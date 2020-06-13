@@ -13,9 +13,8 @@ def get_userID(username):
 
 
 def getruns(username, all=False):
-
     if not all:
-        rep = requests.get(f"{URL}/users/{username}/personal-bests")
+        rep = requests.get(f"{URL}/users/{get_userID(username)}/personal-bests")
         if rep.status_code == 200:
             rep = rep.json()
         return rep["data"]
@@ -27,10 +26,10 @@ def getruns(username, all=False):
                     # Status
                     # Times (OK)
     elif all:
-        rep = requests.get(f"{URL}/runs?user=x7qz6qq8")
+        rep = requests.get(f"{URL}/runs?user={get_userID(username)}")
         if rep.status_code == 200:
             rep = rep.json()
         return rep["data"]
 
-test = get_userID("niamek")
+test = getruns("niamek", True)
 print(test)
