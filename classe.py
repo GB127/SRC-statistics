@@ -24,7 +24,8 @@ class runner:
                     self.runs[game][category].sort(reverse=True)
                     plot.plot(self.runs[game][category], label=f'{game} - {category}')
         plot.legend()
-
+        plot.xlabel("PB #")
+        plot.ylabel("PB time")
         plot.show()
 
 class Run:
