@@ -10,7 +10,12 @@ def get_game(gameid):
     return rep["data"]["names"]["international"]
 
 def get_category(categid):
-    pass
+    rep = requests.get(f"{URL}/categories/{categid}")
+    if rep.status_code == 200:
+        rep = rep.json()
+    return rep["data"]["name"]
+
+
 
 
 def get_userID(username):
