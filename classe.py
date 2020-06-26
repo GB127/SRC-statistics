@@ -8,7 +8,13 @@ class runner:
     def __init__(self, username):
         self.runs = {}
         for run in get_runs(username, True):
-            print(Run(run))
+            tempo = Run(run)
+            if self.runs.get(tempo.game) is None:
+                self.runs[tempo.game] = {}
+            if self.runs[tempo.game].get(tempo.category) is None:
+                self.runs[tempo.game][tempo.category] = []
+            self.runs[tempo.game][tempo.category].append(tempo.time)
+
     def __str__(self):
         plot.plot([1, 2, 3, 4])
         plot.ylabel('some numbers')
