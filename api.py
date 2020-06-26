@@ -1,9 +1,14 @@
 import requests
 import matplotlib
-import datetime
-import isodate
 
 URL = "https://www.speedrun.com/api/v1"
+
+def get_game(gameid):
+    pass
+
+def get_category(categid):
+    pass
+
 
 def get_userID(username):
     rep = requests.get(f"{URL}/users/{username}")
@@ -12,7 +17,8 @@ def get_userID(username):
     return rep["data"]["id"]
 
 
-def getruns(username, all=False):
+def get_runs(username, all=False):
+    unwanted_data = ["values", "players", "date", "level", "submitted", "id", "comment", "weblink", "videos", "status", "splits", "links"]
     if not all:
         rep = requests.get(f"{URL}/users/{get_userID(username)}/personal-bests")
         if rep.status_code == 200:
@@ -30,6 +36,3 @@ def getruns(username, all=False):
         if rep.status_code == 200:
             rep = rep.json()
         return rep["data"]
-
-test = getruns("niamek", True)
-print(test)
