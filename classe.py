@@ -42,9 +42,9 @@ class runner:
 
         self.runs[game][category].sort(reverse=True)
         plot.plot(self.runs[game][category])
+        plot.axhline(y=WRs[game][category])
         plot.xlabel("PB #")
         plot.ylabel("Time")
-
         plot.show()
 
 
@@ -80,7 +80,7 @@ class Run:
         if WRs.get(self.game) is None:
             WRs[self.game] = {}
         if WRs[self.game].get(self.category) is None:
-            WRs[self.game][self.category] = isodate.parse_duration(get_WR(info["game"], info["category"]))
+            WRs[self.game][self.category] = isodate.parse_duration(get_WR(info["game"], info["category"])).total_seconds()
 
         self.system = f'{info["system"]["platform"]}'
 
