@@ -40,13 +40,14 @@ class runner:
             print(f'{no} - {cat}')
         category = listofcat[int(input("Which category do you want to plot? "))]
 
+        self.runs[game][category].sort(reverse=True)
         plot.plot(self.runs[game][category])
-        plot.legend()
         plot.xlabel("PB #")
         plot.ylabel("Time")
+
         plot.show()
 
-        
+
 
 
 
