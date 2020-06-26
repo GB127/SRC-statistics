@@ -28,6 +28,24 @@ class runner:
         plot.ylabel("PB time")
         plot.show()
 
+    def plot(self):
+        listofgames = []
+        for no, game in enumerate(self.runs):
+            listofgames.append(game)
+            print(f'{no} - {game}')
+        game = listofgames[int(input("Which game do you want to plot? "))]
+        listofcat = []
+        for no, cat in enumerate(self.runs[game]):
+            listofcat.append(cat)
+            print(f'{no} - {cat}')
+        category = listofcat[int(input("Which category do you want to plot? "))]
+
+        plot.plot(self.runs[game][category])
+        plot.legend()
+        plot.show()
+
+
+
 class Run:
     def __init__(self, info):
         """
