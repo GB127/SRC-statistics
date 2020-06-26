@@ -16,15 +16,16 @@ class runner:
             self.runs[tempo.game][tempo.category].append(tempo.time)
 
     def __str__(self):
+        pass
+    def plot_all(self):
         for game in self.runs:
             for category in self.runs[game]:
                 if len(self.runs[game][category]) > 1:
                     self.runs[game][category].sort(reverse=True)
                     plot.plot(self.runs[game][category], label=f'{game} - {category}')
-        plot.legend()        
+        plot.legend()
 
         plot.show()
-        return "plot closed"
 
 class Run:
     def __init__(self, info):
