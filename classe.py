@@ -45,7 +45,8 @@ class runner:
         plot.axhline(y=WRs[game][category], color="y")
         plot.xlabel("PB #")
         plot.ylabel("Time")
-        plot.title(f"{game} - {category}")
+        plot.title(f"{game} - {category}\nWR: {WRs[game][category]}")
+
         plot.show()
 
 
