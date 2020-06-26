@@ -18,8 +18,9 @@ class runner:
     def __str__(self):
         for game in self.runs:
             for category in self.runs[game]:
-                self.runs[game][category].sort(reverse=True)
-                plot.plot(self.runs[game][category], label=f'{game} - {category}')
+                if len(self.runs[game][category]) > 1:
+                    self.runs[game][category].sort(reverse=True)
+                    plot.plot(self.runs[game][category], label=f'{game} - {category}')
         plot.legend()        
 
         plot.show()
