@@ -49,6 +49,7 @@ class runner:
 
 
 
+WRs = {}
 
 
 class Run:
@@ -75,6 +76,12 @@ class Run:
         self.game = get_game(info["game"])
         self.category = get_category(info["category"])
         self.time = isodate.parse_duration(info["times"]["primary"]).total_seconds()
+
+        if WRs.get(self.game) is None:
+            WRs[self.game] = {}
+        if WRs[self.game].get(self.category) is None:
+            WRs[self.game][self.category] = isodate.parse_duration(get_WR(info["game"], info["category"]))
+
         self.system = f'{info["system"]["platform"]}'
 
     def __str__(self):
