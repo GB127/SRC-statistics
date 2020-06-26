@@ -42,6 +42,8 @@ class runner:
 
         plot.plot(self.runs[game][category])
         plot.legend()
+        plot.xlabel("PB #")
+        plot.ylabel("Time")
         plot.show()
 
 
