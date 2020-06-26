@@ -16,8 +16,12 @@ class runner:
             self.runs[tempo.game][tempo.category].append(tempo.time)
 
     def __str__(self):
-        plot.plot([1, 2, 3, 4])
-        plot.ylabel('some numbers')
+        for game in self.runs:
+            for category in self.runs[game]:
+                self.runs[game][category].sort(reverse=True)
+                plot.plot(self.runs[game][category], label=f'{game} - {category}')
+        plot.legend()        
+
         plot.show()
         return "plot closed"
 
@@ -44,7 +48,7 @@ class Run:
         """
         self.game = get_game(info["game"])
         self.category = get_category(info["category"])
-        self.time = isodate.parse_duration(info["times"]["primary"])
+        self.time = isodate.parse_duration(info["times"]["primary"]).total_seconds()
         self.system = f'{info["system"]["platform"]}'
 
     def __str__(self):
