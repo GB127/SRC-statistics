@@ -12,6 +12,6 @@ if __name__ == "__main__":
         command = input("What would you like to do? ")
         if command == "plot":
             user.plot()
-        if command == "exit":
+        if command == "exit" or command == "end":
             use = False
     print("Program terminated")

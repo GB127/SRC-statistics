@@ -42,9 +42,10 @@ class runner:
 
         self.runs[game][category].sort(reverse=True)
         plot.plot(self.runs[game][category])
-        plot.axhline(y=WRs[game][category])
+        plot.axhline(y=WRs[game][category], color="y")
         plot.xlabel("PB #")
         plot.ylabel("Time")
+        plot.title(f"{game} - {category}")
         plot.show()
 
 
