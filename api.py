@@ -4,7 +4,10 @@ import matplotlib
 URL = "https://www.speedrun.com/api/v1"
 
 def get_game(gameid):
-    pass
+    rep = requests.get(f"{URL}/games/{gameid}")
+    if rep.status_code == 200:
+        rep = rep.json()
+    return rep["data"]["names"]["international"]
 
 def get_category(categid):
     pass
