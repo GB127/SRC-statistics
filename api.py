@@ -16,11 +16,17 @@ def get_game(gameid):
             gamesid[gameid] = rep["data"]["names"]["international"]
             return gamesid[gameid]
 
+categoriesid = {}
 def get_category(categid):
-    rep = requests.get(f"{URL}/categories/{categid}")
-    if rep.status_code == 200:
-        rep = rep.json()
-        return rep["data"]["name"]
+    try:
+        categoriesid[categid]
+        return categoriesid[categid]
+    except KeyError:
+        rep = requests.get(f"{URL}/categories/{categid}")
+        if rep.status_code == 200:
+            rep = rep.json()
+            categoriesid[categid] = rep["data"]["name"]
+            return categoriesid[categid]
 
 def get_WR(game, category):
     rep = requests.get(f"{URL}/leaderboards/{game}/category/{category}?top=1")
