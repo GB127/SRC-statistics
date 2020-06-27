@@ -15,7 +15,11 @@ def get_category(categid):
         rep = rep.json()
     return rep["data"]["name"]
 
-
+def get_WR(game, category):
+    rep = requests.get(f"{URL}/leaderboards/{game}/category/{category}?top=1")
+    if rep.status_code == 200:
+        rep = rep.json()
+    return rep["data"]["runs"][0]["run"]["times"]["primary"]
 
 
 def get_userID(username):
@@ -40,7 +44,7 @@ def get_runs(username, all=False):
                     # Status
                     # Times (OK)
     elif all:
-        rep = requests.get(f"{URL}/runs?user={get_userID(username)}")
+        rep = requests.get(f"{URL}/runs?user={get_userID(username)}&max=200")
         if rep.status_code == 200:
             rep = rep.json()
         return rep["data"]
