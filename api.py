@@ -3,11 +3,18 @@ import matplotlib
 
 URL = "https://www.speedrun.com/api/v1"
 
+gamesid = {}
+
 def get_game(gameid):
-    rep = requests.get(f"{URL}/games/{gameid}")
-    if rep.status_code == 200:
-        rep = rep.json()
-        return rep["data"]["names"]["international"]
+    try:
+        gamesid[gameid]
+        return gamesid[gameid]
+    except KeyError:
+        rep = requests.get(f"{URL}/games/{gameid}")
+        if rep.status_code == 200:
+            rep = rep.json()
+            gamesid[gameid] = rep["data"]["names"]["international"]
+            return gamesid[gameid]
 
 def get_category(categid):
     rep = requests.get(f"{URL}/categories/{categid}")
