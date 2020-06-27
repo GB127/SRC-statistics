@@ -9,11 +9,14 @@ class runner:
         self.runs = {}
         for run in get_runs(username, True):
             tempo = Run(run)
-            if self.runs.get(tempo.game) is None:
-                self.runs[tempo.game] = {}
-            if self.runs[tempo.game].get(tempo.category) is None:
-                self.runs[tempo.game][tempo.category] = []
-            self.runs[tempo.game][tempo.category].append(tempo.time)
+            if tempo.level:
+                pass
+            else:
+                if self.runs.get(tempo.game) is None:
+                    self.runs[tempo.game] = {}
+                if self.runs[tempo.game].get(tempo.category) is None:
+                    self.runs[tempo.game][tempo.category] = []
+                self.runs[tempo.game][tempo.category].append(tempo.time)
 
     def __str__(self):
         pass
@@ -75,16 +78,20 @@ class Run:
                 values      NOPE
                 links       NOPE
         """
+        self.level = info["level"]
         self.game = get_game(info["game"])
         self.category = get_category(info["category"])
+        print(self.game)
+        print(info["level"])
+        self.system = f'{info["system"]["platform"]}'
         self.time = isodate.parse_duration(info["times"]["primary"]).total_seconds()
 
-        if WRs.get(self.game) is None:
-            WRs[self.game] = {}
-        if WRs[self.game].get(self.category) is None:
-            WRs[self.game][self.category] = isodate.parse_duration(get_WR(info["game"], info["category"])).total_seconds()
+        if self.level is None:
+            if WRs.get(self.game) is None:
+                WRs[self.game] = {}
+            if WRs[self.game].get(self.category) is None:
+                WRs[self.game][self.category] = isodate.parse_duration(get_WR(info["game"], info["category"])).total_seconds()
 
-        self.system = f'{info["system"]["platform"]}'
 
     def __str__(self):
         return f'{self.game} ({self.category}) {self.time}'
