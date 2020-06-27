@@ -26,7 +26,7 @@ class runner:
                 if len(self.runs[game][category]) > 1:
                     self.runs[game][category].sort(reverse=True)
                     plot.plot(self.runs[game][category], label=f'{game} - {category}')
-        plot.legend()
+        plot.legend(bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0.)
         plot.xlabel("PB #")
         plot.ylabel("PB time")
         plot.show()
@@ -42,15 +42,14 @@ class runner:
             listofcat.append(cat)
             print(f'{no} - {cat}')
         category = listofcat[int(input("Which category do you want to plot? "))]
-
         self.runs[game][category].sort(reverse=True)
-        plot.plot(self.runs[game][category])
+        plot.plot(self.runs[game][category], marker=".")
         plot.axhline(y=WRs[game][category], color="y")
         plot.xlabel("PB #")
         plot.ylabel("Time")
         plot.title(f"{game} - {category}\nWR: {WRs[game][category]}")
-
         plot.show()
+
 
 
 
@@ -81,8 +80,6 @@ class Run:
         self.level = info["level"]
         self.game = get_game(info["game"])
         self.category = get_category(info["category"])
-        print(self.game)
-        print(info["level"])
         self.system = f'{info["system"]["platform"]}'
         self.time = isodate.parse_duration(info["times"]["primary"]).total_seconds()
 

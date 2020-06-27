@@ -7,20 +7,19 @@ def get_game(gameid):
     rep = requests.get(f"{URL}/games/{gameid}")
     if rep.status_code == 200:
         rep = rep.json()
-    return rep["data"]["names"]["international"]
+        return rep["data"]["names"]["international"]
 
 def get_category(categid):
     rep = requests.get(f"{URL}/categories/{categid}")
     if rep.status_code == 200:
         rep = rep.json()
-    return rep["data"]["name"]
+        return rep["data"]["name"]
 
 def get_WR(game, category):
     rep = requests.get(f"{URL}/leaderboards/{game}/category/{category}?top=1")
     if rep.status_code == 200:
         rep = rep.json()
-    return rep["data"]["runs"][0]["run"]["times"]["primary"]
-
+        return rep["data"]["runs"][0]["run"]["times"]["primary"]
 
 def get_userID(username):
     rep = requests.get(f"{URL}/users/{username}")
