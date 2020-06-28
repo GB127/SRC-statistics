@@ -29,6 +29,7 @@ class runner:
         plot.legend()
         plot.xlabel("PB #")
         plot.ylabel("PB time")
+        plot.yticks(plot.yticks()[0],[datetime.timedelta(seconds=x) for x in plot.yticks()[0]])
         plot.show()
 
     def plot(self):
@@ -47,7 +48,8 @@ class runner:
         plot.axhline(y=WRs[game][category], color="y")
         plot.xlabel("PB #")
         plot.ylabel("Time")
-        plot.title(f"{game} - {category}\nWR: {WRs[game][category]}")
+        plot.yticks(plot.yticks()[0],[datetime.timedelta(seconds=x) for x in plot.yticks()[0]])
+        plot.title(f"{game} - {category}\nWR: {datetime.timedelta(seconds=WRs[game][category])}")
         plot.show()
 
 
