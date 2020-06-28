@@ -17,9 +17,6 @@ class runner:
                 if self.runs[tempo.game].get(tempo.category) is None:
                     self.runs[tempo.game][tempo.category] = []
                 self.runs[tempo.game][tempo.category].append(tempo.time)
-
-    def __str__(self):
-        pass
     def plot_all(self):
         for game in self.runs:
             for category in self.runs[game]:
