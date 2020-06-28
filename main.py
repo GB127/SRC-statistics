@@ -4,7 +4,7 @@ from api import *
 
 if __name__ == "__main__":
     print("Fetching data, please wait...")
-    user = runner("pac")
+    user = runner("cheese")
     #user = runner(input("Which user name would you like to see? "))
     print("Fetching complete!")
     use = True

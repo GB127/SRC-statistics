@@ -26,7 +26,7 @@ class runner:
                 if len(self.runs[game][category]) > 1:
                     self.runs[game][category].sort(reverse=True)
                     plot.plot(self.runs[game][category], label=f'{game} - {category}')
-        plot.legend(bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0.)
+        plot.legend()
         plot.xlabel("PB #")
         plot.ylabel("PB time")
         plot.show()
