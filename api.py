@@ -16,6 +16,13 @@ def get_game(gameid):
             gamesid[gameid] = rep["data"]["names"]["international"]
             return gamesid[gameid]
 
+def get_gameid(game):
+    for key in gamesid:
+        if gamesid[key] == game:
+            return key
+
+
+
 categoriesid = {}
 def get_category(categid):
     try:
@@ -28,17 +35,35 @@ def get_category(categid):
             categoriesid[categid] = rep["data"]["name"]
             return categoriesid[categid]
 
+def get_categoryid(category):
+    for key in categoriesid:
+        if categoriesid[key] == category:
+            return key
+
+
+WRs = {}
+
+
+
+
 def get_WR(game, category):
-    rep = requests.get(f"{URL}/leaderboards/{game}/category/{category}?top=1")
-    if rep.status_code == 200:
-        rep = rep.json()
-        return rep["data"]["runs"][0]["run"]["times"]["primary"]
+    if WRs.get(game) is None:  # new game? Create a new entry. Not doing this will lead to an error.
+        WRs[game] = {}
+    if WRs[game].get(category) is None:  # This means we don't have a WR for said category
+        rep = requests.get(f"{URL}/leaderboards/{get_gameid(game)}/category/{get_categoryid(category)}?top=1")
+        print(rep.status_code)
+        if rep.status_code == 200:  # Because my stuffs now doesn't call with IDs, it doesn't work
+            rep = rep.json()
+            WRs[game][category] = datetime.timedelta(seconds=isodate.parse_duration(rep["data"]["runs"][0]["run"]["times"]["primary"]).total_seconds())
+    return WRs[game][category]
+
+
 
 def get_userID(username):
     rep = requests.get(f"{URL}/users/{username}")
     if rep.status_code == 200:
         rep = rep.json()
-    return rep["data"]["id"]
+        return rep["data"]["id"]
 
 
 def get_runs(username, all=False):
