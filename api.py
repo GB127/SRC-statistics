@@ -29,6 +29,11 @@ def get_runs(username):
     getter(link_1)
     return runs
 
+def get_PBs(username):
+    rep = requests.get(f"{URL}/users/{get_userID(username)}/personal-bests")
+    if rep.status_code == 200:
+        rep = rep.json()
+    print(len(rep["data"]))
 
 
 
@@ -92,4 +97,4 @@ def get_leaderboard():
 
 
 if __name__ == "__main__":
-    print(get_runs("niamek"))
+    print(get_PBs("zfg"))
