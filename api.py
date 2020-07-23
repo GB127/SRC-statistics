@@ -12,11 +12,24 @@ def get_userID(username):
         rep = rep.json()
         return rep["data"]["id"]
 
+
+games = {}
+
+def get_game(ID):
+    # ID or acronym
+    try:
+        return games[ID]
+    except KeyError:
+        rep = requests.get(f"{URL}/games/{ID}")
+        if rep.status_code == 200:
+            rep = rep.json()
+            games[ID] = rep["data"]["names"]["international"]
+    return games[ID]
+
 def get_leaderboard():
-    # No game ID for now. Only SML1 any
     # TODO: Doublons à éliminer quand possible!
     ranking = []
-    rep = requests.get(f"{URL}/leaderboards/sms/category/Any")
+    rep = requests.get(f"{URL}/leaderboards/sm64/category/16_Star")
     if rep.status_code == 200:
         rep= rep.json()
 
@@ -28,4 +41,5 @@ def get_leaderboard():
 
 
 if __name__ == "__main__":
-    get_leaderboard()
+    print(get_game("sms"))
+    print(games)

@@ -9,7 +9,6 @@ def plot_leaderboard():
     plot.yticks(plot.yticks()[0],[datetime.timedelta(seconds=x) for x in plot.yticks()[0]])
     plot.xlabel("Rank")
     ax = plot.gca()
-    # set the xlimits to be the reverse of the current xlimits
     ax.set_xlim(ax.get_xlim()[::-1])
     plot.show()
 
