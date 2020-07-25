@@ -80,12 +80,12 @@ def get_WR(ID):
             WRs[ID].sort()
     return WRs[ID]
 
-def get_leaderboard():
+def get_leaderboard(gameID, categID):
     # TODO: Doublons à éliminer quand possible!
     # TODO: Séparer les onglets
     # TODO: Game Argument & Category argument
     ranking = []
-    rep = requests.get(f"{URL}/leaderboards/sml2/category/Any_Glitchless")
+    rep = requests.get(f"{URL}/leaderboards/{gameID}/category/{categID}")
     if rep.status_code == 200:
         rep= rep.json()
 
@@ -97,4 +97,4 @@ def get_leaderboard():
 
 
 if __name__ == "__main__":
-    print(get_PBs("zfg"))
+    get_leaderboard("o1y9wo6q","7dgrrxk4")
