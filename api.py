@@ -73,6 +73,10 @@ def get_WR(ID):
             WRs[ID].sort()
     return WRs[ID]
 
+
+leaderboard = {}
+def get_len_leaderboard(gameID, categID):
+    pass
 def get_leaderboard(gameID, categID):
     # TODO: Doublons à éliminer quand possible!
     # TODO: Séparer les onglets
