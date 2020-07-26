@@ -1,4 +1,4 @@
-import requests
+joimport requests
 import matplotlib
 import datetime
 import isodate
@@ -8,20 +8,15 @@ URL = "https://www.speedrun.com/api/v1"
 
 def get_runs(username):
     runs = []
-    unwanted = ["weblink", "videos", "comment", "status","links","values", "id", "level", "players", "date", "submitted", "splits"]
     link_1 = f"{URL}/runs?user={get_userID(username)}&max=200"
 
     def getter(link):
-        print(link)
         rep = requests.get(link)
         if rep.status_code == 200:
             rep = rep.json()
         for run in rep["data"]:
-            for unwant in unwanted: del run[unwant]
-            run["times"] = run["times"]["primary"]
             runs.append(run)
         if rep["pagination"]["size"] == rep["pagination"]["max"]:
-            print("hallo")
             getter(rep["pagination"]["links"][-1]["uri"])
         if rep["pagination"]["size"] < rep["pagination"]["max"]:
             pass
@@ -33,9 +28,7 @@ def get_PBs(username):
     rep = requests.get(f"{URL}/users/{get_userID(username)}/personal-bests")
     if rep.status_code == 200:
         rep = rep.json()
-    print(len(rep["data"]))
-
-
+    return rep["data"]
 
 def get_userID(username):
     rep = requests.get(f"{URL}/users/{username}")
@@ -83,7 +76,6 @@ def get_WR(ID):
 def get_leaderboard(gameID, categID):
     # TODO: Doublons à éliminer quand possible!
     # TODO: Séparer les onglets
-    # TODO: Game Argument & Category argument
     ranking = []
     rep = requests.get(f"{URL}/leaderboards/{gameID}/category/{categID}")
     if rep.status_code == 200:
@@ -97,4 +89,4 @@ def get_leaderboard(gameID, categID):
 
 
 if __name__ == "__main__":
-    get_leaderboard("o1y9wo6q","7dgrrxk4")
+    get_PBs("niamek")

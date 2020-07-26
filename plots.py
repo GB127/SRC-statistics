@@ -2,8 +2,8 @@ import matplotlib.pyplot as plot
 import datetime
 from api import *
 
-def plot_leaderboard():
-    leaderboard = get_leaderboard("o1y9wo6q","7dgrrxk4")
+def plot_leaderboard(gameID, categID):
+    leaderboard = get_leaderboard(gameID,categID)
     plot.plot([time[0] for time in leaderboard], [rank[1] for rank in leaderboard])
     plot.ylabel("Time")
     plot.yticks(plot.yticks()[0],[datetime.timedelta(seconds=x) for x in plot.yticks()[0]])
@@ -14,4 +14,4 @@ def plot_leaderboard():
     plot.show()
 
 if __name__ == "__main__":
-    plot_leaderboard()
+    plot_leaderboard("o1y9wo6q", "7dgrrxk4")
