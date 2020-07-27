@@ -91,10 +91,10 @@ def get_len_leaderboard(gameID, categID):
             rep= rep.json()
             for run in rep["data"]["runs"]:
                 ranking.append((int(run["place"]), isodate.parse_duration(run["run"]["times"]["primary"]).total_seconds()))
-            leaderboard[(gameID, categID, variable)] = ranking
+            leaderboard[(gameID, categID)] = ranking
         else:
             raise BaseException(rep.status_code)
-    return len(leaderboard[(gameID, categID, variable)])
+    return len(leaderboard[(gameID, categID)])
 
 def get_leaderboard(gameID, categID):
     # TODO: Doublons à éliminer quand possible!
