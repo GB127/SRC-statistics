@@ -33,8 +33,9 @@ class user:
     def listPBs(self):  # TODO : Change name
         """Print a table by printing all PBs
         """
-        print(f"|{'Sys':^6}| {'Game':^30}| {'Category':^15} | {'  Rank      (^%)':20}| {'Time':^13}|    + \u0394WR     | sec/rank |")
+        print(f"|{'Sys':^6}| {'Game':^30}| {'Category':^15} | {'  Rank      (^%)':20}| {'Time':^13}|    + \u0394WR     | %WR")
         print("-"*120)
+        self.PBs.sort()
         for PB in self.PBs: print(PB)
 class Run:
     def __init__(self, data):
@@ -58,6 +59,9 @@ class Run:
         self.time = isodate.parse_duration(data["times"]["primary"]).total_seconds()
     def __str__(self):
         return f'{get_game(self.gameID)} - {get_category(self.categID)} - {datetime.timedelta(seconds=self.time)}'
+    def __lt__(self, other):
+        #return get_system(self.system) < get_system(other.system)
+        return get_game(self.gameID) < get_game(other.gameID)
 
 class PB(Run):
     def __init__(self, data):
@@ -84,10 +88,13 @@ class PB(Run):
             calculation2 = f'({str(round(100 * (self.lenrank - self.place) / self.lenrank,2)):^5} %)'
             return str(f'{calculation:^9} {calculation2}')
         def str_times(self):
-            return f'{str_time(self.time)[:11]:12} | + {str_time(self.delta)[:11]:11}'
-        return f'{str_game(self)} | {str_rank(self)} | {str_times(self)}|{round(self.delta/ (self.place -1), 2):^10}|'
-
+            return f'{str_time(self.time)[:11]:12} | + {str_time(self.delta)[:11]:11}| {round((self.time * 100/self.WR),2)} %'
+        return f'{str_game(self)} | {str_rank(self)} | {str_times(self)}'
+    def __lt__(self, other):
+        # return (self.lenrank - self.place) / self.lenrank < (other.lenrank - other.place) / other.lenrank
+        # return self.delta < other.delta
+        return self.time * 100/self.WR < other.time * 100/other.WR
 
 if __name__ == "__main__":
-    user = user("Niamek")
+    user = user("zfg")
     user.listPBs()
