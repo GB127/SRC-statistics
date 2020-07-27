@@ -33,7 +33,7 @@ class user:
     def listPBs(self):  # TODO : Change name
         """Print a table by printing all PBs
         """
-        print(f"|{'Sys':^6}| {'Game':^30}| {'Category':^15} | {'  Rank      (^%)':20}| {'Time':^13}| + \u0394WR")
+        print(f"|{'Sys':^6}| {'Game':^30}| {'Category':^15} | {'  Rank      (^%)':20}| {'Time':^13}|    + \u0394WR     | sec/rank |")
         print("-"*120)
         for PB in self.PBs: print(PB)
 class Run:
@@ -75,6 +75,7 @@ class PB(Run):
         self.place = data["place"]
         self.lenrank = get_len_leaderboard(self.gameID, self.categID)
         self.WR = isodate.parse_duration(get_WR(self.categID)[0]).total_seconds()
+        self.delta = self.time - self.WR
     def __str__(self):
         def str_game(self):
             return f'|{get_system(self.system)[:6]:^6}| {get_game(self.gameID)[:30]:30}| {get_category(self.categID)[:15]:15}'
@@ -83,10 +84,10 @@ class PB(Run):
             calculation2 = f'({str(round(100 * (self.lenrank - self.place) / self.lenrank,2)):^5} %)'
             return str(f'{calculation:^9} {calculation2}')
         def str_times(self):
-            return f'{str_time(self.time)[:11]:12} | + {str_time(self.time - self.WR)[:11]:11}'
-        return f'{str_game(self)} | {str_rank(self)} | {str_times(self)}'
+            return f'{str_time(self.time)[:11]:12} | + {str_time(self.delta)[:11]:11}'
+        return f'{str_game(self)} | {str_rank(self)} | {str_times(self)}|{round(self.delta/ (self.place -1), 2):^10}|'
 
 
 if __name__ == "__main__":
-    user = user("Pac")
+    user = user("Niamek")
     user.listPBs()
