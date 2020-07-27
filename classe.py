@@ -7,6 +7,18 @@ from tools import *
 
 class user:
     def __init__(self, username):
+        """
+            Object of a Speedrun.com user. It tracks username, ID, runs and PBs
+
+            Args:
+                username (str) : Username on speedrun.com
+
+            Attributes created:
+                self.username (str) : Username
+                self.ID (str) : ID of the user
+                self.runs (list) : List of runs
+                self.PBs (list) : List of PBs
+        """
         self.username = username
         print("initializing data...")
         self.ID = get_userID(self.username)
@@ -17,26 +29,48 @@ class user:
                 self.PBs.append(PB(pb))
             else: pass
         print("user initialized!")
-    def printruns(self):
-        for run in self.runs: print(run)
-    def listPBs(self):
-        print(f"|{'Sys':^6}| {'Game':^30}| {'Category':^15} | {'  Rank      (^%)':20}| Time     (+ \u0394WR)")
+
+    def listPBs(self):  # TODO : Change name
+        """Print a table by printing all PBs
+        """
+        print(f"|{'Sys':^6}| {'Game':^30}| {'Category':^15} | {'  Rank      (^%)':20}| {'Time':^13}| + \u0394WR")
         print("-"*120)
         for PB in self.PBs: print(PB)
 class Run:
     def __init__(self, data):
+        """
+            Args:
+                data ([json]): data from requests to speedrun.com
+
+            Attributes:
+                self.system : System the run is on
+                self.emulated : True if emulated, False if not emulated
+                self.ID : ID of the run
+                self.gameID : ID of the game ran
+                self.categID : ID of the category ran
+                self.time : duration of the run
+        """
         self.system = data["system"]["platform"]
         self.emulated = True if data["system"]["emulated"] else False
         self.ID = data["id"]
         self.gameID = data["game"]
         self.categID = data["category"]
-        self.variID = data["values"]
         self.time = isodate.parse_duration(data["times"]["primary"]).total_seconds()
     def __str__(self):
         return f'{get_game(self.gameID)} - {get_category(self.categID)} - {datetime.timedelta(seconds=self.time)}'
 
 class PB(Run):
     def __init__(self, data):
+        """
+            NOTES:
+                Some extra infos not eally related to the PB 
+                are stored because of the maths I want to do.
+
+            Attributes:
+                self.place : Rank of the PB
+                self.lenrank : Length of the leaderboard
+                self.WR : WR of the said run
+        """
         super().__init__(data["run"])
         self.place = data["place"]
         self.lenrank = get_len_leaderboard(self.gameID, self.categID)
@@ -49,10 +83,10 @@ class PB(Run):
             calculation2 = f'({str(round(100 * (self.lenrank - self.place) / self.lenrank,2)):^5} %)'
             return str(f'{calculation:^9} {calculation2}')
         def str_times(self):
-            return f'{str_time(self.time):9}(+ {str_time(self.time - self.WR)[:11]:11})'
+            return f'{str_time(self.time)[:11]:12} | + {str_time(self.time - self.WR)[:11]:11}'
         return f'{str_game(self)} | {str_rank(self)} | {str_times(self)}'
 
 
 if __name__ == "__main__":
-    user = user("niamek")
+    user = user("Pac")
     user.listPBs()
