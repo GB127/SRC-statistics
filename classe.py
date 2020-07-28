@@ -20,23 +20,42 @@ class user:
                 self.PBs (list) : List of PBs
         """
         self.username = username
-        print("initializing data...")
+        print("Fetching data...")
         self.ID = get_userID(self.username)
         self.runs, self.PBs = [], []
-        for run in get_runs(self.ID): self.runs.append(Run(run))
         for pb in get_PBs(self.ID): 
             if pb["run"]["level"] is None:
                 self.PBs.append(PB(pb))
             else: pass
+        self.total_PB()
+        self.total_WR()
+
         print("user initialized!")
+
+    def total_PB(self):
+        tempo = []
+        for PB in self.PBs:
+            tempo.append(PB.time)
+        self.total_PB = sum(tempo)
+
+    def total_WR(self):
+        tempo = []
+        for PB in self.PBs:
+            tempo.append(PB.WR)
+        self.total_WR = sum(tempo)
 
     def listPBs(self):  # TODO : Change name
         """Print a table by printing all PBs
         """
-        print(f"|{'Sys':^6}| {'Game':^30}| {'Category':^15} | {'  Rank      (^%)':20}| {'Time':^13}|    + \u0394WR     | %WR")
+        print("-"*120)
+        print(f"|{'Sys':^6}| {'Game':^30}| {'Category':^15} | {'  Rank      (^%)':20}| {'Time':^14}|    + \u0394WR       | %WR")
         print("-"*120)
         self.PBs.sort()
         for PB in self.PBs: print(PB)
+        print("-"*120)
+        print(f'{"Total :":>57}| {str_time(self.total_PB)[:13]:14}| + {str_time(self.total_PB - self.total_WR)[:13]:13}|')
+        print(f'{"Average :":>57}| {str_time(self.total_PB/len(self.PBs))[:13]:14}| + {str_time((self.total_PB - self.total_WR)/len(self.PBs))[:13]:13}| {str(round(self.total_PB/self.total_WR * 100,2))[:6]:6} %|')
+
 class Run:
     def __init__(self, data):
         """
@@ -78,23 +97,28 @@ class PB(Run):
         super().__init__(data["run"])
         self.place = data["place"]
         self.lenrank = get_len_leaderboard(self.gameID, self.categID)
+        self.perclenrank = round(100 * (self.lenrank - self.place) / self.lenrank,2)
         self.WR = isodate.parse_duration(get_WR(self.categID)[0]).total_seconds()
         self.delta = self.time - self.WR
+        self.percWR = round((self.time * 100/self.WR),2)
     def __str__(self):
         def str_game(self):
             return f'|{get_system(self.system)[:6]:^6}| {get_game(self.gameID)[:30]:30}| {get_category(self.categID)[:15]:15}'
         def str_rank(self):
             calculation = f'{self.place}/{self.lenrank}'
-            calculation2 = f'({str(round(100 * (self.lenrank - self.place) / self.lenrank,2)):^5} %)'
+            calculation2 = f'({str(self.perclenrank):^5} %)'
             return str(f'{calculation:^9} {calculation2}')
         def str_times(self):
-            return f'{str_time(self.time)[:11]:12} | + {str_time(self.delta)[:11]:11}| {round((self.time * 100/self.WR),2)} %'
-        return f'{str_game(self)} | {str_rank(self)} | {str_times(self)}'
+            return f'{str_time(self.time)[:13]:13} | + {str_time(self.delta)[:13]:13}| {self.percWR:^6} %'
+        return f'{str_game(self)} | {str_times(self)} | {str_rank(self)}'
     def __lt__(self, other):
         # return (self.lenrank - self.place) / self.lenrank < (other.lenrank - other.place) / other.lenrank
         # return self.delta < other.delta
-        return self.time * 100/self.WR < other.time * 100/other.WR
+        # return self.time * 100/self.WR < other.time * 100/other.WR
+        # return self.percWR < other.percWR
+
+        return super().__lt__(other)
 
 if __name__ == "__main__":
-    user = user("zfg")
+    user = user("niamek")
     user.listPBs()

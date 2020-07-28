@@ -2,37 +2,20 @@ import requests
 import matplotlib
 import datetime
 import isodate
+import time
 
 
 URL = "https://www.speedrun.com/api/v1"
 
 def requester(link):
-    rep = requests.get(f"{URL}{link}")
-    if rep.status_code == 200:
-        return rep.json()
-    else:
-        raise BaseException(rep.status_code)
-
-
-def get_runs(username):
-    runs = []
-    link_1 = f"{URL}/runs?user={get_userID(username)}&max=200"
-
-    def getter(link):
-        rep = requests.get(link)
+    while True:
+        rep = requests.get(f"{URL}{link}")
         if rep.status_code == 200:
-            rep = rep.json()
-        else: raise BaseException(rep.status_code)
-        for run in rep["data"]:
-            if run["level"] is None: pass
-            else: runs.append(run)
-        if rep["pagination"]["size"] == rep["pagination"]["max"]:
-            getter(rep["pagination"]["links"][-1]["uri"])
-        if rep["pagination"]["size"] < rep["pagination"]["max"]:
-            pass
-    
-    getter(link_1)
-    return runs
+            return rep.json()
+        if rep.status_code == 502:
+            print("502 error, let's wait and try again")
+            time.sleep(20)
+
 
 def get_PBs(username):  # Requester DONE
     rep = requester(f"/users/{get_userID(username)}/personal-bests")
