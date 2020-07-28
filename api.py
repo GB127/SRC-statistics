@@ -34,10 +34,8 @@ def get_runs(username):
     getter(link_1)
     return runs
 
-def get_PBs(username):
-    rep = requests.get(f"{URL}/users/{get_userID(username)}/personal-bests")
-    if rep.status_code == 200:
-        rep = rep.json()
+def get_PBs(username):  # Requester DONE
+    rep = requester(f"/users/{get_userID(username)}/personal-bests")
     return rep["data"]
 
 def get_userID(username):  # requester DONE
@@ -76,19 +74,15 @@ def get_WR(ID):  # Requester DONE
 
 
 leaderboard = {}
-def get_len_leaderboard(gameID, categID):
+def get_len_leaderboard(gameID, categID):  # Requester Done!
     try:
         return len(leaderboard[(gameID, categID)])
     except KeyError:
         ranking = []
-        rep = requests.get(f"{URL}/leaderboards/{gameID}/category/{categID}")
-        if rep.status_code == 200:
-            rep= rep.json()
-            for run in rep["data"]["runs"]:
-                ranking.append((int(run["place"]), isodate.parse_duration(run["run"]["times"]["primary"]).total_seconds()))
-            leaderboard[(gameID, categID)] = ranking
-        else:
-            raise BaseException(rep.status_code)
+        rep = requester(f"/leaderboards/{gameID}/category/{categID}")
+        for run in rep["data"]["runs"]:
+            ranking.append((int(run["place"]), isodate.parse_duration(run["run"]["times"]["primary"]).total_seconds()))
+        leaderboard[(gameID, categID)] = ranking
     return len(leaderboard[(gameID, categID)])
 
 def get_leaderboard(gameID, categID):  # Requester done!
