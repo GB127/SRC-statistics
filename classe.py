@@ -48,13 +48,13 @@ class user:
         """Print a table by printing all PBs
         """
         print("-"*120)
-        print(f"|{'Sys':^6}| {'Game':^30}| {'Category':^15} | {'  Rank      (^%)':20}| {'Time':^14}|    + \u0394WR       | %WR")
+        print(f"# |{'Sys':^6}| {'Game':^30}| {'Category':^15} | {'Time':^14}|      + \u0394WR     |{'%WR':^9}| {'  Rank      (^%)':20}")
         print("-"*120)
         self.PBs.sort()
-        for PB in self.PBs: print(PB)
-        print("-"*120)
-        print(f'{"Total :":>57}| {str_time(self.total_PB)[:13]:14}| + {str_time(self.total_PB - self.total_WR)[:13]:13}|')
-        print(f'{"Average :":>57}| {str_time(self.total_PB/len(self.PBs))[:13]:14}| + {str_time((self.total_PB - self.total_WR)/len(self.PBs))[:13]:13}| {str(round(self.total_PB/self.total_WR * 100,2))[:6]:6} %|')
+        for no, PB in enumerate(self.PBs): print(f'{no+1} {PB}')
+        print("-"*122)
+        print(f'{"Total :":>59}| {str_time(self.total_PB)[:13]:14}| + {str_time(self.total_PB - self.total_WR)[:13]:13}|----------|')
+        print(f'{"Average :":>59}| {str_time(self.total_PB/len(self.PBs))[:13]:14}| + {str_time((self.total_PB - self.total_WR)/len(self.PBs))[:13]:13}| {str(round(self.total_PB/self.total_WR * 100,2))[:6]:6} % |')
 
 class Run:
     def __init__(self, data):
@@ -120,5 +120,5 @@ class PB(Run):
         return super().__lt__(other)
 
 if __name__ == "__main__":
-    user = user("niamek")
+    user = user("pac")
     user.listPBs()
