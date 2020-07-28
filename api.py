@@ -91,21 +91,17 @@ def get_len_leaderboard(gameID, categID):
             raise BaseException(rep.status_code)
     return len(leaderboard[(gameID, categID)])
 
-def get_leaderboard(gameID, categID):
+def get_leaderboard(gameID, categID):  # Requester done!
     # TODO: Doublons à éliminer quand possible!
     # TODO: Séparer les onglets
     try:
         return leaderboard[(gameID, categID)]
     except KeyError:
         ranking = []
-        rep = requests.get(f"{URL}/leaderboards/{gameID}/category/{categID}")
-        if rep.status_code == 200:
-            rep= rep.json()
-            for run in rep["data"]["runs"]:
-                ranking.append((int(run["place"]), isodate.parse_duration(run["run"]["times"]["primary"]).total_seconds()))
-            leaderboard[(gameID, categID)] = ranking
-        else:
-            raise BaseException(rep.status_code)
+        rep = requester(f"/leaderboards/{gameID}/category/{categID}")
+        for run in rep["data"]["runs"]:
+            ranking.append((int(run["place"]), isodate.parse_duration(run["run"]["times"]["primary"]).total_seconds()))
+        leaderboard[(gameID, categID)] = ranking
     return leaderboard[(gameID, categID)]
 
 systems = {
@@ -118,32 +114,23 @@ systems = {
     "3167jd6q" : "SGB",
     "83exk6l5" : "SNES",
     "nzelreqp" : "WII VC"}
-def get_newsystem(newsystem):
-    rep = requests.get(f"{URL}/platforms?max=200")
-    if rep.status_code == 200:
-        rep= rep.json()
-        for system in rep["data"]:
-            if system["name"] == newsystem: 
-                print("-------------------------------------")
-                print(f'"{system["id"]}" : "{system["name"]}",')
-                print("-------------------------------------")
-                return
-        for system in rep["data"]:
-            print(system["name"])
-    else:
-        raise BaseException(rep.status_code)
+def get_newsystem(newsystem): # Requester done!
+    rep = requester(f"/platforms?max=200")
+    for system in rep["data"]:
+        if system["name"] == newsystem: 
+            print("-------------------------------------")
+            print(f'"{system["id"]}" : "{system["name"]}",')
+            print("-------------------------------------")
+            return
+    for system in rep["data"]:
+        print(system["name"])
 
-
-def get_system(ID):
+def get_system(ID):  # Requester done!
     try:
         return systems[ID]
     except KeyError:
-        rep = requests.get(f"{URL}/platforms/{ID}")
-        if rep.status_code == 200:
-            rep= rep.json()
-            systems[ID] = rep["data"]["name"]
-        else:
-            raise BaseException(rep.status_code)
+        rep = requester(f"/platforms/{ID}")
+        systems[ID] = rep["data"]["name"]
     return systems[ID]
 
 
