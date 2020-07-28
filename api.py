@@ -6,6 +6,14 @@ import isodate
 
 URL = "https://www.speedrun.com/api/v1"
 
+def requester(link):
+    rep = requests.get(f"{URL}{link}")
+    if rep.status_code == 200:
+        return rep.json()
+    else:
+        raise BaseException(rep.status_code)
+
+
 def get_runs(username):
     runs = []
     link_1 = f"{URL}/runs?user={get_userID(username)}&max=200"
@@ -32,51 +40,38 @@ def get_PBs(username):
         rep = rep.json()
     return rep["data"]
 
-def get_userID(username):
-    rep = requests.get(f"{URL}/users/{username}")
-    if rep.status_code == 200:
-        rep = rep.json()
-        return rep["data"]["id"]
+def get_userID(username):  # requester DONE
+    rep = requester(f"/users/{username}")
+    return rep["data"]["id"]
 
 games = {}
-def get_game(ID):
+def get_game(ID):  # requester DONE
     # ID or acronym
     try:
         return games[ID]
     except KeyError:
-        rep = requests.get(f"{URL}/games/{ID}")
-        if rep.status_code == 200:
-            rep = rep.json()
-            games[ID] = rep["data"]["names"]["international"]
+        rep = requester(f"/games/{ID}")
+        games[ID] = rep["data"]["names"]["international"]
     return games[ID]
 
 categories = {}
-def get_category(ID):
+def get_category(ID):  # requester DONE
     try:
         return categories[ID]
     except KeyError:
-        rep = requests.get(f'{URL}/categories/{ID}')
-        if rep.status_code == 200:
-            rep = rep.json()
-            categories[ID] = rep["data"]["name"]
+        rep = requester(f'/categories/{ID}')
+        categories[ID] = rep["data"]["name"]
     return categories[ID]
 
 WRs = {}
-
-
-def get_WR(ID):
+def get_WR(ID):  # Requester DONE
     try:
         return WRs[ID]
     except KeyError:
         WRs[ID] = []
-        rep = requests.get(f'{URL}/categories/{ID}/records?top=1')
-        if rep.status_code == 200:
-            rep = rep.json()
-            for place in rep["data"][0]["runs"]:
-                WRs[ID].append(place["run"]["times"]["primary"])
-            WRs[ID].sort()
-        else:
-            raise BaseException
+        rep = requester(f'/categories/{ID}/records?top=1')
+        for place in rep["data"][0]["runs"]:
+            WRs[ID].append(place["run"]["times"]["primary"])
     return WRs[ID]
 
 
@@ -155,9 +150,7 @@ def get_system(ID):
 if __name__ == "__main__":
     
     
-    game = "o1y9wo6q"
+    game = "allo"
     cat = "7dgrrxk4"
 
-    test = get_leaderboard(game, cat)
-
-    print(test)
+    print(get_game("sml1"))
