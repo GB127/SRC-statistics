@@ -32,6 +32,10 @@ class user:
 
         print("user initialized!")
 
+    def __str__(self):
+        return f'{self.username}, {len(self.runs)} runs, {len(self.PBs)} PBs'
+
+
     def total_PB(self):
         tempo = []
         for PB in self.PBs:
@@ -48,7 +52,7 @@ class user:
         """Print a table by printing all PBs
         """
         print("-"*120)
-        print(f"# |{'Sys':^6}| {'Game':^30}| {'Category':^15} | {'Time':^14}|      + \u0394WR     |{'%WR':^9}| {'  Rank      (^%)':20}")
+        print(f"# |{'Sys':^6}| {'Game':^30}| {'Category':^15} | {'Time':^14}|      + \u0394WR     |{'%WR':^10}| {'  Rank      (^%)':20}")
         print("-"*120)
         self.PBs.sort()
         for no, PB in enumerate(self.PBs): print(f'{no+1} {PB}')
