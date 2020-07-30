@@ -17,16 +17,16 @@ def requester(link):
             time.sleep(20)
 
 
-def get_PBs(username):  # Requester DONE
+def get_PBs(username):
     rep = requester(f"/users/{get_userID(username)}/personal-bests")
     return rep["data"]
 
-def get_userID(username):  # requester DONE
+def get_userID(username):
     rep = requester(f"/users/{username}")
     return rep["data"]["id"]
 
 games = {}
-def get_game(ID):  # requester DONE
+def get_game(ID):
     # ID or acronym
     try:
         return games[ID]
@@ -36,7 +36,7 @@ def get_game(ID):  # requester DONE
     return games[ID]
 
 categories = {}
-def get_category(ID):  # requester DONE
+def get_category(ID):
     try:
         return categories[ID]
     except KeyError:
@@ -45,7 +45,7 @@ def get_category(ID):  # requester DONE
     return categories[ID]
 
 WRs = {}
-def get_WR(ID):  # Requester DONE
+def get_WR(ID):
     try:
         return WRs[ID]
     except KeyError:
@@ -57,7 +57,7 @@ def get_WR(ID):  # Requester DONE
 
 
 leaderboard = {}
-def get_len_leaderboard(gameID, categID):  # Requester Done!
+def get_len_leaderboard(gameID, categID):
     try:
         return len(leaderboard[(gameID, categID)])
     except KeyError:
@@ -68,7 +68,7 @@ def get_len_leaderboard(gameID, categID):  # Requester Done!
         leaderboard[(gameID, categID)] = ranking
     return len(leaderboard[(gameID, categID)])
 
-def get_leaderboard(gameID, categID):  # Requester done!
+def get_leaderboard(gameID, categID):
     # TODO: Doublons à éliminer quand possible!
     # TODO: Séparer les onglets
     try:
@@ -91,7 +91,7 @@ systems = {
     "3167jd6q" : "SGB",
     "83exk6l5" : "SNES",
     "nzelreqp" : "WII VC"}
-def get_newsystem(newsystem): # Requester done!
+def get_newsystem(newsystem):
     rep = requester(f"/platforms?max=200")
     for system in rep["data"]:
         if system["name"] == newsystem: 
@@ -102,7 +102,7 @@ def get_newsystem(newsystem): # Requester done!
     for system in rep["data"]:
         print(system["name"])
 
-def get_system(ID):  # Requester done!
+def get_system(ID):
     try:
         return systems[ID]
     except KeyError:
