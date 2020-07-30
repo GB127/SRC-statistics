@@ -35,7 +35,6 @@ class user:
     def __str__(self):
         return f'{self.username}, {len(self.runs)} runs, {len(self.PBs)} PBs'
 
-
     def total_PB(self):
         tempo = []
         for PB in self.PBs:
@@ -48,7 +47,8 @@ class user:
             tempo.append(PB.WR)
         self.total_WR = sum(tempo)
 
-    def listPBs(self):  # TODO : Change name
+
+    def table_PBs(self):  # TODO : Change name
         """Print a table by printing all PBs
         """
         print("-"*120)
@@ -119,10 +119,10 @@ class PB(Run):
         # return (self.lenrank - self.place) / self.lenrank < (other.lenrank - other.place) / other.lenrank
         # return self.delta < other.delta
         # return self.time * 100/self.WR < other.time * 100/other.WR
-        # return self.percWR < other.percWR
+        return self.percWR < other.percWR
 
         return super().__lt__(other)
 
 if __name__ == "__main__":
     user = user("pac")
-    user.listPBs()
+    print(user.PBs[0])
