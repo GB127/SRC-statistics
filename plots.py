@@ -3,7 +3,7 @@ import datetime
 from tools import *
 from api import *
 
-def plot_leaderboard(gameID, categID, PB=None, username=None):
+def plot_leaderboard(gameID, categID, PB=None, username=None): #TODO: Convert to user method
     leaderboard = get_leaderboard(gameID,categID)
     plot.plot([time[0] for time in leaderboard], [rank[1] for rank in leaderboard])
     plot.ylabel("Time")
@@ -13,10 +13,10 @@ def plot_leaderboard(gameID, categID, PB=None, username=None):
     ax = plot.gca()
     ax.set_xlim(ax.get_xlim()[::-1])
     if PB and username:
-        plot.annotate(f"{username}", xy=(PB.place, PB.time), xytext=(0.5,0.5), textcoords="figure fraction",
+        plot.annotate(f"{username}", xy=(PB.place, PB.time), xytext=(0.65,0.65), textcoords="figure fraction",
                         arrowprops={"arrowstyle":"->"}
                         )
     plot.show()
-
+    
 if __name__ == "__main__":
-    plot_leaderboard("o1y9wo6q", "7dgrrxk4")
+    histo_leaderboard("smb", "Any")

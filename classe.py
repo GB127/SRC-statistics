@@ -79,6 +79,7 @@ class Run:
         self.ID = data["id"]
         self.gameID = data["game"]
         self.categID = data["category"]
+        self.vari = data["values"]
         self.time = isodate.parse_duration(data["times"]["primary"]).total_seconds()
     def __str__(self):
         return f'{get_game(self.gameID)} - {get_category(self.categID)} - {datetime.timedelta(seconds=self.time)}'
@@ -100,7 +101,7 @@ class PB(Run):
         """
         super().__init__(data["run"])
         self.place = data["place"]
-        self.lenrank = get_len_leaderboard(self.gameID, self.categID)
+        self.lenrank = get_len_leaderboard(self.gameID, self.categID, self.vari)
         self.perclenrank = round(100 * (self.lenrank - self.place) / self.lenrank,2)
         self.WR = isodate.parse_duration(get_WR(self.categID)[0]).total_seconds()
         self.delta = self.time - self.WR
@@ -124,5 +125,5 @@ class PB(Run):
         return super().__lt__(other)
 
 if __name__ == "__main__":
-    user = user("pac")
-    print(user.PBs[0])
+    user = user("zfg")
+    user.table_PBs()

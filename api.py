@@ -56,30 +56,51 @@ def get_WR(ID):
     return WRs[ID]
 
 
+def get_variable(variID):
+    rep = requester(f'/variables/{variID}')
+    return rep["data"]
+
+
 leaderboard = {}
-def get_len_leaderboard(gameID, categID):
+def get_len_leaderboard(gameID, categID, vari):
+    # vari is a dicto!
+    varistr = ""
+    if vari != {}:
+        tempo = []
+        for key in vari:
+            if get_variable(key)["is-subcategory"] is True: tempo.append(f"var-{key}={vari[key]}")
+        varistr = "&".join(tempo)
+        if varistr != "": varistr = "?" + varistr
     try:
-        return len(leaderboard[(gameID, categID)])
+        return len(leaderboard[(gameID, categID, varistr)])
     except KeyError:
         ranking = []
-        rep = requester(f"/leaderboards/{gameID}/category/{categID}")
+        rep = requester(f"/leaderboards/{gameID}/category/{categID}" + varistr)
         for run in rep["data"]["runs"]:
             ranking.append((int(run["place"]), isodate.parse_duration(run["run"]["times"]["primary"]).total_seconds()))
         leaderboard[(gameID, categID)] = ranking
     return len(leaderboard[(gameID, categID)])
 
-def get_leaderboard(gameID, categID):
+def get_leaderboard(gameID, categID, vari):
     # TODO: Doublons à éliminer quand possible!
     # TODO: Séparer les onglets
+    varistr = ""
+    if vari != {}:
+        for key in vari:
+            tempo = []
+            test = get_variable(key)["is-subcategory"]
+            if test: tempo.append(f"var-{key}={vari[key]}")
+            varistr = "&".join(tempo)
+        if varistr != "": varistr = "?" + varistr
     try:
-        return leaderboard[(gameID, categID)]
+        return leaderboard[(gameID, categID, varistr)]
     except KeyError:
         ranking = []
-        rep = requester(f"/leaderboards/{gameID}/category/{categID}")
+        rep = requester(f"/leaderboards/{gameID}/category/{categID}" + varistr)
         for run in rep["data"]["runs"]:
             ranking.append((int(run["place"]), isodate.parse_duration(run["run"]["times"]["primary"]).total_seconds()))
         leaderboard[(gameID, categID)] = ranking
-    return leaderboard[(gameID, categID)]
+    return leaderboard[(gameID, categID, varistr)]
 
 systems = {
     None : "PC",
