@@ -2,7 +2,7 @@ from plots import *
 from classe import *
 
 if __name__ == "__main__":
-    user = user("malzakiel")
+    user = user("DunkelGotik")
     user.table_PBs()
     command = True
     while command != "end":

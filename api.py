@@ -13,8 +13,10 @@ def requester(link):
         if rep.status_code == 200:
             return rep.json()
         if rep.status_code == 502:
-            print("502 error, let's wait and try again")
-            time.sleep(20)
+            time.sleep(10)
+        else:
+            print(f"{URL}{link}")
+            raise BaseException
 
 
 def get_PBs(username):
@@ -44,17 +46,19 @@ def get_category(ID):
         categories[ID] = rep["data"]["name"]
     return categories[ID]
 
-WRs = {}
-def get_WR(ID):
+def get_WR(gameID, categID, vari):
+    varistr = ""
+    if vari != {}:
+        tempo = []
+        for key in vari:
+            if get_variable(key)["is-subcategory"] is True: tempo.append(f"var-{key}={vari[key]}")
+        varistr = "&".join(tempo)
+        if varistr != "": varistr = "?" + varistr
     try:
-        return WRs[ID]
+        leaderboard[(gameID, categID, varistr)]
     except KeyError:
-        WRs[ID] = []
-        rep = requester(f'/categories/{ID}/records?top=1')
-        for place in rep["data"][0]["runs"]:
-            WRs[ID].append(place["run"]["times"]["primary"])
-    return WRs[ID]
-
+        get_leaderboard(gameID, categID, vari)
+    return leaderboard[(gameID, categID, varistr)][0][1]
 
 def get_variable(variID):
     rep = requester(f'/variables/{variID}')
@@ -78,19 +82,18 @@ def get_len_leaderboard(gameID, categID, vari):
         rep = requester(f"/leaderboards/{gameID}/category/{categID}" + varistr)
         for run in rep["data"]["runs"]:
             ranking.append((int(run["place"]), isodate.parse_duration(run["run"]["times"]["primary"]).total_seconds()))
-        leaderboard[(gameID, categID)] = ranking
-    return len(leaderboard[(gameID, categID)])
+        leaderboard[(gameID, categID, varistr)] = ranking
+    return len(leaderboard[(gameID, categID, varistr)])
 
 def get_leaderboard(gameID, categID, vari):
     # TODO: Doublons à éliminer quand possible!
     # TODO: Séparer les onglets
     varistr = ""
     if vari != {}:
+        tempo = []
         for key in vari:
-            tempo = []
-            test = get_variable(key)["is-subcategory"]
-            if test: tempo.append(f"var-{key}={vari[key]}")
-            varistr = "&".join(tempo)
+            if get_variable(key)["is-subcategory"] is True: tempo.append(f"var-{key}={vari[key]}")
+        varistr = "&".join(tempo)
         if varistr != "": varistr = "?" + varistr
     try:
         return leaderboard[(gameID, categID, varistr)]
@@ -99,7 +102,7 @@ def get_leaderboard(gameID, categID, vari):
         rep = requester(f"/leaderboards/{gameID}/category/{categID}" + varistr)
         for run in rep["data"]["runs"]:
             ranking.append((int(run["place"]), isodate.parse_duration(run["run"]["times"]["primary"]).total_seconds()))
-        leaderboard[(gameID, categID)] = ranking
+        leaderboard[(gameID, categID, varistr)] = ranking
     return leaderboard[(gameID, categID, varistr)]
 
 systems = {

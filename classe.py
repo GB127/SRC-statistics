@@ -48,14 +48,14 @@ class user:
         self.total_WR = sum(tempo)
 
 
-    def table_PBs(self):  # TODO : Change name
+    def table_PBs(self):
         """Print a table by printing all PBs
         """
         print("-"*120)
-        print(f"# |{'Sys':^6}| {'Game':^30}| {'Category':^15} | {'Time':^14}|      + \u0394WR     |{'%WR':^10}| {'  Rank      (^%)':20}")
+        print(f"| # |{'Sys':^6}| {'Game':^30}| {'Category':^15} | {'Time':^14}|      + \u0394WR     |{'%WR':^10}| {'  Rank      (^%)':20}")
         print("-"*120)
         self.PBs.sort()
-        for no, PB in enumerate(self.PBs): print(f'{no+1} {PB}')
+        for no, PB in enumerate(self.PBs): print(f'{no+1:3} {PB}')
         print("-"*122)
         print(f'{"Total :":>59}| {str_time(self.total_PB)[:13]:14}| + {str_time(self.total_PB - self.total_WR)[:13]:13}|----------|')
         print(f'{"Average :":>59}| {str_time(self.total_PB/len(self.PBs))[:13]:14}| + {str_time((self.total_PB - self.total_WR)/len(self.PBs))[:13]:13}| {str(round(self.total_PB/self.total_WR * 100,2))[:6]:6} % |')
@@ -103,7 +103,7 @@ class PB(Run):
         self.place = data["place"]
         self.lenrank = get_len_leaderboard(self.gameID, self.categID, self.vari)
         self.perclenrank = round(100 * (self.lenrank - self.place) / self.lenrank,2)
-        self.WR = isodate.parse_duration(get_WR(self.categID)[0]).total_seconds()
+        self.WR = get_WR(self.gameID, self.categID, self.vari)
         self.delta = self.time - self.WR
         self.percWR = round((self.time * 100/self.WR),2)
     def __str__(self):
@@ -125,5 +125,5 @@ class PB(Run):
         return super().__lt__(other)
 
 if __name__ == "__main__":
-    user = user("zfg")
+    user = user("jaypin88")
     user.table_PBs()
