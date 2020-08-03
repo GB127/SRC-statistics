@@ -3,8 +3,8 @@ import datetime
 from tools import *
 from api import *
 
-def plot_leaderboard(gameID, categID, PB=None, username=None): #TODO: Convert to user method
-    leaderboard = get_leaderboard(gameID,categID)
+def plot_leaderboard(gameID, categID, PB=None, username=None, vari=None): #TODO: Convert to user method
+    leaderboard = get_leaderboard(gameID,categID, vari)
     plot.plot([time[0] for time in leaderboard], [rank[1] for rank in leaderboard])
     plot.ylabel("Time")
     plot.yticks(plot.yticks()[0],[datetime.timedelta(seconds=x) for x in plot.yticks()[0]])
