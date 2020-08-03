@@ -8,7 +8,19 @@ import time
 URL = "https://www.speedrun.com/api/v1"
 
 def requester(link):
+    """Generic requester.
+
+        Args:
+            link (string): link addition of the request
+
+        Raises:
+            BaseException: Raise error if the status code isn't 200 or 502.
+
+        Returns:
+            json: return the data in a json form
+        """
     while True:
+        # It's in a loop in order to bypass the 502 status code.
         rep = requests.get(f"{URL}{link}")
         if rep.status_code == 200:
             return rep.json()
@@ -20,10 +32,26 @@ def requester(link):
 
 
 def get_PBs(username):
+    """Requests the PBs of the said username
+
+        Args:
+            username (str): username
+
+        Returns:
+            data
+        """
     rep = requester(f"/users/{get_userID(username)}/personal-bests")
     return rep["data"]
 
 def get_userID(username):
+    """Get the user ID of a username.
+
+    Args:
+        username (str): username
+
+    Returns:
+        ID (str)
+    """
     rep = requester(f"/users/{username}")
     return rep["data"]["id"]
 
