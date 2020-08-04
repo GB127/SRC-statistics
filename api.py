@@ -7,6 +7,24 @@ import time
 
 URL = "https://www.speedrun.com/api/v1"
 
+def recursive_requester(link, toupdate):
+    print(link)
+    rep = requests.get(link)
+    if rep.status_code == 200:
+        rep = rep.json()
+    for run in rep["data"]:
+        toupdate.append(run)
+    if rep["pagination"]["size"] == rep["pagination"]["max"]:
+        print("hallo")
+        recursive_requester(rep["pagination"]["links"][-1]["uri"], toupdate)
+    if rep["pagination"]["size"] < rep["pagination"]["max"]:
+        pass
+
+
+
+
+
+
 def requester(link):
     """Generic requester.
 
@@ -28,10 +46,9 @@ def requester(link):
             time.sleep(10)
         else:
             print(f"{URL}{link}")
-            raise BaseException
+            raise BaseException(rep.status_code)
 
-
-def get_PBs(username):
+def get_PBs(ID):
     """Requests the PBs of the said username
 
         Args:
@@ -40,7 +57,7 @@ def get_PBs(username):
         Returns:
             data
         """
-    rep = requester(f"/users/{get_userID(username)}/personal-bests")
+    rep = requester(f"/users/{ID}/personal-bests")
     return rep["data"]
 
 def get_userID(username):
@@ -163,10 +180,18 @@ def get_system(ID):
     return systems[ID]
 
 
+def get_runs(ID):
+    runs = []
+    link_1 = f"{URL}/runs?user={ID}&max=10"
+
+    recursive_requester(link_1, runs)
+    return runs
+
+
+
 if __name__ == "__main__":
     
-    
-    game = "allo"
-    cat = "7dgrrxk4"
+    test = get_userID("Niamek")
 
-    print(get_game("sml1"))
+    test2 = get_runs(test)
+    print(len(test2))
