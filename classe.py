@@ -19,16 +19,30 @@ class user:
                 self.runs (list) : List of runs
                 self.PBs (list) : List of PBs
         """
-        self.username = username
         print("Fetching data...")
+
+
+        self.username = username
         self.ID = get_userID(self.username)
         self.runs, self.PBs = [], []
+
+
+        # PB related
         for pb in get_PBs(self.ID): 
             if pb["run"]["level"] is None:
                 self.PBs.append(PB(pb))
             else: pass
         self.total_PB()
         self.total_WR()
+
+        # Runs related:
+        for run in get_runs(self.ID):
+            if run["level"] is None:
+                self.runs.append(Run(run))
+            else: pass
+
+
+
 
         print("user initialized!")
 
@@ -57,10 +71,11 @@ class user:
         self.PBs.sort()
         for no, PB in enumerate(self.PBs): print(f'{no+1:3} {PB}')
         print("-"*122)
-        print(f'{"Total :":>59}| {str_time(self.total_PB)[:13]:14}| + {str_time(self.total_PB - self.total_WR)[:13]:13}|----------|')
-        print(f'{"Average :":>59}| {str_time(self.total_PB/len(self.PBs))[:13]:14}| + {str_time((self.total_PB - self.total_WR)/len(self.PBs))[:13]:13}| {str(round(self.total_PB/self.total_WR * 100,2))[:6]:6} % |')
+        print(f'{"Total :":>58}| {str_time(self.total_PB)[:17]:17}| + {str_time(self.total_PB - self.total_WR)[:13]:20}|----------|')
+        print(f'{"Average :":>58}| {str_time(self.total_PB/len(self.PBs))[:17]:17}| + {str_time((self.total_PB - self.total_WR)/len(self.PBs))[:13]:20}| {str(round(self.total_PB/self.total_WR * 100,2))[:6]:6} % |')
 
 class Run:
+    sort = "system"
     def __init__(self, data):
         """
             Args:
@@ -82,12 +97,20 @@ class Run:
         self.vari = data["values"]
         self.time = isodate.parse_duration(data["times"]["primary"]).total_seconds()
     def __str__(self):
-        return f'{get_game(self.gameID)} - {get_category(self.categID)} - {datetime.timedelta(seconds=self.time)}'
+        return f'{get_system(self.system)[:6]:^6}| {get_game(self.gameID)[:30]:30} | {get_category(self.categID)[:15]:15} | {datetime.timedelta(seconds=self.time)}'
     def __lt__(self, other):
-        #return get_system(self.system) < get_system(other.system)
-        return get_game(self.gameID) < get_game(other.gameID)
+        if Run.sort == "system":
+            if get_system(self.system) != get_system(other.system):
+                return get_system(self.system) < get_system(other.system)
+        if Run.sort == "game":
+            if get_game(self.gameID) != get_game(other.gameID):
+                return get_game(self.gameID) < get_game(other.gameID)
+        if get_category(self.categID) != get_category(other.categID):
+            return get_category(self.categID) < get_category(other.categID)
+        return self.time < other.time
 
 class PB(Run):
+    sort = "%WR"
     def __init__(self, data):
         """
             NOTES:
@@ -117,13 +140,23 @@ class PB(Run):
             return f'{str_time(self.time)[:13]:13} | + {str_time(self.delta)[:13]:13}| {self.percWR:^6} %'
         return f'{str_game(self)} | {str_times(self)} | {str_rank(self)}'
     def __lt__(self, other):
-        # return (self.lenrank - self.place) / self.lenrank < (other.lenrank - other.place) / other.lenrank
-        # return self.delta < other.delta
-        # return self.time * 100/self.WR < other.time * 100/other.WR
-        return self.percWR < other.percWR
+        if PB.sort == "game":
+            return get_game(self.gameID) < get_game(other.gameID)
+        elif PB.sort == "system":
+            return get_system(self.system) < get_system(other.system)
+        elif PB.sort == "time":
+            return self.time < other.time
+        elif PB.sort == "delta":
+            return self.delta < other.delta
+        elif PB.sort == "%WR":
+            return self.percWR < other.percWR
+        elif PB.sort == "%LB":
+            return self.perclenrank > other.perclenrank
 
         return super().__lt__(other)
 
 if __name__ == "__main__":
-    user = user("jaypin88")
+
+    user = user("niamek")
+    PB.sort = "%WR"
     user.table_PBs()
