@@ -46,14 +46,17 @@ class user:
 
         print("user initialized!")
 
+
     def __str__(self):
         return f'{self.username}, {len(self.runs)} runs, {len(self.PBs)} PBs'
+
 
     def total_PB(self):
         tempo = []
         for PB in self.PBs:
             tempo.append(PB.time)
         self.total_PB = sum(tempo)
+
 
     def total_WR(self):
         tempo = []
@@ -76,6 +79,7 @@ class user:
 
 class Run:
     sort = "system"
+
     def __init__(self, data):
         """
             Args:
@@ -96,8 +100,12 @@ class Run:
         self.categID = data["category"]
         self.vari = data["values"]
         self.time = isodate.parse_duration(data["times"]["primary"]).total_seconds()
+
+
     def __str__(self):
         return f'{get_system(self.system)[:6]:^6}| {get_game(self.gameID)[:30]:30} | {get_category(self.categID)[:15]:15} | {datetime.timedelta(seconds=self.time)}'
+
+
     def __lt__(self, other):
         if Run.sort == "system":
             if get_system(self.system) != get_system(other.system):
@@ -129,6 +137,8 @@ class PB(Run):
         self.WR = get_WR(self.gameID, self.categID, self.vari)
         self.delta = self.time - self.WR
         self.percWR = round((self.time * 100/self.WR),2)
+
+
     def __str__(self):
         def str_game(self):
             return f'|{get_system(self.system)[:6]:^6}| {get_game(self.gameID)[:30]:30}| {get_category(self.categID)[:15]:15}'
@@ -139,6 +149,8 @@ class PB(Run):
         def str_times(self):
             return f'{str_time(self.time)[:13]:13} | + {str_time(self.delta)[:13]:13}| {self.percWR:^6} %'
         return f'{str_game(self)} | {str_times(self)} | {str_rank(self)}'
+
+
     def __lt__(self, other):
         if PB.sort == "game":
             return get_game(self.gameID) < get_game(other.gameID)
@@ -153,10 +165,7 @@ class PB(Run):
         elif PB.sort == "%LB":
             return self.perclenrank > other.perclenrank
 
-        return super().__lt__(other)
-
 if __name__ == "__main__":
 
     user = user("niamek")
-    PB.sort = "%WR"
-    user.table_PBs()
+    print(user.runs)

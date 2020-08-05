@@ -8,14 +8,12 @@ import time
 URL = "https://www.speedrun.com/api/v1"
 
 def recursive_requester(link, toupdate):
-    print(link)
     rep = requests.get(link)
     if rep.status_code == 200:
         rep = rep.json()
     for run in rep["data"]:
         toupdate.append(run)
     if rep["pagination"]["size"] == rep["pagination"]["max"]:
-        print("hallo")
         recursive_requester(rep["pagination"]["links"][-1]["uri"], toupdate)
     if rep["pagination"]["size"] < rep["pagination"]["max"]:
         pass
@@ -182,7 +180,7 @@ def get_system(ID):
 
 def get_runs(ID):
     runs = []
-    link_1 = f"{URL}/runs?user={ID}&max=10"
+    link_1 = f"{URL}/runs?user={ID}&max=200"
 
     recursive_requester(link_1, runs)
     return runs

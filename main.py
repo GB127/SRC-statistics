@@ -2,7 +2,7 @@ from plots import *
 from classe import *
 
 if __name__ == "__main__":
-    user = user("DunkelGotik")
+    user = user(input("who? "))
     user.table_PBs()
     command = True
     while command != "end":
@@ -13,6 +13,6 @@ if __name__ == "__main__":
             plot_leaderboard(user.PBs[which].gameID,
                             user.PBs[which].categID,
                             PB=user.PBs[which],
-                            username=user.username)
+                            username=user.username, vari=user.PBs[which].vari)
 
     print("Script ended, thank you!")
