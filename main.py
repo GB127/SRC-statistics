@@ -4,35 +4,37 @@ import os
 
 clear = lambda: os.system('cls')
 
-def run_analyser(PB, username):
+def run_analyser(user):
+    #TODO : Get which PB
+
+
     stat = True
+    commands = ["Plot leaderboard", "Plot PB progression", "end"]
+
     while stat:
-        stat = input("What do you want to do?")
-        if stat == "lb":
-            plot_leaderboard(PB, username)
+        for no, command in enumerate(commands): print(no, command)
+        stat = commands[input_which(commands)]
+        if stat == "Plot leaderboard":
+            plot_leaderboard(PB, user.username)
+        elif stat == "Plot PB progression":
+            plot_runs(PB, username, runs )
+        elif stat == "end":
+            stat = False
 
 
-
-
-
+def input_which(length):
+    try:
+        return int(input(f"Enter a number from 1 to {len(length)}"))
+    except ValueError:
+        print("allo this is a test")
 
 if __name__ == "__main__":
     username = input("Who? ")
     user = user(username)
     clear()
     user.table_PBs()
-    use = True
-    while use:
-        check = False
-        while check is False:  # This while is to fetch which run to analyse
-            try:
-                which = int(input("Which Run & Category do you want to analyse? "))-1
-                assert which > 0 and which < len(user.PBs), "This is a test" 
-                clear()
-                check = True
-            except AssertionError:
-                print(f"Number must be in the range of 1-{len(user.PBs)}")
-            except ValueError:
-                print(f"Input must be a number in the range of 1-{len(user.PBs)}")
-        print(user.PBs[which])
-        run_analyser(user.PBs[which], username)
+    command = input("[all, one]")
+    if command == "all":
+        pass
+    if command == "one":
+        run_analyser(user)

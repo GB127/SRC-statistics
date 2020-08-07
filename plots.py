@@ -3,13 +3,10 @@ import datetime
 from tools import *
 from api import *
 
-def plot_runs(gameID, categID, WR, runs):
-    toplot = []
-    for run in runs:
-        if run.gameID == gameID and run.categID == categID:
-            toplot.append(run)
-    toplot.sort(reverse=True)
-    plot.plot([run.time for run in toplot])
+def plot_runs(PB,username, runs):
+
+    runs.sort(reverse=True)
+    plot.plot([run.time for run in runs])
     plot.axhline(y=WR, c="gold")
     plot.ylabel("Time")
     plot.yticks(plot.yticks()[0],[datetime.timedelta(seconds=x) for x in plot.yticks()[0]])

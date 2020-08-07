@@ -77,6 +77,14 @@ class user:
         print(f'{"Total :":>58}| {str_time(self.total_PB)[:17]:17}| + {str_time(self.total_PB - self.total_WR)[:13]:20}|----------|')
         print(f'{"Average :":>58}| {str_time(self.total_PB/len(self.PBs))[:17]:17}| + {str_time((self.total_PB - self.total_WR)/len(self.PBs))[:13]:20}| {str(round(self.total_PB/self.total_WR * 100,2))[:6]:6} % |')
 
+    def runs_PB(self,PB):
+        toreturn = []
+        for run in self.runs:
+            if run.gameID == PB.gameID and run.categID == PB.categID:
+                toreturn.append(run)
+        return toreturn
+
+
 class Run:
     sort = "time"
 
