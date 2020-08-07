@@ -3,6 +3,20 @@ import datetime
 from tools import *
 from api import *
 
+def plot_runs(gameID, categID, WR, runs):
+    toplot = []
+    for run in runs:
+        if run.gameID == gameID and run.categID == categID:
+            toplot.append(run)
+    toplot.sort(reverse=True)
+    plot.plot([run.time for run in toplot])
+    plot.axhline(y=WR, c="gold")
+    plot.ylabel("Time")
+    plot.yticks(plot.yticks()[0],[datetime.timedelta(seconds=x) for x in plot.yticks()[0]])
+    plot.xlabel("PB #")
+    plot.title(f'{get_game(gameID)} - {get_category(categID)}')
+    plot.show()
+
 def plot_leaderboard(gameID, categID, PB=None, username=None, vari=None): #TODO: Convert to user method
     leaderboard = get_leaderboard(gameID,categID, vari)
     plot.plot([time[0] for time in leaderboard], [rank[1] for rank in leaderboard])
