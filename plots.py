@@ -17,13 +17,13 @@ def plot_runs(gameID, categID, WR, runs):
     plot.title(f'{get_game(gameID)} - {get_category(categID)}')
     plot.show()
 
-def plot_leaderboard(gameID, categID, PB=None, username=None, vari=None): #TODO: Convert to user method
-    leaderboard = get_leaderboard(gameID,categID, vari)
+def plot_leaderboard(PB, username):
+    leaderboard = get_leaderboard(PB.gameID,PB.categID, PB.vari)
     plot.plot([time[0] for time in leaderboard], [rank[1] for rank in leaderboard])
     plot.ylabel("Time")
     plot.yticks(plot.yticks()[0],[datetime.timedelta(seconds=x) for x in plot.yticks()[0]])
     plot.xlabel("Rank")
-    plot.title(f'{get_game(gameID)} - {get_category(categID)}')
+    plot.title(f'{get_game(PB.gameID)} - {get_category(PB.categID)}')
     ax = plot.gca()
     ax.set_xlim(ax.get_xlim()[::-1])
     if PB and username:
