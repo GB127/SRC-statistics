@@ -78,7 +78,7 @@ class user:
         print(f'{"Average :":>58}| {str_time(self.total_PB/len(self.PBs))[:17]:17}| + {str_time((self.total_PB - self.total_WR)/len(self.PBs))[:13]:20}| {str(round(self.total_PB/self.total_WR * 100,2))[:6]:6} % |')
 
 class Run:
-    sort = "system"
+    sort = "time"
 
     def __init__(self, data):
         """
@@ -93,23 +93,23 @@ class Run:
                 self.categID : ID of the category ran
                 self.time : duration of the run
         """
-        self.system = data["system"]["platform"]
+        self.system = get_system(data["system"]["platform"])
         self.emulated = True if data["system"]["emulated"] else False
         self.ID = data["id"]
         self.gameID = data["game"]
         self.categID = data["category"]
         self.vari = data["values"]
-        self.time = isodate.parse_duration(data["times"]["primary"]).total_seconds()
+        self.time = data["times"]["primary_t"]
 
 
     def __str__(self):
-        return f'{get_system(self.system)[:6]:^6}| {get_game(self.gameID)[:30]:30} | {get_category(self.categID)[:15]:15} | {datetime.timedelta(seconds=self.time)}'
+        return f'{self.system[:6]:^6}| {get_game(self.gameID)[:30]:30} | {get_category(self.categID)[:15]:15} | {datetime.timedelta(seconds=self.time)}'
 
 
     def __lt__(self, other):
         if Run.sort == "system":
-            if get_system(self.system) != get_system(other.system):
-                return get_system(self.system) < get_system(other.system)
+            if self.system != other.system:
+                return self.system < other.system
         if Run.sort == "game":
             if get_game(self.gameID) != get_game(other.gameID):
                 return get_game(self.gameID) < get_game(other.gameID)
@@ -133,15 +133,15 @@ class PB(Run):
         super().__init__(data["run"])
         self.place = data["place"]
         self.lenrank = get_len_leaderboard(self.gameID, self.categID, self.vari)
-        self.perclenrank = round(100 * (self.lenrank - self.place) / self.lenrank,2)
+        self.perclenrank = round(100 * (self.lenrank - self.place) / self.lenrank, 2)
         self.WR = get_WR(self.gameID, self.categID, self.vari)
         self.delta = self.time - self.WR
-        self.percWR = round((self.time * 100/self.WR),2)
+        self.percWR = round((self.time * 100/self.WR), 2)
 
 
     def __str__(self):
         def str_game(self):
-            return f'|{get_system(self.system)[:6]:^6}| {get_game(self.gameID)[:30]:30}| {get_category(self.categID)[:15]:15}'
+            return f'|{self.system[:6]:^6}| {get_game(self.gameID)[:30]:30}| {get_category(self.categID)[:15]:15}'
         def str_rank(self):
             calculation = f'{self.place}/{self.lenrank}'
             calculation2 = f'({str(self.perclenrank):^5} %)'
@@ -155,7 +155,7 @@ class PB(Run):
         if PB.sort == "game":
             return get_game(self.gameID) < get_game(other.gameID)
         elif PB.sort == "system":
-            return get_system(self.system) < get_system(other.system)
+            return self.system < other.system
         elif PB.sort == "time":
             return self.time < other.time
         elif PB.sort == "delta":

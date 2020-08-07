@@ -5,6 +5,7 @@ import isodate
 import time
 
 
+
 URL = "https://www.speedrun.com/api/v1"
 
 def recursive_requester(link, toupdate):
@@ -192,4 +193,4 @@ if __name__ == "__main__":
     test = get_userID("Niamek")
 
     test2 = get_runs(test)
-    print(len(test2))
+    
