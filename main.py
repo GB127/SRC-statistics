@@ -6,18 +6,18 @@ clear = lambda: os.system('cls')
 
 def run_analyser(user):
     #TODO : Get which PB
+    which = int(input(f"Enter a number from 1 to {len(user.PBs)} ")) -1
+    PB = user.PBs[which]
 
 
     stat = True
-    commands = ["Plot leaderboard", "Plot PB progression", "end"]
 
     while stat:
-        for no, command in enumerate(commands): print(no, command)
-        stat = commands[input_which(commands)]
-        if stat == "Plot leaderboard":
+        stat = input("[lb, pb, end] ")
+        if stat == "lb":
             plot_leaderboard(PB, user.username)
-        elif stat == "Plot PB progression":
-            plot_runs(PB, username, runs )
+        elif stat == "pb":
+            plot_runs(PB, username, user.runs_PB(PB) )
         elif stat == "end":
             stat = False
 
@@ -33,8 +33,8 @@ if __name__ == "__main__":
     user = user(username)
     clear()
     user.table_PBs()
-    command = input("[all, one]")
+    command = input("[all, 1]")
     if command == "all":
         pass
-    if command == "one":
+    if command == "1":
         run_analyser(user)

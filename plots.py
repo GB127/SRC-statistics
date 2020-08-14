@@ -7,11 +7,11 @@ def plot_runs(PB,username, runs):
 
     runs.sort(reverse=True)
     plot.plot([run.time for run in runs])
-    plot.axhline(y=WR, c="gold")
+    plot.axhline(y=PB.WR, c="gold")
     plot.ylabel("Time")
     plot.yticks(plot.yticks()[0],[datetime.timedelta(seconds=x) for x in plot.yticks()[0]])
     plot.xlabel("PB #")
-    plot.title(f'{get_game(gameID)} - {get_category(categID)}')
+    plot.title(f'{get_game(PB.gameID)} - {get_category(PB.categID)}')
     plot.show()
 
 def plot_leaderboard(PB, username):
