@@ -5,6 +5,8 @@ from api import *
 from classe import *
 
 def plot_userchart(user):
+    fig, axs = plot.subplots(2, 2)
+
     
     systems = {}
     for PB in user.PBs:
@@ -12,18 +14,44 @@ def plot_userchart(user):
             systems[PB.system] += 1
         except KeyError:
             systems[PB.system] = 1
-    plot.pie([systems[system] for system in systems.keys()], labels=[system for system in systems.keys()], autopct='%1.1f%%')
-    
-    """
+    list_system = sorted(list(systems.keys()))
+    axs[0,0].pie([systems[system] for system in list_system], labels=[system for system in list_system], autopct='%1.1f%%', startangle=90)
+    axs[0,0].set_title("PB #")
+
+
     systems = {}
     for run in user.runs:
         try:
             systems[run.system] += 1
         except KeyError:
             systems[run.system] = 1
-    plot.pie([systems[system] for system in systems.keys()], labels=[system for system in systems.keys()], autopct='%1.1f%%')
-    """
+    list_system = sorted(list(systems.keys()))
+    axs[0,1].pie([systems[system] for system in list_system], labels=[system for system in list_system], autopct='%1.1f%%', startangle=90)
+    axs[0,1].set_title("run #")
 
+
+    systems = {}
+    for PB in user.PBs:
+        try:
+            systems[PB.system] += PB.time
+        except KeyError:
+            systems[PB.system] = PB.time
+    list_system = sorted(list(systems.keys()))
+    axs[1,0].pie([systems[system] for system in list_system], labels=[system for system in list_system], autopct='%1.1f%%', startangle=90)
+    axs[1,0].set_title("PB total time")
+
+
+    systems = {}
+    for run in user.runs:
+        try:
+            systems[run.system] += run.time
+        except KeyError:
+            systems[run.system] = run.time
+    list_system = sorted(list(systems.keys()))
+    axs[1,1].pie([systems[system] for system in list_system], labels=[system for system in list_system], autopct='%1.1f%%', startangle=90)
+    axs[1,1].set_title("run total time")
+
+    fig.suptitle(user.username)
 
 
     plot.show()
@@ -60,4 +88,4 @@ def plot_leaderboard(PB, username):
     plot.show()
     
 if __name__ == "__main__":
-    plot_userchart(user("lackattack24"))
+    plot_userchart(user("niamek"))

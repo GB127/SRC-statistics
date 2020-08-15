@@ -77,7 +77,7 @@ class user:
         print(f'{"Total :":>58}| {str_time(self.total_PB)[:17]:17}| + {str_time(self.total_PB - self.total_WR)[:13]:20}|----------|')
         print(f'{"Average :":>58}| {str_time(self.total_PB/len(self.PBs))[:17]:17}| + {str_time((self.total_PB - self.total_WR)/len(self.PBs))[:13]:20}| {str(round(self.total_PB/self.total_WR * 100,2))[:6]:6} % |')
 
-    def runs_PB(self,PB):
+    def runs_PB(self, PB):
         toreturn = []
         for run in self.runs:
             if run.gameID == PB.gameID and run.categID == PB.categID:
@@ -115,15 +115,12 @@ class Run:
 
 
     def __lt__(self, other):
-        if Run.sort == "system":
-            if self.system != other.system:
-                return self.system < other.system
-        if Run.sort == "game":
-            if get_game(self.gameID) != get_game(other.gameID):
-                return get_game(self.gameID) < get_game(other.gameID)
-        if get_category(self.categID) != get_category(other.categID):
+        if get_game(self.gameID) != get_game(other.gameID):
+            return get_game(self.gameID) < get_game(other.gameID)
+        elif get_category(self.categID) != get_category(other.categID):
             return get_category(self.categID) < get_category(other.categID)
-        return self.time < other.time
+        else:
+            return self.time < other.time
 
 class PB(Run):
     sort = "%WR"

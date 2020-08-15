@@ -5,21 +5,14 @@ import os
 clear = lambda: os.system('cls')
 
 def run_analyser(user):
-    #TODO : Get which PB
     which = int(input(f"Enter a number from 1 to {len(user.PBs)} ")) -1
     PB = user.PBs[which]
 
+    plot_leaderboard(PB, user.username)
+    plot_runs(PB, username, user.runs_PB(PB) )
 
-    stat = True
-
-    while stat:
-        stat = input("[lb, pb, end] ")
-        if stat == "lb":
-            plot_leaderboard(PB, user.username)
-        elif stat == "pb":
-            plot_runs(PB, username, user.runs_PB(PB) )
-        elif stat == "end":
-            stat = False
+def user_analyser(user):
+    plot_userchart(user)
 
 
 def input_which(length):
@@ -37,7 +30,7 @@ if __name__ == "__main__":
     while main:
         command = input("[all, 1, list, end] ")
         if command == "all":
-            pass
+            user_analyser(user)
         elif command == "1":
             run_analyser(user)
         elif command == "list":
