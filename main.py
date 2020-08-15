@@ -33,8 +33,14 @@ if __name__ == "__main__":
     user = user(username)
     clear()
     user.table_PBs()
-    command = input("[all, 1]")
-    if command == "all":
-        pass
-    if command == "1":
-        run_analyser(user)
+    main = True
+    while main:
+        command = input("[all, 1, list, end] ")
+        if command == "all":
+            pass
+        elif command == "1":
+            run_analyser(user)
+        elif command == "list":
+            clear()
+            user.table_PBs()
+        elif command == "end": main = False
