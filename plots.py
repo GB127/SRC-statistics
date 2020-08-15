@@ -2,6 +2,36 @@ import matplotlib.pyplot as plot
 import datetime
 from tools import *
 from api import *
+from classe import *
+
+def plot_userchart(user):
+    
+    systems = {}
+    for PB in user.PBs:
+        try:
+            systems[PB.system] += 1
+        except KeyError:
+            systems[PB.system] = 1
+    plot.pie([systems[system] for system in systems.keys()], labels=[system for system in systems.keys()], autopct='%1.1f%%')
+    
+    """
+    systems = {}
+    for run in user.runs:
+        try:
+            systems[run.system] += 1
+        except KeyError:
+            systems[run.system] = 1
+    plot.pie([systems[system] for system in systems.keys()], labels=[system for system in systems.keys()], autopct='%1.1f%%')
+    """
+
+
+
+    plot.show()
+
+
+
+
+
 
 def plot_runs(PB,username, runs):
 
@@ -30,4 +60,4 @@ def plot_leaderboard(PB, username):
     plot.show()
     
 if __name__ == "__main__":
-    histo_leaderboard("smb", "Any")
+    plot_userchart(user("lackattack24"))
