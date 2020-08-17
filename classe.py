@@ -29,7 +29,7 @@ class user:
 
         # PB related
         for pb in get_PBs(self.ID): 
-            if pb["run"]["level"] is None:
+            if pb["run"]["level"] is None and pb["run"]["times"]["primary_t"] > 180:
                 self.PBs.append(PB(pb))
             else: pass
         self.total_PB()
@@ -37,7 +37,7 @@ class user:
 
         # Runs related:
         for run in get_runs(self.ID):
-            if run["level"] is None:
+            if run["level"] is None and run["times"]["primary_t"] > 180:
                 self.runs.append(Run(run))
             else: pass
 
@@ -171,6 +171,4 @@ class PB(Run):
             return self.perclenrank > other.perclenrank
 
 if __name__ == "__main__":
-
-    user = user("niamek")
-    print(user.runs)
+    pass
