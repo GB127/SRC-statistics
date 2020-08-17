@@ -4,7 +4,7 @@ from tools import *
 from api import *
 from classe import *
 
-def plot_userchart(user):
+def plot_userpies_systems(user):
     fig, axs = plot.subplots(2, 2)
 
     
@@ -57,9 +57,20 @@ def plot_userchart(user):
     plot.show()
 
 
+def plot_new(user):
+    fig, axs = plot.subplots(2, 2)
 
+    times = []
+    for run in user.runs:
+        times.append(run.time)
+    axs[0,0].hist(times)
 
+    times = []
+    for run in user.PBs:
+        times.append(run.time)
+    axs[0,1].hist(times)
 
+    plot.show()
 
 def plot_runs(PB,username, runs):
 
@@ -88,4 +99,5 @@ def plot_leaderboard(PB, username):
     plot.show()
     
 if __name__ == "__main__":
-    plot_userchart(user("niamek"))
+    plot_userpies_systems(user("baffan"))
+    plot_new(user("baffan"))

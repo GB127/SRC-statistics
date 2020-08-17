@@ -12,8 +12,14 @@ def run_analyser(user):
     plot_runs(PB, username, user.runs_PB(PB) )
 
 def user_analyser(user):
-    plot_userchart(user)
+    plot_userpies_systems(user)
+    # Emu vs. non-emu
 
+
+    # pie chart of WR difference per system
+    # pie chart of WR% per system?
+    # Histogram as well
+    # Histogram as well
 
 def input_which(length):
     try:
