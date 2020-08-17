@@ -12,12 +12,13 @@ def run_analyser(user):
     plot_runs(PB, username, user.runs_PB(PB) )
 
 def user_analyser(user):
-    plot_userpies_systems(user)
+    plot_user_pies_systems(user)
+    plot_user_hist_times(user)
     # Emu vs. non-emu
 
 
     # pie chart of WR difference per system
-    # pie chart of WR% per system?
+    # pie chart of WR% per system
     # Histogram as well
     # Histogram as well
 
@@ -30,16 +31,13 @@ def input_which(length):
 if __name__ == "__main__":
     username = input("Who? ")
     user = user(username)
-    clear()
-    user.table_PBs()
     main = True
     while main:
+        clear()
+        user.table_PBs()
         command = input("[all, 1, list, end] ")
         if command == "all":
             user_analyser(user)
         elif command == "1":
             run_analyser(user)
-        elif command == "list":
-            clear()
-            user.table_PBs()
         elif command == "end": main = False
