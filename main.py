@@ -9,11 +9,16 @@ def run_analyser(user):
     PB = user.PBs[which]
 
     plot_leaderboard(PB, user.username)
-    plot_runs(PB, username, user.runs_PB(PB) )
+    plot_runs(PB, user.username, user.runs_PB(PB) )
 
 def user_analyser(user):
+
+
+
+
     plot_user_pies_systems(user)
-    plot_user_hist_times(user)
+
+
     # Emu vs. non-emu
 
 
@@ -29,13 +34,12 @@ def input_which(length):
         print("allo this is a test")
 
 if __name__ == "__main__":
-    username = input("Who? ")
-    user = user(username)
+    user = user(input("Who? "))
     main = True
     while main:
         clear()
         user.table_PBs()
-        command = input("[all, 1, list, end] ")
+        command = input("[all, 1, end] ")
         if command == "all":
             user_analyser(user)
         elif command == "1":

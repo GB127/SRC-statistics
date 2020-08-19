@@ -4,7 +4,7 @@ from tools import *
 from api import *
 from classe import *
 
-def plot_userpies_systems(user):
+def plot_user_pies_systems(user):
     fig, axs = plot.subplots(2, 2)
 
     
@@ -17,6 +17,7 @@ def plot_userpies_systems(user):
     list_system = sorted(list(systems.keys()))
     axs[0,0].pie([systems[system] for system in list_system], labels=[system for system in list_system], autopct='%1.1f%%', startangle=90)
     axs[0,0].set_title("PB #")
+
 
 
     systems = {}
@@ -57,18 +58,18 @@ def plot_userpies_systems(user):
     plot.show()
 
 
-def plot_new(user):
-    fig, axs = plot.subplots(2, 2)
+def plot_user_hist_times(user):
+    fig, axs = plot.subplots(2, 1)
 
     times = []
     for run in user.runs:
         times.append(run.time)
-    axs[0,0].hist(times)
+    axs[0].hist(times)
 
     times = []
     for run in user.PBs:
         times.append(run.time)
-    axs[0,1].hist(times)
+    axs[1].hist(times)
 
     plot.show()
 
@@ -99,5 +100,4 @@ def plot_leaderboard(PB, username):
     plot.show()
     
 if __name__ == "__main__":
-    plot_userpies_systems(user("baffan"))
-    plot_new(user("baffan"))
+    plot_user_pies_systems(user("niamek"))

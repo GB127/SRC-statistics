@@ -158,7 +158,8 @@ systems = {
     "jm95z9ol" : "NES",
     "3167jd6q" : "SGB",
     "83exk6l5" : "SNES",
-    "nzelreqp" : "WII VC"}
+    "4p9z06rn" : "GC",
+    "nzelreqp" : "WIIVC"}
 def get_newsystem(newsystem):
     rep = requester(f"/platforms?max=200")
     for system in rep["data"]:
@@ -190,7 +191,4 @@ def get_runs(ID):
 
 if __name__ == "__main__":
     
-    test = get_userID("Niamek")
-
-    test2 = get_runs(test)
-    
+    get_newsystem("GameCube")
