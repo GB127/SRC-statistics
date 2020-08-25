@@ -20,7 +20,7 @@ class user:
                 self.PBs (list) : List of PBs
         """
         print("Fetching data...")
-
+        self.rejected = 0
 
         self.username = username
         self.ID = get_userID(self.username)
@@ -39,7 +39,31 @@ class user:
         for run in get_runs(self.ID):
             if run["level"] is None and run["times"]["primary_t"] > 180:
                 self.runs.append(Run(run))
-            else: pass
+            else: self.rejected += 1
+
+        self.systems_runs = {}
+
+        for run in self.runs:
+            try:
+                self.systems_runs[run.system]["count"] += 1
+                self.systems_runs[run.system]["time"] += run.time
+            except KeyError:
+                self.systems_runs[run.system] = {"count" : 1,
+                                            "time" : run.time}
+
+        self.systems_PBs = {}
+
+        for run in self.PBs:
+            try:
+                self.systems_PBs[run.system]["count"] += 1
+                self.systems_PBs[run.system]["time"] += run.time
+                self.systems_PBs[run.system]["WR"] += run.WR    
+                self.systems_PBs[run.system]["delta"] += run.delta             
+            except KeyError:
+                self.systems_PBs[run.system] = {"count" : 1,
+                                            "time" : run.time,
+                                            "WR" : run.WR,
+                                            "delta" : run.delta}
 
 
 
@@ -68,16 +92,41 @@ class user:
     def table_PBs(self):
         """Print a table by printing all PBs
         """
+        # Idea : add a filter :
+            # by system
+
         print("-"*120)
         print(f"| # |{'Sys':^6}| {'Game':^30}| {'Category':^15} | {'Time':^14}|      + \u0394WR     |{'%WR':^10}| {'  Rank      (^%)':20}")
         print("-"*120)
         self.PBs.sort()
         for no, PB in enumerate(self.PBs): print(f'{no+1:3} {PB}')
         print("-"*122)
-        print(f'{"Total :":>58}| {str_time(self.total_PB)[:17]:17}| + {str_time(self.total_PB - self.total_WR)[:13]:20}|----------|')
-        print(f'{"Average :":>58}| {str_time(self.total_PB/len(self.PBs))[:17]:17}| + {str_time((self.total_PB - self.total_WR)/len(self.PBs))[:13]:20}| {str(round(self.total_PB/self.total_WR * 100,2))[:6]:6} % |')
+        print(f'{"Total :"}| {str_time(self.total_PB)[:17]:17}| + {str_time(self.total_PB - self.total_WR)[:13]:20}|----------|')
+        print(f'{"Average :"}| {str_time(self.total_PB/len(self.PBs))[:17]:17}| + {str_time((self.total_PB - self.total_WR)/len(self.PBs))[:13]:20}| {str(round(self.total_PB/self.total_WR * 100,2))[:6]:6} % |')
 
+    def table_systems(self):
+        liste_systems = sorted([system for system in self.systems_PBs.keys()])
+
+        print("-" * 131)
+        print(f'| System |{" Runs":36}|{" PBs":83}|')
+        print("-" * 131)
+
+        for system in liste_systems:
+            string = f'| {system[:6]:^6} |'
+            string_1 = f'{self.systems_runs[system]["count"]:^4}| {str_time(self.systems_runs[system]["time"])[:13]:13} |'
+            string_2 = f' {str_time(self.systems_runs[system]["time"]/self.systems_runs[system]["count"])[:13]:13} |'
+            string_3 = f'{self.systems_PBs[system]["count"]:^4}| {str_time(self.systems_PBs[system]["time"])[:13]:13} | + {str_time(self.systems_PBs[system]["delta"])[:13]:13} | {round(100 * self.systems_PBs[system]["time"] / self.systems_PBs[system]["WR"],2):6} % |'
+            string_4 = f' {str_time(self.systems_PBs[system]["time"]/self.systems_PBs[system]["count"])[:13]:13} | + {str_time(self.systems_PBs[system]["delta"]/self.systems_PBs[system]["count"])[:13]:13} |'
+
+            print(string + string_1 + string_2 + string_3 + string_4)
+
+        print("-"*131)
+        print(f'{len(liste_systems)} different systems')
+    
     def runs_PB(self, PB):
+        """
+            Find all the runs for that PBs
+        """
         toreturn = []
         for run in self.runs:
             if run.gameID == PB.gameID and run.categID == PB.categID:
@@ -171,4 +220,5 @@ class PB(Run):
             return self.perclenrank > other.perclenrank
 
 if __name__ == "__main__":
-    pass
+    test = user("niamek")
+    test.table_systems()
