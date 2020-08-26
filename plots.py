@@ -4,7 +4,7 @@ from tools import *
 from api import *
 from classe import *
 
-def plot_systems(user):  #FIXME : System count and all.
+def plot_systems(user):
     """Generate 4 pies that tells the proportions of systems.
 
         PB#     |   run#
@@ -15,50 +15,19 @@ def plot_systems(user):  #FIXME : System count and all.
             user (object): User object.
         """
     fig, axs = plot.subplots(2, 2)
-
-
-    systems = {}
-    for PB in user.PBs:
-        try:
-            systems[PB.system] += 1
-        except KeyError:
-            systems[PB.system] = 1
-    list_system = sorted(list(systems.keys()))
-    axs[0,0].pie([systems[system] for system in list_system], labels=[system for system in list_system], autopct='%1.1f%%', startangle=90)
+    axs[0,0].pie([user.systems_PBs[system]["count"] for system in user.all_systems], labels=[system for system in user.all_systems], autopct='%1.1f%%', startangle=90)
     axs[0,0].set_title("PB #")
 
 
 
-    systems = {}
-    for run in user.runs:
-        try:
-            systems[run.system] += 1
-        except KeyError:
-            systems[run.system] = 1
-    list_system = sorted(list(systems.keys()))
-    axs[0,1].pie([systems[system] for system in list_system], labels=[system for system in list_system], autopct='%1.1f%%', startangle=90)
+    axs[0,1].pie([user.systems_runs[system]["count"] for system in user.all_systems], labels=[system for system in user.all_systems], autopct='%1.1f%%', startangle=90)
     axs[0,1].set_title("run #")
 
 
-    systems = {}
-    for PB in user.PBs:
-        try:
-            systems[PB.system] += PB.time
-        except KeyError:
-            systems[PB.system] = PB.time
-    list_system = sorted(list(systems.keys()))
-    axs[1,0].pie([systems[system] for system in list_system], labels=[system for system in list_system], autopct='%1.1f%%', startangle=90)
+    axs[1,0].pie([user.systems_PBs[system]["time"] for system in user.all_systems], labels=[system for system in user.all_systems], autopct='%1.1f%%', startangle=90)
     axs[1,0].set_title("PB total time")
 
-
-    systems = {}
-    for run in user.runs:
-        try:
-            systems[run.system] += run.time
-        except KeyError:
-            systems[run.system] = run.time
-    list_system = sorted(list(systems.keys()))
-    axs[1,1].pie([systems[system] for system in list_system], labels=[system for system in list_system], autopct='%1.1f%%', startangle=90)
+    axs[1,1].pie([user.systems_runs[system]["time"] for system in user.all_systems], labels=[system for system in user.all_systems], autopct='%1.1f%%', startangle=90)
     axs[1,1].set_title("run total time")
 
     fig.suptitle(user.username)
