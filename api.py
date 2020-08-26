@@ -41,8 +41,13 @@ def requester(link):
         rep = requests.get(f"{URL}{link}")
         if rep.status_code == 200:
             return rep.json()
-        if rep.status_code == 502:
+        elif rep.status_code == 502:
             time.sleep(10)
+        elif rep.status_code == 404:
+            print(rep.status_code)
+            print(f"{URL}{link}")
+            raise BaseException("Incorrect info, please check again")
+
         else:
             print(f"{URL}{link}")
             raise BaseException(rep.status_code)
