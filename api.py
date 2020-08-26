@@ -159,7 +159,15 @@ systems = {
     "3167jd6q" : "SGB",
     "83exk6l5" : "SNES",
     "4p9z06rn" : "GC",
-    "nzelreqp" : "WIIVC"}
+    "mr6k0ezw" : "Sega Genesis",
+    "nzelreqp" : "WII VC",
+    "3167jd6q" : "SGB",
+    "n5e147e2" : "SGB2",
+    "wxeod9rn" : "PS",
+    "n5e17e27" : "PS2",
+    "mx6pwe3g" : "PS3",
+    "nzelkr6q" : "PS4",
+    }
 def get_newsystem(newsystem):
     rep = requester(f"/platforms?max=200")
     for system in rep["data"]:
@@ -191,4 +199,8 @@ def get_runs(ID):
 
 if __name__ == "__main__":
     
-    get_newsystem("GameCube")
+    get_newsystem("Super Game Boy 2")
+    get_newsystem("PlayStation")
+    get_newsystem("PlayStation 2")
+    get_newsystem("PlayStation 3")
+    get_newsystem("PlayStation 4")
