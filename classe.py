@@ -8,19 +8,50 @@ from tools import *
 class user:
     def __init__(self, username):
         """
-            Object of a Speedrun.com user. It tracks username, ID, runs and PBs
+            Class of a Speedrun.com user. The class contains informations such as username, runs, etc.
 
             Args:
                 username (str) : Username on speedrun.com
 
             Attributes created:
-                self.username (str) : Username
-                self.ID (str) : ID of the user
-                self.runs (list) : List of runs
-                self.PBs (list) : List of PBs
+                user.all_systems (list): List of all systems in which the user has a PB.
+                user.ID (string) : User ID attributed by speedrun.com, fetched with a api request
+                user.PBs (list) : List that contains *all* PBs of the user that aren't rejected.
+                    All elements of this list are PB objects. Data collected with a request.
+                user.rejected (dicto) : Dicto that tracks how many runs aren't
+                    elligible for my stats analysis. The runs not elligible are
+                    individual levels and runs shorter than 3 minutes.
+                    - I decided to not include the individual levels runs because they
+                        usually are very short and doesn't complete the game. I personally prefer
+                        runs that actually complete the games or that does a significant part of the game.
+                    - I don't include runs shorter than 3 minutes because I don't consider them long enough to be
+                    worthy of analysis. I also noticed that most of these runs shorter than 3 minutes are meme runs
+                    or meme games... Probably runs that wouldn't be (generally) accepted under current speedrun.com rules. 
+                    - Obviously, not all runs that are "normal runs" fall under these criteria. Excluding these runs requires case
+                        by case analysis, which is impossible to do because of the sheer number of games/categories.
+
+                    Keys:
+                        "level" : Quantity of individual levels (int)
+                        "time" : Quantity of runs under of three minutes (int)
+                user.runs (list) : List that contains *all* runs of the user that aren't rejected.
+                    All elements of this list are Run objects. Data collected with a request.
+                user.systems_PBss : Infos of user.PBs, grouped by systems.
+                    hierachy:
+                        "system" (dicto)
+                            "count" (int): How many run on the said system.
+                            "time" (int) : Summation of all PBs on the said system, in seconds.
+                            "WR" (int) : Summation of all WRs on the said system, in seconds.
+                            "delta" (int) : Summation of all deltas of WR on the said system, in seconds.
+                user.systems_runs : Infos of user.runs, grouped by systems only.
+                    hierachy:
+                        "system" (dicto)
+                            "count" (int): How many run on the said system.
+                            "time" (int) : Summation of all runs on the said system, in seconds.
+                user.total_PB (int) : Summation of all PB times of the user, in seconds.
+                user.total_WR (int) : Summation of all Run times of the user, in seconds.
+                user.username (string): Username of the user
         """
-        print("Fetching data...")
-        self.rejected = 0
+        print("Fetching data...")  # Printing this because the fetching can take a couple of minutes.
 
         self.username = username
         self.ID = get_userID(self.username)
@@ -32,27 +63,14 @@ class user:
             if pb["run"]["level"] is None and pb["run"]["times"]["primary_t"] > 180:
                 self.PBs.append(PB(pb))
             else: pass
+
         self.total_PB()
         self.total_WR()
 
-        # Runs related:
-        for run in get_runs(self.ID):
-            if run["level"] is None and run["times"]["primary_t"] > 180:
-                self.runs.append(Run(run))
-            else: self.rejected += 1
 
-        self.systems_runs = {}
-
-        for run in self.runs:
-            try:
-                self.systems_runs[run.system]["count"] += 1
-                self.systems_runs[run.system]["time"] += run.time
-            except KeyError:
-                self.systems_runs[run.system] = {"count" : 1,
-                                            "time" : run.time}
+        # Split the infos into systems, PBs
 
         self.systems_PBs = {}
-
         for run in self.PBs:
             try:
                 self.systems_PBs[run.system]["count"] += 1
@@ -68,14 +86,43 @@ class user:
         self.all_systems = sorted(list(self.systems_PBs.keys()))
 
 
+        # Runs related:
+
+        self.rejected = {"level": 0, "time": 0}
+        for run in get_runs(self.ID):
+            if run["level"] is None and run["times"]["primary_t"] > 180:
+                self.runs.append(Run(run))
+            elif run["level"] is not None:
+                self.rejected["level"] += 1
+            else:
+                self.rejected["time"] += 1
+
+
+        # Split the infos into systems, runs
+
+        self.systems_runs = {}
+        for run in self.runs:
+            try:
+                self.systems_runs[run.system]["count"] += 1
+                self.systems_runs[run.system]["time"] += run.time
+            except KeyError:
+                self.systems_runs[run.system] = {"count" : 1,
+                                            "time" : run.time}
+
+
+
+
         print("user initialized!")
 
 
     def __str__(self):
+        """ Format: username, # runs, # PBs
+            """
         return f'{self.username}, {len(self.runs)} runs, {len(self.PBs)} PBs'
 
-
     def total_PB(self):
+        """Function that will take user.PBs and calculate a total time.
+            """
         tempo = []
         for PB in self.PBs:
             tempo.append(PB.time)
@@ -83,6 +130,8 @@ class user:
 
 
     def total_WR(self):
+        """Function that takes the user.PBs and calculate the total WR.
+        """
         tempo = []
         for PB in self.PBs:
             tempo.append(PB.WR)
@@ -90,51 +139,51 @@ class user:
 
 
     def table_PBs(self):
-        """Print a table by printing all PBs
+        """ Print a table by printing all PBs. Sorting can be changed by
+            changing the PB.sort variable.
         """
-        # Idea : add a filter :
-            # by system
+        self.PBs.sort()  # Always sort in case we change the sorting method?
 
+        ### En tete of the table
         print("-"*120)
         print(f"| # |{'Sys':^6}| {'Game':^30}| {'Category':^15} | {'Time':^14}|      + \u0394WR     |{'%WR':^10}| {'  Rank      (^%)':20}")
         print("-"*120)
-        self.PBs.sort()
+    
+        ### Actual entry of the table.
         for no, PB in enumerate(self.PBs): print(f'{no+1:3} {PB}')
         print("-"*122)
-        print(f'{"Total :"}| {str_time(self.total_PB)[:17]:17}| + {str_time(self.total_PB - self.total_WR)[:13]:20}|----------|')
-        print(f'{"Average :"}| {str_time(self.total_PB/len(self.PBs))[:17]:17}| + {str_time((self.total_PB - self.total_WR)/len(self.PBs))[:13]:20}| {str(round(self.total_PB/self.total_WR * 100,2))[:6]:6} % |')
+
+        ### Foot of the table
+        print(f'{"Total :":10}| {str_time(self.total_PB)[:17]:17}| + {str_time(self.total_PB - self.total_WR)[:13]:20}|----------|')
+        print(f'{"Average :":10}| {str_time(self.total_PB/len(self.PBs))[:17]:17}| + {str_time((self.total_PB - self.total_WR)/len(self.PBs))[:13]:20}| {str(round(self.total_PB/self.total_WR * 100,2))[:6]:6} % |')
 
     def table_systems(self):
-        liste_systems = sorted([system for system in self.systems_PBs.keys()])
+        """Print a table of the infos of the runs of the user by systems.
+            """
+        liste_systems = sorted([system for system in self.systems_PBs.keys()])  # FIXME
 
-        print("-" * 83)
-        print(f'   | System |{" Runs":20}|{" PBs":49}|')
-        print("-" * 83)
+        print("-" * 85)
+        print(f'|   | System |{" Runs":20}|{" PBs":49}|')
+        print("-" * 85)
 
         for no,system in enumerate(liste_systems):
-            string = f'| {system[:6]:^6} |'
-            string_1 = f'{self.systems_runs[system]["count"]:^4}| {str_time(self.systems_runs[system]["time"])[:13]:13} |'
-            string_2 = f'{str_time(self.systems_runs[system]["time"]/self.systems_runs[system]["count"])[:13]:13} |'
-            string_3 = f'{self.systems_PBs[system]["count"]:^4}| {str_time(self.systems_PBs[system]["time"])[:13]:13} | + {str_time(self.systems_PBs[system]["delta"])[:13]:13} | {round(100 * self.systems_PBs[system]["time"] / self.systems_PBs[system]["WR"],2):6} % |'
-            string_4 = f'{str_time(self.systems_PBs[system]["time"]/self.systems_PBs[system]["count"])[:13]:13} | + {str_time(self.systems_PBs[system]["delta"]/self.systems_PBs[system]["count"])[:13]:13} |'
+            # Current system
+            current_system = f'| {system[:6]:^6} |'
+            # Runs count and time (coti) of the current system
+            runs_coti = f'{self.systems_runs[system]["count"]:^4}| {str_time(self.systems_runs[system]["time"])[:13]:13} |'
+            # Average of runs time
+            runs_av_coti = f'{str_time(self.systems_runs[system]["time"]/self.systems_runs[system]["count"])[:13]:13} |'
 
-            print(f'{no+1:^3}{string}{string_1}{string_3}')
-            print(f'   |{"|--- ":>13}| {string_2}{"---":^4}| {string_4} -------- |')
-            print("-"*84)
+            # PBs count, time, delta, and %WR (infos) of the current system
+            PBs_infos = f'{self.systems_PBs[system]["count"]:^4}| {str_time(self.systems_PBs[system]["time"])[:13]:13} | + {str_time(self.systems_PBs[system]["delta"])[:13]:13} | {round(100 * self.systems_PBs[system]["time"] / self.systems_PBs[system]["WR"],2):6} % |'
+            # PBs average of infos
+            PBs_av_infos = f'{str_time(self.systems_PBs[system]["time"]/self.systems_PBs[system]["count"])[:13]:13} | + {str_time(self.systems_PBs[system]["delta"]/self.systems_PBs[system]["count"])[:13]:13} |'
 
-        print(f'{len(liste_systems)} different systems')
-    
-    def runs_PB(self, PB):
-        """
-            Find all the runs for that PBs
-        """
-        toreturn = []
-        for run in self.runs:
-            if run.gameID == PB.gameID and run.categID == PB.categID:
-                toreturn.append(run)
-        return toreturn
+            print(f'|{no+1:^3}{current_system}{runs_coti}{PBs_infos}')
+            print(f'|   |{"|--- ":>13}| {runs_av_coti}{"---":^4}| {PBs_av_infos} -------- |')
+            print("-"*85)
 
-    def fetch_system(self, system, PB=False):
+    def fetch_runs_system(self, system, PB=False):
         liste = []
         if PB is False:
             for run in self.runs:
@@ -147,6 +196,18 @@ class user:
                     liste.append(run)
             return liste
 
+    def fetch_runs_PB(self, PB):
+        """
+            Find all the runs for that PBs
+        """
+
+        #FIXME : Check vari too?
+        toreturn = []
+        for run in self.runs:
+            if run.gameID == PB.gameID and run.categID == PB.categID:
+                toreturn.append(run)
+        return toreturn
+
 
 class Run:
     sort = "time"
@@ -157,12 +218,13 @@ class Run:
                 data ([json]): data from requests to speedrun.com
 
             Attributes:
-                self.system : System the run is on
-                self.emulated : True if emulated, False if not emulated
-                self.ID : ID of the run
-                self.gameID : ID of the game ran
-                self.categID : ID of the category ran
-                self.time : duration of the run
+                self.categID (string) : ID of the category ran
+                self.emulated (bool): True if emulated, False if not emulated
+                self.gameID (string): ID of the game ran
+                self.ID (string): ID of the run
+                self.system (string): System the run is on
+                self.time (int): duration of the run, in seconds
+                FIXME self.vari : "subcategories" of the category.
         """
         self.system = get_system(data["system"]["platform"])
         self.emulated = True if data["system"]["emulated"] else False
@@ -174,6 +236,8 @@ class Run:
 
 
     def __str__(self):
+        """ Format: System|Game|Category|Time
+            """
         return f'{self.system[:6]:^6}| {get_game(self.gameID)[:30]:30} | {get_category(self.categID)[:15]:15} | {datetime.timedelta(seconds=self.time)}'
 
 
@@ -193,10 +257,18 @@ class PB(Run):
                 Some extra infos not eally related to the PB 
                 are stored because of the maths I want to do.
 
-            Attributes:
-                self.place : Rank of the PB
-                self.lenrank : Length of the leaderboard
-                self.WR : WR of the said run
+            New Attributes:
+                self.delta (int): Time difference of PB compared to WR, in seconds. 
+                self.place (int): Rank of the PB
+                self.lenrank (int): Length of the leaderboard
+                self.perclenrank (int): Percentage of people you beat in the leaderboard.
+                    Note : If you are the only runner on the leaderboard, you will
+                    have 0% even if you have the WR! This is because you don't beat anyone.
+                    Will never be 100% because it doesn't count you : you ar emerely the threshold
+                    for the maths.
+                self.percWR (int): % of the WR. 100% means it's the WR. 200% means the time is exactly double
+                    the WR
+                self.WR (int): WR of the said run, in seconds)
         """
         super().__init__(data["run"])
         self.place = data["place"]
@@ -207,7 +279,7 @@ class PB(Run):
         self.percWR = round((self.time * 100/self.WR), 2)
 
 
-    def __str__(self):
+    def __str__(self):  # FIXME : Documentate this
         def str_game(self):
             return f'|{self.system[:6]:^6}| {get_game(self.gameID)[:30]:30}| {get_category(self.categID)[:15]:15}'
         def str_rank(self):
@@ -235,5 +307,4 @@ class PB(Run):
 
 if __name__ == "__main__":
     test = user("niamek")
-    for testo in test.fetch_system("WII VC"):
-        print(testo)
+    test.table_systems()

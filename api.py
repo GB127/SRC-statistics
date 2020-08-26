@@ -9,6 +9,15 @@ import time
 URL = "https://www.speedrun.com/api/v1"
 
 def recursive_requester(link, toupdate):
+    """Recursive requester.
+
+        Args:
+            link (string): Complete link of the request to do. 
+            toupdate (list): list to update with all the recursive requests.
+                Should be an empty list as the goal of this function is to "return" a list.
+
+        Returns nothing, but modify the "toupdate" list that can then be used elsewhere.
+        """
     rep = requests.get(link)
     if rep.status_code == 200:
         rep = rep.json()
@@ -31,7 +40,7 @@ def requester(link):
             link (string): link addition of the request
 
         Raises:
-            BaseException: Raise error if the status code isn't 200 or 502.
+            BaseException: Raise error if the status code is 404.
 
         Returns:
             json: return the data in a json form
@@ -47,10 +56,8 @@ def requester(link):
             print(rep.status_code)
             print(f"{URL}{link}")
             raise BaseException("Incorrect info, please check again")
-
         else:
-            print(f"{URL}{link}")
-            raise BaseException(rep.status_code)
+            raise BaseException(f"Please report this, {rep.status_code} - {URL}{link}")
 
 def get_PBs(ID):
     """Requests the PBs of the said username
@@ -67,17 +74,31 @@ def get_PBs(ID):
 def get_userID(username):
     """Get the user ID of a username.
 
-    Args:
-        username (str): username
+        Args:
+            username (str): username
 
-    Returns:
-        ID (str)
+        Returns:
+            ID (str)
     """
     rep = requester(f"/users/{username}")
     return rep["data"]["id"]
 
-games = {}
+games = {}  # Used by get_game(ID) to reduce requests.
 def get_game(ID):
+    """Fetch the full name of the game.
+
+        Args:
+            ID (string): ID of the game, or acronym.
+                If used elsewhere than this script, you can use an acronym instead
+                of ID. But everywhere in this script, it uses ID, as the API gives
+                you the ID of the games instead of the full name in the runs datas.
+
+        Note : It uses the variable games to return data in order to reduce requests quantity.
+        if it's a new game, it will do a request and update games accordingly so that future requests
+        won't do a new request.
+
+        Returns (str): Full name of the game
+        """
     # ID or acronym
     try:
         return games[ID]
@@ -86,8 +107,20 @@ def get_game(ID):
         games[ID] = rep["data"]["names"]["international"]
     return games[ID]
 
-categories = {}
+categories = {}  # Used by get_category(ID) to reduce requests.
 def get_category(ID):
+    """Fetch the full name of the category.
+
+        Args:
+            ID (string): ID of the category. Everywhere in this script, it uses ID, as the API gives
+                you the ID of the games instead of the full name in the runs datas.
+
+        Note : It uses the variable categories to return data in order to reduce requests quantity.
+        if it's a new category, it will do a request and update categories accordingly so that future requests
+        won't do a new request.
+
+        Returns (str): Full name of the category
+        """
     try:
         return categories[ID]
     except KeyError:
@@ -96,6 +129,16 @@ def get_category(ID):
     return categories[ID]
 
 def get_WR(gameID, categID, vari):
+    """[summary]
+
+    Args:
+        gameID ([type]): [description]
+        categID ([type]): [description]
+        vari ([type]): [description]
+
+    Returns:
+        [type]: [description]
+    """
     varistr = ""
     if vari != {}:
         tempo = []
@@ -110,12 +153,30 @@ def get_WR(gameID, categID, vari):
     return leaderboard[(gameID, categID, varistr)][0][1]
 
 def get_variable(variID):
+    """[summary]
+
+        Args:
+            variID ([type]): [description]
+
+        Returns:
+            [type]: [description]
+    """
     rep = requester(f'/variables/{variID}')
     return rep["data"]
 
 
 leaderboard = {}
 def get_len_leaderboard(gameID, categID, vari):
+    """[summary]
+
+    Args:
+        gameID ([type]): [description]
+        categID ([type]): [description]
+        vari ([type]): [description]
+
+    Returns:
+        [type]: [description]
+    """
     # vari is a dicto!
     varistr = ""
     if vari != {}:
@@ -136,7 +197,16 @@ def get_len_leaderboard(gameID, categID, vari):
 
 def get_leaderboard(gameID, categID, vari):
     # TODO: Doublons à éliminer quand possible!
-    # TODO: Séparer les onglets
+    """[summary]
+
+    Args:
+        gameID ([type]): [description]
+        categID ([type]): [description]
+        vari ([type]): [description]
+
+    Returns:
+        [type]: [description]
+    """
     varistr = ""
     if vari != {}:
         tempo = []
@@ -154,7 +224,29 @@ def get_leaderboard(gameID, categID, vari):
         leaderboard[(gameID, categID, varistr)] = ranking
     return leaderboard[(gameID, categID, varistr)]
 
-systems = {
+def get_newsystem(newsystem):
+    """Debug function to find a new system to give a new acronym in the dictionnary.
+
+        Args:
+            newsystem (str): string to "acronymize". Need to be exactly the same.
+
+        Result : print([ID] : "Full name")
+
+        If no system matches with the newsystem seeked, it will print all available systems.
+        Find the system you want to acronymize and rerun the code with the corrections.
+
+        """
+    rep = requester(f"/platforms?max=200")
+    for system in rep["data"]:
+        if system["name"] == newsystem: 
+            print("-------------------------------------")
+            print(f'"{system["id"]}" : "{system["name"]}",')
+            print("-------------------------------------")
+            return
+    for system in rep["data"]:
+        print(system["name"])
+systems = {  # It's the approach I use for using acronyms, as requesting a system will give you the full name.
+
     None : "PC",
     "n5683oev" : "GB",
     "gde3g9k1" : "GBC",
@@ -173,18 +265,19 @@ systems = {
     "mx6pwe3g" : "PS3",
     "nzelkr6q" : "PS4",
     }
-def get_newsystem(newsystem):
-    rep = requester(f"/platforms?max=200")
-    for system in rep["data"]:
-        if system["name"] == newsystem: 
-            print("-------------------------------------")
-            print(f'"{system["id"]}" : "{system["name"]}",')
-            print("-------------------------------------")
-            return
-    for system in rep["data"]:
-        print(system["name"])
-
 def get_system(ID):
+    """Return the system linked to the ID. If already defined, use a acornym. Else,
+        return the full name.
+
+        Args:
+            ID (str): ID of the system.
+
+        Returns: (str) Acronym of the system, or full name of the system.
+
+        Note : it uses the variable systems defined in the code in order to reduce
+        amount of requests. It doesn't update while running the code though: it needs to be updated manually
+        before running the code.
+    """
     try:
         return systems[ID]
     except KeyError:
@@ -194,10 +287,18 @@ def get_system(ID):
 
 
 def get_runs(ID):
-    runs = []
-    link_1 = f"{URL}/runs?user={ID}&max=200"
+    """Returns a list of all the runs (json form) by the user 
+        identified with the ID provided. Uses the recursive requester.
 
-    recursive_requester(link_1, runs)
+        Args:
+            ID (string) : ID of the user to fetch runs from.
+
+        Returns (list) : list of all runs of the user (still in json data form).
+    """
+    runs = []  # List to update with the recursive requester.
+    link_1 = f"{URL}/runs?user={ID}&max=200"  # First link of the recursive requester.
+
+    recursive_requester(link_1, runs)  # Recursive request will update the list.
     return runs
 
 

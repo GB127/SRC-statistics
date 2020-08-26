@@ -1,10 +1,16 @@
 from plots import *
 from classe import *
 import os
+from tools import input_which
 
 clear = lambda: os.system('cls')
 
 def run_analyser(user):
+    """Runs analyser module.
+
+        Args:
+            user (object): User object from class.py
+    """
     clear()
     user.table_PBs()
     which = input_which(user.PBs)
@@ -17,6 +23,11 @@ def run_analyser(user):
         plot_runs(PB, user.username, user.runs_PB(PB) )
 
 def system_analyser(user):
+    """System analyser module.
+
+        Args:
+            user (object): User object from class.py
+    """
     clear()
     user.table_systems()
     which = input_which(user.all_systems)
@@ -28,15 +39,10 @@ def system_analyser(user):
     # pie chart of WR difference per system
     # pie chart of WR% per system
 
-def input_which(length):
-    command = input(f"[1 - {len(length)}, all] ")
-    try:
-        return int(command) - 1
-    except ValueError:
-        return command
 
 if __name__ == "__main__":
     user = user(input("Who? "))
+    print(user)
     main = True
     while main:
         command = input("[system, run, sort end] ")

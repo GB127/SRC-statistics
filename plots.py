@@ -4,10 +4,19 @@ from tools import *
 from api import *
 from classe import *
 
-def plot_systems(user):
+def plot_systems(user):  #FIXME : System count and all.
+    """Generate 4 pies that tells the proportions of systems.
+
+        PB#     |   run#
+        -------------------
+        PB time | run time
+
+        Args:
+            user (object): User object.
+        """
     fig, axs = plot.subplots(2, 2)
 
-    
+
     systems = {}
     for PB in user.PBs:
         try:
@@ -58,7 +67,7 @@ def plot_systems(user):
     plot.show()
 
 
-def plot_runs(PB,username, runs):
+def plot_runs(PB,username, runs):  #FIXME : Rework on it.
 
     runs.sort(reverse=True)
     plot.plot([run.time for run in runs])
@@ -70,7 +79,7 @@ def plot_runs(PB,username, runs):
     plot.show()
 
 
-def plot_leaderboard(PB, username):
+def plot_leaderboard(PB, username):  #FIXME : Rework on it.
     leaderboard = get_leaderboard(PB.gameID,PB.categID, PB.vari)
     plot.plot([time[0] for time in leaderboard], [rank[1] for rank in leaderboard])
     plot.ylabel("Time")
@@ -86,11 +95,23 @@ def plot_leaderboard(PB, username):
     plot.show()
     
 def plot_system(user, system):
+    """Generate 4 histograms about the system times.
+
+        runs times | PB times
+        ---------------------
+        PB delta   | PB %WR
+
+        Args:
+            user (object): User object
+            system (string): System to analyse.
+
+        """
+
     fig, axs = plot.subplots(2, 2)
 
     fig.suptitle(f"{system}")
 
-    data = user.fetch_system(system)
+    data = user.fetch_runs_system(system)
     data_2 = [run.time for run in data]
     axs[0,0].hist(data_2)
     axs[0,0].set_title("Runs")
@@ -99,7 +120,7 @@ def plot_system(user, system):
     plot.xticks(plot.xticks()[0], [str_time(tick) for tick in plot.xticks()[0]])
 
 
-    data = user.fetch_system(system, PB=True)
+    data = user.fetch_runs_system(system, PB=True)
     data_2 = [run.time for run in data]
     axs[0,1].hist(data_2)
     axs[0,1].set_title("PBs")
@@ -131,6 +152,6 @@ def plot_system(user, system):
 
 
 if __name__ == "__main__":
-    testing = user("lackattack24")
+    testing = user("pac")
     testing.table_systems()
     plot_system(testing, "NES")
