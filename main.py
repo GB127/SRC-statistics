@@ -36,8 +36,7 @@ def input_which(length):
         print("allo this is a test")
 
 if __name__ == "__main__":
-    #user = user(input("Who? "))
-    user = user("baffan")
+    user = user(input("Who? "))
     main = True
     while main:
         clear()
