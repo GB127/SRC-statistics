@@ -159,7 +159,7 @@ systems = {
     "3167jd6q" : "SGB",
     "83exk6l5" : "SNES",
     "4p9z06rn" : "GC",
-    "mr6k0ezw" : "Sega Genesis",
+    "mr6k0ezw" : "S.GEN",
     "nzelreqp" : "WII VC",
     "3167jd6q" : "SGB",
     "n5e147e2" : "SGB2",
