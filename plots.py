@@ -4,7 +4,7 @@ from tools import *
 from api import *
 from classe import *
 
-def plot_user_pies_systems(user):
+def plot_systems(user):
     fig, axs = plot.subplots(2, 2)
 
     
@@ -58,21 +58,6 @@ def plot_user_pies_systems(user):
     plot.show()
 
 
-def plot_user_hist_times(user):
-    fig, axs = plot.subplots(2, 1)
-
-    times = []
-    for run in user.runs:
-        times.append(run.time)
-    axs[0].hist(times)
-
-    times = []
-    for run in user.PBs:
-        times.append(run.time)
-    axs[1].hist(times)
-
-    plot.show()
-
 def plot_runs(PB,username, runs):
 
     runs.sort(reverse=True)
@@ -83,6 +68,7 @@ def plot_runs(PB,username, runs):
     plot.xlabel("PB #")
     plot.title(f'{get_game(PB.gameID)} - {get_category(PB.categID)}')
     plot.show()
+
 
 def plot_leaderboard(PB, username):
     leaderboard = get_leaderboard(PB.gameID,PB.categID, PB.vari)
@@ -99,5 +85,52 @@ def plot_leaderboard(PB, username):
                         )
     plot.show()
     
+def plot_system(user, system):
+    fig, axs = plot.subplots(2, 2)
+
+    fig.suptitle(f"{system}")
+
+    data = user.fetch_system(system)
+    data_2 = [run.time for run in data]
+    axs[0,0].hist(data_2)
+    axs[0,0].set_title("Runs")
+    plot.sca(axs[0,0])
+    plot.xlim(left=0)
+    plot.xticks(plot.xticks()[0], [str_time(tick) for tick in plot.xticks()[0]])
+
+
+    data = user.fetch_system(system, PB=True)
+    data_2 = [run.time for run in data]
+    axs[0,1].hist(data_2)
+    axs[0,1].set_title("PBs")
+    plot.sca(axs[0,1])
+    plot.xlim(left=0)
+    plot.xticks(plot.xticks()[0], [str_time(tick) for tick in plot.xticks()[0]])
+
+
+    data_2 = [run.delta for run in data]
+    axs[1,0].hist(data_2)
+    axs[1,0].set_title("delta WR")
+    plot.sca(axs[1,0])
+    plot.xlim(left=0)
+    plot.xticks(plot.xticks()[0], [str_time(tick) for tick in plot.xticks()[0]])
+
+    data_2 = [run.percWR for run in data]
+    axs[1,1].hist(data_2)
+    axs[1,1].set_title("%WR")
+    plot.sca(axs[1,1])
+    plot.xlim(left=100)
+    plot.xticks(plot.xticks()[0], [str(tick) + " %" for tick in plot.xticks()[0]])
+
+
+
+
+
+
+    plot.show()
+
+
 if __name__ == "__main__":
-    plot_user_pies_systems(user("niamek"))
+    testing = user("lackattack24")
+    testing.table_systems()
+    plot_system(testing, "NES")
