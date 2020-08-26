@@ -107,20 +107,21 @@ class user:
     def table_systems(self):
         liste_systems = sorted([system for system in self.systems_PBs.keys()])
 
-        print("-" * 131)
-        print(f'| System |{" Runs":36}|{" PBs":83}|')
-        print("-" * 131)
+        print("-" * 80)
+        print(f'| System |{" Runs":20}|{" PBs":49}|')
+        print("-" * 80)
 
         for system in liste_systems:
             string = f'| {system[:6]:^6} |'
             string_1 = f'{self.systems_runs[system]["count"]:^4}| {str_time(self.systems_runs[system]["time"])[:13]:13} |'
-            string_2 = f' {str_time(self.systems_runs[system]["time"]/self.systems_runs[system]["count"])[:13]:13} |'
+            string_2 = f'{str_time(self.systems_runs[system]["time"]/self.systems_runs[system]["count"])[:13]:13} |'
             string_3 = f'{self.systems_PBs[system]["count"]:^4}| {str_time(self.systems_PBs[system]["time"])[:13]:13} | + {str_time(self.systems_PBs[system]["delta"])[:13]:13} | {round(100 * self.systems_PBs[system]["time"] / self.systems_PBs[system]["WR"],2):6} % |'
-            string_4 = f' {str_time(self.systems_PBs[system]["time"]/self.systems_PBs[system]["count"])[:13]:13} | + {str_time(self.systems_PBs[system]["delta"]/self.systems_PBs[system]["count"])[:13]:13} |'
+            string_4 = f'{str_time(self.systems_PBs[system]["time"]/self.systems_PBs[system]["count"])[:13]:13} | + {str_time(self.systems_PBs[system]["delta"]/self.systems_PBs[system]["count"])[:13]:13} |'
 
-            print(string + string_1 + string_2 + string_3 + string_4)
+            print(string + string_1 + string_3)
+            print(f'|{"|--- ":>13}| {string_2}{"---":^4}| {string_4} -------- |')
+            print("-"*80)
 
-        print("-"*131)
         print(f'{len(liste_systems)} different systems')
     
     def runs_PB(self, PB):
@@ -132,6 +133,19 @@ class user:
             if run.gameID == PB.gameID and run.categID == PB.categID:
                 toreturn.append(run)
         return toreturn
+
+    def fetch_system(self, system, PB=False):
+        liste = []
+        if PB is False:
+            for run in self.runs:
+                if run.system == system:
+                    liste.append(run)
+            return liste
+        elif PB:
+            for run in self.PBs:
+                if run.system == system:
+                    liste.append(run)
+            return liste
 
 
 class Run:
@@ -165,11 +179,11 @@ class Run:
 
     def __lt__(self, other):
         if get_game(self.gameID) != get_game(other.gameID):
-            return get_game(self.gameID) < get_game(other.gameID)
+            return get_game(self.gameID) <= get_game(other.gameID)
         elif get_category(self.categID) != get_category(other.categID):
-            return get_category(self.categID) < get_category(other.categID)
+            return get_category(self.categID) <= get_category(other.categID)
         else:
-            return self.time < other.time
+            return self.time <= other.time
 
 class PB(Run):
     sort = "%WR"
@@ -221,4 +235,5 @@ class PB(Run):
 
 if __name__ == "__main__":
     test = user("niamek")
-    test.table_systems()
+    for testo in test.fetch_system("WII VC"):
+        print(testo)
