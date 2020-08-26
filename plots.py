@@ -15,22 +15,22 @@ def plot_systems(user):
             user (object): User object.
         """
     fig, axs = plot.subplots(2, 2)
-    axs[0,0].pie([user.systems_PBs[system]["count"] for system in user.all_systems], labels=[system for system in user.all_systems], autopct='%1.1f%%', startangle=90)
-    axs[0,0].set_title("PB #")
-
-
-
-    axs[0,1].pie([user.systems_runs[system]["count"] for system in user.all_systems], labels=[system for system in user.all_systems], autopct='%1.1f%%', startangle=90)
-    axs[0,1].set_title("run #")
-
-
-    axs[1,0].pie([user.systems_PBs[system]["time"] for system in user.all_systems], labels=[system for system in user.all_systems], autopct='%1.1f%%', startangle=90)
-    axs[1,0].set_title("PB total time")
-
-    axs[1,1].pie([user.systems_runs[system]["time"] for system in user.all_systems], labels=[system for system in user.all_systems], autopct='%1.1f%%', startangle=90)
-    axs[1,1].set_title("run total time")
 
     fig.suptitle(user.username)
+
+    axs[0,0].set_title("PB #")
+    axs[0,0].pie([user.systems_PBs[system]["count"] for system in user.all_systems], labels=[system for system in user.all_systems], autopct='%1.1f%%', startangle=90)
+
+
+    axs[0,1].set_title("run #")
+    axs[0,1].pie([user.systems_runs[system]["count"] for system in user.all_systems], labels=[system for system in user.all_systems], autopct='%1.1f%%', startangle=90)
+
+    axs[1,0].set_title("PB total time")
+    axs[1,0].pie([user.systems_PBs[system]["time"] for system in user.all_systems], labels=[system for system in user.all_systems], autopct='%1.1f%%', startangle=90)
+
+    axs[1,1].set_title("run total time")
+    axs[1,1].pie([user.systems_runs[system]["time"] for system in user.all_systems], labels=[system for system in user.all_systems], autopct='%1.1f%%', startangle=90)
+
 
 
     plot.show()
