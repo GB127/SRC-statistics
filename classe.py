@@ -65,7 +65,7 @@ class user:
                                             "WR" : run.WR,
                                             "delta" : run.delta}
 
-
+        self.all_systems = sorted(list(self.systems_PBs.keys()))
 
 
         print("user initialized!")
@@ -107,20 +107,20 @@ class user:
     def table_systems(self):
         liste_systems = sorted([system for system in self.systems_PBs.keys()])
 
-        print("-" * 80)
-        print(f'| System |{" Runs":20}|{" PBs":49}|')
-        print("-" * 80)
+        print("-" * 83)
+        print(f'   | System |{" Runs":20}|{" PBs":49}|')
+        print("-" * 83)
 
-        for system in liste_systems:
+        for no,system in enumerate(liste_systems):
             string = f'| {system[:6]:^6} |'
             string_1 = f'{self.systems_runs[system]["count"]:^4}| {str_time(self.systems_runs[system]["time"])[:13]:13} |'
             string_2 = f'{str_time(self.systems_runs[system]["time"]/self.systems_runs[system]["count"])[:13]:13} |'
             string_3 = f'{self.systems_PBs[system]["count"]:^4}| {str_time(self.systems_PBs[system]["time"])[:13]:13} | + {str_time(self.systems_PBs[system]["delta"])[:13]:13} | {round(100 * self.systems_PBs[system]["time"] / self.systems_PBs[system]["WR"],2):6} % |'
             string_4 = f'{str_time(self.systems_PBs[system]["time"]/self.systems_PBs[system]["count"])[:13]:13} | + {str_time(self.systems_PBs[system]["delta"]/self.systems_PBs[system]["count"])[:13]:13} |'
 
-            print(string + string_1 + string_3)
-            print(f'|{"|--- ":>13}| {string_2}{"---":^4}| {string_4} -------- |')
-            print("-"*80)
+            print(f'{no+1:^3}{string}{string_1}{string_3}')
+            print(f'   |{"|--- ":>13}| {string_2}{"---":^4}| {string_4} -------- |')
+            print("-"*84)
 
         print(f'{len(liste_systems)} different systems')
     
