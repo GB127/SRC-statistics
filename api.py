@@ -224,6 +224,51 @@ def get_leaderboard(gameID, categID, vari):
         leaderboard[(gameID, categID, varistr)] = ranking
     return leaderboard[(gameID, categID, varistr)]
 
+
+
+
+def get_leaderboards(gameID, categID, vari):
+    # TODO: Enlever les temps sans date! (Ils sont dans toutes les années)
+    """[summary]
+
+        Args:
+            gameID ([type]): [description]
+            categID ([type]): [description]
+            vari ([type]): [description]
+
+        Returns:
+            [type]: [description]
+        """
+    varistr = ""
+    if vari != {}:
+        tempo = []
+        for key in vari:
+            if get_variable(key)["is-subcategory"] is True: tempo.append(f"var-{key}={vari[key]}")
+        varistr = "&" + "&".join(tempo)
+
+
+    game_date = requester(f"/games/{gameID}")['data']["release-date"]
+    now = str(datetime.date.today())
+
+    rankings = {}
+    for year in range(int(now[:4]), int(game_date[:4]), -1):
+        tempo = []
+        rep = requester(f"/leaderboards/{gameID}/category/{categID}?date={f'{year}-{now[5:7]}-{now[8:10]}'}" + varistr)
+        for run in rep["data"]["runs"]:
+            tempo.append((int(run["place"]), isodate.parse_duration(run["run"]["times"]["primary"]).total_seconds()))
+        if len(tempo) == 0: break
+        else: 
+            rankings[year] = tempo
+    return rankings
+
+
+
+
+
+
+
+
+
 def get_newsystem(newsystem):
     """Debug function to find a new system to give a new acronym in the dictionnary.
 
@@ -304,4 +349,4 @@ def get_runs(ID):
 
 
 if __name__ == "__main__":
-    pass
+    get_leaderboards("o1y9wo6q","7dgrrxk4", vari={}).keys()
