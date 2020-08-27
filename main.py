@@ -12,17 +12,24 @@ def run_analyser(user):
             user (object): User object from class.py
     """
     clear()
-    #user.table_PBs()
+    user.table_PBs()
     user.PBs.sort()
-    #which = input_which(user.PBs)
-    which = 20
+    which = input_which(user.PBs)
     if which == "all":
         pass
     else:
         PB = user.PBs[which]
 
-        plot_leaderboard(PB, user)
-        #plot_runs(PB, user)
+        plot_PB_leaderboard(PB, user)
+        plot_runs(PB, user)
+
+def leaderboard_analyser(user):
+    clear()
+    user.table_PBs()
+    which = input_which(user.PBs)
+    if which == "all": pass
+    else:
+        plot_leaderboard(user.PBs[which])
 
 def system_analyser(user):
     """System analyser module.
@@ -43,12 +50,10 @@ def system_analyser(user):
 
 
 if __name__ == "__main__":
-    user = user("niamek")
-    #user = user(input("Who? "))
+    user = user(input("Who? "))
     main = True
     while main:
-        #command = input("[system, run, sort end] ")
-        command = "run"
+        command = input("[system, run, lb, sort end] ")
         if command == "system":
             system_analyser(user)
         elif command == "run":
@@ -56,4 +61,5 @@ if __name__ == "__main__":
         elif command == "sort":
             PB.sort = input("Which sorting method? [game, system, time, delta, %WR, %LB] ")
         elif command == "end": main = False
-        main = False
+        elif command == "lb":
+            leaderboard_analyser(user)

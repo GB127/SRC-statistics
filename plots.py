@@ -51,7 +51,7 @@ def plot_runs(PB,user):  #FIXME : Rework on it.
     plot.show()
 
 
-def plot_leaderboard(PB, user):  #FIXME : Rework on it.
+def plot_PB_leaderboard(PB, user):
     leaderboard = get_leaderboard(PB.gameID,PB.categID, PB.vari)
 
     rank_toremove = []
@@ -81,6 +81,28 @@ def plot_leaderboard(PB, user):  #FIXME : Rework on it.
 
 
     plot.show()
+
+def plot_leaderboard(PB):
+    leaderboards = get_leaderboards(PB.gameID,PB.categID, PB.vari)
+
+    for year in leaderboards.keys():
+        plot.plot([time[0] for time in leaderboards[year]], [rank[1] for rank in leaderboards[year]], label=year)
+
+    plot.title(f'{get_game(PB.gameID)}\n{get_category(PB.categID)}')
+
+
+    plot.ylabel("Time")
+    plot.yticks(plot.yticks()[0],[datetime.timedelta(seconds=x) for x in plot.yticks()[0]])
+
+    plot.xlabel("Rank")
+    ax = plot.gca()
+    ax.set_xlim(ax.get_xlim()[::-1])
+    
+
+
+    plot.show()
+
+
 
 
 def plot_system(user, system):
@@ -141,6 +163,6 @@ def plot_system(user, system):
 
 
 if __name__ == "__main__":
-    testing = user("pac")
-    testing.table_systems()
-    plot_systems(testing)
+    testing = user("niamek")
+    testing.table_PBs()
+    plot_leaderboard(testing.PBs[6])
