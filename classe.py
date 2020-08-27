@@ -35,7 +35,7 @@ class user:
                         "time" : Quantity of runs under of three minutes (int)
                 user.runs (list) : List that contains *all* runs of the user that aren't rejected.
                     All elements of this list are Run objects. Data collected with a request.
-                user.systems_PBss : Infos of user.PBs, grouped by systems.
+                user.systems_PBs : Infos of user.PBs, grouped by systems.
                     hierachy:
                         "system" (dicto)
                             "count" (int): How many run on the said system.
@@ -160,13 +160,13 @@ class user:
     def table_systems(self):
         """Print a table of the infos of the runs of the user by systems.
             """
-        liste_systems = sorted([system for system in self.systems_PBs.keys()])  # FIXME
+        self.all_systems.sort()
 
         print("-" * 85)
         print(f'|   | System |{" Runs":20}|{" PBs":49}|')
         print("-" * 85)
 
-        for no,system in enumerate(liste_systems):
+        for no,system in enumerate(self.all_systems):
             # Current system
             current_system = f'| {system[:6]:^6} |'
             # Runs count and time (coti) of the current system

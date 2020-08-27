@@ -16,7 +16,7 @@ def plot_systems(user):
         """
     fig, axs = plot.subplots(2, 2)
 
-    fig.suptitle(user.username)
+    fig.suptitle(f'{user.username}\n{len(user.all_systems)} systems')
 
     axs[0,0].set_title("PB #")
     axs[0,0].pie([user.systems_PBs[system]["count"] for system in user.all_systems], labels=[system for system in user.all_systems], autopct='%1.1f%%', startangle=90)
@@ -36,33 +36,53 @@ def plot_systems(user):
     plot.show()
 
 
-def plot_runs(PB,username, runs):  #FIXME : Rework on it.
-
+def plot_runs(PB,user):  #FIXME : Rework on it.
+    runs = user.fetch_runs_PB(PB)
     runs.sort(reverse=True)
-    plot.plot([run.time for run in runs])
+
+    plot.title(f'{get_game(PB.gameID)}\n{get_category(PB.categID)}\nWR:{str_time(PB.WR)}')
     plot.axhline(y=PB.WR, c="gold")
+
+
+    plot.plot([run.time for run in runs])
+    plot.xlabel("PB #")
     plot.ylabel("Time")
     plot.yticks(plot.yticks()[0],[datetime.timedelta(seconds=x) for x in plot.yticks()[0]])
-    plot.xlabel("PB #")
-    plot.title(f'{get_game(PB.gameID)} - {get_category(PB.categID)}')
     plot.show()
 
 
-def plot_leaderboard(PB, username):  #FIXME : Rework on it.
+def plot_leaderboard(PB, user):  #FIXME : Rework on it.
     leaderboard = get_leaderboard(PB.gameID,PB.categID, PB.vari)
+
+    rank_toremove = []
+    for rank in leaderboard:
+        if rank[1] > (6 * PB.WR):
+            rank_toremove.append(rank)
+
+    for rank in rank_toremove:
+        leaderboard.remove(rank)
+
+
     plot.plot([time[0] for time in leaderboard], [rank[1] for rank in leaderboard])
+
+    plot.title(f'{get_game(PB.gameID)}\n{get_category(PB.categID)}')
+
+
     plot.ylabel("Time")
     plot.yticks(plot.yticks()[0],[datetime.timedelta(seconds=x) for x in plot.yticks()[0]])
+
     plot.xlabel("Rank")
-    plot.title(f'{get_game(PB.gameID)} - {get_category(PB.categID)}')
     ax = plot.gca()
     ax.set_xlim(ax.get_xlim()[::-1])
-    if PB and username:
-        plot.annotate(f"{username}", xy=(PB.place, PB.time), xytext=(0.65,0.65), textcoords="figure fraction",
-                        arrowprops={"arrowstyle":"->"}
-                        )
+    plot.annotate(f"{user.username}", xy=(PB.place, PB.time), xytext=(0.65,0.65), textcoords="figure fraction",
+                    arrowprops={"arrowstyle":"->"}
+                    )
+
+
+
     plot.show()
-    
+
+
 def plot_system(user, system):
     """Generate 4 histograms about the system times.
 
@@ -78,7 +98,7 @@ def plot_system(user, system):
 
     fig, axs = plot.subplots(2, 2)
 
-    fig.suptitle(f"{system}")
+    fig.suptitle(f"{user}\n{system}")
 
     data = user.fetch_runs_system(system)
     data_2 = [run.time for run in data]
@@ -123,4 +143,4 @@ def plot_system(user, system):
 if __name__ == "__main__":
     testing = user("pac")
     testing.table_systems()
-    plot_system(testing, "NES")
+    plot_systems(testing)

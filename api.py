@@ -304,9 +304,4 @@ def get_runs(ID):
 
 
 if __name__ == "__main__":
-    
-    get_newsystem("Super Game Boy 2")
-    get_newsystem("PlayStation")
-    get_newsystem("PlayStation 2")
-    get_newsystem("PlayStation 3")
-    get_newsystem("PlayStation 4")
+    pass
