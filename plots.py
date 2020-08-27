@@ -43,8 +43,10 @@ def plot_runs(PB,user):  #FIXME : Rework on it.
     plot.title(f'{get_game(PB.gameID)}\n{get_category(PB.categID)}\nWR:{str_time(PB.WR)}')
     plot.axhline(y=PB.WR, c="gold")
 
-
-    plot.plot([run.time for run in runs])
+    if len(runs) == 1:
+        plot.plot([run.time for run in runs], marker="o")
+    else:
+        plot.plot([run.time for run in runs])
     plot.xlabel("PB #")
     plot.ylabel("Time")
     plot.yticks(plot.yticks()[0],[datetime.timedelta(seconds=x) for x in plot.yticks()[0]])
@@ -86,7 +88,10 @@ def plot_leaderboard(PB):
     leaderboards = get_leaderboards(PB.gameID,PB.categID, PB.vari)
 
     for year in leaderboards.keys():
-        plot.plot([time[0] for time in leaderboards[year]], [rank[1] for rank in leaderboards[year]], label=year)
+        if len(leaderboards[year]) == 1:
+            plot.plot([time[0] for time in leaderboards[year]], [rank[1] for rank in leaderboards[year]], label=year, marker="*")
+        else:
+            plot.plot([time[0] for time in leaderboards[year]], [rank[1] for rank in leaderboards[year]], label=year)
 
     plot.title(f'{get_game(PB.gameID)}\n{get_category(PB.categID)}')
 
