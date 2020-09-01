@@ -16,7 +16,7 @@ def run_analyser(user):
     user.PBs.sort()
     which = input_which(user.PBs)
     if which == "all":
-        pass
+        histo_all_runs(user)
     else:
         PB = user.PBs[which]
 
@@ -53,9 +53,11 @@ if __name__ == "__main__":
     user = user(input("Who? "))
     main = True
     while main:
-        command = input("[system, run, lb, sort end] ")
+        command = input("[system, run, lb, sort, user, end] ")
         if command == "system":
             system_analyser(user)
+        if command == "user":
+            user.summarize()
         elif command == "run":
             run_analyser(user)
         elif command == "sort":

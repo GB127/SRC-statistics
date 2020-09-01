@@ -129,6 +129,16 @@ class user:
         self.total_PB = sum(tempo)
 
 
+    def summarize(self):
+        print(self.username)
+        print(f"{len(self.all_systems)} different systems")
+        print(f"{len(self.runs)} runs")
+        print(f'{len(self.PBs)} PBs')
+        print("-" * 100)
+        print(f"{self.rejected['level']} Individual level runs not considered in the script")
+        print(f"{self.rejected['time']} runs not considered in the script because of run time too short")
+
+
     def total_WR(self):
         """Function that takes the user.PBs and calculate the total WR.
         """
@@ -306,5 +316,5 @@ class PB(Run):
             return self.perclenrank > other.perclenrank
 
 if __name__ == "__main__":
-    test = user("niamek")
-    test.table_systems()
+    test = user("dadinfinitum")
+    test.summarize()

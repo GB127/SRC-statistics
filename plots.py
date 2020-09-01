@@ -167,7 +167,58 @@ def plot_system(user, system):
     plot.show()
 
 
+
+def histo_all_runs(user):
+        """Generate 4 histograms about the system times.
+
+        runs times | PB times
+        ---------------------
+        PB delta   | PB %WR
+
+        Args:
+            user (object): User object
+            system (string): System to analyse.
+
+        """
+
+        fig, axs = plot.subplots(2, 2)
+
+        fig.suptitle(f"{user}")
+
+        axs[0,0].hist([run.time for run in user.runs])
+        axs[0,0].set_title("Runs")
+        plot.sca(axs[0,0])
+        plot.xlim(left=0)
+        plot.xticks(plot.xticks()[0], [str_time(tick) for tick in plot.xticks()[0]])
+
+
+        axs[0,1].hist([run.time for run in user.PBs])
+        axs[0,1].set_title("PBs")
+        plot.sca(axs[0,1])
+        plot.xlim(left=0)
+        plot.xticks(plot.xticks()[0], [str_time(tick) for tick in plot.xticks()[0]])
+
+
+
+        axs[1,0].hist([run.delta for run in user.PBs])
+        axs[1,0].set_title("delta WR")
+        plot.sca(axs[1,0])
+        plot.xlim(left=0)
+        plot.xticks(plot.xticks()[0], [str_time(tick) for tick in plot.xticks()[0]])
+
+        axs[1,1].hist([run.percWR for run in user.PBs])
+        axs[1,1].set_title("%WR")
+        plot.sca(axs[1,1])
+        plot.xlim(left=100)
+        plot.xticks(plot.xticks()[0], [str(tick) + " %" for tick in plot.xticks()[0]])
+
+
+
+
+
+
+        plot.show()
+
 if __name__ == "__main__":
-    testing = user("niamek")
-    testing.table_PBs()
-    plot_leaderboard(testing.PBs[6])
+    testing = user("jaypin88")
+    histo_all_runs(testing)
