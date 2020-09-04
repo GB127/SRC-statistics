@@ -221,11 +221,6 @@ def plot_all_runs(user):
     cutoff_2 = 60 ** 2
     cutoff_3 = (60 ** 2) * 3
 
-    print(str_time(cutoff_1))
-    print(str_time(cutoff_2))
-    print(str_time(cutoff_3))
-
-
 
     fig, axs = plot.subplots(2, 2)
 
