@@ -84,17 +84,13 @@ def plot_PB_leaderboard(PB, user):
 
     plot.show()
 
-def plot_leaderboard(PB):
-    leaderboards = get_leaderboards(PB.gameID,PB.categID, PB.vari)
+def plot_leaderboard(leaderboards):
 
     for year in leaderboards.keys():
         if len(leaderboards[year]) == 1:
             plot.plot([time[0] for time in leaderboards[year]], [rank[1] for rank in leaderboards[year]], label=year, marker="*")
         else:
             plot.plot([time[0] for time in leaderboards[year]], [rank[1] for rank in leaderboards[year]], label=year)
-
-    plot.title(f'{get_game(PB.gameID)}\n{get_category(PB.categID)}')
-
 
     plot.ylabel("Time")
     plot.yticks(plot.yticks()[0],[datetime.timedelta(seconds=x) for x in plot.yticks()[0]])
@@ -168,8 +164,9 @@ def plot_system(user, system):
 
 
 
+
 def histo_all_runs(user):
-        """Generate 4 histograms about the system times.
+    """Generate 4 histograms about the system times.
 
         runs times | PB times
         ---------------------
@@ -181,44 +178,99 @@ def histo_all_runs(user):
 
         """
 
-        fig, axs = plot.subplots(2, 2)
+    fig, axs = plot.subplots(2, 2)
 
-        fig.suptitle(f"{user}")
+    fig.suptitle(f"{user}")
 
-        axs[0,0].hist([run.time for run in user.runs])
-        axs[0,0].set_title("Runs")
-        plot.sca(axs[0,0])
-        plot.xlim(left=0)
-        plot.xticks(plot.xticks()[0], [str_time(tick) for tick in plot.xticks()[0]])
-
-
-        axs[0,1].hist([run.time for run in user.PBs])
-        axs[0,1].set_title("PBs")
-        plot.sca(axs[0,1])
-        plot.xlim(left=0)
-        plot.xticks(plot.xticks()[0], [str_time(tick) for tick in plot.xticks()[0]])
+    axs[0,0].hist([run.time for run in user.runs])
+    axs[0,0].set_title("Runs")
+    plot.sca(axs[0,0])
+    plot.xlim(left=0)
+    plot.xticks(plot.xticks()[0], [str_time(tick) for tick in plot.xticks()[0]])
 
 
-
-        axs[1,0].hist([run.delta for run in user.PBs])
-        axs[1,0].set_title("delta WR")
-        plot.sca(axs[1,0])
-        plot.xlim(left=0)
-        plot.xticks(plot.xticks()[0], [str_time(tick) for tick in plot.xticks()[0]])
-
-        axs[1,1].hist([run.percWR for run in user.PBs])
-        axs[1,1].set_title("%WR")
-        plot.sca(axs[1,1])
-        plot.xlim(left=100)
-        plot.xticks(plot.xticks()[0], [str(tick) + " %" for tick in plot.xticks()[0]])
+    axs[0,1].hist([run.time for run in user.PBs])
+    axs[0,1].set_title("PBs")
+    plot.sca(axs[0,1])
+    plot.xlim(left=0)
+    plot.xticks(plot.xticks()[0], [str_time(tick) for tick in plot.xticks()[0]])
 
 
+
+    axs[1,0].hist([run.delta for run in user.PBs])
+    axs[1,0].set_title("delta WR")
+    plot.sca(axs[1,0])
+    plot.xlim(left=0)
+    plot.xticks(plot.xticks()[0], [str_time(tick) for tick in plot.xticks()[0]])
+
+    axs[1,1].hist([run.percWR for run in user.PBs])
+    axs[1,1].set_title("%WR")
+    plot.sca(axs[1,1])
+    plot.xlim(left=100)
+    plot.xticks(plot.xticks()[0], [str(tick) + " %" for tick in plot.xticks()[0]])
 
 
 
 
-        plot.show()
+
+
+    plot.show()
+
+def plot_all_runs(user):
+    cutoff_1 = 1800
+    cutoff_2 = 60 ** 2
+    cutoff_3 = (60 ** 2) * 3
+
+    print(str_time(cutoff_1))
+    print(str_time(cutoff_2))
+    print(str_time(cutoff_3))
+
+
+
+    fig, axs = plot.subplots(2, 2)
+
+    fig.suptitle(f"{user}")
+
+    for run in user.PBs:
+        tempo = [one.time for one in user.fetch_runs_PB(run)]
+        tempo.sort(reverse=True)
+        if tempo[0] < cutoff_1:
+            if len(tempo) != 1:
+                axs[0,0].plot(tempo)
+            else:
+                axs[0,0].plot(tempo, marker=".")
+        elif tempo[0] < cutoff_2:
+            if len(tempo) != 1:
+                axs[0,1].plot(tempo)
+            else:
+                axs[0,1].plot(tempo, marker=".")
+        elif tempo[0] < cutoff_3:
+            if len(tempo) != 1:
+                axs[1,0].plot(tempo)
+            else:
+                axs[1,0].plot(tempo, marker=".")
+        else:
+            if len(tempo) != 1:
+                axs[1,1].plot(tempo)
+            else:
+                axs[1,1].plot(tempo, marker=".")
+
+
+    plot.sca(axs[0,0])
+    plot.yticks(plot.yticks()[0], [str_time(tick) for tick in plot.yticks()[0]])
+    plot.sca(axs[0,1])
+    plot.yticks(plot.yticks()[0], [str_time(tick) for tick in plot.yticks()[0]])
+    plot.sca(axs[1,0])
+    plot.yticks(plot.yticks()[0], [str_time(tick) for tick in plot.yticks()[0]])
+    plot.sca(axs[1,1])
+    plot.yticks(plot.yticks()[0], [str_time(tick) for tick in plot.yticks()[0]])
+
+
+
+    plot.show()
+
+
 
 if __name__ == "__main__":
-    testing = user("jaypin88")
-    histo_all_runs(testing)
+    testing = user("zfg")
+    plot_all_runs(testing)

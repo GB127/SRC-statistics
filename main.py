@@ -17,9 +17,9 @@ def run_analyser(user):
     which = input_which(user.PBs)
     if which == "all":
         histo_all_runs(user)
+        plot_all_runs(user)
     else:
         PB = user.PBs[which]
-
         plot_PB_leaderboard(PB, user)
         plot_runs(PB, user)
 
@@ -29,7 +29,10 @@ def leaderboard_analyser(user):
     which = input_which(user.PBs)
     if which == "all": pass
     else:
-        plot_leaderboard(user.PBs[which])
+        pb_tempo = user.PBs[which]
+        lead_tempo = get_leaderboards(pb_tempo.gameID, pb_tempo.categID, pb_tempo.vari)
+        #plot_leaderboard(lead_tempo)
+        histo_leaderboards(lead_tempo)
 
 def system_analyser(user):
     """System analyser module.
