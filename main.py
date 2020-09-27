@@ -31,8 +31,7 @@ def leaderboard_analyser(user):
     else:
         pb_tempo = user.PBs[which]
         lead_tempo = get_leaderboards(pb_tempo.gameID, pb_tempo.categID, pb_tempo.vari)
-        #plot_leaderboard(lead_tempo)
-        histo_leaderboards(lead_tempo)
+        plot_leaderboard(lead_tempo)
 
 def system_analyser(user):
     """System analyser module.
@@ -42,11 +41,11 @@ def system_analyser(user):
     """
     clear()
     user.table_systems()
-    which = input_which(user.all_systems)
+    which = input_which(user.systems)
     if which == "all":
         plot_systems(user)
     else:
-        plot_system(user, user.all_systems[which])
+        plot_system(user, user.systems[which])
 
     # pie chart of WR difference per system
     # pie chart of WR% per system
