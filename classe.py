@@ -51,68 +51,77 @@ class user:
                 user.total_WR (int) : Summation of all Run times of the user, in seconds.
                 user.username (string): Username of the user
         """
+        def maker_runs_list(toupdate, list_runs, typ):
+            """Function to update liste with runs.
+
+            Args:
+                toupdate (List): List to update
+                list_runs (List): List of runs to verify
+                typ (str): Determine if PB or run
+            """
+
+            for run in list_runs:
+                if typ == "Run":
+                    level = run["level"]
+                    time = run["times"]["primary_t"]
+                elif typ == "PB":
+                    level = run["run"]["level"]
+                    time = run["run"]["times"]["primary_t"]
+                if level is None and time > 180:
+                    if typ == "PB":
+                        toupdate.append(PB(run))
+                    elif typ == "Run":
+                        toupdate.append(Run(run))
+                elif level is not None and typ =="Run":
+                    self.rejected["level"] += 1
+                elif typ == "Run":
+                    self.rejected["time"] += 1
+
+        def runs_splitter_system(runs):
+            tempo = {}
+            try:
+                for run in runs:
+                    tempo[run.system]["count"] += 1
+                    tempo[run.system]["time"] += run.time
+                    if type(run) == PB:
+                        tempo[run.system]["WR"] += run.WR    
+                        tempo[run.system]["delta"] += run.delta
+            except KeyError:
+                if type(run) == PB:
+                    tempo[run.system] = {"count" : 1,
+                                         "time" : run.time,
+                                         "WR" : run.WR,
+                                         "delta" : run.delta}
+                else:
+                    tempo[run.system] = {"count" : 1,
+                                         "time" : run.time}
+
+            return tempo
         print("Fetching data...")  # Printing this because the fetching can take a couple of minutes.
 
         self.username = username
         self.ID = get_userID(self.username)
         self.runs, self.PBs = [], []
-
-
-        # PB related
-        for pb in get_PBs(self.ID): 
-            if pb["run"]["level"] is None and pb["run"]["times"]["primary_t"] > 180:
-                self.PBs.append(PB(pb))
-            else: pass
-
-        self.total_PB()
-        self.total_WR()
-
-
-        # Split the infos into systems, PBs
-
-        self.systems_PBs = {}
-        for run in self.PBs:
-            try:
-                self.systems_PBs[run.system]["count"] += 1
-                self.systems_PBs[run.system]["time"] += run.time
-                self.systems_PBs[run.system]["WR"] += run.WR    
-                self.systems_PBs[run.system]["delta"] += run.delta             
-            except KeyError:
-                self.systems_PBs[run.system] = {"count" : 1,
-                                            "time" : run.time,
-                                            "WR" : run.WR,
-                                            "delta" : run.delta}
-
-        self.all_systems = sorted(list(self.systems_PBs.keys()))
-
-
-        # Runs related:
-
         self.rejected = {"level": 0, "time": 0}
-        for run in get_runs(self.ID):
-            if run["level"] is None and run["times"]["primary_t"] > 180:
-                self.runs.append(Run(run))
-            elif run["level"] is not None:
-                self.rejected["level"] += 1
-            else:
-                self.rejected["time"] += 1
 
+        maker_runs_list(self.PBs,
+                        get_PBs(self.ID),
+                        typ="PB")
+        maker_runs_list(self.runs,
+                        get_runs(self.ID),
+                        typ="Run")
 
-        # Split the infos into systems, runs
+        self.total_PB = sum([pb.time for pb in self.PBs])
+        self.total_WR = sum([pb.WR for pb in self.PBs])
+        self.total_run = sum([run.time for run in self.runs])
 
-        self.systems_runs = {}
-        for run in self.runs:
-            try:
-                self.systems_runs[run.system]["count"] += 1
-                self.systems_runs[run.system]["time"] += run.time
-            except KeyError:
-                self.systems_runs[run.system] = {"count" : 1,
-                                            "time" : run.time}
-
-
-
-
+        self.systems_PBs = runs_splitter_system(self.PBs)
+        self.systems_runs = runs_splitter_system(self.runs)
+        self.systems = sorted(list(self.systems_PBs.keys()))
         print("user initialized!")
+
+
+
 
 
     def __str__(self):
@@ -120,32 +129,14 @@ class user:
             """
         return f'{self.username}, {len(self.runs)} runs, {len(self.PBs)} PBs'
 
-    def total_PB(self):
-        """Function that will take user.PBs and calculate a total time.
-            """
-        tempo = []
-        for PB in self.PBs:
-            tempo.append(PB.time)
-        self.total_PB = sum(tempo)
-
-
     def summarize(self):
         print(self.username)
-        print(f"{len(self.all_systems)} different systems")
+        print(f"{len(self.systems)} different systems")
         print(f"{len(self.runs)} runs")
         print(f'{len(self.PBs)} PBs')
         print("-" * 100)
         print(f"{self.rejected['level']} Individual level runs not considered in the script")
         print(f"{self.rejected['time']} runs not considered in the script because of run time too short")
-
-
-    def total_WR(self):
-        """Function that takes the user.PBs and calculate the total WR.
-        """
-        tempo = []
-        for PB in self.PBs:
-            tempo.append(PB.WR)
-        self.total_WR = sum(tempo)
 
 
     def table_PBs(self):
