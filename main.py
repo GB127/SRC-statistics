@@ -16,22 +16,12 @@ def run_analyser(user):
     user.PBs.sort()
     which = input_which(user.PBs)
     if which == "all":
-        histo_all_runs(user)
-        plot_all_runs(user)
+        user.histo_all_runs()
+        user.plot_all_runs()
     else:
         PB = user.PBs[which]
-        plot_PB_leaderboard(PB, user)
-        plot_runs(PB, user)
-
-def leaderboard_analyser(user):
-    clear()
-    user.table_PBs()
-    which = input_which(user.PBs)
-    if which == "all": pass
-    else:
-        pb_tempo = user.PBs[which]
-        lead_tempo = get_leaderboards(pb_tempo.gameID, pb_tempo.categID, pb_tempo.vari)
-        plot_leaderboard(lead_tempo)
+        user.plot_PB_leaderboard(PB)
+        user.plot_runs(PB)
 
 def system_analyser(user):
     """System analyser module.
@@ -43,9 +33,9 @@ def system_analyser(user):
     user.table_systems()
     which = input_which(user.systems)
     if which == "all":
-        plot_systems(user)
+        user.plot_systems()
     else:
-        plot_system(user, user.systems[which])
+        user.plot_system(user.systems[which])
 
     # pie chart of WR difference per system
     # pie chart of WR% per system
@@ -55,7 +45,7 @@ if __name__ == "__main__":
     user = user(input("Who? "))
     main = True
     while main:
-        command = input("[system, run, lb, sort, user, end] ")
+        command = input("[system, run, sort, user, end] ")
         if command == "system":
             system_analyser(user)
         if command == "user":
@@ -65,5 +55,3 @@ if __name__ == "__main__":
         elif command == "sort":
             PB.sort = input("Which sorting method? [game, system, time, delta, %WR, %LB] ")
         elif command == "end": main = False
-        elif command == "lb":
-            leaderboard_analyser(user)

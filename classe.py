@@ -231,7 +231,7 @@ class user:
         axs[1,0].pie([self.systems_PBs[system]["time"] for system in self.systems], labels=[system for system in self.systems], autopct='%1.1f%%', startangle=90)
 
         axs[1,1].set_title("run total time")
-        axs[1,1].pie([self.systems_runs[system]["time"] for system in selfsystems], labels=[system for system in self.systems], autopct='%1.1f%%', startangle=90)
+        axs[1,1].pie([self.systems_runs[system]["time"] for system in self.systems], labels=[system for system in self.systems], autopct='%1.1f%%', startangle=90)
 
         plot.show()
 
@@ -375,10 +375,6 @@ class user:
 
 
         plot.show()
-
-
-
-
 
     def histo_system(self, system):
         """Generate 4 histograms about the system times.
@@ -529,6 +525,16 @@ class PB(Run):
             return self.percWR < other.percWR
         elif PB.sort == "%LB":
             return self.perclenrank > other.perclenrank
+
+
+
+class leaderboard:
+    def __init__(self):
+        pass
+
+
+
+
 
 if __name__ == "__main__":
     test = user("niamek")
