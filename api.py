@@ -29,10 +29,6 @@ def recursive_requester(link, toupdate):
         pass
 
 
-
-
-
-
 def requester(link):
     """Generic requester.
 
@@ -224,9 +220,6 @@ def get_leaderboard(gameID, categID, vari):
         leaderboard[(gameID, categID, varistr)] = ranking
     return leaderboard[(gameID, categID, varistr)]
 
-
-
-
 def get_leaderboards(gameID, categID, vari):
     # TODO: Enlever les temps sans date! (Ils sont dans toutes les années)
     """[summary]
@@ -262,13 +255,6 @@ def get_leaderboards(gameID, categID, vari):
     return rankings
 
 
-
-
-
-
-
-
-
 def get_newsystem(newsystem):
     """Debug function to find a new system to give a new acronym in the dictionnary.
 
@@ -291,7 +277,6 @@ def get_newsystem(newsystem):
     for system in rep["data"]:
         print(system["name"])
 systems = {  # It's the approach I use for using acronyms, as requesting a system will give you the full name.
-
     None : "PC",
     "n5683oev" : "GB",
     "gde3g9k1" : "GBC",
