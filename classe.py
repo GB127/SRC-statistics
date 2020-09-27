@@ -79,23 +79,22 @@ class user:
 
         def runs_splitter_system(runs):
             tempo = {}
-            try:
-                for run in runs:
+            for run in runs:
+                try:
                     tempo[run.system]["count"] += 1
                     tempo[run.system]["time"] += run.time
                     if type(run) == PB:
                         tempo[run.system]["WR"] += run.WR    
                         tempo[run.system]["delta"] += run.delta
-            except KeyError:
-                if type(run) == PB:
-                    tempo[run.system] = {"count" : 1,
-                                         "time" : run.time,
-                                         "WR" : run.WR,
-                                         "delta" : run.delta}
-                else:
-                    tempo[run.system] = {"count" : 1,
-                                         "time" : run.time}
-
+                except KeyError:
+                    if type(run) == PB:
+                        tempo[run.system] = {"count" : 1,
+                                            "time" : run.time,
+                                            "WR" : run.WR,
+                                            "delta" : run.delta}
+                    else:
+                        tempo[run.system] = {"count" : 1,
+                                            "time" : run.time}
             return tempo
         print("Fetching data...")  # Printing this because the fetching can take a couple of minutes.
 
@@ -160,13 +159,11 @@ class user:
     def table_systems(self):
         """Print a table of the infos of the runs of the user by systems.
             """
-        self.all_systems.sort()
-
         print("-" * 85)
         print(f'|   | System |{" Runs":20}|{" PBs":49}|')
         print("-" * 85)
 
-        for no,system in enumerate(self.all_systems):
+        for no,system in enumerate(self.systems):
             # Current system
             current_system = f'| {system[:6]:^6} |'
             # Runs count and time (coti) of the current system
@@ -306,5 +303,5 @@ class PB(Run):
             return self.perclenrank > other.perclenrank
 
 if __name__ == "__main__":
-    test = user("pac")
-    test.table_PBs()
+    test = user("niamek")
+    test.table_systems()
