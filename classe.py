@@ -112,8 +112,26 @@ class user:
                         typ="Run")
 
         self.total_PB = sum([pb.time for pb in self.PBs])
+        self.average_PB = self.total_PB / len(self.PBs)
+
         self.total_WR = sum([pb.WR for pb in self.PBs])
+        self.total_delta = self.total_PB - self.total_WR
+        self.average_delta = self.total_WR / len(self.PBs)
+
         self.total_run = sum([run.time for run in self.runs])
+        self.average_run = self.total_run / len(self.runs)
+
+        self.str_total_PB = str_time(self.total_PB)
+        self.str_total_WR = str_time(self.total_WR)
+        self.str_total_delta = str_time(self.total_delta)
+        self.str_total_run = str_time(self.total_run)
+
+        self.str_average_PB = str_time(self.average_PB)
+        self.str_average_delta = str_time(self.average_delta)
+        self.str_average_run = str_time(self.average_run)
+
+
+
 
         self.systems_PBs = runs_splitter_system(self.PBs)
         self.systems_runs = runs_splitter_system(self.runs)
@@ -127,17 +145,17 @@ class user:
         self.PBs.sort()  # Always sort in case we change the sorting method?
 
         ### En tete of the table
-        print("-"*120)
-        print(f"| # |{'Sys':^6}| {'Game':^30}| {'Category':^15} | {'Time':^14}|      + \u0394WR     |{'%WR':^10}| {'  Rank      (^%)':20}")
-        print("-"*120)
+        print("-"*130)
+        print(f"| #  |{'Sys':^6}| {'Game':^30}| {'Category':^15} | {'Time':^14}|      + \u0394WR     |{'%WR':^10}| {'  Rank      (^%)':20}")
+        print("-"*130)
     
         ### Actual entry of the table.
-        for no, PB in enumerate(self.PBs): print(f'{no+1:3} {PB}')
-        print("-"*122)
+        for no, PB in enumerate(self.PBs): print(f'|{no+1:3} {PB}')
+        print("-"*130)
 
         ### Foot of the table
-        print(f'{"Total :":10}| {str_time(self.total_PB)[:17]:17}| + {str_time(self.total_PB - self.total_WR)[:13]:20}|----------|')
-        print(f'{"Average :":10}| {str_time(self.total_PB/len(self.PBs))[:17]:17}| + {str_time((self.total_PB - self.total_WR)/len(self.PBs))[:13]:20}| {str(round(self.total_PB/self.total_WR * 100,2))[:6]:6} % |')
+        print(f'| {"Total :":10}| {self.str_total_PB:17}| + {self.str_total_delta[:13]:20}|----------|')
+        print(f'| {"Average :":10}| {self.str_average_PB:17}| + {self.str_average_delta[:13]:20}|')
 
     def table_systems(self):
         """Print a table of the infos of the runs of the user by systems.
@@ -289,3 +307,4 @@ class PB(Run):
 
 if __name__ == "__main__":
     test = user("pac")
+    test.table_PBs()
