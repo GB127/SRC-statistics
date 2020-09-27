@@ -223,20 +223,23 @@ class Run:
                 self.time (int): duration of the run, in seconds
                 FIXME self.vari : "subcategories" of the category.
         """
-        self.system = get_system(data["system"]["platform"])
-        self.emulated = True if data["system"]["emulated"] else False
         self.ID = data["id"]
-        self.gameID = data["game"]
-        self.categID = data["category"]
-        self.vari = data["values"]
         self.time = data["times"]["primary_t"]
 
+        self.gameID = data["game"]
+        self.game = get_game(self.gameID)
 
+        self.categID = data["category"]
+        self.categ = get_category(self.categID)
+        self.vari = data["values"]
+
+        self.system = get_system(data["system"]["platform"])
+        self.emulated = data["system"]["emulated"]
+        
     def __str__(self):
         """ Format: System|Game|Category|Time
             """
-        return f'{self.system[:6]:^6}| {get_game(self.gameID)[:30]:30} | {get_category(self.categID)[:15]:15} | {datetime.timedelta(seconds=self.time)}'
-
+        return f'{self.system[:6]:^6}| {self.game[:30]:30} | {self.categ[:15]:15} | {datetime.timedelta(seconds=self.time)}'
 
     def __lt__(self, other):
         if get_game(self.gameID) != get_game(other.gameID):
@@ -247,7 +250,7 @@ class Run:
             return self.time <= other.time
 
 class PB(Run):
-    sort = "%WR"
+    sort = "game"
     def __init__(self, data):
         """
             NOTES:
@@ -278,7 +281,7 @@ class PB(Run):
 
     def __str__(self):  # FIXME : Documentate this
         def str_game(self):
-            return f'|{self.system[:6]:^6}| {get_game(self.gameID)[:30]:30}| {get_category(self.categID)[:15]:15}'
+            return f'|{self.system[:6]:^6}| {self.game[:30]:30}| {self.categ[:15]:15}'
         def str_rank(self):
             calculation = f'{self.place}/{self.lenrank}'
             calculation2 = f'({str(self.perclenrank):^5} %)'
@@ -304,4 +307,4 @@ class PB(Run):
 
 if __name__ == "__main__":
     test = user("niamek")
-    test.table_systems()
+    test.table_PBs()
