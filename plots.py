@@ -1,40 +1,4 @@
 import matplotlib.pyplot as plot
-import datetime
-from tools import *
-from api import *
-from classe import *
-
-def plot_systems(user):
-    """Generate 4 pies that tells the proportions of systems.
-
-        PB#     |   run#
-        -------------------
-        PB time | run time
-
-        Args:
-            user (object): User object.
-        """
-    fig, axs = plot.subplots(2, 2)
-
-    fig.suptitle(f'{user.username}\n{len(user.all_systems)} systems')
-
-    axs[0,0].set_title("PB #")
-    axs[0,0].pie([user.systems_PBs[system]["count"] for system in user.all_systems], labels=[system for system in user.all_systems], autopct='%1.1f%%', startangle=90)
-
-
-    axs[0,1].set_title("run #")
-    axs[0,1].pie([user.systems_runs[system]["count"] for system in user.all_systems], labels=[system for system in user.all_systems], autopct='%1.1f%%', startangle=90)
-
-    axs[1,0].set_title("PB total time")
-    axs[1,0].pie([user.systems_PBs[system]["time"] for system in user.all_systems], labels=[system for system in user.all_systems], autopct='%1.1f%%', startangle=90)
-
-    axs[1,1].set_title("run total time")
-    axs[1,1].pie([user.systems_runs[system]["time"] for system in user.all_systems], labels=[system for system in user.all_systems], autopct='%1.1f%%', startangle=90)
-
-
-
-    plot.show()
-
 
 def plot_runs(PB,user):  #FIXME : Rework on it.
     runs = user.fetch_runs_PB(PB)
@@ -102,8 +66,6 @@ def plot_leaderboard(leaderboards):
 
 
     plot.show()
-
-
 
 
 def plot_system(user, system):
