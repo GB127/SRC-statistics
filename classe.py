@@ -120,24 +120,10 @@ class user:
         self.systems = sorted(list(self.systems_PBs.keys()))
         print("user initialized!")
 
-
-
-
-
     def __str__(self):
         """ Format: username, # runs, # PBs
             """
         return f'{self.username}, {len(self.runs)} runs, {len(self.PBs)} PBs'
-
-    def summarize(self):
-        print(self.username)
-        print(f"{len(self.systems)} different systems")
-        print(f"{len(self.runs)} runs")
-        print(f'{len(self.PBs)} PBs')
-        print("-" * 100)
-        print(f"{self.rejected['level']} Individual level runs not considered in the script")
-        print(f"{self.rejected['time']} runs not considered in the script because of run time too short")
-
 
     def table_PBs(self):
         """ Print a table by printing all PBs. Sorting can be changed by
@@ -307,5 +293,5 @@ class PB(Run):
             return self.perclenrank > other.perclenrank
 
 if __name__ == "__main__":
-    test = user("dadinfinitum")
-    test.summarize()
+    test = user("pac")
+    print(test)
