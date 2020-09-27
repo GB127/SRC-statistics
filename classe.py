@@ -120,11 +120,6 @@ class user:
         self.systems = sorted(list(self.systems_PBs.keys()))
         print("user initialized!")
 
-    def __str__(self):
-        """ Format: username, # runs, # PBs
-            """
-        return f'{self.username}, {len(self.runs)} runs, {len(self.PBs)} PBs'
-
     def table_PBs(self):
         """ Print a table by printing all PBs. Sorting can be changed by
             changing the PB.sort variable.
@@ -294,4 +289,3 @@ class PB(Run):
 
 if __name__ == "__main__":
     test = user("pac")
-    print(test)
