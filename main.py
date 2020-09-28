@@ -1,4 +1,3 @@
-from plots import *
 from classe import *
 import os
 from tools import input_which

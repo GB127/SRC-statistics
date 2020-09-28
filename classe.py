@@ -580,5 +580,5 @@ class leaderboard:
 
 
 if __name__ == "__main__":
-    test = user("baffan")
+    test = user("niamek")
     test.table_PBs()

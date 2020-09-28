@@ -20,17 +20,5 @@ def input_which(length):
     except ValueError:
         return command
 
-
-def str_time(time):
-    """Convert an amount of seconds into a readable time format.
-
-        Args:
-            time (int): Amount of seconds.
-
-        Returns (str) : Time in a readable format.
-    """
-    return str(datetime.timedelta(seconds=time))
-
-
 if __name__ == "__main__":
     pass
