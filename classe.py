@@ -6,6 +6,40 @@ from api import *
 from tools import *
 import matplotlib.pyplot as plot
 
+class run_time:
+
+    def __init__(self, seconds):
+        self.time = seconds
+    def __str__(self):
+        return str(datetime.timedelta(seconds=int(self.time)))
+
+    def __format__(self, specs):
+        return format(str(self), specs)
+
+    def __mul__(self, integ):
+        return run_time(self.time * integ)
+    __rmul__ = __mul__
+
+    def __round__(self, number):
+        return run_time(round(self.time, number))
+
+    def __truediv__(self, integ):
+        return self.time / integ
+
+    def __rtruediv__(self,integ):
+        return integ / self.time
+
+    def __sub__(self, other):
+        return run_time(self.time - other.time)
+
+    def __add__(self, other):
+        if isinstance(other, run_time):
+            return run_time(self.time + other.time)
+        if isinstance(other, int):
+            return run_time(self.time + other)
+    __radd__ = __add__
+
+
 class user:
     def __init__(self, username):
         """
@@ -112,25 +146,14 @@ class user:
                         typ="Run")
 
         self.total_PB = sum([pb.time for pb in self.PBs])
-        self.average_PB = self.total_PB / len(self.PBs)
+        self.average_PB = run_time(self.total_PB / len(self.PBs))
 
         self.total_WR = sum([pb.WR for pb in self.PBs])
         self.total_delta = self.total_PB - self.total_WR
-        self.average_delta = self.total_WR / len(self.PBs)
+        self.average_delta = run_time(self.total_WR / len(self.PBs))
 
         self.total_run = sum([run.time for run in self.runs])
-        self.average_run = self.total_run / len(self.runs)
-
-        self.str_total_PB = str_time(self.total_PB)
-        self.str_total_WR = str_time(self.total_WR)
-        self.str_total_delta = str_time(self.total_delta)
-        self.str_total_run = str_time(self.total_run)
-
-        self.str_average_PB = str_time(self.average_PB)
-        self.str_average_delta = str_time(self.average_delta)
-        self.str_average_run = str_time(self.average_run)
-
-
+        self.average_run = run_time(self.total_run / len(self.runs))
 
 
         self.systems_PBs = runs_splitter_system(self.PBs)
@@ -154,8 +177,8 @@ class user:
         print("-"*130)
 
         ### Foot of the table
-        print(f'| {"Total :":10}| {self.str_total_PB:17}| + {self.str_total_delta[:13]:20}|----------|')
-        print(f'| {"Average :":10}| {self.str_average_PB:17}| + {self.str_average_delta[:13]:20}|')
+        print(f'| {"Total :":10}| {self.total_PB:17}| + {self.total_delta:20}|----------|')
+        print(f'| {"Average :":10}| {self.average_PB:17}| + {self.average_delta:20}|')
 
     def table_systems(self):
         """Print a table of the infos of the runs of the user by systems.
@@ -205,7 +228,6 @@ class user:
             if run.gameID == PB.gameID and run.categID == PB.categID:
                 toreturn.append(run)
         return toreturn
-
 
     def plot_systems(self):
         """Generate 4 pies that tells the proportions of systems.
@@ -445,7 +467,7 @@ class Run:
                 FIXME self.vari : "subcategories" of the category.
         """
         self.ID = data["id"]
-        self.time = data["times"]["primary_t"]
+        self.time = run_time(data["times"]["primary_t"])
 
         self.gameID = data["game"]
         self.game = get_game(self.gameID)
@@ -460,7 +482,7 @@ class Run:
     def __str__(self):
         """ Format: System|Game|Category|Time
             """
-        return f'{self.system[:6]:^6}| {self.game[:30]:30} | {self.categ[:15]:15} | {datetime.timedelta(seconds=self.time)}'
+        return f'{self.system[:6]:^6}| {self.game[:30]:30} | {self.categ[:15]:15} | {self.time}'
 
     def __lt__(self, other):
         if get_game(self.gameID) != get_game(other.gameID):
@@ -495,7 +517,7 @@ class PB(Run):
         self.place = data["place"]
         self.lenrank = get_len_leaderboard(self.gameID, self.categID, self.vari)
         self.perclenrank = round(100 * (self.lenrank - self.place) / self.lenrank, 2)
-        self.WR = get_WR(self.gameID, self.categID, self.vari)
+        self.WR = run_time(get_WR(self.gameID, self.categID, self.vari))
         self.delta = self.time - self.WR
         self.percWR = round((self.time * 100/self.WR), 2)
 
@@ -505,10 +527,10 @@ class PB(Run):
             return f'|{self.system[:6]:^6}| {self.game[:30]:30}| {self.categ[:15]:15}'
         def str_rank(self):
             calculation = f'{self.place}/{self.lenrank}'
-            calculation2 = f'({str(self.perclenrank):^5} %)'
+            calculation2 = f'({self.perclenrank:^5} %)'
             return str(f'{calculation:^9} {calculation2}')
         def str_times(self):
-            return f'{str_time(self.time)[:13]:13} | + {str_time(self.delta)[:13]:13}| {self.percWR:^6} %'
+            return f'{self.time:13} | + {self.delta:13}| {self.percWR:^6} %'
         return f'{str_game(self)} | {str_times(self)} | {str_rank(self)}'
 
 
@@ -558,5 +580,5 @@ class leaderboard:
 
 
 if __name__ == "__main__":
-    test = user("niamek")
-    test.plot_all_runs()
+    test = user("pac")
+    test.table_PBs()
