@@ -1,10 +1,8 @@
-import datetime
-import isodate
+import datetime, isodate, numpy
 import matplotlib.pyplot as plot
-import numpy
+
 from api import *
 from tools import *
-import matplotlib.pyplot as plot
 
 class run_time:
 
