@@ -55,12 +55,12 @@ class user:
                     All elements of this list are PB objects. Data collected with a request.
                 user.rejected (dicto) : Dicto that tracks how many runs aren't
                     elligible for my stats analysis. The runs not elligible are
-                    individual levels and runs shorter than 3 minutes.
+                    individual levels and runs short1er than 3 minutes.
                     - I decided to not include the individual levels runs because they
-                        usually are very short and doesn't complete the game. I personally prefer
+                        usually are very short1 and doesn't complete the game. I personally prefer
                         runs that actually complete the games or that does a significant part of the game.
-                    - I don't include runs shorter than 3 minutes because I don't consider them long enough to be
-                    worthy of analysis. I also noticed that most of these runs shorter than 3 minutes are meme runs
+                    - I don't include runs short1er than 3 minutes because I don't consider them long enough to be
+                    worthy of analysis. I also noticed that most of these runs short1er than 3 minutes are meme runs
                     or meme games... Probably runs that wouldn't be (generally) accepted under current speedrun.com rules. 
                     - Obviously, not all runs that are "normal runs" fall under these criteria. Excluding these runs requires case
                         by case analysis, which is impossible to do because of the sheer number of games/categories.
@@ -431,6 +431,8 @@ class user:
         print(f'| {"Average :":>60}| {self.average_PB} (+ {self.average_delta})')
 
     def table_systems(self):
+        #FIXME : Idea : define a new function or method that returns the thing I want.
+
         """Print a table of the infos of the runs of the user by systems.
             """
         print("-" * 85)
@@ -438,17 +440,19 @@ class user:
         print("-" * 85)
 
         for no,system in enumerate(self.systems):
+            short1 = self.systems_runs[system]
+            short2 = self.systems_PBs[system]
             # Current system
             current_system = f'| {system[:6]:^6} |'
             # Runs count and time (coti) of the current system
-            runs_coti = f'{self.systems_runs[system]["count"]:^4}| {str_time(self.systems_runs[system]["time"])[:13]:13} |'
+            runs_coti = f'{short1["count"]:^4}| {short1["time"]:13} |'
             # Average of runs time
-            runs_av_coti = f'{str_time(self.systems_runs[system]["time"]/self.systems_runs[system]["count"])[:13]:13} |'
+            runs_av_coti = f'{run_time(short1["time"]/short1["count"]):13} |'
 
             # PBs count, time, delta, and %WR (infos) of the current system
-            PBs_infos = f'{self.systems_PBs[system]["count"]:^4}| {str_time(self.systems_PBs[system]["time"])[:13]:13} | + {str_time(self.systems_PBs[system]["delta"])[:13]:13} | {round(100 * self.systems_PBs[system]["time"] / self.systems_PBs[system]["WR"],2):6} % |'
+            PBs_infos = f'{short2["count"]:^4}| {short2["time"]:13} | + {short2["delta"]:13} | {round(100 * short2["time"] / short2["WR"],2):6} % |'
             # PBs average of infos
-            PBs_av_infos = f'{str_time(self.systems_PBs[system]["time"]/self.systems_PBs[system]["count"])[:13]:13} | + {str_time(self.systems_PBs[system]["delta"]/self.systems_PBs[system]["count"])[:13]:13} |'
+            PBs_av_infos = f'{run_time(short2["time"]/short2["count"]):13} | + {run_time(short2["delta"]/short2["count"]):13} |'
 
             print(f'|{no+1:^3}{current_system}{runs_coti}{PBs_infos}')
             print(f'|   |{"|--- ":>13}| {runs_av_coti}{"---":^4}| {PBs_av_infos} -------- |')
@@ -589,4 +593,4 @@ class leaderboard:
 
 if __name__ == "__main__":
     test = user("niamek")
-    test.table_PBs()
+    test.table_systems()
