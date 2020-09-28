@@ -13,6 +13,13 @@ class run_time:
     def __str__(self):
         return str(datetime.timedelta(seconds=int(self.time)))
 
+    def __lt__(self, other):
+        return self.time < other.time
+
+    def __le__(self, other):
+        return self.time <= other.time
+
+
     def __format__(self, specs):
         return format(str(self), specs)
 
@@ -206,26 +213,26 @@ class user:
 
         fig.suptitle(f"{self.username}")
 
-        axs[0,0].hist([run.time for run in self.runs])
+        axs[0,0].hist([run.time.time for run in self.runs])
         axs[0,0].set_title("Runs")
         plot.sca(axs[0,0])
         plot.xlim(left=0)
-        plot.xticks(plot.xticks()[0], [str_time(tick) for tick in plot.xticks()[0]])
+        plot.xticks(plot.xticks()[0], [str(run_time(tick)) for tick in plot.xticks()[0]])
 
 
-        axs[0,1].hist([run.time for run in self.PBs])
+        axs[0,1].hist([run.time.time for run in self.PBs])
         axs[0,1].set_title("PBs")
         plot.sca(axs[0,1])
         plot.xlim(left=0)
-        plot.xticks(plot.xticks()[0], [str_time(tick) for tick in plot.xticks()[0]])
+        plot.xticks(plot.xticks()[0], [str(run_time(tick)) for tick in plot.xticks()[0]])
 
 
 
-        axs[1,0].hist([run.delta for run in self.PBs])
+        axs[1,0].hist([run.delta.time for run in self.PBs])
         axs[1,0].set_title("delta WR")
         plot.sca(axs[1,0])
         plot.xlim(left=0)
-        plot.xticks(plot.xticks()[0], [str_time(tick) for tick in plot.xticks()[0]])
+        plot.xticks(plot.xticks()[0], [str(run_time(tick)) for tick in plot.xticks()[0]])
 
         axs[1,1].hist([run.percWR for run in self.PBs])
         axs[1,1].set_title("%WR")
@@ -253,29 +260,29 @@ class user:
         fig.suptitle(f"{self.username}\n{system}")
 
         data = self.fetch_runs_system(system)
-        data_2 = [run.time for run in data]
+        data_2 = [run.time.time for run in data]
         axs[0,0].hist(data_2)
         axs[0,0].set_title("Runs")
         plot.sca(axs[0,0])
         plot.xlim(left=0)
-        plot.xticks(plot.xticks()[0], [str_time(tick) for tick in plot.xticks()[0]])
+        plot.xticks(plot.xticks()[0], [str(run_time(tick)) for tick in plot.xticks()[0]])
 
 
         data = self.fetch_runs_system(system, PB=True)
-        data_2 = [run.time for run in data]
+        data_2 = [run.time.time for run in data]
         axs[0,1].hist(data_2)
         axs[0,1].set_title("PBs")
         plot.sca(axs[0,1])
         plot.xlim(left=0)
-        plot.xticks(plot.xticks()[0], [str_time(tick) for tick in plot.xticks()[0]])
+        plot.xticks(plot.xticks()[0], [str(run_time(tick)) for tick in plot.xticks()[0]])
 
 
-        data_2 = [run.delta for run in data]
+        data_2 = [run.delta.time for run in data]
         axs[1,0].hist(data_2)
         axs[1,0].set_title("delta WR")
         plot.sca(axs[1,0])
         plot.xlim(left=0)
-        plot.xticks(plot.xticks()[0], [str_time(tick) for tick in plot.xticks()[0]])
+        plot.xticks(plot.xticks()[0], [str(run_time(tick)) for tick in plot.xticks()[0]])
 
         data_2 = [run.percWR for run in data]
         axs[1,1].hist(data_2)
@@ -320,16 +327,16 @@ class user:
         runs = self.fetch_runs_PB(PB)
         runs.sort(reverse=True)
 
-        plot.title(f'{PB.game}\n{PB.categID}\nWR:{str_time(PB.WR)}')
-        plot.axhline(y=PB.WR, c="gold")
+        plot.title(f'{PB.game}\n{PB.categ}\nWR:{PB.WR}')
+        plot.axhline(y=PB.WR.time, c="gold")
 
         if len(runs) == 1:
-            plot.plot([run.time for run in runs], marker="o")
+            plot.plot([run.time.time for run in runs], marker="o")
         else:
-            plot.plot([run.time for run in runs])
+            plot.plot([run.time.time for run in runs])
         plot.xlabel("PB #")
         plot.ylabel("Time")
-        plot.yticks(plot.yticks()[0],[datetime.timedelta(seconds=x) for x in plot.yticks()[0]])
+        plot.yticks(plot.yticks()[0],[datetime.timedelta(seconds=x) for x in plot.yticks()[0]])  # FIXME
         plot.show()
 
     def plot_PB_leaderboard(self, PB):
@@ -337,7 +344,7 @@ class user:
 
         rank_toremove = []
         for rank in leaderboard:
-            if rank[1] > (6 * PB.WR):
+            if rank[1] > (6 * PB.WR.time):
                 rank_toremove.append(rank)
 
         for rank in rank_toremove:
@@ -355,7 +362,7 @@ class user:
         plot.xlabel("Rank")
         ax = plot.gca()
         ax.set_xlim(ax.get_xlim()[::-1])
-        plot.annotate(f"{self.username}", xy=(PB.place, PB.time), xytext=(0.65,0.65), textcoords="figure fraction",
+        plot.annotate(f"{self.username}", xy=(PB.place, PB.time.time), xytext=(0.65,0.65), textcoords="figure fraction",
                         arrowprops={"arrowstyle":"->"}
                         )
 
@@ -374,7 +381,7 @@ class user:
         fig.suptitle(f"{self.username}")
 
         for run in self.PBs:
-            tempo = [one.time for one in self.fetch_runs_PB(run)]
+            tempo = [one.time.time for one in self.fetch_runs_PB(run)]
             tempo.sort(reverse=True)
             if tempo[0] < cutoff_1:
                 if len(tempo) != 1:
@@ -399,13 +406,13 @@ class user:
 
 
         plot.sca(axs[0,0])
-        plot.yticks(plot.yticks()[0], [str_time(tick) for tick in plot.yticks()[0]])
+        plot.yticks(plot.yticks()[0], [str(run_time(tick)) for tick in plot.yticks()[0]])
         plot.sca(axs[0,1])
-        plot.yticks(plot.yticks()[0], [str_time(tick) for tick in plot.yticks()[0]])
+        plot.yticks(plot.yticks()[0], [str(run_time(tick)) for tick in plot.yticks()[0]])
         plot.sca(axs[1,0])
-        plot.yticks(plot.yticks()[0], [str_time(tick) for tick in plot.yticks()[0]])
+        plot.yticks(plot.yticks()[0], [str(run_time(tick)) for tick in plot.yticks()[0]])
         plot.sca(axs[1,1])
-        plot.yticks(plot.yticks()[0], [str_time(tick) for tick in plot.yticks()[0]])
+        plot.yticks(plot.yticks()[0], [str(run_time(tick)) for tick in plot.yticks()[0]])
 
 
 
@@ -541,9 +548,9 @@ class PB(Run):
             calculation = f'{self.place}/{self.lenrank}'
             calculation2 = f'({self.perclenrank:^5} %)'
             return str(f'{calculation:^9} {calculation2}')
-        def str_times(self):
+        def str_time(self):
             return f'{self.time:8} | + {self.delta:8}| {self.percWR:^6} %'
-        return f'{str_game(self)} | {str_times(self)} | {str_rank(self)}'
+        return f'{str_game(self)} | {str(str_time(self))} | {str_rank(self)}'
 
 
     def __lt__(self, other):
@@ -593,4 +600,4 @@ class leaderboard:
 
 if __name__ == "__main__":
     test = user("niamek")
-    test.table_systems()
+    test.plot_runs(test.PBs[0])
