@@ -137,11 +137,9 @@ class user:
         """
             Find all the runs for that PBs
         """
-
-        #FIXME : Check vari too?
         toreturn = []
         for run in self.runs:
-            if run.gameID == PB.gameID and run.categID == PB.categID:
+            if run.gameID == PB.gameID and run.categID == PB.categID and run.vari == PB.vari:
                 toreturn.append(run)
         return toreturn
 
