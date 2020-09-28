@@ -16,7 +16,13 @@ class Run:
                 self.ID (string): ID of the run
                 self.system (string): System the run is on
                 self.time (int): duration of the run, in seconds
-                FIXME self.vari : "subcategories" of the category.
+                self.vari (dicto) : contains the different keys and values of the variations of the main category.
+                    key (str) : ID for the option
+                        example : 100 % run of Oot :
+                            Key : SRM vs. no SRM?
+                    value (str) : ID for the value of the option
+                            Value : SRM!
+
         """
         self.ID = data["id"]
         self.time = run_time(data["times"]["primary_t"])
@@ -27,6 +33,7 @@ class Run:
         self.categID = data["category"]
         self.categ = get_category(self.categID)
         self.vari = data["values"]
+        print(self.vari)
 
         self.system = get_system(data["system"]["platform"])
         self.emulated = data["system"]["emulated"]
