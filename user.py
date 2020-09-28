@@ -430,4 +430,4 @@ class user:
 
 if __name__ == "__main__":
     test = user("niamek")
-    test.table_PBs()
+    test.plot_all_runs()

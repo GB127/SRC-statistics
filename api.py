@@ -1,10 +1,7 @@
 import requests
-import matplotlib
 import datetime
 import isodate
 import time
-
-
 
 URL = "https://www.speedrun.com/api/v1"
 
