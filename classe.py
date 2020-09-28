@@ -161,48 +161,19 @@ class user:
         self.systems = sorted(list(self.systems_PBs.keys()))
         print("user initialized!")
 
-    def table_PBs(self):
-        """ Print a table by printing all PBs. Sorting can be changed by
-            changing the PB.sort variable.
+
+    def fetch_runs_PB(self, PB):
         """
-        self.PBs.sort()  # Always sort in case we change the sorting method?
+            Find all the runs for that PBs
+        """
 
-        ### En tete of the table
-        print("-"*130)
-        print(f"| #  |{'Sys':^6}| {'Game':^30}| {'Category':^15} | {'Time':^9}| + \u0394WR     |{'%WR':^10}| {'  Rank      (^%)':20}")
-        print("-"*130)
+        #FIXME : Check vari too?
+        toreturn = []
+        for run in self.runs:
+            if run.gameID == PB.gameID and run.categID == PB.categID:
+                toreturn.append(run)
+        return toreturn
 
-        ### Actual entry of the table.
-        for no, PB in enumerate(self.PBs): print(f'|{no+1:3} {PB}')
-        print("-"*130)
-
-        ### Foot of the table
-        print(f'| {"Total :":>60}| {self.total_PB} (+ {self.total_delta})')
-        print(f'| {"Average :":>60}| {self.average_PB} (+ {self.average_delta})')
-
-    def table_systems(self):
-        """Print a table of the infos of the runs of the user by systems.
-            """
-        print("-" * 85)
-        print(f'|   | System |{" Runs":20}|{" PBs":49}|')
-        print("-" * 85)
-
-        for no,system in enumerate(self.systems):
-            # Current system
-            current_system = f'| {system[:6]:^6} |'
-            # Runs count and time (coti) of the current system
-            runs_coti = f'{self.systems_runs[system]["count"]:^4}| {str_time(self.systems_runs[system]["time"])[:13]:13} |'
-            # Average of runs time
-            runs_av_coti = f'{str_time(self.systems_runs[system]["time"]/self.systems_runs[system]["count"])[:13]:13} |'
-
-            # PBs count, time, delta, and %WR (infos) of the current system
-            PBs_infos = f'{self.systems_PBs[system]["count"]:^4}| {str_time(self.systems_PBs[system]["time"])[:13]:13} | + {str_time(self.systems_PBs[system]["delta"])[:13]:13} | {round(100 * self.systems_PBs[system]["time"] / self.systems_PBs[system]["WR"],2):6} % |'
-            # PBs average of infos
-            PBs_av_infos = f'{str_time(self.systems_PBs[system]["time"]/self.systems_PBs[system]["count"])[:13]:13} | + {str_time(self.systems_PBs[system]["delta"]/self.systems_PBs[system]["count"])[:13]:13} |'
-
-            print(f'|{no+1:^3}{current_system}{runs_coti}{PBs_infos}')
-            print(f'|   |{"|--- ":>13}| {runs_av_coti}{"---":^4}| {PBs_av_infos} -------- |')
-            print("-"*85)
 
     def fetch_runs_system(self, system, PB=False):
         liste = []
@@ -217,63 +188,8 @@ class user:
                     liste.append(run)
             return liste
 
-    def fetch_runs_PB(self, PB):
-        """
-            Find all the runs for that PBs
-        """
 
-        #FIXME : Check vari too?
-        toreturn = []
-        for run in self.runs:
-            if run.gameID == PB.gameID and run.categID == PB.categID:
-                toreturn.append(run)
-        return toreturn
-
-    def plot_systems(self):
-        """Generate 4 pies that tells the proportions of systems.
-
-            PB#     |   run#
-            -------------------
-            PB time | run time
-
-            Args:
-                user (object): User object.
-            """
-        fig, axs = plot.subplots(2, 2)
-
-        fig.suptitle(f'{self.username}\n{len(self.systems)} systems')
-
-        axs[0,0].set_title("PB #")
-        axs[0,0].pie([self.systems_PBs[system]["count"] for system in self.systems], labels=[system for system in self.systems], autopct='%1.1f%%', startangle=90)
-
-        axs[0,1].set_title("run #")
-        axs[0,1].pie([self.systems_runs[system]["count"] for system in self.systems], labels=[system for system in self.systems], autopct='%1.1f%%', startangle=90)
-
-        axs[1,0].set_title("PB total time")
-        axs[1,0].pie([self.systems_PBs[system]["time"] for system in self.systems], labels=[system for system in self.systems], autopct='%1.1f%%', startangle=90)
-
-        axs[1,1].set_title("run total time")
-        axs[1,1].pie([self.systems_runs[system]["time"] for system in self.systems], labels=[system for system in self.systems], autopct='%1.1f%%', startangle=90)
-
-        plot.show()
-
-    def plot_runs(self, PB):  #FIXME : Rework on it.
-        runs = self.fetch_runs_PB(PB)
-        runs.sort(reverse=True)
-
-        plot.title(f'{PB.game}\n{PB.categID}\nWR:{str_time(PB.WR)}')
-        plot.axhline(y=PB.WR, c="gold")
-
-        if len(runs) == 1:
-            plot.plot([run.time for run in runs], marker="o")
-        else:
-            plot.plot([run.time for run in runs])
-        plot.xlabel("PB #")
-        plot.ylabel("Time")
-        plot.yticks(plot.yticks()[0],[datetime.timedelta(seconds=x) for x in plot.yticks()[0]])
-        plot.show()
-
-    def histo_all_runs(self):
+    def histo_runs(self):
         """Generate 4 histograms about the system times.
 
             runs times | PB times
@@ -317,6 +233,103 @@ class user:
         plot.xlim(left=100)
         plot.xticks(plot.xticks()[0], [str(tick) + " %" for tick in plot.xticks()[0]])
 
+        plot.show()
+
+    def histo_system(self, system):
+        """Generate 4 histograms about the system times.
+
+            runs times | PB times
+            ---------------------
+            PB delta   | PB %WR
+
+            Args:
+                user (object): User object
+                system (string): System to analyse.
+
+            """
+
+        fig, axs = plot.subplots(2, 2)
+
+        fig.suptitle(f"{self.username}\n{system}")
+
+        data = self.fetch_runs_system(system)
+        data_2 = [run.time for run in data]
+        axs[0,0].hist(data_2)
+        axs[0,0].set_title("Runs")
+        plot.sca(axs[0,0])
+        plot.xlim(left=0)
+        plot.xticks(plot.xticks()[0], [str_time(tick) for tick in plot.xticks()[0]])
+
+
+        data = self.fetch_runs_system(system, PB=True)
+        data_2 = [run.time for run in data]
+        axs[0,1].hist(data_2)
+        axs[0,1].set_title("PBs")
+        plot.sca(axs[0,1])
+        plot.xlim(left=0)
+        plot.xticks(plot.xticks()[0], [str_time(tick) for tick in plot.xticks()[0]])
+
+
+        data_2 = [run.delta for run in data]
+        axs[1,0].hist(data_2)
+        axs[1,0].set_title("delta WR")
+        plot.sca(axs[1,0])
+        plot.xlim(left=0)
+        plot.xticks(plot.xticks()[0], [str_time(tick) for tick in plot.xticks()[0]])
+
+        data_2 = [run.percWR for run in data]
+        axs[1,1].hist(data_2)
+        axs[1,1].set_title("%WR")
+        plot.sca(axs[1,1])
+        plot.xlim(left=100)
+        plot.xticks(plot.xticks()[0], [str(tick) + " %" for tick in plot.xticks()[0]])
+
+        plot.show()
+
+
+
+    def plot_systems(self):
+        """Generate 4 pies that tells the proportions of systems.
+
+            PB#     |   run#
+            -------------------
+            PB time | run time
+
+            Args:
+                user (object): User object.
+            """
+        fig, axs = plot.subplots(2, 2)
+
+        fig.suptitle(f'{self.username}\n{len(self.systems)} systems')
+
+        axs[0,0].set_title("PB #")
+        axs[0,0].pie([self.systems_PBs[system]["count"] for system in self.systems], labels=[system for system in self.systems], autopct='%1.1f%%', startangle=90)
+
+        axs[0,1].set_title("run #")
+        axs[0,1].pie([self.systems_runs[system]["count"] for system in self.systems], labels=[system for system in self.systems], autopct='%1.1f%%', startangle=90)
+
+        axs[1,0].set_title("PB total time")
+        axs[1,0].pie([self.systems_PBs[system]["time"] for system in self.systems], labels=[system for system in self.systems], autopct='%1.1f%%', startangle=90)
+
+        axs[1,1].set_title("run total time")
+        axs[1,1].pie([self.systems_runs[system]["time"] for system in self.systems], labels=[system for system in self.systems], autopct='%1.1f%%', startangle=90)
+
+        plot.show()
+
+    def plot_runs(self, PB):  #FIXME : Rework on it.
+        runs = self.fetch_runs_PB(PB)
+        runs.sort(reverse=True)
+
+        plot.title(f'{PB.game}\n{PB.categID}\nWR:{str_time(PB.WR)}')
+        plot.axhline(y=PB.WR, c="gold")
+
+        if len(runs) == 1:
+            plot.plot([run.time for run in runs], marker="o")
+        else:
+            plot.plot([run.time for run in runs])
+        plot.xlabel("PB #")
+        plot.ylabel("Time")
+        plot.yticks(plot.yticks()[0],[datetime.timedelta(seconds=x) for x in plot.yticks()[0]])
         plot.show()
 
     def plot_PB_leaderboard(self, PB):
@@ -398,56 +411,51 @@ class user:
 
         plot.show()
 
-    def histo_system(self, system):
-        """Generate 4 histograms about the system times.
+    def table_PBs(self):
+        """ Print a table by printing all PBs. Sorting can be changed by
+            changing the PB.sort variable.
+        """
+        self.PBs.sort()  # Always sort in case we change the sorting method?
 
-            runs times | PB times
-            ---------------------
-            PB delta   | PB %WR
+        ### En tete of the table
+        print("-"*130)
+        print(f"| #  |{'Sys':^6}| {'Game':^30}| {'Category':^15} | {'Time':^9}| + \u0394WR     |{'%WR':^10}| {'  Rank      (^%)':20}")
+        print("-"*130)
 
-            Args:
-                user (object): User object
-                system (string): System to analyse.
+        ### Actual entry of the table.
+        for no, PB in enumerate(self.PBs): print(f'|{no+1:3} {PB}')
+        print("-"*130)
 
+        ### Foot of the table
+        print(f'| {"Total :":>60}| {self.total_PB} (+ {self.total_delta})')
+        print(f'| {"Average :":>60}| {self.average_PB} (+ {self.average_delta})')
+
+    def table_systems(self):
+        """Print a table of the infos of the runs of the user by systems.
             """
+        print("-" * 85)
+        print(f'|   | System |{" Runs":20}|{" PBs":49}|')
+        print("-" * 85)
 
-        fig, axs = plot.subplots(2, 2)
+        for no,system in enumerate(self.systems):
+            # Current system
+            current_system = f'| {system[:6]:^6} |'
+            # Runs count and time (coti) of the current system
+            runs_coti = f'{self.systems_runs[system]["count"]:^4}| {str_time(self.systems_runs[system]["time"])[:13]:13} |'
+            # Average of runs time
+            runs_av_coti = f'{str_time(self.systems_runs[system]["time"]/self.systems_runs[system]["count"])[:13]:13} |'
 
-        fig.suptitle(f"{self.username}\n{system}")
+            # PBs count, time, delta, and %WR (infos) of the current system
+            PBs_infos = f'{self.systems_PBs[system]["count"]:^4}| {str_time(self.systems_PBs[system]["time"])[:13]:13} | + {str_time(self.systems_PBs[system]["delta"])[:13]:13} | {round(100 * self.systems_PBs[system]["time"] / self.systems_PBs[system]["WR"],2):6} % |'
+            # PBs average of infos
+            PBs_av_infos = f'{str_time(self.systems_PBs[system]["time"]/self.systems_PBs[system]["count"])[:13]:13} | + {str_time(self.systems_PBs[system]["delta"]/self.systems_PBs[system]["count"])[:13]:13} |'
 
-        data = self.fetch_runs_system(system)
-        data_2 = [run.time for run in data]
-        axs[0,0].hist(data_2)
-        axs[0,0].set_title("Runs")
-        plot.sca(axs[0,0])
-        plot.xlim(left=0)
-        plot.xticks(plot.xticks()[0], [str_time(tick) for tick in plot.xticks()[0]])
-
-
-        data = self.fetch_runs_system(system, PB=True)
-        data_2 = [run.time for run in data]
-        axs[0,1].hist(data_2)
-        axs[0,1].set_title("PBs")
-        plot.sca(axs[0,1])
-        plot.xlim(left=0)
-        plot.xticks(plot.xticks()[0], [str_time(tick) for tick in plot.xticks()[0]])
+            print(f'|{no+1:^3}{current_system}{runs_coti}{PBs_infos}')
+            print(f'|   |{"|--- ":>13}| {runs_av_coti}{"---":^4}| {PBs_av_infos} -------- |')
+            print("-"*85)
 
 
-        data_2 = [run.delta for run in data]
-        axs[1,0].hist(data_2)
-        axs[1,0].set_title("delta WR")
-        plot.sca(axs[1,0])
-        plot.xlim(left=0)
-        plot.xticks(plot.xticks()[0], [str_time(tick) for tick in plot.xticks()[0]])
 
-        data_2 = [run.percWR for run in data]
-        axs[1,1].hist(data_2)
-        axs[1,1].set_title("%WR")
-        plot.sca(axs[1,1])
-        plot.xlim(left=100)
-        plot.xticks(plot.xticks()[0], [str(tick) + " %" for tick in plot.xticks()[0]])
-
-        plot.show()
 
 class Run:
     sort = "time"
