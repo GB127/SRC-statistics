@@ -45,7 +45,7 @@ class Run:
             return self.time <= other.time
 
 class PB(Run):
-    sort = "game"
+    sort = "PB#"
     def __init__(self, data):
         """
             NOTES:
@@ -94,12 +94,14 @@ class PB(Run):
             return f'{self.time:8} | + {self.delta:8}| {self.percWR:^6} %'
 
 
-        return f'{str_game(self)} | {str(str_time(self))} | {str_rank(self)}'
+        return f'{str_game(self)} |{self.number:^3} | {str(str_time(self))} | {str_rank(self)} |'
 
 
     def __lt__(self, other):
         if PB.sort == "game":
-            return get_game(self.gameID) < get_game(other.gameID)
+            return self.game < other.game
+        elif PB.sort == "PB#":
+            return self.number < other.number
         elif PB.sort == "system":
             return self.system < other.system
         elif PB.sort == "time":
@@ -110,6 +112,10 @@ class PB(Run):
             return self.percWR < other.percWR
         elif PB.sort == "%LB":
             return self.perclenrank > other.perclenrank
+
+
+    def set_pb_number(self, list):
+        self.number = len(list)
 
 
 

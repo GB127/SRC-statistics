@@ -125,6 +125,11 @@ class user:
         self.systems_PBs = runs_splitter_system(self.PBs)
         self.systems_runs = runs_splitter_system(self.runs)
         self.systems = sorted(list(self.systems_PBs.keys()))
+
+        for pb in self.PBs:
+            pb.set_pb_number(self.fetch_runs_PB(pb))
+
+
         print("user initialized!")
 
 
@@ -379,11 +384,11 @@ class user:
         """ Print a table by printing all PBs. Sorting can be changed by
             changing the PB.sort variable.
         """
-        self.PBs.sort()  # Always sort in case we change the sorting method?
+        self.PBs.sort()
 
         ### En tete of the table
         print("-"*130)
-        print(f"| #  |{'Sys':^6}| {'Game':^30}| {'Category':^15} | {'Time':^9}| + \u0394WR     |{'%WR':^10}| {'  Rank      (^%)':20}")
+        print(f"| #  |{'Sys':^6}| {'Game':^30}| {'Category':^15} |{f'PB#':^4}| {'Time':^9}| + \u0394WR     |{'%WR':^10}| {'  Rank      (^%)':20}")
         print("-"*130)
 
         ### Actual entry of the table.
@@ -391,11 +396,10 @@ class user:
         print("-"*130)
 
         ### Foot of the table
-        print(f'| {"Total :":>60}| {self.total_PB} (+ {self.total_delta})')
-        print(f'| {"Average :":>60}| {self.average_PB} (+ {self.average_delta})')
+        print(f'| {"Total :":>64}| {self.total_PB} (+ {self.total_delta})')
+        print(f'| {"Average :":>64}| {self.average_PB} (+ {self.average_delta})')
 
     def table_systems(self):
-        #FIXME : Idea : define a new function or method that returns the thing I want.
 
         """Print a table of the infos of the runs of the user by systems.
             """
@@ -428,4 +432,4 @@ class user:
 
 if __name__ == "__main__":
     test = user("niamek")
-    test.plot_runs(test.PBs[0])
+    test.table_PBs()
