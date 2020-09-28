@@ -169,16 +169,16 @@ class user:
 
         ### En tete of the table
         print("-"*130)
-        print(f"| #  |{'Sys':^6}| {'Game':^30}| {'Category':^15} | {'Time':^14}|      + \u0394WR     |{'%WR':^10}| {'  Rank      (^%)':20}")
+        print(f"| #  |{'Sys':^6}| {'Game':^30}| {'Category':^15} | {'Time':^9}| + \u0394WR     |{'%WR':^10}| {'  Rank      (^%)':20}")
         print("-"*130)
-    
+
         ### Actual entry of the table.
         for no, PB in enumerate(self.PBs): print(f'|{no+1:3} {PB}')
         print("-"*130)
 
         ### Foot of the table
-        print(f'| {"Total :":10}| {self.total_PB:17}| + {self.total_delta:20}|----------|')
-        print(f'| {"Average :":10}| {self.average_PB:17}| + {self.average_delta:20}|')
+        print(f'| {"Total :":>60}| {self.total_PB} (+ {self.total_delta})')
+        print(f'| {"Average :":>60}| {self.average_PB} (+ {self.average_delta})')
 
     def table_systems(self):
         """Print a table of the infos of the runs of the user by systems.
@@ -530,7 +530,7 @@ class PB(Run):
             calculation2 = f'({self.perclenrank:^5} %)'
             return str(f'{calculation:^9} {calculation2}')
         def str_times(self):
-            return f'{self.time:13} | + {self.delta:13}| {self.percWR:^6} %'
+            return f'{self.time:8} | + {self.delta:8}| {self.percWR:^6} %'
         return f'{str_game(self)} | {str_times(self)} | {str_rank(self)}'
 
 
@@ -580,5 +580,5 @@ class leaderboard:
 
 
 if __name__ == "__main__":
-    test = user("pac")
+    test = user("baffan")
     test.table_PBs()
