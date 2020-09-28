@@ -74,15 +74,26 @@ class PB(Run):
         self.percWR = round((self.time * 100/self.WR), 2)
 
 
-    def __str__(self):  # FIXME : Documentate this
+    def __str__(self):
+        """Define 3 functions :
+            str_game : Generate a string with the system, game and category informations
+            str_rank : Generate a string with the ranking informations
+            str_time : Generate a string with the time informations
+
+            Then use these three functions to generate the final str.
+        """
         def str_game(self):
             return f'|{self.system[:6]:^6}| {self.game[:30]:30}| {self.categ[:15]:15}'
+
         def str_rank(self):
             calculation = f'{self.place}/{self.lenrank}'
             calculation2 = f'({self.perclenrank:^5} %)'
             return str(f'{calculation:^9} {calculation2}')
+
         def str_time(self):
             return f'{self.time:8} | + {self.delta:8}| {self.percWR:^6} %'
+
+
         return f'{str_game(self)} | {str(str_time(self))} | {str_rank(self)}'
 
 
