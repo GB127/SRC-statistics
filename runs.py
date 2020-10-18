@@ -24,16 +24,20 @@ class Run:
                             Value : SRM!
 
         """
+
+        self.vari = data["values"]
         self.ID = data["id"]
         self.time = run_time(data["times"]["primary_t"])
-
+        self.date = data["date"]
         self.gameID = data["game"]
         self.game = get_game(self.gameID)
-
         self.categID = data["category"]
         self.categ = get_category(self.categID)
-        self.vari = data["values"]
-        print(self.vari)
+
+
+
+
+
 
         self.system = get_system(data["system"]["platform"])
         self.emulated = data["system"]["emulated"]
@@ -52,7 +56,7 @@ class Run:
             return self.time <= other.time
 
 class PB(Run):
-    sort = "PB#"
+    sort = "time"
     def __init__(self, data):
         """
             NOTES:
@@ -80,6 +84,12 @@ class PB(Run):
         self.delta = self.time - self.WR
         self.percWR = round((self.time * 100/self.WR), 2)
 
+
+    def saved(self, run):
+        self.first = run
+        self.saved = 0
+        if (self.first.time - self.time).time > 0:  # Using this instead of self.number so that I never get a negative value somehow for now (It,s because of vari I bet).
+            self.saved = self.first.time - self.time
 
     def __str__(self):
         """Define 3 functions :

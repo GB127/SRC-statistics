@@ -115,12 +115,17 @@ class user:
         self.average_PB = run_time(self.total_PB / len(self.PBs))
 
         self.total_WR = sum([pb.WR for pb in self.PBs])
+        self.average_WR = self.total_WR / len(self.PBs)
+
+
+
         self.total_delta = self.total_PB - self.total_WR
-        self.average_delta = run_time(self.total_WR / len(self.PBs))
+        self.average_delta = run_time(self.total_delta / len(self.PBs))
 
         self.total_run = sum([run.time for run in self.runs])
         self.average_run = run_time(self.total_run / len(self.runs))
 
+        self.average_perc = sum([one.percWR for one in self.PBs]) / len(self.PBs)
 
         self.systems_PBs = runs_splitter_system(self.PBs)
         self.systems_runs = runs_splitter_system(self.runs)
@@ -128,6 +133,7 @@ class user:
 
         for pb in self.PBs:
             pb.set_pb_number(self.fetch_runs_PB(pb))
+            pb.saved(self.fetch_1st_PB(pb))
 
 
         print("user initialized!")
@@ -139,7 +145,7 @@ class user:
         """
         toreturn = []
         for run in self.runs:
-            if run.gameID == PB.gameID and run.categID == PB.categID and run.vari == PB.vari:
+            if run.gameID == PB.gameID and run.categID == PB.categID:
                 toreturn.append(run)
         return toreturn
 
@@ -277,10 +283,10 @@ class user:
         axs[0,1].pie([self.systems_runs[system]["count"] for system in self.systems], labels=[system for system in self.systems], autopct='%1.1f%%', startangle=90)
 
         axs[1,0].set_title("PB total time")
-        axs[1,0].pie([self.systems_PBs[system]["time"] for system in self.systems], labels=[system for system in self.systems], autopct='%1.1f%%', startangle=90)
+        axs[1,0].pie([self.systems_PBs[system]["time"].time for system in self.systems], labels=[system for system in self.systems], autopct='%1.1f%%', startangle=90)
 
         axs[1,1].set_title("run total time")
-        axs[1,1].pie([self.systems_runs[system]["time"] for system in self.systems], labels=[system for system in self.systems], autopct='%1.1f%%', startangle=90)
+        axs[1,1].pie([self.systems_runs[system]["time"].time for system in self.systems], labels=[system for system in self.systems], autopct='%1.1f%%', startangle=90)
 
         plot.show()
 
@@ -394,9 +400,8 @@ class user:
         print("-"*130)
 
         ### Foot of the table
-        print(f'| {"Total :":>64}| {self.total_PB} (+ {self.total_delta})')
-        print(f'| {"Average :":>64}| {self.average_PB} (+ {self.average_delta})')
-
+        print(f'| {"Total :":>65}| {self.total_PB} (+ {self.total_delta})')
+        print(f'| {"Average :":>65}| {self.average_PB} (+ {self.average_delta}) | ({self.average_perc} %)')
     def table_systems(self):
 
         """Print a table of the infos of the runs of the user by systems.
@@ -424,10 +429,13 @@ class user:
             print(f'|   |{"|--- ":>13}| {runs_av_coti}{"---":^4}| {PBs_av_infos} -------- |')
             print("-"*85)
 
-
-
+    def fetch_1st_PB(self, PB):
+        liste = self.fetch_runs_PB(PB)
+        return liste[0]
 
 
 if __name__ == "__main__":
     test = user("niamek")
-    test.plot_all_runs()
+    test.table_PBs()
+    test.plot_systems()
+    test.table_systems()
