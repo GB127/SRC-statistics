@@ -24,8 +24,11 @@ class Run:
                             Value : SRM!
 
         """
-
-        self.vari = data["values"]
+        self.vari = {}
+        if data["values"] != {}:
+            self.vari = {}
+            for key in data["values"]:
+                if get_variable(key)["is-subcategory"] is True: self.vari[key] = data["values"][key]
         self.ID = data["id"]
         self.time = run_time(data["times"]["primary_t"])
         self.date = data["date"]

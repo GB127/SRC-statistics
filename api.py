@@ -175,7 +175,7 @@ def get_len_leaderboard(gameID, categID, vari):
     if vari != {}:
         tempo = []
         for key in vari:
-            if get_variable(key)["is-subcategory"] is True: tempo.append(f"var-{key}={vari[key]}")
+            tempo.append(f"var-{key}={vari[key]}")
         varistr = "&".join(tempo)
         if varistr != "": varistr = "?" + varistr
     try:
@@ -204,7 +204,7 @@ def get_leaderboard(gameID, categID, vari):
     if vari != {}:
         tempo = []
         for key in vari:
-            if get_variable(key)["is-subcategory"] is True: tempo.append(f"var-{key}={vari[key]}")
+            tempo.append(f"var-{key}={vari[key]}")
         varistr = "&".join(tempo)
         if varistr != "": varistr = "?" + varistr
     try:
@@ -233,8 +233,9 @@ def get_leaderboards(gameID, categID, vari):
     if vari != {}:
         tempo = []
         for key in vari:
-            if get_variable(key)["is-subcategory"] is True: tempo.append(f"var-{key}={vari[key]}")
-        varistr = "&" + "&".join(tempo)
+            tempo.append(f"var-{key}={vari[key]}")
+        varistr = "&".join(tempo)
+        if varistr != "": varistr = "?" + varistr
 
 
     game_date = requester(f"/games/{gameID}")['data']["release-date"]
