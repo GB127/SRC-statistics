@@ -5,7 +5,7 @@ if __name__ == "__main__":
     use = True
     while use:
         print("What do you want to do?")
-        command = input("[PBs, systems, end]")
+        command = input("[PBs, systems,sort, end] ")
         if command == "PBs":
             user.table_PBs()
             command2 = input(f"[0 - {len(user.PBs)}, all]")
@@ -19,7 +19,7 @@ if __name__ == "__main__":
             user.table_systems()
             command2 = input(f"[0 - {len(user.systems)}, all]")
             if command2 == "all":
-                user.plot_systems()
+                user.pie_systems()
             if command2 != "all":
                 user.histo_system(user.systems[int(command2)-1])
         if command == "end":

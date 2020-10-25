@@ -135,8 +135,21 @@ class user:
             pb.set_pb_number(self.fetch_runs_PB(pb))
             pb.saved(self.fetch_1st_PB(pb))
 
-
         print("user initialized!")
+
+
+    def set_time_progression(self):
+        progression = [run_time(0) for _ in range(sorted([x.number for x in self.PBs])[-1])]
+        for pb in self.PBs:
+            for no, run in enumerate(sorted(self.fetch_runs_PB(pb), reverse = True)):
+                progression[no] += run.time
+            for no in range(pb.number, len(progression)):
+                progression[no] += pb.time
+        return progression
+
+    def fetch_1st_PB(self, PB):
+        liste = self.fetch_runs_PB(PB)
+        return liste[0]
 
 
     def fetch_runs_PB(self, PB):
@@ -145,7 +158,7 @@ class user:
         """
         toreturn = []
         for run in self.runs:
-            if run.gameID == PB.gameID and run.categID == PB.categID:
+            if run.gameID == PB.gameID and run.categID == PB.categID and PB.vari == run.vari:
                 toreturn.append(run)
         return toreturn
 
@@ -210,6 +223,7 @@ class user:
 
         plot.show()
 
+
     def histo_system(self, system):
         """Generate 4 histograms about the system times.
 
@@ -262,7 +276,7 @@ class user:
         plot.show()
 
 
-    def plot_systems(self):
+    def pie_systems(self):
         """Generate 4 pies that tells the proportions of systems.
 
             PB#     |   run#
@@ -290,7 +304,9 @@ class user:
 
         plot.show()
 
-    def plot_runs(self, PB):  #FIXME : Rework on it.
+
+
+    def plot_PB(self, PB):  #FIXME : Rework on it.
         runs = self.fetch_runs_PB(PB)
         runs.sort(reverse=True)
 
@@ -305,6 +321,7 @@ class user:
         plot.ylabel("Time")
         plot.yticks(plot.yticks()[0],[datetime.timedelta(seconds=x) for x in plot.yticks()[0]])  # FIXME
         plot.show()
+
 
     def plot_PB_leaderboard(self, PB):
         leaderboard = get_leaderboard(PB.gameID,PB.categID, PB.vari)
@@ -335,6 +352,18 @@ class user:
 
 
         plot.show()
+
+
+    def plot_saves(self):
+        plot.plot(list(x.time for x in self.set_time_progression()))
+
+        plot.ylabel("Time")
+        plot.yticks(plot.yticks()[0],[datetime.timedelta(seconds=x) for x in plot.yticks()[0]])
+
+        plot.xlabel("PB #")
+
+        plot.show()
+
 
     def plot_all_runs(self):
         cutoff_1 = 1800
@@ -384,6 +413,7 @@ class user:
 
         plot.show()
 
+
     def table_PBs(self):
         """ Print a table by printing all PBs. Sorting can be changed by
             changing the PB.sort variable.
@@ -402,6 +432,8 @@ class user:
         ### Foot of the table
         print(f'| {"Total :":>65}| {self.total_PB} (+ {self.total_delta})')
         print(f'| {"Average :":>65}| {self.average_PB} (+ {self.average_delta}) | ({self.average_perc} %)')
+
+
     def table_systems(self):
 
         """Print a table of the infos of the runs of the user by systems.
@@ -429,13 +461,11 @@ class user:
             print(f'|   |{"|--- ":>13}| {runs_av_coti}{"---":^4}| {PBs_av_infos} -------- |')
             print("-"*85)
 
-    def fetch_1st_PB(self, PB):
-        liste = self.fetch_runs_PB(PB)
-        return liste[0]
+
 
 
 if __name__ == "__main__":
-    test = user("niamek")
-    test.table_PBs()
-    test.plot_systems()
-    test.table_systems()
+    # test = user("helienne")
+    # test = user("deadephant")
+    test = user("dadinfinitum")
+    test.plot_saves()
