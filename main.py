@@ -1,4 +1,6 @@
 from user import user
+from runs import leaderboard, PB
+
 
 if __name__ == "__main__":
     user = user(input("Which sr user? "))
@@ -6,6 +8,8 @@ if __name__ == "__main__":
     while use:
         print("What do you want to do?")
         command = input("[PBs, systems,sort, end] ")
+        if command == "sort":
+            PB.sort = input("[game, PB#, system, time, delta, %WR, %LB]")
         if command == "PBs":
             user.table_PBs()
             command2 = input(f"[0 - {len(user.PBs)}, all]")
