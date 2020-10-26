@@ -305,7 +305,6 @@ class user:
         plot.show()
 
 
-
     def plot_PB(self, PB):  #FIXME : Rework on it.
         runs = self.fetch_runs_PB(PB)
         runs.sort(reverse=True)
@@ -434,6 +433,21 @@ class user:
         print(f'| {"Average :":>65}| {self.average_PB} (+ {self.average_delta}) | ({self.average_perc} %)')
 
 
+    def table_saves(self):
+        solo, solo_time = 0, run_time(0)
+        print(f'   |{"game":30}|{"category":20}|##| {"First PB":10}| {"Current PB":10}| {"saved":^10} ({"%":^8})')
+        print("-" * 106)
+        for no, pb in enumerate(self.PBs):
+            if pb.number != 1:
+                print(f'{no:3}|{pb.game[:30]:30}|{pb.categ[:20]:20}|{pb.number:2}| {pb.first.time:10}| {pb.time:10}| -{pb.saved:10}({round(100 - (pb.time*100/pb.first.time), 2):<6} %)')
+            elif pb.number == 1:
+                solo += 1
+                solo_time += pb.time
+        print("-" * 106)
+        print("-" * 106)
+        print(f'{solo} PBs with only 1 attempt, total time : {solo_time}')
+
+
     def table_systems(self):
 
         """Print a table of the infos of the runs of the user by systems.
@@ -465,7 +479,9 @@ class user:
 
 
 if __name__ == "__main__":
+    pass
     # test = user("helienne")
     # test = user("deadephant")
-    test = user("dadinfinitum")
-    test.plot_saves()
+    # test = user("lackattack24")
+    test = user("niamek")
+    test.table_saves()
