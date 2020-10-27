@@ -1,5 +1,8 @@
 from tools import run_time
 from api import *
+import numpy
+import matplotlib.pyplot as plot
+
 
 class Run:
     sort = "time"
@@ -146,18 +149,26 @@ class PB(Run):
 
 
 class leaderboard:
-    def __init__(self):
-        pass
+    def __init__(self, data):
+        """[summary]
 
+        Args:
+            data (PB): PB object so we can retrieve the appropriate infos we need.
+        """
+        self.vari = data.vari
+        self.game = data.game
+        self.gameID = data.gameID
+        self.categ = data.categ
+        self.categID = data.categID
+        self.rankings = get_leaderboards(self.gameID,self.categID,self.vari)  # liste de leaderboards
 
-    def plot_leaderboard(leaderboards):
-
-        for year in leaderboards.keys():
-            if len(leaderboards[year]) == 1:
-                plot.plot([time[0] for time in leaderboards[year]], [rank[1] for rank in leaderboards[year]], label=year, marker="*")
+    def plot_leaderboards(self):
+        for year in self.rankings.keys():
+            if len(self.rankings[year]) == 1:
+                plot.plot([time[0] for time in self.rankings[year]], [rank[1] for rank in self.rankings[year]], label=year, marker="*")
             else:
-                plot.plot([time[0] for time in leaderboards[year]], [rank[1] for rank in leaderboards[year]], label=year)
-
+                plot.plot([time[0] for time in self.rankings[year]], [rank[1] for rank in self.rankings[year]], label=year)
+        plot.title(f'{self.game}\n{self.categ}')
         plot.ylabel("Time")
         plot.yticks(plot.yticks()[0],[datetime.timedelta(seconds=x) for x in plot.yticks()[0]])
 

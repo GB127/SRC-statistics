@@ -219,16 +219,6 @@ def get_leaderboard(gameID, categID, vari):
 
 def get_leaderboards(gameID, categID, vari):
     # TODO: Enlever les temps sans date! (Ils sont dans toutes les années)
-    """[summary]
-
-        Args:
-            gameID ([type]): [description]
-            categID ([type]): [description]
-            vari ([type]): [description]
-
-        Returns:
-            [type]: [description]
-        """
     varistr = ""
     if vari != {}:
         tempo = []

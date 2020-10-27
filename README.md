@@ -5,6 +5,9 @@ The entire script is written by Niamek. Current version : 1.0
 It's a python script that fetches data from speedrun.com's API to plot graphs (histograms or simple plot) or to display tables.
 
 The program divides the stats into the following categories:
++ Leaderboard
+    + Category that will focus on the leaderboards stats.
+    + **Note: This is still an immature feature, I'm planning to do more stuffs for this category.**
 + PBs
     + Category that covers all PBs and compares them to the leaderboard and WR.
 + Saves
@@ -30,13 +33,25 @@ The script will then be fetching data and can't accept commands during the proce
 
 Once the process is done, you will be asked an option from the "main menu".
 > What do you want to do?
-> [PBs, systems, saves, sort, end]
+> [lb, PBs, systems, saves, sort, end]
 
 Type down the category you want to display data. **The commands are case sensitives**.
 > What do you want to do?
-> [PBs, systems, saves, sort, end] PBs
+> [lb, PBs, systems, saves, sort, end] PBs
 
 **For all tables, I did not add a check for inputs that are out of the table or not a number except "all". Doing so will throw an error. I plan to fix it eventually, but not now, as I consider it minor.**
+
+# lb (Leaderboard)
+This category is still in devellopments. Only one feature is available at the time of writing. Selecting this feature will display the table of PBs of the user selected, and ask you to select one of the runs.
+
+After the selection, it will undergo a new fetching process. So you have a waiting time for each use of this feature. Then a plot will be displayed.
+
+More feature coming "soon"!
+
+## Yearly plot of leaderboard
+The generated plot will draw a plot of the look of the leaderboard for the past years, starting today.
+
+Title is the game and the category of the leaderboards. Time on the Y axis, ranking on the X axis. 
 
 # PBs
 This category will analyse stats of the PBs and compare them to the WR and the leaderboard.

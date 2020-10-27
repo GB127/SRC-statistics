@@ -456,6 +456,7 @@ class user:
         print(f'| {"Average :":>60}| {self.average_PB} (+ {self.average_delta}) | ({round(self.average_perc, 2)} %)')
 
     def table_saves(self):
+        self.PBs.sort()
         solo, solo_time = 0, run_time(0)
         count, group, group_time, group_first, group_saved= 0, 0, run_time(0),run_time(0), run_time(0)
         print(f'   |{"game":30}|{"category":20}|###| {"First PB":10}| {"Current PB":10}| {"saved":^10} ({"%":^8})')
