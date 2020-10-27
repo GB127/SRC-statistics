@@ -1,6 +1,8 @@
 # Speedrun.com statistics fetcher
 
-Python script that fetches data from speedrun.com's API to plot graphs (histograms or simple plot) or to display tables.
+The entire script is written by Niamek. Current version : 1.0
+
+It's a python script that fetches data from speedrun.com's API to plot graphs (histograms or simple plot) or to display tables.
 
 The program divides the stats into the following categories:
 + PBs
@@ -21,8 +23,15 @@ Running the script will first ask you which user you wish to analyse.
 Type the speedrun username you want to analyse, then hit "enter".
 > Which sr user? niamek
 
-The script will then be fetching data and can't accept commands during the process.**The more run the user have, the longer the process will be.**
+The script will then be fetching data and can't accept commands during the process.**The more runs the user have, the longer the process will be.**
 > Fetching data...
+
+**Note:
+
+
+**
+
+
 
 Once the process is done, you will be asked an option from the "main menu".
 > What do you want to do?
@@ -66,7 +75,17 @@ NOTE : The plot removes some entries that have a way too high time compared to t
 
 ## All PBs:
 ### The histograms of PBs vs. WR:
-Coming soon!
+The histogram combines two histograms : The histogram of all the PBs and the histogram of all the WRs. The histograms represent the frequency of times.
+
+Title of the graphic is the runner and the number of PBs.
+
+gold histogram : Represent all the WRs.
+Green histogram : Represent all the current PBs.
+
+Overall, the gold bars should be more to the left than the green bars. The closer the green histogram is to the gold histogram, the closer to WR the user is.
+
+Note that if runs with smaller improvements will have a good chance to appear on the same time bar and not shift to a different time bar.
+
 ### The histograms of PBs:
 Selecting all PBs will display 4 histograms gathering the infos of all PBs.
 On the top left : Histogram of all the runs time frequency.
@@ -123,7 +142,7 @@ Green histogram : Represent all the current PBs together.
 
 Overall, the green bars should be more to the left than the red bars, showing the improvements. Note that if runs with smaller improvements will have a good chance to appear on the same time bar and not shift to a different time bar.
 
-## The combined PB progressions plot
+### The combined PB progressions plot
 The runs with saves are divided in four plots with different time frames to minimize a crushed look. This plot combines all the single plots.
 
 # sort
@@ -160,7 +179,7 @@ On the bottom left : Histogram of all the times behind WR frequency of the said 
 On the bottom right : Histogram of all the percentages off the WR frequency of the said system.
 
 ## All systems pie:
-Selectin all the systems will display a pie system deciphering the percentage of each system. On the left, it's the PBs, on the right it's all the runs. On the top, the percentages of the number of runs per system. On the bottom, the percentages of times per system.
+Selecting all the systems will display a pie system deciphering the percentage of each system. On the left, it's the PBs, on the right it's all the runs. On the top, the percentages of the number of runs per system. On the bottom, the percentages of times per system.
 
 # end
 This command ends the script.

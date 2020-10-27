@@ -419,6 +419,23 @@ class user:
 
         plot.show()
 
+
+
+    def histo_PBs_WR(self):
+        plot.hist([[pb.WR.time for pb in self.PBs], [pb.time.time for pb in self.PBs]],
+        color=["gold", "green"], label=["WR", "PBs"])
+        plot.legend()
+        plot.xlim(left=0)
+        plot.xticks(plot.xticks()[0], [datetime.timedelta(seconds=x) for x in plot.xticks()[0]])  # FIXME
+        plot.title(f'{self.username}\n{len(self.PBs)} runs')
+
+
+
+        plot.show()
+
+
+
+
     def table_PBs(self):
         """ Print a table by printing all PBs. Sorting can be changed by
             changing the PB.sort variable.
@@ -503,9 +520,9 @@ if __name__ == "__main__":
     # test = user("helienne")
     # test = user("deadephant")
     # test = user("zfg")
-    # test = user("lackattack24")
-    test = user("niamek")
+    test = user("lackattack24")
+    # test = user("niamek")
     # test = user("baffan")
     # test = user("iateyourpie")
     # test = user("darbian")
-    test.table_saves()
+    test.histo_PBs_WR()
