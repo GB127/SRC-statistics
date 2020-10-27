@@ -28,11 +28,6 @@ The script will then be fetching data and can't accept commands during the proce
 
 **Note: Not all runs will be considered for the analysis. First, the individual levels runs are all discarded altogether. Second, runs that are lower than 3 minutes are all discarded.**
 
-
-**
-
-
-
 Once the process is done, you will be asked an option from the "main menu".
 > What do you want to do?
 > [PBs, systems, saves, sort, end]
@@ -40,6 +35,8 @@ Once the process is done, you will be asked an option from the "main menu".
 Type down the category you want to display data. **The commands are case sensitives**.
 > What do you want to do?
 > [PBs, systems, saves, sort, end] PBs
+
+**For all tables, I did not add a check for inputs that are out of the table or not a number except "all". Doing so will throw an error. I plan to fix it eventually, but not now, as I consider it minor.**
 
 # PBs
 This category will analyse stats of the PBs and compare them to the WR and the leaderboard.
