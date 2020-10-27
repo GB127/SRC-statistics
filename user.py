@@ -305,7 +305,7 @@ class user:
         plot.show()
 
 
-    def plot_PB(self, PB):  #FIXME : Rework on it.
+    def plot_saves_PB(self, PB):  #FIXME : Rework on it.
         runs = self.fetch_runs_PB(PB)
         runs.sort(reverse=True)
 
@@ -349,17 +349,6 @@ class user:
                         arrowprops={"arrowstyle":"->"}
                         )
 
-
-        plot.show()
-
-
-    def plot_saves(self):
-        plot.plot(list(x.time for x in self.set_time_progression()))
-
-        plot.ylabel("Time")
-        plot.yticks(plot.yticks()[0],[datetime.timedelta(seconds=x) for x in plot.yticks()[0]])
-
-        plot.xlabel("PB #")
 
         plot.show()
 
@@ -450,7 +439,7 @@ class user:
         print("-" * 106)
         for no, pb in enumerate(self.PBs):
             if pb.number != 1:
-                print(f'{no:3}|{pb.game[:30]:30}|{pb.categ[:20]:20}|{pb.number:2}| {pb.first.time:10}| {pb.time:10}| -{pb.saved:10}({round(100 - (pb.time*100/pb.first.time), 2):<6} %)')
+                print(f'{no+1:3}|{pb.game[:30]:30}|{pb.categ[:20]:20}|{pb.number:2}| {pb.first.time:10}| {pb.time:10}| -{pb.saved:10}({round(100 - (pb.time*100/pb.first.time), 2):<6} %)')
             elif pb.number == 1:
                 solo += 1
                 solo_time += pb.time
@@ -458,6 +447,12 @@ class user:
         print("-" * 106)
         print(f'{solo} PBs with only 1 attempt, total time : {solo_time}')
 
+    def table_saves_combined(self):
+        data = self.set_time_progression()
+        print(f'{"1"} | {data[0]} | ')
+        for no, i in enumerate(data[1:]): 
+            
+            print(f'{no + 2} | {i} | {data[no] - i} | {round(100 - (i * 100 / data[no]),2)} %')
 
     def table_systems(self):
 
@@ -496,5 +491,8 @@ if __name__ == "__main__":
     # test = user("zfg")
     test = user("lackattack24")
     # test = user("niamek")
-    test.table_saves()
-    test.histo_saves()
+    # test = user("baffan")
+    # test = user("iateyourpie")
+    # test = user("darbian")
+    test.table_saves_combined()
+    test.plot_all_runs()

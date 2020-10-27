@@ -121,7 +121,7 @@ class PB(Run):
         if PB.sort == "game":
             return self.game < other.game
         elif PB.sort == "PB#":
-            return self.number < other.number
+            return self.number > other.number
         elif PB.sort == "system":
             return self.system < other.system
         elif PB.sort == "time":

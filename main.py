@@ -7,7 +7,7 @@ if __name__ == "__main__":
     use = True
     while use:
         print("What do you want to do?")
-        command = input("[PBs, systems, sort, save, end] ")
+        command = input("[PBs, systems, sort, saves, end] ")
         if command == "sort":
             print("What will be the new sorting method?")
             PB.sort = input("[game, PB#, system, time, delta, %WR, %LB] ")
@@ -16,9 +16,7 @@ if __name__ == "__main__":
             command2 = input(f"[0 - {len(user.PBs)}, all]")
             if command2 == "all":
                 user.histo_runs()
-                user.plot_all_runs()
             if command2 != "all":
-                user.plot_runs(user.PBs[int(command2)-1])
                 user.plot_PB_leaderboard(user.PBs[int(command2) -1])
         elif command == "systems":
             user.table_systems()
@@ -27,8 +25,14 @@ if __name__ == "__main__":
                 user.pie_systems()
             if command2 != "all":
                 user.histo_system(user.systems[int(command2)-1])
-        elif command == "save":
+        elif command == "saves":
             user.table_saves()
-            user.plot_saves()
+            command2 = input(f"[0 - {len(user.PBs)}, all]")  #FIXME
+            if command2 == "all":
+                user.histo_saves()
+                user.plot_all_runs()
+            if command2 != "all":
+                user.plot_saves_PB(user.PBs[int(command2)-1])
+
         elif command == "end":
             use = False
