@@ -309,8 +309,9 @@ class user:
         runs = self.fetch_runs_PB(PB)
         runs.sort(reverse=True)
 
-        plot.title(f'{PB.game}\n{PB.categ}\nWR:{PB.WR}')
-        plot.axhline(y=PB.WR.time, c="gold")
+        plot.title(f'{self.username}\n{PB.game}\n{PB.categ}')
+        plot.axhline(y=PB.WR.time, c="gold", label=f"WR : {PB.WR}")
+        plot.legend()
 
         if len(runs) == 1:
             plot.plot([run.time.time for run in runs], marker="o")
@@ -497,5 +498,4 @@ if __name__ == "__main__":
     # test = user("baffan")
     # test = user("iateyourpie")
     # test = user("darbian")
-    test.table_PBs()
-    test.histo_saves()
+    test.plot_saves_PB(test.PBs[2])
