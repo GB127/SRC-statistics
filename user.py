@@ -413,6 +413,17 @@ class user:
         plot.show()
 
 
+    def histo_saves(self):
+        data = []
+        for run in self.PBs:
+            if run.number > 1:
+                data.append(run)
+        plot.hist([[pb.time.time for pb in data], [pb.first.time.time for pb in data]],
+        color=["green", "red"])
+        plot.xticks(plot.xticks()[0],[datetime.timedelta(seconds=x) for x in plot.xticks()[0]])  # FIXME
+
+        plot.show()
+
     def table_PBs(self):
         """ Print a table by printing all PBs. Sorting can be changed by
             changing the PB.sort variable.
@@ -429,9 +440,9 @@ class user:
         print("-"*130)
 
         ### Foot of the table
-        print(f'| {"Total :":>65}| {self.total_PB} (+ {self.total_delta})')
-        print(f'| {"Average :":>65}| {self.average_PB} (+ {self.average_delta}) | ({self.average_perc} %)')
-
+        total_count = sum([t.number for t in self.PBs])
+        print(f'| {"Total :":>60}|{total_count:^4}| {self.total_PB} (+ {self.total_delta})')
+        print(f'| {"Average :":>60}|{round(total_count/len(self.PBs),1):^4}| {self.average_PB} (+ {self.average_delta}) | ({round(self.average_perc, 2)} %)')
 
     def table_saves(self):
         solo, solo_time = 0, run_time(0)
@@ -482,6 +493,8 @@ if __name__ == "__main__":
     pass
     # test = user("helienne")
     # test = user("deadephant")
-    # test = user("lackattack24")
-    test = user("niamek")
+    # test = user("zfg")
+    test = user("lackattack24")
+    # test = user("niamek")
     test.table_saves()
+    test.histo_saves()
