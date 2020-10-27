@@ -1,13 +1,19 @@
 from user import user
 from runs import leaderboard, PB
+import os
+
+clear = lambda: os.system('cls')
 
 
 if __name__ == "__main__":
     user = user(input("Which sr user? "))
+    clear()
     use = True
     while use:
+        clear()
         print("What do you want to do?")
         command = input("[lb, PBs, systems, saves, sort, end] ")
+        clear()
         if command == "sort":
             print("What will be the new sorting method?")
             PB.sort = input("[deltaWR, game, PB#, saved, system, time, %LB, %Saved, %WR] ")
