@@ -148,16 +148,17 @@ The runs with saves are divided in four plots with different time frames to mini
 This option allows you to change the sorting method of the PBs, effectively influencing the tables displayed of all the others options.
 
 Sorting options:
++ deltaWR : Sort the PBs by time behind the WR.
 + game : Sort the PBs by game name.
 + PB# : Sort the PBs by the number of PBs.
++ saved : Sort the PBs by time shaved from first PB 
 + system : sort the PBs by system.
 + Time : Sort the PBs by time.
-+ deltaWR : Sort the PBs by time behind the WR.
 + %WR : Sort the PBs by the percentage of WR
     + Example : 200 %, WR is 1:00:00, => your time is 2:00:00
 + %LB : Sort the PBs by the leaderboard percentage.
     + Example : leaderboard has 10 runners => you are 8th on the leaderboard. You are better than 20% of the runners. Then your leaderboard percentage is 20%.
-
++ %Saved : Sort the PBs by % shaved from first PB
 
 # systems
 This category will analyse stats of systems.

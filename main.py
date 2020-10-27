@@ -10,7 +10,7 @@ if __name__ == "__main__":
         command = input("[PBs, systems, saves, sort, end] ")
         if command == "sort":
             print("What will be the new sorting method?")
-            PB.sort = input("[game, PB#, system, time, deltaWR, %WR, %LB, saved, %Saved] ")
+            PB.sort = input("[deltaWR, game, PB#, saved, system, time, %WR, %LB, %Saved] ")
         elif command == "PBs":
             user.table_PBs()
             command2 = input(f"[0 - {len(user.PBs)}, all]")
