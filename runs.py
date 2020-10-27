@@ -90,9 +90,11 @@ class PB(Run):
 
     def saved(self, run):
         self.first = run
-        self.saved = 0
+        self.saved = run_time(0)
+        self.perc_saved = 0
         if (self.first.time - self.time).time > 0:  # Using this instead of self.number so that I never get a negative value somehow for now (It,s because of vari I bet).
             self.saved = self.first.time - self.time
+            self.perc_saved = 100 - (self.time * 100 / self.first.time)
 
     def __str__(self):
         """Define 3 functions :
@@ -120,6 +122,10 @@ class PB(Run):
     def __lt__(self, other):
         if PB.sort == "game":
             return self.game < other.game
+        if PB.sort == "%Saved":
+            return self.perc_saved > other.perc_saved
+        if PB.sort == "saved":
+            return self.saved > other.saved
         elif PB.sort == "PB#":
             return self.number > other.number
         elif PB.sort == "system":

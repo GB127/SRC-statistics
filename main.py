@@ -10,11 +10,12 @@ if __name__ == "__main__":
         command = input("[PBs, systems, saves, sort, end] ")
         if command == "sort":
             print("What will be the new sorting method?")
-            PB.sort = input("[game, PB#, system, time, delta, %WR, %LB] ")
+            PB.sort = input("[game, PB#, system, time, deltaWR, %WR, %LB, saved, %Saved] ")
         elif command == "PBs":
             user.table_PBs()
             command2 = input(f"[0 - {len(user.PBs)}, all]")
             if command2 == "all":
+                user.histo_PBs_WR()
                 user.histo_runs()
             if command2 != "all":
                 user.plot_PB_leaderboard(user.PBs[int(command2) -1])
