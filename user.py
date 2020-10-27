@@ -408,8 +408,13 @@ class user:
             if run.number > 1:
                 data.append(run)
         plot.hist([[pb.time.time for pb in data], [pb.first.time.time for pb in data]],
-        color=["green", "red"])
+        color=["green", "red"], label=["current", "first"])
+        plot.legend()
+        plot.xlim(left=0)
         plot.xticks(plot.xticks()[0],[datetime.timedelta(seconds=x) for x in plot.xticks()[0]])  # FIXME
+        plot.title(f'{self.username}\n{len(data)} runs')
+
+
 
         plot.show()
 
@@ -484,13 +489,13 @@ class user:
 
 
 if __name__ == "__main__":
-    pass
-    test = user("helienne")
+    # test = user("helienne")
     # test = user("deadephant")
     # test = user("zfg")
     # test = user("lackattack24")
-    # test = user("niamek")
+    test = user("niamek")
     # test = user("baffan")
     # test = user("iateyourpie")
     # test = user("darbian")
     test.table_PBs()
+    test.histo_saves()
