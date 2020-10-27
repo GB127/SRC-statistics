@@ -7,10 +7,10 @@ It's a python script that fetches data from speedrun.com's API to plot graphs (h
 The program divides the stats into the following categories:
 + PBs
     + Category that covers all PBs and compares them to the leaderboard and WR.
-+ Systems
-    + Category that covers all systems stats of the said user.
 + Saves
     + Category that covers runs improvements.
++ Systems
+    + Category that covers all systems stats of the said user.
 
 The details of each categories will be covered further in the README.
 
