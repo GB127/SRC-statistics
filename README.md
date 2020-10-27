@@ -62,9 +62,12 @@ This plot shows where the runner is on the leaderboard.
 
 The rank is shown on the x axis, and the time is on the y axis. The analysed runner's rank is shown with an arrow.
 
-NOTE : The plot removes some entries that have a way too high time compared to the WR. This is to avoid an entirely crushed plot. Currently, the cut off is 6 times the WR. In other words : if an entry's time is 6 times higher the WR, it won't be displayed on the plot.
+NOTE : The plot removes some entries that have a way too high time compared to the WR. This is to avoid an entirely crushed plot. Currently, the cut off is 6 times the WR. In other words : if an entry's time is 6 times higher the WR or higher, it won't be displayed on the plot.
 
 ## All PBs:
+### The histograms of PBs vs. WR:
+Coming soon!
+### The histograms of PBs:
 Selecting all PBs will display 4 histograms gathering the infos of all PBs.
 On the top left : Histogram of all the runs time frequency.
 On the top right : Histogram of all the PBs time frequency.
@@ -73,7 +76,9 @@ On the bottom right : Histogram of all the percentages off the WR frequency.
 
 # saves
 This category of data will show statistics regarding the improvements of your PBs. For this category, all runs that have only one attempt are omitted. A table will be listed, and then you will be asked to select an entry of the table or all of them.
+
 > [0 - 19, all]
+
 Selecting a single entry will make a plot of the progression of the PBs.
 Selecting all of them will combine every plots into a single plot.
 
