@@ -26,7 +26,7 @@ Type the speedrun username you want to analyse, then hit "enter".
 The script will then be fetching data and can't accept commands during the process.**The more runs the user have, the longer the process will be.**
 > Fetching data...
 
-**Note:
+**Note: Not all runs will be considered for the analysis. First, the individual levels runs are all discarded altogether. Second, runs that are lower than 3 minutes are all discarded.**
 
 
 **
