@@ -421,7 +421,7 @@ class user:
 
         ### En tete of the table
         print("-"*130)
-        print(f"| #  |{'Sys':^6}| {'Game':^30}| {'Category':^15} |{f'PB#':^4}| {'Time':^9}| + \u0394WR     |{'%WR':^10}| {'  Rank      (^%)':20}")
+        print(f"| #  |{'Sys':^6}| {'Game':^30}| {'Category':^15} |{'Time':^9}| + \u0394WR     |{'%WR':^10}| {'  Rank      (^%)':20}")
         print("-"*130)
 
         ### Actual entry of the table.
@@ -429,9 +429,8 @@ class user:
         print("-"*130)
 
         ### Foot of the table
-        total_count = sum([t.number for t in self.PBs])
-        print(f'| {"Total :":>60}|{total_count:^4}| {self.total_PB} (+ {self.total_delta})')
-        print(f'| {"Average :":>60}|{round(total_count/len(self.PBs),1):^4}| {self.average_PB} (+ {self.average_delta}) | ({round(self.average_perc, 2)} %)')
+        print(f'| {"Total :":>60}| {self.total_PB} (+ {self.total_delta})')
+        print(f'| {"Average :":>60}| {self.average_PB} (+ {self.average_delta}) | ({round(self.average_perc, 2)} %)')
 
     def table_saves(self):
         solo, solo_time = 0, run_time(0)
@@ -486,13 +485,12 @@ class user:
 
 if __name__ == "__main__":
     pass
-    # test = user("helienne")
+    test = user("helienne")
     # test = user("deadephant")
     # test = user("zfg")
-    test = user("lackattack24")
+    # test = user("lackattack24")
     # test = user("niamek")
     # test = user("baffan")
     # test = user("iateyourpie")
     # test = user("darbian")
-    test.table_saves_combined()
-    test.plot_all_runs()
+    test.table_PBs()

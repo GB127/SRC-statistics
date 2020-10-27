@@ -114,7 +114,7 @@ class PB(Run):
             return f'{self.time:8} | + {self.delta:8}| {self.percWR:^6} %'
 
 
-        return f'{str_game(self)} |{self.number:^3} | {str(str_time(self))} | {str_rank(self)} |'
+        return f'{str_game(self)} | {str(str_time(self))} | {str_rank(self)} |'
 
 
     def __lt__(self, other):
@@ -126,7 +126,7 @@ class PB(Run):
             return self.system < other.system
         elif PB.sort == "time":
             return self.time < other.time
-        elif PB.sort == "delta":
+        elif PB.sort == "deltaWR":
             return self.delta < other.delta
         elif PB.sort == "%WR":
             return self.percWR < other.percWR
