@@ -440,17 +440,27 @@ class user:
 
     def table_saves(self):
         solo, solo_time = 0, run_time(0)
-        print(f'   |{"game":30}|{"category":20}|##| {"First PB":10}| {"Current PB":10}| {"saved":^10} ({"%":^8})')
+        count, group, group_time, group_first, group_saved= 0, 0, run_time(0),run_time(0), run_time(0)
+        print(f'   |{"game":30}|{"category":20}|###| {"First PB":10}| {"Current PB":10}| {"saved":^10} ({"%":^8})')
         print("-" * 106)
         for no, pb in enumerate(self.PBs):
             if pb.number != 1:
-                print(f'{no+1:3}|{pb.game[:30]:30}|{pb.categ[:20]:20}|{pb.number:2}| {pb.first.time:10}| {pb.time:10}| -{pb.saved:10}({round(100 - (pb.time*100/pb.first.time), 2):<6} %)')
+                print(f'{no+1:3}|{pb.game[:30]:30}|{pb.categ[:20]:20}|{pb.number:^3}| {pb.first.time:10}| {pb.time:10}| -{pb.saved:10}({round(100 - (pb.time*100/pb.first.time), 2):<6} %)')
+                count += pb.number
+                group += 1
+                group_first += pb.first.time
+                group_time += pb.time
+                group_saved += pb.saved
             elif pb.number == 1:
                 solo += 1
                 solo_time += pb.time
         print("-" * 106)
+        print(f'{"Total :" :>55}|{count:^3}| {group_first}  | {group_time}| -{group_saved}  ({round(100 - (group_time * 100 / group_first),2)} %)')
+        print(f'{"Average :" :>55}|{count / group:^3}| {run_time(group_time / group)}  | -{run_time(group_saved / group)}')
+
         print("-" * 106)
         print(f'{solo} PBs with only 1 attempt, total time : {solo_time}')
+        print(f'total time : {solo_time + group_time}')
 
     def table_saves_combined(self):
         data = self.set_time_progression()
@@ -498,4 +508,4 @@ if __name__ == "__main__":
     # test = user("baffan")
     # test = user("iateyourpie")
     # test = user("darbian")
-    test.plot_saves_PB(test.PBs[2])
+    test.table_saves()
