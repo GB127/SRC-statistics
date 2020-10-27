@@ -96,6 +96,8 @@ On the bottom right : Histogram of all the percentages off the WR frequency.
 # saves
 This category of data will show statistics regarding the improvements of your PBs. For this category, all runs that have only one attempt are omitted. A table will be listed, and then you will be asked to select an entry of the table or all of them.
 
+**Note : Currently, you can also select entries that has no saves. I did not get around to fix that yet. I deemed it minor enough to leave it as is. I do plan to fix it eventually.**
+
 > [0 - 19, all]
 
 Selecting a single entry will make a plot of the progression of the PBs.
