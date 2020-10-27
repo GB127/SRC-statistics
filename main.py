@@ -7,7 +7,7 @@ if __name__ == "__main__":
     use = True
     while use:
         print("What do you want to do?")
-        command = input("[PBs, systems, sort, saves, end] ")
+        command = input("[PBs, systems, saves, sort, end] ")
         if command == "sort":
             print("What will be the new sorting method?")
             PB.sort = input("[game, PB#, system, time, delta, %WR, %LB] ")
