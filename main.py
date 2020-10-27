@@ -7,10 +7,16 @@ if __name__ == "__main__":
     use = True
     while use:
         print("What do you want to do?")
-        command = input("[PBs, systems, saves, sort, end] ")
+        command = input("[lb, PBs, systems, saves, sort, end] ")
         if command == "sort":
             print("What will be the new sorting method?")
-            PB.sort = input("[deltaWR, game, PB#, saved, system, time, %WR, %LB, %Saved] ")
+            PB.sort = input("[deltaWR, game, PB#, saved, system, time, %LB, %Saved, %WR] ")
+        elif command == "lb":
+            user.table_PBs()
+            command2 = int(input(f"[0 - {len(user.PBs)}]")) - 1
+            tempo = leaderboard(user.PBs[command2])
+            tempo.plot_leaderboards()
+            del tempo         
         elif command == "PBs":
             user.table_PBs()
             command2 = input(f"[0 - {len(user.PBs)}, all]")

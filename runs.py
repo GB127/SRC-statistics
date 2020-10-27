@@ -160,6 +160,7 @@ class leaderboard:
         self.gameID = data.gameID
         self.categ = data.categ
         self.categID = data.categID
+        print("Fetching data...")
         self.rankings = get_leaderboards(self.gameID,self.categID,self.vari)  # liste de leaderboards
 
     def plot_leaderboards(self):
