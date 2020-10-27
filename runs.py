@@ -133,15 +133,17 @@ class PB(Run):
             return self.number > other.number
         elif PB.sort == "system":
             return self.system < other.system
-        elif PB.sort == "time":
-            return self.time < other.time
         elif PB.sort == "deltaWR":
             return self.delta < other.delta
         elif PB.sort == "%WR":
             return self.percWR < other.percWR
         elif PB.sort == "%LB":
             return self.perclenrank > other.perclenrank
-
+        elif PB.sort == "time":
+            return self.time < other.time
+        else:
+            return self.time < other.time
+            
 
     def set_pb_number(self, list):
         self.number = len(list)
