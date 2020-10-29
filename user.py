@@ -310,16 +310,18 @@ class user:
         runs.sort(reverse=True)
 
         plot.title(f'{self.username}\n{PB.game}\n{PB.categ}')
-        plot.axhline(y=PB.WR.time, c="gold", label=f"WR : {PB.WR}")
-        plot.legend()
 
         if len(runs) == 1:
-            plot.plot([run.time.time for run in runs], marker="o")
+            plot.plot([run.time.time for run in runs], marker="o", label=f'PB : {PB.time}')
         else:
-            plot.plot([run.time.time for run in runs])
+            plot.plot([run.time.time for run in runs], label=f'PB : {PB.time}')
+
+        plot.axhline(y=PB.WR.time, c="gold", label=f"WR : {PB.WR}")
+
         plot.xlabel("PB #")
         plot.ylabel("Time")
         plot.yticks(plot.yticks()[0],[datetime.timedelta(seconds=x) for x in plot.yticks()[0]])  # FIXME
+        plot.legend()
         plot.show()
 
 
