@@ -162,6 +162,14 @@ class user:
                 toreturn.append(run)
         return toreturn
 
+    def fetch_nosolo_PBs(self):
+        toreturn = []
+        for run in self.PBs:
+            if run.number != 1:
+                toreturn.append(run)
+        return toreturn
+
+
     def fetch_runs_system(self, system, PB=False):
         liste = []
         if PB is False:
@@ -461,23 +469,24 @@ class user:
         print(f'| {"Average :":>60}| {self.average_PB} (+ {self.average_delta}) | ({self.average_perc} %)')
 
     def table_saves(self):
+        data = self.fetch_nosolo_PBs()
         self.PBs.sort()
         solo, solo_time = 0, run_time(0)
-        count, group, group_time, group_first, group_saved= 0, 0, run_time(0),run_time(0), run_time(0)
         print(f'   |{"game":30}|{"category":20}|###| {"First PB":10}| {"Current PB":10}| {"saved":^10} ({"%":^8})')
         print("-" * 106)
-        for no, pb in enumerate(self.PBs):
-            if pb.number != 1:
-                print(f'{no+1:3}|{pb.game[:30]:30}|{pb.categ[:20]:20}|{pb.number:^3}| {pb.first.time:10}| {pb.time:10}| -{pb.saved:10}({percent(pb.first.time, pb.time, delta=True):<6} %)')
-                count += pb.number
-                group += 1
-                group_first += pb.first.time
-                group_time += pb.time
-                group_saved += pb.saved
-            elif pb.number == 1:
-                solo += 1
-                solo_time += pb.time
+        for no, pb in enumerate(data):
+            print(f'{no+1:3}|{pb.game[:30]:30}|{pb.categ[:20]:20}|{pb.number:^3}| {pb.first.time:10}| {pb.time:10}| -{pb.saved:10}({percent(pb.first.time, pb.time, delta=True):<6} %)')
+
         print("-" * 106)
+        count = sum([pb.number for pb in data])
+        group = len(data)
+        group_first = sum([pb.first.time for pb in data])
+        group_time = sum([pb.time for pb in data])
+        group_saved = sum([pb.saved for pb in data])
+        count = sum([pb.number for pb in data])
+
+
+
         print(f'{"Total :" :>55}|{count:^3}| {group_first}  | {group_time}| -{group_saved}  ({percent(group_first, group_time, delta=True)} %)')
         print(f'{"Average :" :>55}|{int(round(count / group, 0)):^3}| {run_time(group_first / group)} | {run_time(group_time / group)}  | -{run_time(group_saved / group)}')
 
@@ -526,9 +535,9 @@ if __name__ == "__main__":
     # test = user("deadephant")
     # test = user("zfg")
     # test = user("lackattack24")
-    # test = user("niamek")
+    test = user("niamek")
     # test = user("baffan")
     # test = user("snowfats")
     # test = user("iateyourpie")
-    test = user("darbian")
-    test.table_PBs()
+    # test = user("darbian")
+    test.table_saves()
