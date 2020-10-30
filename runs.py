@@ -1,4 +1,4 @@
-from tools import run_time
+from tools import run_time, percent
 from api import *
 import numpy
 import matplotlib.pyplot as plot
@@ -85,11 +85,10 @@ class PB(Run):
         super().__init__(data["run"])
         self.place = data["place"]
         self.lenrank = get_len_leaderboard(self.gameID, self.categID, self.vari)
-        self.perclenrank = round(100 * (self.lenrank - self.place) / self.lenrank, 2)
+        self.perclenrank = percent(self.lenrank, self.lenrank - self.place)
         self.WR = run_time(get_WR(self.gameID, self.categID, self.vari))
         self.delta = self.time - self.WR
-        self.percWR = round((self.time * 100/self.WR), 2)
-
+        self.percWR = percent(self.WR, self.time)
 
     def saved(self, run):
         self.first = run

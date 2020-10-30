@@ -39,3 +39,7 @@ class run_time:
             return run_time(self.time + other)
     __radd__ = __add__
 
+def percent(cent, new, delta=False):
+    if delta:
+        return round(100 - 100 * new/cent, 2)
+    return round(100 * new/cent, 2)

@@ -2,7 +2,7 @@ import numpy
 import matplotlib.pyplot as plot
 
 from api import *
-from tools import run_time
+from tools import run_time, percent
 from runs import Run, PB
 
 
@@ -455,7 +455,7 @@ class user:
 
         ### Foot of the table
         print(f'| {"Total :":>60}| {self.total_PB} (+ {self.total_delta})')
-        print(f'| {"Average :":>60}| {self.average_PB} (+ {self.average_delta}) | ({round(self.average_perc, 2)} %)')
+        print(f'| {"Average :":>60}| {self.average_PB} (+ {self.average_delta}) | ({self.average_perc} %)')
 
     def table_saves(self):
         self.PBs.sort()
@@ -465,7 +465,7 @@ class user:
         print("-" * 106)
         for no, pb in enumerate(self.PBs):
             if pb.number != 1:
-                print(f'{no+1:3}|{pb.game[:30]:30}|{pb.categ[:20]:20}|{pb.number:^3}| {pb.first.time:10}| {pb.time:10}| -{pb.saved:10}({round(100 - (pb.time*100/pb.first.time), 2):<6} %)')
+                print(f'{no+1:3}|{pb.game[:30]:30}|{pb.categ[:20]:20}|{pb.number:^3}| {pb.first.time:10}| {pb.time:10}| -{pb.saved:10}({percent(pb.first.time, pb.time, delta=True):<6} %)')
                 count += pb.number
                 group += 1
                 group_first += pb.first.time
@@ -475,7 +475,7 @@ class user:
                 solo += 1
                 solo_time += pb.time
         print("-" * 106)
-        print(f'{"Total :" :>55}|{count:^3}| {group_first}  | {group_time}| -{group_saved}  ({round(100 - (group_time * 100 / group_first),2)} %)')
+        print(f'{"Total :" :>55}|{count:^3}| {group_first}  | {group_time}| -{group_saved}  ({percent(group_first, group_time, delta=True)} %)')
         print(f'{"Average :" :>55}|{count / group:^3}| {run_time(group_time / group)}  | -{run_time(group_saved / group)}')
 
         print("-" * 106)
@@ -486,8 +486,7 @@ class user:
         data = self.set_time_progression()
         print(f'{"1"} | {data[0]} | ')
         for no, i in enumerate(data[1:]): 
-            
-            print(f'{no + 2} | {i} | {data[no] - i} | {round(100 - (i * 100 / data[no]),2)} %')
+            print(f'{no + 2} | {i} | {data[no] - i} | {percent(i, data[no])} %')
 
     def table_systems(self):
 
@@ -508,7 +507,7 @@ class user:
             runs_av_coti = f'{run_time(short1["time"]/short1["count"]):13} |'
 
             # PBs count, time, delta, and %WR (infos) of the current system
-            PBs_infos = f'{short2["count"]:^4}| {short2["time"]:13} | + {short2["delta"]:13} | {round(100 * short2["time"] / short2["WR"],2):6} % |'
+            PBs_infos = f'{short2["count"]:^4}| {short2["time"]:13} | + {short2["delta"]:13} | {percent(short2["time"], short2["WR"]):6} % |'
             # PBs average of infos
             PBs_av_infos = f'{run_time(short2["time"]/short2["count"]):13} | + {run_time(short2["delta"]/short2["count"]):13} |'
 
@@ -523,9 +522,9 @@ if __name__ == "__main__":
     # test = user("helienne")
     # test = user("deadephant")
     # test = user("zfg")
-    test = user("lackattack24")
-    # test = user("niamek")
+    # test = user("lackattack24")
+    test = user("niamek")
     # test = user("baffan")
     # test = user("iateyourpie")
     # test = user("darbian")
-    test.histo_PBs_WR()
+    test.table_PBs()
