@@ -50,6 +50,3 @@ def percent(cent, new, delta=False):
     if delta:
         return round(100 - 100 * new/cent, 2)
     return round(100 * new/cent, 2)
-
-test = run_time(30238)
-print(test)
