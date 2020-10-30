@@ -55,10 +55,12 @@ class user:
         def maker_runs_list(toupdate, list_runs, typ):
             """Function to update liste with runs.
 
-            Args:
-                toupdate (List): List to update
-                list_runs (List): List of runs to verify
-                typ (str): Determine if PB or run
+                It removes runs that are 3 minutes short or that are individual levels runs.
+
+                Args:
+                    toupdate (List): List to update
+                    list_runs (List): List of runs to verify
+                    typ (str): Determine if PB or run
             """
 
             for run in list_runs:
@@ -111,13 +113,12 @@ class user:
                         get_runs(self.ID),
                         typ="Run")
 
+
         self.total_PB = sum([pb.time for pb in self.PBs])
         self.average_PB = run_time(self.total_PB / len(self.PBs))
 
         self.total_WR = sum([pb.WR for pb in self.PBs])
-        self.average_WR = self.total_WR / len(self.PBs)
-
-
+        self.average_WR = run_time(self.total_WR / len(self.PBs))
 
         self.total_delta = self.total_PB - self.total_WR
         self.average_delta = run_time(self.total_delta / len(self.PBs))
@@ -151,7 +152,6 @@ class user:
         liste = self.fetch_runs_PB(PB)
         return liste[0]
 
-
     def fetch_runs_PB(self, PB):
         """
             Find all the runs for that PBs
@@ -161,7 +161,6 @@ class user:
             if run.gameID == PB.gameID and run.categID == PB.categID and PB.vari == run.vari:
                 toreturn.append(run)
         return toreturn
-
 
     def fetch_runs_system(self, system, PB=False):
         liste = []
@@ -305,7 +304,7 @@ class user:
         plot.show()
 
 
-    def plot_saves_PB(self, PB):  #FIXME : Rework on it.
+    def plot_saves_PB(self, PB):
         runs = self.fetch_runs_PB(PB)
         runs.sort(reverse=True)
 
@@ -339,16 +338,20 @@ class user:
 
         plot.plot([time[0] for time in leaderboard], [rank[1] for rank in leaderboard])
 
-        plot.title(f'{get_game(PB.gameID)}\n{get_category(PB.categID)}')
+        plot.title(f'{PB.game}\n{PB.categ}')
 
 
         plot.ylabel("Time")
-        plot.yticks(plot.yticks()[0],[datetime.timedelta(seconds=x) for x in plot.yticks()[0]])
+        plot.yticks(plot.yticks()[0],[run_time(x) for x in plot.yticks()[0]])
+        # plot.yticks(plot.yticks()[0],[datetime.timedelta(seconds=x) for x in plot.yticks()[0]])
 
         plot.xlabel("Rank")
         ax = plot.gca()
         ax.set_xlim(ax.get_xlim()[::-1])
-        plot.annotate(f"{self.username}", xy=(PB.place, PB.time.time), xytext=(0.65,0.65), textcoords="figure fraction",
+        plot.annotate(f"{self.username}",
+                        xy=(PB.place, PB.time.time),
+                        xytext=(0.65,0.65),
+                        textcoords="figure fraction",
                         arrowprops={"arrowstyle":"->"}
                         )
 
@@ -392,13 +395,13 @@ class user:
 
 
         plot.sca(axs[0,0])
-        plot.yticks(plot.yticks()[0], [str(run_time(tick)) for tick in plot.yticks()[0]])
+        plot.yticks(plot.yticks()[0], [run_time(tick) for tick in plot.yticks()[0]])
         plot.sca(axs[0,1])
-        plot.yticks(plot.yticks()[0], [str(run_time(tick)) for tick in plot.yticks()[0]])
+        plot.yticks(plot.yticks()[0], [run_time(tick) for tick in plot.yticks()[0]])
         plot.sca(axs[1,0])
-        plot.yticks(plot.yticks()[0], [str(run_time(tick)) for tick in plot.yticks()[0]])
+        plot.yticks(plot.yticks()[0], [run_time(tick) for tick in plot.yticks()[0]])
         plot.sca(axs[1,1])
-        plot.yticks(plot.yticks()[0], [str(run_time(tick)) for tick in plot.yticks()[0]])
+        plot.yticks(plot.yticks()[0], [run_time(tick) for tick in plot.yticks()[0]])
 
 
 
@@ -414,7 +417,7 @@ class user:
         color=["green", "red"], label=["current", "first"])
         plot.legend()
         plot.xlim(left=0)
-        plot.xticks(plot.xticks()[0],[datetime.timedelta(seconds=x) for x in plot.xticks()[0]])  # FIXME
+        plot.xticks(plot.xticks()[0],[run_time(x) for x in plot.xticks()[0]])
         plot.title(f'{self.username}\n{len(data)} runs')
 
 
@@ -428,7 +431,7 @@ class user:
         color=["gold", "green"], label=["WR", "PBs"])
         plot.legend()
         plot.xlim(left=0)
-        plot.xticks(plot.xticks()[0], [datetime.timedelta(seconds=x) for x in plot.xticks()[0]])  # FIXME
+        plot.xticks(plot.xticks()[0], [run_time(x) for x in plot.xticks()[0]])
         plot.title(f'{self.username}\n{len(self.PBs)} runs')
 
 
@@ -525,6 +528,7 @@ if __name__ == "__main__":
     # test = user("lackattack24")
     # test = user("niamek")
     # test = user("baffan")
-    test = user("iateyourpie")
-    # test = user("darbian")
-    test.table_saves()
+    # test = user("snowfats")
+    # test = user("iateyourpie")
+    test = user("darbian")
+    test.table_PBs()
