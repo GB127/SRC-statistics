@@ -6,7 +6,7 @@ clear = lambda: os.system('cls')
 
 
 if __name__ == "__main__":
-    print("speedrun.com statistic fetcher, program written by Niamek")
+    print("speedrun.com statistics fetcher, program written by Niamek")
     user = user(input("Which sr user? "))
     clear()
     use = True
@@ -41,12 +41,12 @@ if __name__ == "__main__":
                 user.histo_system(user.systems[int(command2)-1])
         elif command == "saves":
             user.table_saves()
-            command2 = input(f"[0 - {len(user.PBs)}, all]")  #FIXME
+            command2 = input(f"[0 - {len(user.fetch_nosolo_PBs())}, all]")
             if command2 == "all":
                 user.histo_saves()
                 user.plot_all_runs()
             if command2 != "all":
-                user.plot_saves_PB(user.PBs[int(command2)-1])
+                user.plot_saves_PB(user.fetch_nosolo_PBs()[int(command2)-1])
 
         elif command == "end":
             print("speedrun.com statistic fetcher, program written by Niamek")
