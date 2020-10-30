@@ -48,7 +48,19 @@ class run_time:
             return run_time(self.time + other)
     __radd__ = __add__
 
-
+def entry_selecter(liste, more=["all"]):
+    string = f"[1 - {len(liste)}"
+    for option in more:
+        string += f', {option}'
+    string += "] "
+    command = input(string)
+    try:
+        command = int(command)
+        if 0 < command <= len(liste):
+            return liste[command - 1]
+    except ValueError: 
+        if command in more:
+            return command
 
 def percent(cent, new, delta=False):
     if delta:

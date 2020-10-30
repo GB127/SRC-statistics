@@ -1,4 +1,5 @@
 from user import user
+from tools import entry_selecter
 from runs import leaderboard, PB
 import os
 
@@ -26,27 +27,27 @@ if __name__ == "__main__":
             del tempo         
         elif command == "PBs":
             user.table_PBs()
-            command2 = input(f"[0 - {len(user.PBs)}, all]")
+            command2 = entry_selecter(user.PBs)
             if command2 == "all":
                 user.histo_PBs_WR()
                 user.histo_runs()
-            if command2 != "all":
-                user.plot_PB_leaderboard(user.PBs[int(command2) -1])
+            if command2 != "all" and command2:
+                user.plot_PB_leaderboard(command2)
         elif command == "systems":
             user.table_systems()
-            command2 = input(f"[0 - {len(user.systems)}, all]")
+            command2 = entry_selecter(user.systems)
             if command2 == "all":
                 user.pie_systems()
-            if command2 != "all":
-                user.histo_system(user.systems[int(command2)-1])
+            if command2 != "all" and command2:
+                user.histo_system(command2)
         elif command == "saves":
             user.table_saves()
-            command2 = input(f"[0 - {len(user.fetch_nosolo_PBs())}, all]")
+            command2 = entry_selecter(user.fetch_nosolo_PBs())
             if command2 == "all":
                 user.histo_saves()
                 user.plot_all_runs()
-            if command2 != "all":
-                user.plot_saves_PB(user.fetch_nosolo_PBs()[int(command2)-1])
+            if command2 != "all" and command2:
+                user.plot_saves_PB(command2)
 
         elif command == "end":
             print("speedrun.com statistic fetcher, program written by Niamek")
