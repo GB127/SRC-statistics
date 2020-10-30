@@ -319,8 +319,7 @@ class user:
         plot.title(f'{self.username}\n{PB.game}\n{PB.categ}')
 
         plot.plot([run.time.time for run in runs], marker="o", label=f'PB : {PB.time}')
-        # plot.plot([run.time.time for run in runs], label=f'PB : {PB.time}')
-
+        
         plot.axhline(y=PB.WR.time, c="gold", label=f"WR : {PB.WR}")
 
         plot.xlabel("PB #")
