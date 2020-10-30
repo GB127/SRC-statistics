@@ -5,10 +5,14 @@ class run_time:
         self.time = seconds
 
     def __str__(self):
-        self.hours = int(self.time//3600)
+        self.hours = str(int(self.time//3600))
         self.minutes = int(self.time % 3600 // 60)
+        if self.minutes < 10: self.minutes = "0" + str(self.minutes)
         self.seconds = int(self.time % 3600 % 60 % 60)
+        if self.seconds < 10: self.seconds = "0" + str(self.seconds)
         return f'{self.hours}:{self.minutes}:{self.seconds}'
+
+        # I want to keep this for a new display eventually.
         return str(datetime.timedelta(seconds=int(self.time)))
 
     def __lt__(self, other):
