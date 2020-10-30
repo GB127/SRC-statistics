@@ -167,7 +167,7 @@ class user:
         for run in self.PBs:
             if run.number != 1:
                 toreturn.append(run)
-        return toreturn
+        return sorted(toreturn)
 
 
     def fetch_runs_system(self, system, PB=False):
@@ -318,16 +318,14 @@ class user:
 
         plot.title(f'{self.username}\n{PB.game}\n{PB.categ}')
 
-        if len(runs) == 1:
-            plot.plot([run.time.time for run in runs], marker="o", label=f'PB : {PB.time}')
-        else:
-            plot.plot([run.time.time for run in runs], label=f'PB : {PB.time}')
+        plot.plot([run.time.time for run in runs], marker="o", label=f'PB : {PB.time}')
+        # plot.plot([run.time.time for run in runs], label=f'PB : {PB.time}')
 
         plot.axhline(y=PB.WR.time, c="gold", label=f"WR : {PB.WR}")
 
         plot.xlabel("PB #")
         plot.ylabel("Time")
-        plot.yticks(plot.yticks()[0],[datetime.timedelta(seconds=x) for x in plot.yticks()[0]])  # FIXME
+        plot.yticks(plot.yticks()[0],[run_time(x) for x in plot.yticks()[0]])
         plot.legend()
         plot.show()
 
@@ -471,7 +469,6 @@ class user:
     def table_saves(self):
         data = self.fetch_nosolo_PBs()
         self.PBs.sort()
-        solo, solo_time = 0, run_time(0)
         print(f'   |{"game":30}|{"category":20}|###| {"First PB":10}| {"Current PB":10}| {"saved":^10} ({"%":^8})')
         print("-" * 106)
         for no, pb in enumerate(data):
@@ -491,8 +488,8 @@ class user:
         print(f'{"Average :" :>55}|{int(round(count / group, 0)):^3}| {run_time(group_first / group)} | {run_time(group_time / group)}  | -{run_time(group_saved / group)}')
 
         print("-" * 106)
-        print(f'{solo} PBs with only 1 attempt, total time : {solo_time}')
-        print(f'total time : {solo_time + group_time}')
+        # print(f'{solo} PBs with only 1 attempt, total time : {solo_time}')
+        # print(f'total time : {solo_time + group_time}')
 
     def table_saves_combined(self):
         data = self.set_time_progression()
