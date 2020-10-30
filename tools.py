@@ -7,7 +7,7 @@ class run_time:
     def __str__(self):
         self.hours = int(self.time//3600)
         self.minutes = int(self.time % 3600 // 60)
-        self.seconds = int(test.time % 3600 % 60 % 60)
+        self.seconds = int(self.time % 3600 % 60 % 60)
         return f'{self.hours}:{self.minutes}:{self.seconds}'
         return str(datetime.timedelta(seconds=int(self.time)))
 

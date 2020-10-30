@@ -476,7 +476,7 @@ class user:
                 solo_time += pb.time
         print("-" * 106)
         print(f'{"Total :" :>55}|{count:^3}| {group_first}  | {group_time}| -{group_saved}  ({percent(group_first, group_time, delta=True)} %)')
-        print(f'{"Average :" :>55}|{count / group:^3}| {run_time(group_time / group)}  | -{run_time(group_saved / group)}')
+        print(f'{"Average :" :>55}|{int(round(count / group, 0)):^3}| {run_time(group_first / group)} | {run_time(group_time / group)}  | -{run_time(group_saved / group)}')
 
         print("-" * 106)
         print(f'{solo} PBs with only 1 attempt, total time : {solo_time}')
@@ -523,8 +523,8 @@ if __name__ == "__main__":
     # test = user("deadephant")
     # test = user("zfg")
     # test = user("lackattack24")
-    test = user("niamek")
+    # test = user("niamek")
     # test = user("baffan")
-    # test = user("iateyourpie")
+    test = user("iateyourpie")
     # test = user("darbian")
-    test.table_PBs()
+    test.table_saves()
