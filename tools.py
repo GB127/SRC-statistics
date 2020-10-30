@@ -3,7 +3,12 @@ class run_time:
 
     def __init__(self, seconds):
         self.time = seconds
+
     def __str__(self):
+        self.hours = int(self.time//3600)
+        self.minutes = int(self.time % 3600 // 60)
+        self.seconds = int(test.time % 3600 % 60 % 60)
+        return f'{self.hours}:{self.minutes}:{self.seconds}'
         return str(datetime.timedelta(seconds=int(self.time)))
 
     def __lt__(self, other):
@@ -39,7 +44,12 @@ class run_time:
             return run_time(self.time + other)
     __radd__ = __add__
 
+
+
 def percent(cent, new, delta=False):
     if delta:
         return round(100 - 100 * new/cent, 2)
     return round(100 * new/cent, 2)
+
+test = run_time(30238)
+print(test)
