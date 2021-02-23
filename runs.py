@@ -8,8 +8,10 @@ class Runs:
             self.data.append(Run(run))
     def __len__(self):
         return len(self.data)
-    def __sum__(self):
-        return sum(self.data)
+    def total_time(self):
+        return sum([x.time for x in self.data])
+    def mean_time(self):
+        return run_time(self.total_time() / self.__len__())
     def __getitem__(self, argument):
         return self.data[argument]
     def __iter__(self):
@@ -76,6 +78,7 @@ class Run:
                     f'{self.category[:20]:20}',
                     f'{self.time}']
         return " | ".join(tempo)
+
 
 class PB(Run):
     def __init__(self, data):

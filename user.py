@@ -22,16 +22,30 @@ class user:
             print(run)
 
     def table_Runs(self):
-        tempo = [
-            f'{"System":^7}',
-            f'{"Game":40}',
-            f'{"Category":20}',
-            f'{"Time"}']
-        print( " | ".join(tempo))
-        print("-" * ((len(" | ".join(tempo)) + 3)))
-        for run in self.Runs:
-            print(run)
-        print("-" * ((len(" | ".join(tempo)) + 3)))
+        def entete():
+            tempo = [f'{"#":^3}',
+                f'{"System":^7}',
+                f'{"Game":40}',
+                f'{"Category":20}',
+                f'{"Time"}']
+            print( " | ".join(tempo))
+            print("-" * ((len(" | ".join(tempo)) + 3)))
+
+        def pied():
+            tempo = [f'{len(self.Runs):^3}',
+                f'{"Total":>73}',
+                f'{self.Runs.total_time()}']
+            print("-" * ((len(" | ".join(tempo)) + 3)))
+            print( " | ".join(tempo))
+            tempo = [
+                f'{"Mean":>79}',
+                f'{self.Runs.mean_time()}']
+            print( " | ".join(tempo))
+
+        entete()
+        for no, run in enumerate(self.Runs):
+            print(f'{no+1:^3} | {run}')
+        pied()
 
     def table_PBs(self):
         for pb in self.PBs:
