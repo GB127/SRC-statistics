@@ -38,9 +38,14 @@ class Run:
 
         try:
             self.game = Run.games[data["game"]]
+            self.system = Run.systems[data["system"]["platform"]]
         except KeyError:
             Run.games[data["game"]] = get_game(data["game"])
             self.game = Run.games[data["game"]]
+            Run.systems[data["system"]["platform"]] = get_system(data["system"]["platform"])
+            self.system = Run.systems[data["system"]["platform"]]
+
+
 
         try:
             self.category = Run.categories[data["category"]]
@@ -48,11 +53,6 @@ class Run:
             Run.categories[data["category"]] = get_category(data["category"])
             self.category = Run.categories[data["category"]]
 
-        try:
-            self.system = Run.systems[data["system"]["platform"]]
-        except KeyError:
-            Run.systems[data["system"]["platform"]] = get_system(data["system"]["platform"])
-            self.system = Run.systems[data["system"]["platform"]]
 
 
 class PB(Run):
