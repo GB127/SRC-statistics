@@ -17,6 +17,11 @@ class user:
         self.PBs = PBs(get_PBs(self.ID))
         self.Runs = Runs(get_runs(self.ID))
         print("user initialized!")
+    def debug(self):
+        for run in self.PBs:
+            print(run)
 
 if __name__ == "__main__":
     test = user("niamek")
+    print(test.PBs[2])
+    test.debug()

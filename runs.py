@@ -6,13 +6,23 @@ class Runs:
         self.data = []
         for run in data:
             self.data.append(Run(run))
+    def __len__(self):
+        return len(self.data)
+    def __sum__(self):
+        return sum(self.data)
+    def __getitem__(self, argument):
+        return self.data[argument]
+    def __iter__(self):
+        return iter(self.data)
 
 
-class PBs:
+class PBs(Runs):
     def __init__(self, data):
         self.data = []
         for pb in data:
             self.data.append(PB(pb))
+
+    
 
 class Run:
     games = {}
@@ -37,7 +47,6 @@ class Run:
         "nzelkr6q" : "PS4",
         }
 
-
     def __init__(self, data):
         self.time = run_time(data["times"]["primary_t"])
 
@@ -56,8 +65,8 @@ class Run:
             Run.categories[data["category"]] = get_category(data["category"])
             self.category = Run.categories[data["category"]]
 
-
-
+    def __str__(self):
+        return f'{self.game}{self.system}{self.category}{self.time}'
 class PB(Run):
     def __init__(self, data):
         self.place = data["place"]
