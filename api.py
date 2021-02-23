@@ -76,50 +76,18 @@ def get_userID(username):
     rep = requester(f"/users/{username}")
     return rep["data"]["id"]
 
-games = {}  # Used by get_game(ID) to reduce requests.
 def get_game(ID):
-    """Fetch the full name of the game.
-
-        Args:
-            ID (string): ID of the game, or acronym.
-                If used elsewhere than this script, you can use an acronym instead
-                of ID. But everywhere in this script, it uses ID, as the API gives
-                you the ID of the games instead of the full name in the runs datas.
-
-        Note : It uses the variable games to return data in order to reduce requests quantity.
-        if it's a new game, it will do a request and update games accordingly so that future requests
-        won't do a new request.
-
-        Returns (str): Full name of the game
+    """Fetch the full name of the game with an ID or acronym(str).
         """
-    # ID or acronym
-    try:
-        return games[ID]
-    except KeyError:
-        rep = requester(f"/games/{ID}")
-        games[ID] = rep["data"]["names"]["international"]
-    return games[ID]
+    rep = requester(f"/games/{ID}")
+    return rep["data"]["names"]["international"]
 
-categories = {}  # Used by get_category(ID) to reduce requests.
 def get_category(ID):
-    """Fetch the full name of the category.
-
-        Args:
-            ID (string): ID of the category. Everywhere in this script, it uses ID, as the API gives
-                you the ID of the games instead of the full name in the runs datas.
-
-        Note : It uses the variable categories to return data in order to reduce requests quantity.
-        if it's a new category, it will do a request and update categories accordingly so that future requests
-        won't do a new request.
-
+    """Fetch the full name of the category with an ID.
         Returns (str): Full name of the category
         """
-    try:
-        return categories[ID]
-    except KeyError:
-        rep = requester(f'/categories/{ID}')
-        categories[ID] = rep["data"]["name"]
-    return categories[ID]
+    rep = requester(f'/categories/{ID}')
+    return rep["data"]["name"]
 
 def get_WR(gameID, categID, vari):
     """[summary]
@@ -264,44 +232,14 @@ def get_newsystem(newsystem):
             return
     for system in rep["data"]:
         print(system["name"])
-systems = {  # It's the approach I use for using acronyms, as requesting a system will give you the full name.
-    None : "PC",
-    "n5683oev" : "GB",
-    "gde3g9k1" : "GBC",
-    "3167d6q2" : "GBA",
-    "w89rwelk" : "N64",
-    "jm95z9ol" : "NES",
-    "3167jd6q" : "SGB",
-    "83exk6l5" : "SNES",
-    "4p9z06rn" : "GC",
-    "mr6k0ezw" : "S.GEN",
-    "nzelreqp" : "WII VC",
-    "3167jd6q" : "SGB",
-    "n5e147e2" : "SGB2",
-    "wxeod9rn" : "PS",
-    "n5e17e27" : "PS2",
-    "mx6pwe3g" : "PS3",
-    "nzelkr6q" : "PS4",
-    }
+
 def get_system(ID):
-    """Return the system linked to the ID. If already defined, use a acornym. Else,
-        return the full name.
+    """Return the system.
+        Returns: (str) full name of the system.
+        """
+    rep = requester(f"/platforms/{ID}")
+    return rep["data"]["name"]
 
-        Args:
-            ID (str): ID of the system.
-
-        Returns: (str) Acronym of the system, or full name of the system.
-
-        Note : it uses the variable systems defined in the code in order to reduce
-        amount of requests. It doesn't update while running the code though: it needs to be updated manually
-        before running the code.
-    """
-    try:
-        return systems[ID]
-    except KeyError:
-        rep = requester(f"/platforms/{ID}")
-        systems[ID] = rep["data"]["name"]
-    return systems[ID]
 
 
 def get_runs(ID):
