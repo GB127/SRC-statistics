@@ -1,7 +1,4 @@
-import numpy
-import matplotlib.pyplot as plot
-
-from api import *
+from api import get_userID, get_PBs
 from tools import run_time, percent
 from runs import PBs
 
