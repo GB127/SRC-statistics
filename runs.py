@@ -21,4 +21,4 @@ class PB:
         self.category = get_category(data_1["category"])
 
     def __str__(self):
-        return f'{self.game}{self.category}{self.time}'
+        return f'{self.game}{self.category}{self.time}{self.place}'
