@@ -9,16 +9,18 @@ class PBs:
         for pb in self.data:
             print(pb)
 
-class PB:
+class Run:
+    games = {}
     def __init__(self, data):
-        self.data = data
-        self.place = self.data["place"]
-
-        data_1 = self.data["run"]
-        self.time = run_time(data_1["times"]["primary_t"])
+        self.time = run_time(data["times"]["primary_t"])
         
-        self.game = get_game(data_1["game"])
-        self.category = get_category(data_1["category"])
+        self.game = get_game(data["game"])
+        self.category = get_category(data["category"])
+
+class PB(Run):
+    def __init__(self, data):
+        self.place = data["place"]
+        super().__init__(data["run"])
 
     def __str__(self):
         return f'{self.game}{self.category}{self.time}{self.place}'
