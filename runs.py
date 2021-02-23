@@ -1,13 +1,18 @@
 from tools import run_time
 from api import get_game, get_category, get_system
 
+class Runs:
+    def __init__(self,data):
+        self.data = []
+        for run in data:
+            self.data.append(Run(run))
+
+
 class PBs:
     def __init__(self, data):
         self.data = []
         for pb in data:
             self.data.append(PB(pb))
-        for pb in self.data:
-            print(pb)
 
 class Run:
     games = {}
@@ -44,8 +49,6 @@ class Run:
             self.game = Run.games[data["game"]]
             Run.systems[data["system"]["platform"]] = get_system(data["system"]["platform"])
             self.system = Run.systems[data["system"]["platform"]]
-
-
 
         try:
             self.category = Run.categories[data["category"]]

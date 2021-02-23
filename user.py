@@ -1,6 +1,6 @@
-from api import get_userID, get_PBs
+from api import get_userID, get_PBs, get_runs
 from tools import run_time, percent
-from runs import PBs
+from runs import PBs, Runs
 
 
 class user:
@@ -15,7 +15,7 @@ class user:
         self.ID = get_userID(self.username)
 
         self.PBs = PBs(get_PBs(self.ID))
-
+        self.Runs = Runs(get_runs(self.ID))
         print("user initialized!")
 
 if __name__ == "__main__":
