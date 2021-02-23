@@ -3,7 +3,7 @@ import matplotlib.pyplot as plot
 
 from api import *
 from tools import run_time, percent
-from runs import Run, PB
+from runs import PBs
 
 
 class user:
@@ -16,6 +16,8 @@ class user:
         """
         self.username = username
         self.ID = get_userID(self.username)
+
+        self.PBs = PBs(get_PBs(self.ID))
 
         print("user initialized!")
 
