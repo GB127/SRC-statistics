@@ -22,8 +22,16 @@ class user:
             print(run)
 
     def table_Runs(self):
+        tempo = [
+            f'{"System":^7}',
+            f'{"Game":40}',
+            f'{"Category":20}',
+            f'{"Time"}']
+        print( " | ".join(tempo))
+        print("-" * ((len(" | ".join(tempo)) + 3)))
         for run in self.Runs:
             print(run)
+        print("-" * ((len(" | ".join(tempo)) + 3)))
 
     def table_PBs(self):
         for pb in self.PBs:
