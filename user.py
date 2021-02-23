@@ -47,10 +47,34 @@ class user:
             print(f'{no+1:^3} | {run}')
         pied()
 
+
     def table_PBs(self):
-        for pb in self.PBs:
-            print(pb)
+        def entete():
+            tempo = [f'{"#":^3}',
+                f'{"System":^7}',
+                f'{"Game":40}',
+                f'{"Category":20}',
+                f'{"Time"}']
+            print( " | ".join(tempo))
+            print("-" * ((len(" | ".join(tempo)) + 3)))
+
+        def pied():
+            tempo = [f'{len(self.PBs):^3}',
+                f'{"Total":>73}',
+                f'{self.PBs.total_time()}']
+            print("-" * ((len(" | ".join(tempo)) + 3)))
+            print( " | ".join(tempo))
+            tempo = [
+                f'{"Mean":>79}',
+                f'{self.PBs.mean_time()}']
+            print( " | ".join(tempo))
+
+        entete()
+        for no, run in enumerate(self.PBs):
+            print(f'{no+1:^3} | {run}')
+        pied()
+
 
 if __name__ == "__main__":
     test = user("niamek")
-    test.table_Runs()
+    test.table_PBs()

@@ -86,4 +86,9 @@ class PB(Run):
         super().__init__(data["run"])
 
     def __str__(self):
-        return f'{self.game}{self.system}{self.category}{self.time}{self.place}'
+        tempo = [
+                    f'{self.system[:7]:^7}',
+                    f'{self.game[:40]:40}',
+                    f'{self.category[:20]:20}',
+                    f'{self.time}']
+        return " | ".join(tempo)
