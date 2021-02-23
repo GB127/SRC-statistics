@@ -21,7 +21,14 @@ class user:
         for run in self.PBs:
             print(run)
 
+    def table_Runs(self):
+        for run in self.Runs:
+            print(run)
+
+    def table_PBs(self):
+        for pb in self.PBs:
+            print(pb)
+
 if __name__ == "__main__":
     test = user("niamek")
-    print(test.PBs[2])
-    test.debug()
+    test.table_Runs()

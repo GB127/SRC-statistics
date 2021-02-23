@@ -52,12 +52,16 @@ class Run:
 
         try:
             self.game = Run.games[data["game"]]
-            self.system = Run.systems[data["system"]["platform"]]
         except KeyError:
             Run.games[data["game"]] = get_game(data["game"])
             self.game = Run.games[data["game"]]
+
+        try:
+            self.system = Run.systems[data["system"]["platform"]]
+        except KeyError:
             Run.systems[data["system"]["platform"]] = get_system(data["system"]["platform"])
             self.system = Run.systems[data["system"]["platform"]]
+
 
         try:
             self.category = Run.categories[data["category"]]
@@ -66,7 +70,8 @@ class Run:
             self.category = Run.categories[data["category"]]
 
     def __str__(self):
-        return f'{self.game}{self.system}{self.category}{self.time}'
+        return f'| {self.system[:7]:^7} | {self.game[:40]:40} | {self.category[:20]:20} | {self.time}'
+
 class PB(Run):
     def __init__(self, data):
         self.place = data["place"]
