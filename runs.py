@@ -70,7 +70,12 @@ class Run:
             self.category = Run.categories[data["category"]]
 
     def __str__(self):
-        return f'| {self.system[:7]:^7} | {self.game[:40]:40} | {self.category[:20]:20} | {self.time}'
+        tempo = [
+                    f'{self.system[:7]:^7}',
+                    f'{self.game[:40]:40}',
+                    f'{self.category[:20]:20}',
+                    f'{self.time}']
+        return " | ".join(tempo)
 
 class PB(Run):
     def __init__(self, data):
