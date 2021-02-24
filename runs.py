@@ -1,5 +1,5 @@
 from tools import run_time
-from api import get_game, get_category, get_system, get_variable, get_WR
+from api import get_game, get_category, get_system, get_variable, get_leaderboard
 
 class Runs:
     def __init__(self,data):
@@ -52,6 +52,7 @@ class Run:
 
     def __init__(self, data):
         self.WR = None  # Will be updated after PBs during user initialisation.
+        self.leaderboard = None
 
         self.IDs = [data["game"], data["category"], {}]
         self.time = run_time(data["times"]["primary_t"])
@@ -72,18 +73,24 @@ class Run:
             Run.categories[data["category"]] = get_category(data["category"])
             self.category = Run.categories[data["category"]]
 
-        self.categ2 = {}
+        self.subcateg = []
         for value, item in data["values"].items():
             tempo = get_variable(value)
             if tempo["is-subcategory"]:
-                self.subcateg = tempo["values"]["values"][item]["label"]
+                self.subcateg.append(tempo["values"]["values"][item]["label"])
                 self.IDs[2][value] = item
+
+
+    def full_categ(self):
+        if self.subcateg:
+            return f'{self.category} ({",".join(self.subcateg)})'
+        return f'{self.category}'
 
     def __str__(self):
         tempo = [
                     f'{self.system[:7]:^7}',
                     f'{self.game[:40]:40}',
-                    f'{self.category[:20]:20}',
+                    f'{self.full_categ()[:20]:20}',
                     f'{self.time}']
         return " | ".join(tempo)
 
@@ -92,11 +99,14 @@ class PB(Run):
     def __init__(self, data):
         self.place = data["place"]
         super().__init__(data["run"])
+        
+        self.leaderboard = get_leaderboard(self.IDs)  # NOTE : In the future I will create a class leaderboards so I can do fancy stuffs with leaderboards.
+        self.WR = run_time(self.leaderboard[0][1])
 
     def __str__(self):
         tempo = [
                     f'{self.system[:7]:^7}',
                     f'{self.game[:40]:40}',
-                    f'{self.category[:20]:20}',
+                    f'{self.full_categ()[:20]:20}',
                     f'{self.time}']
         return " | ".join(tempo)

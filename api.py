@@ -4,57 +4,6 @@ import time
 
 URL = "https://www.speedrun.com/api/v1"
 
-
-def get_WR(gameID, categID, vari):
-    """
-    Returns:
-        [type]: [description]
-    """
-    varistr = ""
-    if vari != {}:
-        tempo = []
-        for key in vari:
-            if get_variable(key)["is-subcategory"] is True: tempo.append(f"var-{key}={vari[key]}")
-        varistr = "&".join(tempo)
-        if varistr != "": varistr = "?" + varistr
-    try:
-        leaderboard[(gameID, categID, varistr)]
-    except KeyError:
-        get_leaderboard(gameID, categID, vari)
-    return leaderboard[(gameID, categID, varistr)][0][1]
-
-
-
-def get_len_leaderboard(gameID, categID, vari):
-    """[summary]
-
-    Args:
-        gameID ([type]): [description]
-        categID ([type]): [description]
-        vari ([type]): [description]
-
-    Returns:
-        [type]: [description]
-    """
-    # vari is a dicto!
-    varistr = ""
-    if vari != {}:
-        tempo = []
-        for key in vari:
-            tempo.append(f"var-{key}={vari[key]}")
-        varistr = "&".join(tempo)
-        if varistr != "": varistr = "?" + varistr
-    try:
-        return len(leaderboard[(gameID, categID, varistr)])
-    except KeyError:
-        ranking = []
-        rep = requester(f"/leaderboards/{gameID}/category/{categID}" + varistr)
-        for run in rep["data"]["runs"]:
-            ranking.append((int(run["place"]), isodate.parse_duration(run["run"]["times"]["primary"]).total_seconds()))
-        leaderboard[(gameID, categID, varistr)] = ranking
-    return len(leaderboard[(gameID, categID, varistr)])
-
-
 def get_leaderboard(IDs):
 #def get_leaderboard(gameID, categID, vari):
     # TODO: Doublons à éliminer quand possible!
@@ -70,7 +19,7 @@ def get_leaderboard(IDs):
     # First, get all the data.
     rep = requester(f"/leaderboards/{IDs[0]}/category/{IDs[1]}" + varistr)
 
-    # Now, we only keep the time info.
+    # Now, we only keep the rank - time infos.
     ranking = []
     for run in rep["data"]["runs"]:
         ranking.append((int(run["place"]),run["run"]["times"]["primary_t"]))
