@@ -1,6 +1,5 @@
 import requests
 import datetime
-import isodate
 import time
 
 URL = "https://www.speedrun.com/api/v1"
@@ -26,7 +25,6 @@ def get_WR(gameID, categID, vari):
 
 
 
-leaderboard = {}
 def get_len_leaderboard(gameID, categID, vari):
     """[summary]
 
@@ -56,34 +54,27 @@ def get_len_leaderboard(gameID, categID, vari):
         leaderboard[(gameID, categID, varistr)] = ranking
     return len(leaderboard[(gameID, categID, varistr)])
 
-def get_leaderboard(gameID, categID, vari):
+
+def get_leaderboard(IDs):
+#def get_leaderboard(gameID, categID, vari):
     # TODO: Doublons à éliminer quand possible!
-    """[summary]
 
-    Args:
-        gameID ([type]): [description]
-        categID ([type]): [description]
-        vari ([type]): [description]
-
-    Returns:
-        [type]: [description]
-    """
     varistr = ""
-    if vari != {}:
+    if IDs[2] != {}:
         tempo = []
-        for key in vari:
-            tempo.append(f"var-{key}={vari[key]}")
+        for key in IDs[2]:
+            tempo.append(f"var-{key}={IDs[2][key]}")
         varistr = "&".join(tempo)
         if varistr != "": varistr = "?" + varistr
-    try:
-        return leaderboard[(gameID, categID, varistr)]
-    except KeyError:
-        ranking = []
-        rep = requester(f"/leaderboards/{gameID}/category/{categID}" + varistr)
-        for run in rep["data"]["runs"]:
-            ranking.append((int(run["place"]), isodate.parse_duration(run["run"]["times"]["primary"]).total_seconds()))
-        leaderboard[(gameID, categID, varistr)] = ranking
-    return leaderboard[(gameID, categID, varistr)]
+
+    # First, get all the data.
+    rep = requester(f"/leaderboards/{IDs[0]}/category/{IDs[1]}" + varistr)
+
+    # Now, we only keep the time info.
+    ranking = []
+    for run in rep["data"]["runs"]:
+        ranking.append((int(run["place"]),run["run"]["times"]["primary_t"]))
+    return ranking
 
 def get_leaderboards(gameID, categID, vari):
     # TODO: Enlever les temps sans date! (Ils sont dans toutes les années)
