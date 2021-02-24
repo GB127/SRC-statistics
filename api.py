@@ -5,7 +5,6 @@ import time
 URL = "https://www.speedrun.com/api/v1"
 
 def get_leaderboard(IDs):
-#def get_leaderboard(gameID, categID, vari):
     # TODO: Doublons à éliminer quand possible!
 
     varistr = ""

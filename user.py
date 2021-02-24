@@ -20,7 +20,7 @@ class user:
 
         print("user initialized!")
 
-    def __str__(self):
+    def __str__(self):  # Not sure I'll keep this. We'll see.
         return f'{self.username} : {self.Runs.total_time().days()} ({len(self.Runs)} runs) ; {self.PBs.total_time().days()} ({len(self.PBs)} PBs)'
 
     def table_data(self, data):
@@ -30,11 +30,6 @@ class user:
         def pied():
             print("-" * ((len(" | ".join(data.pied())) + 3)))
             print( " | ".join(data.pied()))
-            tempo = [
-                f'{"Mean":>59}',
-                f'{data.mean_time():>9}',
-                f'+ {data.mean_deltaWR():<9}']
-            print( " | ".join(tempo))
         entete()
         for no, entry in enumerate(data):
             print(f'{no+1:^3} | {entry}')

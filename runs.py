@@ -3,7 +3,7 @@ from run import Run, PB
 
 class Runs:
 
-    def __init__(self,data):
+    def __init__(self, data):
 
         self.data = []
         for run in data:
@@ -38,6 +38,11 @@ class Runs:
     def mean_deltaWR(self):
         return run_time(self.total_deltaWR() / self.__len__())
 
+    def pied(self):
+        return [f'{len(self):^3}',
+                f'{"Total":>53}',
+                f'{self.total_time():>9}']
+
 
 class PBs(Runs):
     def __init__(self, data):
@@ -52,8 +57,8 @@ class PBs(Runs):
         return PB.data
 
     def pied(self):
-        return [f'{len(data):^3}',
+        return [f'{len(self):^3}',
                 f'{"Total":>53}',
-                f'{data.total_time():>9}',
-                f'+ {data.total_deltaWR():<9}',
-                f'{data.mean_percWR():7} %']
+                f'{self.total_time():>9}',
+                f'+ {self.total_deltaWR():<9}',
+                f'{self.mean_percWR():7} %']

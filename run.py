@@ -108,5 +108,5 @@ class PB(Run):
 
 
     def __str__(self):
-        return super().__str__() + [f'+ {self.delta_WR():<8}',
-                                    f'{str(self.perc_WR()) + " %":>9}']
+        return super().__str__() + " | " + " | ".join([f'+ {self.delta_WR():<8}',
+                                    f'{str(self.perc_WR()) + " %":>9}'])
