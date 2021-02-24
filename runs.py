@@ -2,7 +2,13 @@ from tools import run_time
 from api import get_game, get_category, get_system, get_variable, get_leaderboard
 
 class Runs:
+
+
+
     def __init__(self,data):
+
+
+
         self.data = []
         for run in data:
             self.data.append(Run(run))
@@ -55,6 +61,16 @@ class Run:
 
 
     def __init__(self, data):
+        def clean_gamename(name):
+            if "The Legend of Zelda" in name:
+                return name[14:]
+            if name == "Ocarina of Time Category Extensions":
+                return "Zelda: Ocarina of Time"
+            if name == "Super Mario 64 Category Extensions":
+                return "Super Mario 64"
+
+            else: return name
+
 
         self.IDs = [data["game"], data["category"], {}]
         self.time = run_time(data["times"]["primary_t"])
@@ -62,7 +78,7 @@ class Run:
         try:
             self.game = Run.games[data["game"]]
         except KeyError:
-            Run.games[data["game"]] = get_game(data["game"])
+            Run.games[data["game"]] = clean_gamename(get_game(data["game"]))
             self.game = Run.games[data["game"]]
         try:
             self.system = Run.systems[data["system"]["platform"]]
