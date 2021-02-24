@@ -28,7 +28,7 @@ class user:
         def entete():
             tempo = [f'{"#":^3}',
                 f'{"System":^7}',
-                f'{"Game":30}',
+                f'{"Game":20}',
                 f'{"Category":20}',
                 f'{"Time":^9}',
                 f'{"deltaWR"}']  # NOTE : Put back the delta symbol
@@ -56,7 +56,7 @@ class user:
         def entete():
             tempo = [f'{"#":^3}',
                 f'{"System":^7}',
-                f'{"Game":30}',
+                f'{"Game":20}',
                 f'{"Category":20}',
                 f'{"Time":^9}',
                 f'{"deltaWR"}']  # NOTE : Put back the delta symbol
