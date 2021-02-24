@@ -1,5 +1,5 @@
 from tools import run_time
-from api import get_game, get_category, get_system, get_variable
+from api import get_game, get_category, get_system, get_variable, get_WR
 
 class Runs:
     def __init__(self,data):
@@ -49,33 +49,35 @@ class Run:
         "nzelkr6q" : "PS4",
         }
 
+
     def __init__(self, data):
+        self.WR = None  # Will be updated after PBs during user initialisation.
+
+        self.IDs = [data["game"], data["category"], {}]
         self.time = run_time(data["times"]["primary_t"])
-        self.categ = data["values"]
-        self.categ2 = {}
-        for value, item in self.vari.items():
-            tempo = get_variable(value)
-            if tempo["is-subcategory"]:
-                self.categ2[value] = (item, tempo["values"]["values"][item]["label"])                
 
         try:
             self.game = Run.games[data["game"]]
         except KeyError:
             Run.games[data["game"]] = get_game(data["game"])
             self.game = Run.games[data["game"]]
-
         try:
             self.system = Run.systems[data["system"]["platform"]]
         except KeyError:
             Run.systems[data["system"]["platform"]] = get_system(data["system"]["platform"])
             self.system = Run.systems[data["system"]["platform"]]
-
-
         try:
             self.category = Run.categories[data["category"]]
         except KeyError:
             Run.categories[data["category"]] = get_category(data["category"])
             self.category = Run.categories[data["category"]]
+
+        self.categ2 = {}
+        for value, item in data["values"].items():
+            tempo = get_variable(value)
+            if tempo["is-subcategory"]:
+                self.subcateg = tempo["values"]["values"][item]["label"]
+                self.IDs[2][value] = item
 
     def __str__(self):
         tempo = [
