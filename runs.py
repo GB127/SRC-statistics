@@ -18,6 +18,9 @@ class Runs:
     def __len__(self):
         return len(self.data)
 
+    def header(self):
+        return Run.data
+
 
 
     def total_time(self):
@@ -41,3 +44,12 @@ class PBs(Runs):
             self.data.append(PB(pb))
 
 
+    def header(self):
+        return PB.data
+
+    def pied(self):
+        return [f'{len(data):^3}',
+                f'{"Total":>53}',
+                f'{data.total_time():>9}',
+                f'+ {data.total_deltaWR():<9}',
+                f'{data.mean_percWR():7} %']

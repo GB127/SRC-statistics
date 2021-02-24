@@ -26,22 +26,11 @@ class user:
 
     def table_data(self, data):
         def entete():
-            tempo = [f'{"#":^3}',
-                f'{"System":^7}',
-                f'{"Game":20}',
-                f'{"Category":20}',
-                f'{"Time":^9}',
-                f'{"deltaWR"}']  # NOTE : Put back the delta symbol
-            print( " | ".join(tempo))
-            print("-" * ((len(" | ".join(tempo)) + 3)))
+            print( " | ".join(data.header()))
+            print("-" * ((len(" | ".join(data.header())) + 3)))
         def pied():
-            tempo = [f'{len(data):^3}',
-                f'{"Total":>53}',
-                f'{data.total_time():>9}',
-                f'+ {data.total_deltaWR():<9}',
-                f'{data.mean_percWR():7} %']
-            print("-" * ((len(" | ".join(tempo)) + 3)))
-            print( " | ".join(tempo))
+            print("-" * ((len(" | ".join(data.pied())) + 3)))
+            print( " | ".join(data.pied()))
             tempo = [
                 f'{"Mean":>59}',
                 f'{data.mean_time():>9}',

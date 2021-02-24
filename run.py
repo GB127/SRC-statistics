@@ -2,6 +2,14 @@ from api import get_game, get_category, get_system, get_variable, get_leaderboar
 from tools import run_time
 
 class Run:
+    data = [f'{"#":^3}',
+                f'{"System":^7}',
+                f'{"Game":20}',
+                f'{"Category":20}',
+                f'{"Time":^9}',
+                f'{"deltaWR"}']
+
+
     games = {}
     categories = {}
     systems = {
@@ -23,6 +31,7 @@ class Run:
         "mx6pwe3g" : "PS3",
         "nzelkr6q" : "PS4",
         }
+
 
 
     def __init__(self, data):
@@ -86,6 +95,7 @@ class Run:
         return self.time - self.WR
     def perc_WR(self):
         return round((self.time) / self.WR * 100, 2)
+
 
 
 class PB(Run):
