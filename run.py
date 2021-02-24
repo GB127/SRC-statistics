@@ -66,17 +66,16 @@ class Run:
         self.WR = self.time  # Will be updated after PBs during user initialisation.
         self.leaderboard = [(1,0)]
 
-
-    def full_categ(self):
-        if self.subcateg:
-            return f'{self.category} ({",".join(self.subcateg)})'
-        return f'{self.category}'
-
     def __str__(self):
+        def full_categ():
+            if self.subcateg:
+                return f'{self.category} ({",".join(self.subcateg)})'
+            return f'{self.category}'
+        
         tempo = [
                     f'{self.system[:7]:^7}',
                     f'{self.game[:20]:20}',
-                    f'{self.full_categ()[:20]:20}',
+                    f'{full_categ()[:20]:20}',
                     f'{self.time:>9}',
                     f'+ {self.delta_WR():<8}',
                     f'{str(self.perc_WR()) + " %":>9}']
