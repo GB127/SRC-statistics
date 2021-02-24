@@ -7,11 +7,14 @@ class Runs:
 
     def __init__(self,data):
 
-
-
         self.data = []
         for run in data:
-            self.data.append(Run(run))
+            if run["times"]["primary_t"] < 180:
+                pass  # FIXME : I'm sure there is a way to write something like next or continue
+            else:
+                self.data.append(Run(run))
+
+        
     def __len__(self):
         return len(self.data)
     def total_time(self):
