@@ -24,17 +24,6 @@ def get_WR(gameID, categID, vari):
         get_leaderboard(gameID, categID, vari)
     return leaderboard[(gameID, categID, varistr)][0][1]
 
-def get_variable(variID):
-    """[summary]
-
-        Args:
-            variID ([type]): [description]
-
-        Returns:
-            [type]: [description]
-    """
-    rep = requester(f'/variables/{variID}')
-    return rep["data"]
 
 
 leaderboard = {}
@@ -122,6 +111,15 @@ def get_leaderboards(gameID, categID, vari):
     return rankings
 
 ########### Below this are function that works. No need of improving.
+
+def get_variable(variID):
+    """ Returns json data about the speedrun variable identified by ID.
+        => Notable infos: 
+            "is-subcategory"
+            "values", "values", "label"
+    """
+    rep = requester(f'/variables/{variID}')
+    return rep["data"]
 
 
 def get_newsystem(newsystem):

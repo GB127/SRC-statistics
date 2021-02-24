@@ -1,5 +1,5 @@
 from tools import run_time
-from api import get_game, get_category, get_system
+from api import get_game, get_category, get_system, get_variable
 
 class Runs:
     def __init__(self,data):
@@ -51,6 +51,12 @@ class Run:
 
     def __init__(self, data):
         self.time = run_time(data["times"]["primary_t"])
+        self.categ = data["values"]
+        self.categ2 = {}
+        for value, item in self.vari.items():
+            tempo = get_variable(value)
+            if tempo["is-subcategory"]:
+                self.categ2[value] = (item, tempo["values"]["values"][item]["label"])                
 
         try:
             self.game = Run.games[data["game"]]
