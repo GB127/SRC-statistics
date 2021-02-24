@@ -72,8 +72,6 @@ class Run:
                 self.subcateg.append(tempo["values"]["values"][item]["label"])
                 self.IDs[2][value] = item
 
-        self.WR = self.time  # Will be updated after PBs during user initialisation.
-        self.leaderboard = [(1,0)]
 
     def __str__(self):
         def full_categ():
@@ -85,9 +83,7 @@ class Run:
                     f'{self.system[:7]:^7}',
                     f'{self.game[:20]:20}',
                     f'{full_categ()[:20]:20}',
-                    f'{self.time:>9}',
-                    f'+ {self.delta_WR():<8}',
-                    f'{str(self.perc_WR()) + " %":>9}']
+                    f'{self.time:>9}']
         return " | ".join(tempo)
 
 
@@ -103,9 +99,14 @@ class PB(Run):
         self.place = data["place"]
         super().__init__(data["run"])
         
-        self.leaderboard = get_leaderboard(self.IDs)  # NOTE : In the future I will create a class leaderboards so I can do fancy stuffs with leaderboards.
-        self.WR = run_time(self.leaderboard[0][1])
+        try:  # Don't understand why this doesn't work sometimes, so I have to just keep them out of my datas
+            self.leaderboard = get_leaderboard(self.IDs)  # NOTE : In the future I will create a class leaderboards so I can do fancy stuffs with leaderboards.
+            self.WR = run_time(self.leaderboard[0][1])
+        except BaseException:
+            self.leaderboard = False
+            
 
 
     def __str__(self):
-        return super().__str__()
+        return super().__str__() + [f'+ {self.delta_WR():<8}',
+                                    f'{str(self.perc_WR()) + " %":>9}']

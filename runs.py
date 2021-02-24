@@ -11,6 +11,8 @@ class Runs:
                 pass  # FIXME : I'm sure there is a way to write something like next or continue
             else:
                 self.data.append(Run(run))
+
+
     def __getitem__(self, argument):
         return self.data[argument]
     def __iter__(self):
@@ -41,7 +43,9 @@ class PBs(Runs):
     def __init__(self, data):
         self.data = []
         for pb in data:
-            self.data.append(PB(pb))
+            tempo = PB(pb)
+            if tempo.leaderboard:
+                self.data.append(PB(pb))
 
 
     def header(self):

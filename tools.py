@@ -12,7 +12,7 @@ class run_time:
         if self.seconds < 10: self.seconds = "0" + str(self.seconds)
         return f'{self.hours}:{self.minutes}:{self.seconds}'
 
-        # I want to keep this for a new display eventually.
+    def days(self):
         return str(datetime.timedelta(seconds=int(self.time)))
 
     def __lt__(self, other):

@@ -11,18 +11,17 @@ class user:
             Args:
                 username (str) : Username on speedrun.com
         """
-        self.username = username
+        self.username = username.capitalize()
+        print(f"Fectching {self.username}'s data...")
         self.ID = get_userID(self.username)
 
         self.PBs = PBs(get_PBs(self.ID))
         self.Runs = Runs(get_runs(self.ID))
 
-        for pb in self.PBs:
-            for run in self.Runs:
-                if pb.IDs == run.IDs:
-                    run.WR = pb.WR
-                    run.leaderboard = pb.leaderboard
         print("user initialized!")
+
+    def __str__(self):
+        return f'{self.username} : {self.Runs.total_time().days()} ({len(self.Runs)} runs) ; {self.PBs.total_time().days()} ({len(self.PBs)} PBs)'
 
     def table_data(self, data):
         def entete():
