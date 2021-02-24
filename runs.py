@@ -11,18 +11,23 @@ class Runs:
                 pass  # FIXME : I'm sure there is a way to write something like next or continue
             else:
                 self.data.append(Run(run))
-
-        
+    def __getitem__(self, argument):
+        return self.data[argument]
+    def __iter__(self):
+        return iter(self.data)        
     def __len__(self):
         return len(self.data)
+
+
+
     def total_time(self):
         return sum([x.time for x in self.data])
     def mean_time(self):
         return run_time(self.total_time() / self.__len__())
-    def __getitem__(self, argument):
-        return self.data[argument]
-    def __iter__(self):
-        return iter(self.data)
+    def total_WR(self):
+        return sum([x.WR for x in self.data])
+    def mean_percWR(self):
+        return round(self.total_time() / self.total_WR() * 100, 2)
     def total_deltaWR(self):
         return sum([x.delta_WR() for x in self.data])
     def mean_deltaWR(self):

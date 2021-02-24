@@ -35,10 +35,11 @@ class user:
             print( " | ".join(tempo))
             print("-" * ((len(" | ".join(tempo)) + 3)))
         def pied():
-            tempo = [f'{len(self.Runs):^3}',
+            tempo = [f'{len(data):^3}',
                 f'{"Total":>53}',
                 f'{data.total_time():>9}',
-                f'+ {data.total_deltaWR():<9}']
+                f'+ {data.total_deltaWR():<9}',
+                f'{data.mean_percWR():7} %']
             print("-" * ((len(" | ".join(tempo)) + 3)))
             print( " | ".join(tempo))
             tempo = [
