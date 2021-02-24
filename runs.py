@@ -16,6 +16,10 @@ class Runs:
         return self.data[argument]
     def __iter__(self):
         return iter(self.data)
+    def total_deltaWR(self):
+        return sum([x.delta_WR() for x in self.data])
+    def mean_deltaWR(self):
+        return run_time(self.total_deltaWR() / self.__len__())
 
 
 class PBs(Runs):
@@ -51,8 +55,6 @@ class Run:
 
 
     def __init__(self, data):
-        self.WR = None  # Will be updated after PBs during user initialisation.
-        self.leaderboard = None
 
         self.IDs = [data["game"], data["category"], {}]
         self.time = run_time(data["times"]["primary_t"])
@@ -80,6 +82,9 @@ class Run:
                 self.subcateg.append(tempo["values"]["values"][item]["label"])
                 self.IDs[2][value] = item
 
+        self.WR = self.time  # Will be updated after PBs during user initialisation.
+        self.leaderboard = [(1,0)]
+
 
     def full_categ(self):
         if self.subcateg:
@@ -89,10 +94,15 @@ class Run:
     def __str__(self):
         tempo = [
                     f'{self.system[:7]:^7}',
-                    f'{self.game[:40]:40}',
+                    f'{self.game[:30]:30}',
                     f'{self.full_categ()[:20]:20}',
-                    f'{self.time}']
+                    f'{self.time:>9}',
+                    f'+ {self.delta_WR():<9}']
         return " | ".join(tempo)
+
+
+    def delta_WR(self):
+        return self.time - self.WR
 
 
 class PB(Run):
@@ -103,10 +113,12 @@ class PB(Run):
         self.leaderboard = get_leaderboard(self.IDs)  # NOTE : In the future I will create a class leaderboards so I can do fancy stuffs with leaderboards.
         self.WR = run_time(self.leaderboard[0][1])
 
+
     def __str__(self):
         tempo = [
                     f'{self.system[:7]:^7}',
-                    f'{self.game[:40]:40}',
+                    f'{self.game[:30]:30}',
                     f'{self.full_categ()[:20]:20}',
-                    f'{self.time}']
+                    f'{self.time:>9}',
+                    f'+ {self.delta_WR():<9}']
         return " | ".join(tempo)
