@@ -36,13 +36,13 @@ class user:
             print("-" * ((len(" | ".join(tempo)) + 3)))
         def pied():
             tempo = [f'{len(self.Runs):^3}',
-                f'{"Total":>63}',
+                f'{"Total":>53}',
                 f'{self.Runs.total_time():>9}',
                 f'+ {self.Runs.total_deltaWR():<9}']
             print("-" * ((len(" | ".join(tempo)) + 3)))
             print( " | ".join(tempo))
             tempo = [
-                f'{"Mean":>69}',
+                f'{"Mean":>59}',
                 f'{self.Runs.mean_time():>9}',
                 f'+ {self.Runs.mean_deltaWR():<9}']
             print( " | ".join(tempo))
@@ -64,13 +64,13 @@ class user:
             print("-" * ((len(" | ".join(tempo)) + 3)))
         def pied():
             tempo = [f'{len(self.PBs):^3}',
-                f'{"Total":>63}',
+                f'{"Total":>53}',
                 f'{self.PBs.total_time():>9}',
                 f'+ {self.PBs.total_deltaWR():<9}']
             print("-" * ((len(" | ".join(tempo)) + 3)))
             print( " | ".join(tempo))
             tempo = [
-                f'{"Mean":>69}',
+                f'{"Mean":>50}',
                 f'{self.PBs.mean_time():>9}',
                 f'+ {self.PBs.mean_deltaWR():<9}']
             print( " | ".join(tempo))

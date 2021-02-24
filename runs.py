@@ -37,7 +37,7 @@ class PBs(Runs):
         for pb in data:
             self.data.append(PB(pb))
 
-    
+
 
 class Run:
     games = {}
@@ -113,15 +113,19 @@ class Run:
     def __str__(self):
         tempo = [
                     f'{self.system[:7]:^7}',
-                    f'{self.game[:30]:30}',
+                    f'{self.game[:20]:20}',
                     f'{self.full_categ()[:20]:20}',
                     f'{self.time:>9}',
-                    f'+ {self.delta_WR():<9}']
+                    f'+ {self.delta_WR():<8}',
+                    f'{str(self.perc_WR()) + " %":>9}']
         return " | ".join(tempo)
 
 
     def delta_WR(self):
         return self.time - self.WR
+    def perc_WR(self):
+        return round((self.time) / self.WR * 100, 2)
+
 
 
 class PB(Run):
@@ -134,10 +138,4 @@ class PB(Run):
 
 
     def __str__(self):
-        tempo = [
-                    f'{self.system[:7]:^7}',
-                    f'{self.game[:30]:30}',
-                    f'{self.full_categ()[:20]:20}',
-                    f'{self.time:>9}',
-                    f'+ {self.delta_WR():<9}']
-        return " | ".join(tempo)
+        return super().__str__()
