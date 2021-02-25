@@ -13,4 +13,5 @@ if __name__ == "__main__":
         if not isinstance(attribute, str):
             commands.append(attribute)
 
-    commands[0]()
+    for one in commands:
+        one()

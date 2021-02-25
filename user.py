@@ -23,19 +23,6 @@ class user:
     def __str__(self):  # Not sure I'll keep this. We'll see.
         return f'{self.username} : {self.Runs.total_time().days()} ({len(self.Runs)} runs) ; {self.PBs.total_time().days()} ({len(self.PBs)} PBs)'
 
-    def table_data(self, data):
-        def entete():
-            print( " | ".join(data.header()))
-            print("-" * ((len(" | ".join(data.header())) + 3)))
-        def pied():
-            print("-" * ((len(" | ".join(data.pied())) + 3)))
-            print( " | ".join(data.pied()))
-        entete()
-        for no, entry in enumerate(data):
-            print(f'{no+1:^3} | {entry}')
-        pied()
-
-
 if __name__ == "__main__":
     test = user("niamek")
     test.table_data(test.PBs)

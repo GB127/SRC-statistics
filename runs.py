@@ -21,18 +21,30 @@ class Runs:
         return len(self.data)
 
     def __call__(self):
-        print("Ceci est un test")
+        self.table()
 
-
-
-
-
-
+    def table(self):
+        def entete():
+            print( " | ".join(self.header()))
+            print("-" * ((len(" | ".join(self.header())) + 3)))
+        def pied():
+            print("-" * ((len(" | ".join(self.pied())) + 3)))
+            print( " | ".join(self.pied()))
+        entete()
+        for no, entry in enumerate(self):
+            print(f'{no+1:^3} | {entry}')
+        pied()
 
 
     def header(self):
-        return Run.data
+        return PB.data
 
+    def pied(self):
+        return [f'{len(self):^3}',
+                f'{"Total":>53}',
+                f'{self.total_time():>9}',
+                f'+ {self.total_deltaWR():<9}',
+                f'{self.mean_percWR():7} %']
 
 
     def total_time(self):
