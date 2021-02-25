@@ -20,6 +20,16 @@ class Runs:
     def __len__(self):
         return len(self.data)
 
+    def __call__(self):
+        print("Ceci est un test")
+
+
+
+
+
+
+
+
     def header(self):
         return Run.data
 
@@ -49,8 +59,11 @@ class PBs(Runs):
         self.data = []
         for pb in data:
             tempo = PB(pb)
-            if tempo.leaderboard:
+            if tempo.leaderboard:  # NOTE : Tempo fix. Some runs can't get a proper leaderboard for some reason.
                 self.data.append(PB(pb))
+
+
+
 
 
     def header(self):
