@@ -24,46 +24,19 @@ class Runs:
         self.table()
 
     def table(self):
-        def entete():
-            print( " | ".join(self.header()))
-            print("-" * ((len(" | ".join(self.header())) + 3)))
-        def pied():
-            print("-" * ((len(" | ".join(self.pied())) + 3)))
-            print( " | ".join(self.pied()))
-        entete()
+
         for no, entry in enumerate(self):
             print(f'{no+1:^3} | {entry}')
-        pied()
-
-
-    def header(self):
-        return PB.data
-
-    def pied(self):
-        return [f'{len(self):^3}',
-                f'{"Total":>53}',
-                f'{self.total_time():>9}',
-                f'+ {self.total_deltaWR():<9}',
-                f'{self.mean_percWR():7} %']
 
 
     def total_time(self):
         return sum([x.time for x in self.data])
+   
+   
     def mean_time(self):
         return run_time(self.total_time() / self.__len__())
-    def total_WR(self):
-        return sum([x.WR for x in self.data])
-    def mean_percWR(self):
-        return round(self.total_time() / self.total_WR() * 100, 2)
-    def total_deltaWR(self):
-        return sum([x.delta_WR() for x in self.data])
-    def mean_deltaWR(self):
-        return run_time(self.total_deltaWR() / self.__len__())
 
-    def pied(self):
-        return [f'{len(self):^3}',
-                f'{"Total":>53}',
-                f'{self.total_time():>9}']
+
 
 
 class PBs(Runs):
@@ -75,15 +48,12 @@ class PBs(Runs):
                 self.data.append(PB(pb))
 
 
+    def total_WR(self):
+        return sum([x.WR for x in self.data])
+    def mean_percWR(self):
+        return round(self.total_time() / self.total_WR() * 100, 2)
+    def total_deltaWR(self):
+        return sum([x.delta_WR() for x in self.data])
+    def mean_deltaWR(self):
+        return run_time(self.total_deltaWR() / self.__len__())
 
-
-
-    def header(self):
-        return PB.data
-
-    def pied(self):
-        return [f'{len(self):^3}',
-                f'{"Total":>53}',
-                f'{self.total_time():>9}',
-                f'+ {self.total_deltaWR():<9}',
-                f'{self.mean_percWR():7} %']
