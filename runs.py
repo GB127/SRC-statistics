@@ -7,9 +7,7 @@ class Runs:
 
         self.data = []
         for run in data:
-            if run["times"]["primary_t"] < 180:
-                pass  # FIXME : I'm sure there is a way to write something like next or continue
-            else:
+            if run["times"]["primary_t"] >= 180:
                 self.data.append(Run(run))
 
 
