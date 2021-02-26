@@ -24,6 +24,13 @@ class Run:
         "nzelkr6q" : "PS4",
         }
 
+    sorter = "game"
+
+    def __lt__(self, other):
+        if self.__dict__[self.sorter] != other.__dict__[self.sorter]:
+            return self.__dict__[self.sorter] < other.__dict__[self.sorter]
+        return self.category < other.category
+
     def __init__(self, data):
         def clean_gamename(name):
             if "The Legend of Zelda" in name:
@@ -78,6 +85,8 @@ class Run:
         return self.time - self.WR
     def perc_WR(self):
         return round((self.time) / self.WR * 100, 2)
+
+
 
 
 
