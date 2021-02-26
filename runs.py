@@ -21,7 +21,7 @@ class Runs:
         return len(self.data)
 
     def __str__(self):
-        return f'{len(self)} runs'
+        return f'{len(self)} runs ({self.total_time().days()})'
 
     def __call__(self):
         while True:
@@ -60,7 +60,7 @@ class PBs(Runs):
                 self.data.append(PB(pb))
 
     def __str__(self):
-        return f'{len(self)} PBs'
+        return f'{len(self)} PBs ({self.total_time().days()})'
 
     def total_WR(self):
         return sum([x.WR for x in self.data])
