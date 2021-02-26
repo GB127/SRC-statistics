@@ -1,20 +1,8 @@
 from user import user
-import os
-clear = lambda: os.system('cls')
+from tools import command_select
+from os import system
 
-
-def command_select(iterable, printer=True):
-    while True:
-        try:
-            commant = input(f"Which option? [1 - {len(iterable)}]")
-            if int(commant) != 0:
-                return iterable[int(commant) - 1]
-            raise BaseException
-        except:
-            if commant != "end":
-                pass
-            else:
-                return "end"
+clear = lambda: system('cls')
 
 if __name__ == "__main__":
     clear()
