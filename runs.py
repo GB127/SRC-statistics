@@ -23,8 +23,12 @@ class Runs:
     def __call__(self):
         self.table()
 
-    def table(self):
 
+    def table(self):
+        types = list(self.data[0].__dict__.keys())
+        types.remove("IDs")
+        header = " | ".join(types)
+        print(header)
         for no, entry in enumerate(self):
             print(f'{no+1:^3} | {entry}')
 

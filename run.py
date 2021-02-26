@@ -2,14 +2,6 @@ from api import get_game, get_category, get_system, get_variable, get_leaderboar
 from tools import run_time
 
 class Run:
-    data = [f'{"#":^3}',
-                f'{"System":^7}',
-                f'{"Game":20}',
-                f'{"Category":20}',
-                f'{"Time":^9}',
-                f'{"deltaWR"}']
-
-
     games = {}
     categories = {}
     systems = {
@@ -32,8 +24,6 @@ class Run:
         "nzelkr6q" : "PS4",
         }
 
-
-
     def __init__(self, data):
         def clean_gamename(name):
             if "The Legend of Zelda" in name:
@@ -44,10 +34,13 @@ class Run:
                 return "Super Mario 64"
 
             else: return name
-
-
         self.IDs = [data["game"], data["category"], {}]
-        self.time = run_time(data["times"]["primary_t"])
+
+        try:
+            self.system = Run.systems[data["system"]["platform"]]
+        except KeyError:
+            Run.systems[data["system"]["platform"]] = get_system(data["system"]["platform"])
+            self.system = Run.systems[data["system"]["platform"]]
 
         try:
             self.game = Run.games[data["game"]]
@@ -55,36 +48,30 @@ class Run:
             Run.games[data["game"]] = clean_gamename(get_game(data["game"]))
             self.game = Run.games[data["game"]]
         try:
-            self.system = Run.systems[data["system"]["platform"]]
-        except KeyError:
-            Run.systems[data["system"]["platform"]] = get_system(data["system"]["platform"])
-            self.system = Run.systems[data["system"]["platform"]]
-        try:
             self.category = Run.categories[data["category"]]
         except KeyError:
             Run.categories[data["category"]] = get_category(data["category"])
             self.category = Run.categories[data["category"]]
 
-        self.subcateg = []
+        subcateg = []
         for value, item in data["values"].items():
             tempo = get_variable(value)
             if tempo["is-subcategory"]:
-                self.subcateg.append(tempo["values"]["values"][item]["label"])
+                subcateg.append(tempo["values"]["values"][item]["label"])
                 self.IDs[2][value] = item
+        if subcateg:
+            self.category = f'{self.category} ({",".join(subcateg)})'
+        
+        self.time = run_time(data["times"]["primary_t"])
 
 
     def __str__(self):
-        def full_categ():
-            if self.subcateg:
-                return f'{self.category} ({",".join(self.subcateg)})'
-            return f'{self.category}'
-        
         tempo = [
-                    f'{self.system[:7]:^7}',
+                    f'{self.system[:6]:^6}',
                     f'{self.game[:20]:20}',
-                    f'{full_categ()[:20]:20}',
+                    f'{self.category[:20]:20}',
                     f'{self.time:>9}']
-        return " | ".join(tempo)
+        return " | ".join([str(x) for x in tempo])
 
 
     def delta_WR(self):
@@ -96,8 +83,8 @@ class Run:
 
 class PB(Run):
     def __init__(self, data):
-        self.place = data["place"]
         super().__init__(data["run"])
+        self.place = data["place"]
         
         try:  # Don't understand why this doesn't work sometimes, so I have to just keep them out of my datas
             self.leaderboard = get_leaderboard(self.IDs)  # NOTE : In the future I will create a class leaderboards so I can do fancy stuffs with leaderboards.
