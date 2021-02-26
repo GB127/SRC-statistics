@@ -1,4 +1,4 @@
-from tools import run_time
+from tools import run_time, command_select
 from run import Run, PB
 
 class Runs:
@@ -20,8 +20,13 @@ class Runs:
     def __len__(self):
         return len(self.data)
 
+    def __str__(self):
+        return f'{len(self)} runs'
+
     def __call__(self):
+        self.data.sort()
         self.table()
+
 
 
     def table(self):
@@ -51,6 +56,8 @@ class PBs(Runs):
             if tempo.leaderboard:  # NOTE : Tempo fix. Some runs can't get a proper leaderboard for some reason.
                 self.data.append(PB(pb))
 
+    def __str__(self):
+        return f'{len(self)} PBs'
 
     def total_WR(self):
         return sum([x.WR for x in self.data])
