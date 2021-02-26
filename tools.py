@@ -1,11 +1,9 @@
-import datetime
+from datetime import timedelta
 from os import system
 
 clear = lambda: system('cls')
 
-
 class run_time:
-
     def __init__(self, seconds):
         self.time = seconds
 
@@ -18,7 +16,7 @@ class run_time:
         return f'{self.hours}:{self.minutes}:{self.seconds}'
 
     def days(self):
-        return str(datetime.timedelta(seconds=int(self.time)))
+        return str(timedelta(seconds=int(self.time)))
 
     def __lt__(self, other):
         return self.time < other.time
@@ -53,7 +51,14 @@ class run_time:
             return run_time(self.time + other)
     __radd__ = __add__
 
-def command_select(iterable, printer=True):
+def command_select(iterable, printer=False):
+    """Reusable function for command selection.
+        Returns the selection.
+
+        Args:
+            iterable ([type]): list of options to select
+            printer (bool, optional): Print the iterable. Defaults to False.
+        """
     while True:
         try:
             commant = input(f"Which option? [1 - {len(iterable)}]")
