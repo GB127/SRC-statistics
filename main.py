@@ -6,16 +6,15 @@ if __name__ == "__main__":
     print("speedrun.com statistics fetcher, program written by Niamek")
     user = user("niamek")
     commands = []
+    for attribute in user.__dict__.values():
+        if not isinstance(attribute, str):
+            commands.append(attribute)
+
     while True:
         clear()
-        for attribute in user.__dict__.values():
-            if not isinstance(attribute, str):
-                commands.append(attribute)
-
-                print(attribute)
-        selection = command_select(commands)
+        print(user)
+        selection = command_select(commands, printer=True)
         if selection == "end":
             break
         else:
             selection()
-        break

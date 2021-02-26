@@ -24,10 +24,13 @@ class Runs:
         return f'{len(self)} runs'
 
     def __call__(self):
-        self.data.sort()
-        self.table()
-
-
+        while True:
+            self.table()
+            command = input("What do you want to do? [sort, end]")
+            if command == "end": break
+            elif command == "sort":
+                self.data[0].change_sort()
+                self.data.sort()
 
     def table(self):
         types = list(self.data[0].__dict__.keys())

@@ -21,7 +21,10 @@ class user:
         print("user initialized!")
 
     def __str__(self):  # Not sure I'll keep this. We'll see.
-        return f'{self.username} : {self.Runs.total_time().days()} ({len(self.Runs)} runs) ; {self.PBs.total_time().days()} ({len(self.PBs)} PBs)'
+        tempo = list(self.__dict__.values())
+        tempo.pop(1)  # Remove the ID
+        return "; ".join([str(x) for x in tempo])
+        # return f'{self.username} : {self.Runs.total_time().days()} ({len(self.Runs)} runs) ; {self.PBs.total_time().days()} ({len(self.PBs)} PBs)'
 
 if __name__ == "__main__":
     test = user("niamek")
