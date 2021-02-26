@@ -48,8 +48,16 @@ class run_time:
             return run_time(self.time + other)
     __radd__ = __add__
 
+def command_select(iterable, printer=True):
+    while True:
+        try:
+            commant = input(f"Which option? [1 - {len(iterable)}]")
+            if int(commant) != 0:
+                return iterable[int(commant) - 1]
+            raise BaseException
+        except:
+            if commant != "end":
+                pass
+            else:
+                return "end"
 
-def percent(cent, new, delta=False):
-    if delta:
-        return round(100 - 100 * new/cent, 2)
-    return round(100 * new/cent, 2)

@@ -13,6 +13,7 @@ if __name__ == "__main__":
         if not isinstance(attribute, str):
             commands.append(attribute)
     while True:
+        clear()
         selection = command_select(commands)
         if selection == "end":
             break

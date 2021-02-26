@@ -1,5 +1,5 @@
 from api import get_userID, get_PBs, get_runs
-from tools import run_time, percent
+from tools import run_time
 from runs import PBs, Runs
 
 
