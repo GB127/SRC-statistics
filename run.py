@@ -1,5 +1,5 @@
 from api import get_game, get_category, get_system, get_variable, get_leaderboard
-from tools import run_time
+from tools import run_time, command_select
 
 class Run:
     games = {}
@@ -25,6 +25,13 @@ class Run:
         }
 
     sorter = "game"
+
+    def change_sort(self):
+        options = list(self.__dict__)
+        options.pop(0)
+        for no, one in enumerate(options):
+            print(no + 1, one)
+        self.__class__.sorter = command_select(options)
 
     def __lt__(self, other):
         if self.__dict__[self.sorter] != other.__dict__[self.sorter]:
