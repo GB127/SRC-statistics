@@ -1,4 +1,9 @@
 import datetime
+from os import system
+
+clear = lambda: system('cls')
+
+
 class run_time:
 
     def __init__(self, seconds):

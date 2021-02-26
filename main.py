@@ -1,8 +1,5 @@
 from user import user
-from tools import command_select
-from os import system
-
-clear = lambda: system('cls')
+from tools import command_select, clear
 
 if __name__ == "__main__":
     clear()
