@@ -41,8 +41,8 @@ class Runs:
 
     def total_time(self):
         return sum([x.time for x in self.data])
-   
-   
+
+
     def mean_time(self):
         return run_time(self.total_time() / self.__len__())
 

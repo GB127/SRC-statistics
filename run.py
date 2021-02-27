@@ -88,28 +88,21 @@ class Run:
         return " | ".join([str(x) for x in tempo])
 
 
-    def delta_WR(self):
-        return self.time - self.WR
-    def perc_WR(self):
-        return round((self.time) / self.WR * 100, 2)
-
-
-
-
-
 class PB(Run):
     def __init__(self, data):
         super().__init__(data["run"])
-        self.place = data["place"]
-        
         try:  # Don't understand why this doesn't work sometimes, so I have to just keep them out of my datas
             self.leaderboard = get_leaderboard(self.IDs)  # NOTE : In the future I will create a class leaderboards so I can do fancy stuffs with leaderboards.
             self.WR = run_time(self.leaderboard[0][1])
         except BaseException:
             self.leaderboard = False
-            
+        self.delta_WR = self.time - self.WR
+        self.perc_WR = round((self.time) / self.WR * 100, 2)
+        self.place = data["place"]
 
 
     def __str__(self):
-        return super().__str__() + " | " + " | ".join([f'+ {self.delta_WR():<8}',
-                                    f'{str(self.perc_WR()) + " %":>9}'])
+        return super().__str__() + " | " + " | ".join([
+                                    f'+ {self.delta_WR:<8}',
+                                    f'{str(self.perc_WR) + " %":>9}',
+                                    f"{self.place}/{len(self.leaderboard)}"])
