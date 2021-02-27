@@ -79,13 +79,16 @@ class Run:
         self.time = run_time(data["times"]["primary_t"])
 
 
+    def table_size(self):
+        return [1, 17, 13, 6]
+
     def __str__(self):
         tempo = [
                     f'{self.system[:6]:^6}',
                     f'{self.game[:20]:20}',
                     f'{self.category[:20]:20}',
                     f'{self.time:>9}']
-        return " | ".join([str(x) for x in tempo])
+        return " | ".join([str(x) for x in tempo]) + " |"
 
 
 class PB(Run):
@@ -100,9 +103,13 @@ class PB(Run):
         self.perc_WR = round((self.time) / self.WR * 100, 2)
         self.place = data["place"]
 
+    def table_size(self):
+        return super().table_size() + [2, 3, 4]
+
+
 
     def __str__(self):
-        return super().__str__() + " | " + " | ".join([
+        return super().__str__() + " | ".join([
                                     f'+ {self.delta_WR:<8}',
                                     f'{str(self.perc_WR) + " %":>9}',
-                                    f"{self.place}/{len(self.leaderboard)}"])
+                                    f"{f'{self.place}/{len(self.leaderboard)}':9}"]) + "|"
