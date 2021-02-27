@@ -15,25 +15,36 @@ class run_time:
         if self.seconds < 10: self.seconds = "0" + str(self.seconds)
         return f'{self.hours}:{self.minutes}:{self.seconds}'
 
+    def __format__(self, specs):
+        return format(str(self), specs)
+
     def days(self):
         return str(timedelta(seconds=int(self.time)))
 
+
+    # Comparateurs
     def __lt__(self, other):
         return self.time < other.time
 
     def __le__(self, other):
         return self.time <= other.time
 
+    # Opérations
+    def __add__(self, other):
+        if isinstance(other, run_time):
+            return run_time(self.time + other.time)
+        if isinstance(other, int):
+            return run_time(self.time + other)
+    __radd__ = __add__
 
-    def __format__(self, specs):
-        return format(str(self), specs)
+    def __sub__(self, other):
+        return run_time(self.time - other.time)
+
 
     def __mul__(self, integ):
         return run_time(self.time * integ)
     __rmul__ = __mul__
 
-    def __round__(self, number):
-        return run_time(round(self.time, number))
 
     def __truediv__(self, integ):
         return self.time / integ
@@ -41,15 +52,9 @@ class run_time:
     def __rtruediv__(self,integ):
         return integ / self.time
 
-    def __sub__(self, other):
-        return run_time(self.time - other.time)
+    def __round__(self, number):
+        return run_time(round(self.time, number))
 
-    def __add__(self, other):
-        if isinstance(other, run_time):
-            return run_time(self.time + other.time)
-        if isinstance(other, int):
-            return run_time(self.time + other)
-    __radd__ = __add__
 
 def command_select(iterable, printer=False):
     """Reusable function for command selection.
@@ -70,4 +75,3 @@ def command_select(iterable, printer=False):
                 pass
             else:
                 return "end"
-

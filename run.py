@@ -26,18 +26,6 @@ class Run:
 
     sorter = "game"
 
-    def change_sort(self):
-        options = list(self.__dict__)
-        options.pop(0)
-        for no, one in enumerate(options):
-            print(no + 1, one)
-        self.__class__.sorter = command_select(options)
-
-    def __lt__(self, other):
-        if self.__dict__[self.sorter] != other.__dict__[self.sorter]:
-            return self.__dict__[self.sorter] < other.__dict__[self.sorter]
-        return self.category < other.category
-
     def __init__(self, data):
         def clean_gamename(name):
             if "The Legend of Zelda" in name:
@@ -78,10 +66,6 @@ class Run:
         
         self.time = run_time(data["times"]["primary_t"])
 
-
-    def table_size(self):
-        return [1, 17, 13, 6]
-
     def __str__(self):
         tempo = [
                     f'{self.system[:6]:^6}',
@@ -90,6 +74,25 @@ class Run:
                     f'{self.time:>9}']
         return " | ".join([str(x) for x in tempo]) + " |"
 
+
+    def change_sort(self):
+        options = list(self.__dict__)
+        options.pop(0)
+        for no, one in enumerate(options):
+            print(no + 1, one)
+        self.__class__.sorter = command_select(options)
+
+    def __lt__(self, other):
+        if self.__dict__[self.sorter] != other.__dict__[self.sorter]:
+            return self.__dict__[self.sorter] < other.__dict__[self.sorter]
+        return self.category < other.category
+
+
+
+
+
+    def table_size(self):  # Idea : Global variable so it's not a method.
+        return [1, 17, 13, 6]
 
 class PB(Run):
     def __init__(self, data):
@@ -103,13 +106,11 @@ class PB(Run):
         self.perc_WR = round((self.time) / self.WR * 100, 2)
         self.place = data["place"]
 
-    def table_size(self):
-        return super().table_size() + [2, 3, 4]
-
-
-
     def __str__(self):
         return super().__str__() + " | ".join([
                                     f'+ {self.delta_WR:<8}',
                                     f'{str(self.perc_WR) + " %":>9}',
                                     f"{f'{self.place}/{len(self.leaderboard)}':9}"]) + "|"
+
+    def table_size(self):
+        return super().table_size() + [2, 3, 4]

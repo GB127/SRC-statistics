@@ -2,24 +2,11 @@ from tools import run_time, command_select
 from run import Run, PB
 
 class Runs:
-
     def __init__(self, data):
-
         self.data = []
         for run in data:
             if run["times"]["primary_t"] >= 180:
                 self.data.append(Run(run))
-
-
-    def __getitem__(self, argument):
-        return self.data[argument]
-    def __iter__(self):
-        return iter(self.data)        
-    def __len__(self):
-        return len(self.data)
-
-    def __str__(self):
-        return f'{len(self)} runs ({self.total_time().days()})'
 
     def __call__(self):
         while True:
@@ -29,13 +16,25 @@ class Runs:
             elif command == "sort":
                 self.data[0].change_sort()
                 self.data.sort()
+
+    def __str__(self):
+        return f'{len(self)} runs ({self.total_time().days()})'
+
+
+    def __getitem__(self, argument):
+        return self.data[argument]
+    def __iter__(self):
+        return iter(self.data)        
+    def __len__(self):
+        return len(self.data)
+
+
     def get_header(self):
         types = list(self.data[0].__dict__.keys())
         types.remove("IDs")
         return types
 
-    def table(self):
-
+    def table(self):  # Let's try to put this in call
         header = " no |"
         for no, size in enumerate(self.data[0].table_size()):
             header += f' {self.get_header()[no]}' + " "*size + "|"
@@ -48,7 +47,6 @@ class Runs:
 
     def total_time(self):
         return sum([x.time for x in self.data])
-
 
     def mean_time(self):
         return run_time(self.total_time() / self.__len__())
