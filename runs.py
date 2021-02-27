@@ -9,8 +9,18 @@ class Runs:
                 self.data.append(Run(run))
 
     def __call__(self):
+        def table():  # Let's try to put this in call
+            header = " no |"
+            for no, size in enumerate(self.data[0].table_size()):
+                header += f' {self.get_header()[no]}' + " "*size + "|"
+            print(header)
+            print("-" * len(header))
+            for no, entry in enumerate(self):
+                print(f'{no+1:^3} | {entry}')
+            print("-" * len(header))
+
         while True:
-            self.table()
+            table()
             command = input("What do you want to do? [sort, end]")
             if command == "end": break
             elif command == "sort":
@@ -34,15 +44,6 @@ class Runs:
         types.remove("IDs")
         return types
 
-    def table(self):  # Let's try to put this in call
-        header = " no |"
-        for no, size in enumerate(self.data[0].table_size()):
-            header += f' {self.get_header()[no]}' + " "*size + "|"
-        print(header)
-        print("-" * len(header))
-        for no, entry in enumerate(self):
-            print(f'{no+1:^3} | {entry}')
-        print("-" * len(header))
 
 
     def total_time(self):
