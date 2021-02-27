@@ -29,14 +29,21 @@ class Runs:
             elif command == "sort":
                 self.data[0].change_sort()
                 self.data.sort()
-
-    def table(self):
+    def get_header(self):
         types = list(self.data[0].__dict__.keys())
         types.remove("IDs")
-        header = " | ".join(types)
+        return types
+
+    def table(self):
+
+        header = " no |"
+        for no, size in enumerate(self.data[0].table_size()):
+            header += f' {self.get_header()[no]}' + " "*size + "|"
         print(header)
+        print("-" * len(header))
         for no, entry in enumerate(self):
             print(f'{no+1:^3} | {entry}')
+        print("-" * len(header))
 
 
     def total_time(self):
@@ -69,3 +76,8 @@ class PBs(Runs):
     def mean_deltaWR(self):
         return run_time(self.total_deltaWR() / self.__len__())
 
+    def get_header(self):
+        types = super().get_header()
+        types.remove("leaderboard")
+        types.remove("WR")
+        return types
