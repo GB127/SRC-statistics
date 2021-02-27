@@ -87,12 +87,10 @@ class Run:
             return self.__dict__[self.sorter] < other.__dict__[self.sorter]
         return self.category < other.category
 
-
-
-
-
     def table_size(self):  # Idea : Global variable so it's not a method.
         return [1, 17, 13, 6]
+
+    
 
 class PB(Run):
     def __init__(self, data):
@@ -114,3 +112,4 @@ class PB(Run):
 
     def table_size(self):
         return super().table_size() + [2, 3, 4]
+

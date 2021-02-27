@@ -9,7 +9,7 @@ class Runs:
                 self.data.append(Run(run))
 
     def __call__(self):
-        def table():  # Let's try to put this in call
+        def table():
             header = " no |"
             for no, size in enumerate(self.data[0].table_size()):
                 header += f' {self.get_header()[no]}' + " "*size + "|"
@@ -51,9 +51,6 @@ class Runs:
 
     def mean_time(self):
         return run_time(self.total_time() / self.__len__())
-
-
-
 
 class PBs(Runs):
     def __init__(self, data):
