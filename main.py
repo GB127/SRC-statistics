@@ -13,6 +13,8 @@ if __name__ == "__main__":
     while True:
         clear()
         print(user)
+        for attribute in commands:
+            print(attribute)
         selection = command_select(commands, printer=True)
         if selection == "end":
             break

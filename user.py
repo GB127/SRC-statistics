@@ -24,6 +24,7 @@ class user:
     def __str__(self):
         tempo = list(self.__dict__.values())
         tempo.pop(1)  # Remove the ID
+        tempo.pop(3)
         return "; ".join([str(x) for x in tempo])
 
 if __name__ == "__main__":

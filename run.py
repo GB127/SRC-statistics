@@ -101,6 +101,7 @@ class Save(Run):
                 self.runs.append(run)
         Run.sorter = "time"
         self.runs.sort()
+        self.X = len(self.runs)
         self.first = self.runs[-1].time
         self.PB = PB.time
         self.save = self.first - self.PB
@@ -118,23 +119,21 @@ class Save(Run):
                 f'{self.system[:6]:^6}',
                 f'{self.game[:20]:20}',
                 f'{self.category[:20]:20}',
+                f'{self.X:^3}',
                 f'{self.first:>9}',
                 f'{self.PB:>9}' + f' (-{self.save})',
                 f'(-{self.perc1st:6}%)'
         ]) + "|"
 
     def table_size(self):  # Idea : Global variable so it's not a method.
-        return [1, 17, 13, 5, 19, 3]
+        return [1, 17, 13, 3, 5, 19, 3]
 
 
 class PB(Run):
     def __init__(self, data):
         super().__init__(data["run"])
-        try:  # Don't understand why this doesn't work sometimes, so I have to just keep them out of my datas
-            self.leaderboard = get_leaderboard(self.IDs)  # NOTE : In the future I will create a class leaderboards so I can do fancy stuffs with leaderboards.
-            self.WR = run_time(self.leaderboard[0][1])
-        except BaseException:
-            self.leaderboard = False
+        self.leaderboard = get_leaderboard(self.IDs)  # NOTE : In the future I will create a class leaderboards so I can do fancy stuffs with leaderboards.
+        self.WR = run_time(self.leaderboard[0][1])
         self.delta_WR = self.time - self.WR
         self.perc_WR = round((self.time) / self.WR * 100, 2)
         self.place = data["place"]
