@@ -5,7 +5,7 @@ class Runs:
     def __init__(self, data):
         self.data = []
         for run in data:
-            if run["times"]["primary_t"] >= 180:
+            if run["times"]["primary_t"] >= 180 and not run["level"]:
                 self.data.append(Run(run))
 
     def __call__(self):
@@ -56,8 +56,7 @@ class PBs(Runs):
     def __init__(self, data):
         self.data = []
         for pb in data:
-            tempo = PB(pb)
-            if tempo.leaderboard:  # NOTE : Tempo fix. Some runs can't get a proper leaderboard for some reason.
+            if pb["run"]["times"]["primary_t"] > 180 and not pb["run"]["level"]:
                 self.data.append(PB(pb))
 
     def __str__(self):
@@ -87,6 +86,8 @@ class Saves(Runs):
         types.remove("save")
         return types
 
+    def __str__(self):
+        return f"{len(self.data)} PBs with multiple runs"
 
     def __init__(self, PBs, Runs):
         self.data = []
