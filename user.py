@@ -1,6 +1,6 @@
 from api import get_userID, get_PBs, get_runs
 from tools import run_time
-from runs import PBs, Runs
+from runs import PBs, Runs, Saves
 
 
 class user:
@@ -17,7 +17,8 @@ class user:
 
         self.PBs = PBs(get_PBs(self.ID))
         self.Runs = Runs(get_runs(self.ID))
-
+        self.Saves = Saves(self.PBs, self.Runs)
+        
         print("user initialized!")
 
     def __str__(self):

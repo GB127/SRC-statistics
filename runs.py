@@ -1,5 +1,5 @@
 from tools import run_time, command_select
-from run import Run, PB
+from run import Run, PB, Save
 
 class Runs:
     def __init__(self, data):
@@ -77,3 +77,21 @@ class PBs(Runs):
         types.remove("leaderboard")
         types.remove("WR")
         return types
+
+
+class Saves(Runs):
+
+    def get_header(self):
+        types = list(self.data[0].__dict__.keys())
+        types.remove("runs")
+        types.remove("save")
+        return types
+
+
+    def __init__(self, PBs, Runs):
+        self.data = []
+        for pb in PBs:
+            tempo = Save(pb, Runs)
+            if tempo.first != tempo.PB:
+                self.data.append(tempo)
+

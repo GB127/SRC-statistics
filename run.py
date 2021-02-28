@@ -90,7 +90,42 @@ class Run:
     def table_size(self):  # Idea : Global variable so it's not a method.
         return [1, 17, 13, 6]
 
-    
+class Save(Run):
+    def __init__(self, PB, Runs):
+        self.system = PB.system
+        self.game = PB.game
+        self.category = PB.category
+        self.runs = []
+        for run in Runs:
+            if run.game == self.game and run.category == self.category:
+                self.runs.append(run)
+        Run.sorter = "time"
+        self.runs.sort()
+        self.first = self.runs[-1].time
+        self.PB = PB.time
+        self.save = self.first - self.PB
+        self.perc1st = round(self.save/self.first * 100, 2)
+
+    def change_sort(self):
+        options = list(self.__dict__)
+        for no, one in enumerate(options):
+            print(no + 1, one)
+        self.__class__.sorter = command_select(options)
+
+
+    def __str__(self):
+        return " | ".join([
+                f'{self.system[:6]:^6}',
+                f'{self.game[:20]:20}',
+                f'{self.category[:20]:20}',
+                f'{self.first:>9}',
+                f'{self.PB:>9}' + f' (-{self.save})',
+                f'(-{self.perc1st:6}%)'
+        ]) + "|"
+
+    def table_size(self):  # Idea : Global variable so it's not a method.
+        return [1, 17, 13, 5, 19, 3]
+
 
 class PB(Run):
     def __init__(self, data):

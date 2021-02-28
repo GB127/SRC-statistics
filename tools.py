@@ -29,6 +29,10 @@ class run_time:
     def __le__(self, other):
         return self.time <= other.time
 
+    def __ne__(self, other):
+        return self.time != other.time
+
+
     # Opérations
     def __add__(self, other):
         if isinstance(other, run_time):
