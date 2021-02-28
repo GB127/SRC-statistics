@@ -120,7 +120,7 @@ def requester(link):
             print(f"{URL}{link}")
             raise BaseException("Incorrect info, please check again")
         else:
-            raise BaseException(f"Please report this, {rep.status_code} - {URL}{link}")
+            raise BaseException(f"Please report this, {rep.status_code} - {URL}{link}\n{rep.json()['message']}")
 
 
 def get_PBs(ID):
