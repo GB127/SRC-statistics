@@ -25,6 +25,7 @@ class Run(entry):
         "nzelkr6q" : "PS4",
         }
 
+    table_size = [1, 17, 13, 6]
     sorter = "game"
 
     def __init__(self, data):
@@ -75,10 +76,11 @@ class Run(entry):
                     f'{self.time:>9}']
         return " | ".join([str(x) for x in tempo]) + " |"
 
-    def table_size(self):  # Idea : Global variable so it's not a method.
-        return [1, 17, 13, 6]
 
 class Save(entry):
+    table_size =  [1, 17, 13, 3, 5, 19, 3]
+
+
     def __init__(self, PB, Runs):
         self.system = PB.system
         self.game = PB.game
@@ -107,11 +109,11 @@ class Save(entry):
                             f'(-{self.perc1st:6}%)'
                         ]) + "|"
 
-    def table_size(self):  # Idea : Global variable so it's not a method.
-        return [1, 17, 13, 3, 5, 19, 3]
 
 
 class PB(Run):
+    table_size = Run.table_size + [2, 3, 4]
+
     def __init__(self, data):
         super().__init__(data["run"])
         self.leaderboard = get_leaderboard(self.IDs)  # NOTE : In the future I will create a class leaderboards so I can do fancy stuffs with leaderboards.
@@ -126,5 +128,4 @@ class PB(Run):
                                     f'{str(self.perc_WR) + " %":>9}',
                                     f"{f'{self.place}/{len(self.leaderboard)}':9}"]) + "|"
 
-    def table_size(self):
-        return super().table_size() + [2, 3, 4]
+

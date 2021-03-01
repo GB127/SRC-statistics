@@ -11,7 +11,7 @@ class Runs:
     def __call__(self):
         def table():
             header = " no |"
-            for no, size in enumerate(self.data[0].table_size()):
+            for no, size in enumerate(self.data[0].table_size):
                 header += f' {self.get_header()[no]}' + " "*size + "|"
             print(header)
             print("-" * len(header))
