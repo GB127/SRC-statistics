@@ -1,4 +1,6 @@
 from user import user
+from groups import Systems
 
 test = user("Niamek")
-test.Saves()
+test.Runs()
+print("It works!")
