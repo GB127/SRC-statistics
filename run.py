@@ -1,7 +1,8 @@
+from generic import entry
 from api import get_game, get_category, get_system, get_variable, get_leaderboard
 from tools import run_time, command_select
 
-class Run:
+class Run(entry):
     games = {}
     categories = {}
     systems = {
@@ -74,23 +75,10 @@ class Run:
                     f'{self.time:>9}']
         return " | ".join([str(x) for x in tempo]) + " |"
 
-
-    def change_sort(self):
-        options = list(self.__dict__)
-        options.pop(0)
-        for no, one in enumerate(options):
-            print(no + 1, one)
-        self.__class__.sorter = command_select(options)
-
-    def __lt__(self, other):
-        if self.__dict__[self.sorter] != other.__dict__[self.sorter]:
-            return self.__dict__[self.sorter] < other.__dict__[self.sorter]
-        return self.category < other.category
-
     def table_size(self):  # Idea : Global variable so it's not a method.
         return [1, 17, 13, 6]
 
-class Save(Run):
+class Save(entry):
     def __init__(self, PB, Runs):
         self.system = PB.system
         self.game = PB.game
@@ -99,31 +87,25 @@ class Save(Run):
         for run in Runs:
             if run.game == self.game and run.category == self.category:
                 self.runs.append(run)
+        self.X = len(self.runs)
+
         Run.sorter = "time"
         self.runs.sort()
-        self.X = len(self.runs)
         self.first = self.runs[-1].time
         self.PB = PB.time
         self.save = self.first - self.PB
         self.perc1st = round(self.save/self.first * 100, 2)
 
-    def change_sort(self):
-        options = list(self.__dict__)
-        for no, one in enumerate(options):
-            print(no + 1, one)
-        self.__class__.sorter = command_select(options)
-
-
     def __str__(self):
         return " | ".join([
-                f'{self.system[:6]:^6}',
-                f'{self.game[:20]:20}',
-                f'{self.category[:20]:20}',
-                f'{self.X:^3}',
-                f'{self.first:>9}',
-                f'{self.PB:>9}' + f' (-{self.save})',
-                f'(-{self.perc1st:6}%)'
-        ]) + "|"
+                            f'{self.system[:6]:^6}',
+                            f'{self.game[:20]:20}',
+                            f'{self.category[:20]:20}',
+                            f'{self.X:^3}',
+                            f'{self.first:>9}',
+                            f'{self.PB:>9}' + f' (-{self.save})',
+                            f'(-{self.perc1st:6}%)'
+                        ]) + "|"
 
     def table_size(self):  # Idea : Global variable so it's not a method.
         return [1, 17, 13, 3, 5, 19, 3]
@@ -146,4 +128,3 @@ class PB(Run):
 
     def table_size(self):
         return super().table_size() + [2, 3, 4]
-
