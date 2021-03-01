@@ -17,6 +17,3 @@ class entry:
         if self.__dict__[self.sorter] != other.__dict__[self.sorter]:
             return self.__dict__[self.sorter] < other.__dict__[self.sorter]
         return self.category < other.category
-
-    def table_size(self):  # Idea : Global variable so it's not a method.
-        pass
