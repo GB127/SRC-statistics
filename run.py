@@ -129,3 +129,30 @@ class PB(Run):
                                     f"{f'{self.place}/{len(self.leaderboard)}':9}"]) + "|"
 
 
+class System(entry):
+    table_size = [3, 17, 21]
+
+    def __init__(self, system, pbs, runs):
+        self.system = system
+        self.Runs = runs
+        self.Run_count = len(self.Runs)
+        self.Run_Total = sum([run.time for run in self.Runs])
+        self.Run_average = run_time(sum([run.time for run in self.Runs]) / self.Run_count)
+
+
+        self.Pbs = pbs
+        self.PB_count = len(pbs)
+        self.PB_Total = sum([pb.time for pb in self.Pbs])
+        self.PB_average = run_time(self.PB_Total / self.PB_count)
+        self.PB_Total_delta = sum([pb.delta_WR for pb in self.Pbs])
+        self.PB_Total_delta_average = run_time(self.PB_Total_delta / self.PB_count)
+
+
+    def __str__(self):
+        tempo = [f"{self.system:^8}",
+                f'{self.Run_count:^3} Runs ; {self.Run_Total:>9}',
+                f'{self.PB_count:^3} PBs ; {self.PB_Total:>9} (+{self.PB_Total_delta:>8})\n   ',
+                f'        ',
+                f'           {self.Run_average:>9}', 
+                f'          {self.PB_average:>9} (+{self.PB_Total_delta_average:>8})\n' + "-" * 80]
+        return " | ".join(tempo)

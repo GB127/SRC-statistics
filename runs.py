@@ -1,5 +1,5 @@
 from tools import run_time, command_select
-from run import Run, PB, Save
+from run import Run, PB, Save, System
 from generic import table
 
 class Runs(table):
@@ -62,3 +62,18 @@ class Saves(table):
             if tempo.first != tempo.PB:
                 self.data.append(tempo)
 
+
+class Systems(table):
+    def __init__(self, PBs, Runs):
+        self.data = []
+        data_PBs, data_Runs = {},{}
+        for pb in PBs:
+            data_PBs[pb.system] = data_PBs.get(pb.system, []) + [pb]
+        for run in Runs:
+            data_Runs[run.system] = data_Runs.get(run.system, []) + [run]
+
+        for one_system in data_PBs.keys():
+            self.data.append(System(one_system, data_PBs[one_system], data_Runs[one_system]))
+
+    def __str__(self):
+        return str(len(self.data))
