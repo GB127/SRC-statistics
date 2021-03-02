@@ -76,4 +76,4 @@ class Systems(table):
             self.data.append(System(one_system, data_PBs[one_system], data_Runs[one_system]))
 
     def __str__(self):
-        return str(len(self.data))
+        return f'{len(self.data)} systems'
