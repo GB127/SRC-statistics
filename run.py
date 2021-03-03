@@ -129,6 +129,44 @@ class PB(Run):
                                     f"{f'{self.place}/{len(self.leaderboard)}':9}"]) + "|"
 
 
+
+class Game(entry):
+    table_size = [3, 17, 21]
+
+    def __init__(self, game, pbs, runs):
+        self.game = game
+
+        self.Runs = runs
+        self.Run_count = len(self.Runs)
+        self.Run_Total = sum([run.time for run in self.Runs])
+
+
+        self.Pbs = pbs
+        self.PB_count = len(pbs)
+        self.PB_Total = sum([pb.time for pb in self.Pbs])
+
+        self.PB_Total_delta = sum([pb.delta_WR for pb in self.Pbs])
+        WR = sum([pb.WR for pb in self.Pbs])
+        self.PB_perc = round(self.PB_Total / WR * 100,2)
+
+    def __str__(self):
+        tempo = [
+                    f'{self.game[:30]:30}',
+                    f'{self.Run_count:2}',
+                    f'{self.Run_Total:>9}',
+                    f'{self.PB_count:2}',
+                    f'{self.PB_Total:>9} (+{self.PB_Total_delta})',
+                    f'{self.PB_perc:>6} %'
+                ]
+        return " | ".join(tempo)
+
+
+
+
+
+
+
+
 class System(entry):
     table_size = [3, 17, 21]
 

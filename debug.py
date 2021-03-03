@@ -1,6 +1,5 @@
 from user import user
-from groups import Systems
 
 test = user("Niamek")
-test.Runs()
+test.Games()
 print("It works!")

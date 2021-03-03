@@ -1,6 +1,6 @@
 from api import get_userID, get_PBs, get_runs
 from tools import run_time
-from runs import PBs, Runs, Saves
+from runs import PBs, Runs, Saves, Systems, Games
 
 
 class user:
@@ -12,12 +12,14 @@ class user:
                 username (str) : Username on speedrun.com
         """
         self.username = username.capitalize()
-        print(f"Fectching {self.username}'s data...")
+        print(f"Fetching {self.username}'s data...")
         self.ID = get_userID(self.username)
 
         self.PBs = PBs(get_PBs(self.ID))
         self.Runs = Runs(get_runs(self.ID))
         self.Saves = Saves(self.PBs, self.Runs)
+        self.Systems = Systems(self.PBs, self.Runs)
+        self.Games = Games(self.PBs, self.Runs)
         
         print("user initialized!")
 
