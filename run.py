@@ -76,9 +76,19 @@ class Run(entry):
                     f'{self.time:>9}']
         return " | ".join([str(x) for x in tempo]) + " |"
 
+    def sortable(self):
+        tempo = list(self.__dict__)
+        tempo.remove("IDs")
+        return tempo
+
 
 class Save(entry):
     table_size =  [1, 17, 13, 3, 5, 19, 3]
+    def sortable(self):
+        tempo = list(self.__dict__)
+        tempo.remove("runs")
+        return tempo
+
 
 
     def __init__(self, PB, Runs):
@@ -113,6 +123,12 @@ class Save(entry):
 
 class PB(Run):
     table_size = Run.table_size + [2, 3, 4]
+
+    def sortable(self):
+        tempo = super().sortable()
+        tempo.remove("leaderboard")
+        tempo.remove("WR")
+        return tempo
 
     def __init__(self, data):
         super().__init__(data["run"])
@@ -169,6 +185,13 @@ class Game(entry):
 
 class System(entry):
     table_size = [3, 17, 21]
+
+    def sortable(self):
+        tempo = list(self.__dict__)
+        tempo.remove("Pbs")
+        tempo.remove("Runs")
+        return tempo
+
 
     def __init__(self, system, pbs, runs):
         self.system = system

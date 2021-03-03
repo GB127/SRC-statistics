@@ -70,7 +70,7 @@ def command_select(iterable, printer=False):
         """
     while True:
         try:
-            commant = input(f"Which option? [1 - {len(iterable)}]")
+            commant = input(f"Which option? [1 - {len(iterable)}] ")
             if int(commant) != 0:
                 return iterable[int(commant) - 1]
             raise BaseException

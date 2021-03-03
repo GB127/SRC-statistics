@@ -1,5 +1,5 @@
 from user import user
 
 test = user("Niamek")
-test.Games()
+test.Saves()
 print("It works!")

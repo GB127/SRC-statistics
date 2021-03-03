@@ -1,8 +1,11 @@
 from tools import command_select, run_time
 
 class entry:
+    def sortable(self):
+        return list(self.__dict__)
+
     def change_sort(self):
-        for no, one in enumerate(list(self.__dict__)):
+        for no, one in enumerate(self.sortable()):
             print(no + 1, one)
         self.__class__.sorter = command_select(list(self.__dict__))
 
@@ -10,17 +13,18 @@ class entry:
         return self.__dict__[self.sorter] < other.__dict__[self.sorter]
 
 class table:
+    def head(self):
+        header = " no |"
+        for no, size in enumerate(self.data[0].table_size):
+            header += f' {self.get_header()[no]}' + " "*size + "|"
+        return header        
     def __call__(self):
         def table():
-            header = " no |"
-            for no, size in enumerate(self.data[0].table_size):
-                header += f' {self.get_header()[no]}' + " "*size + "|"
+            header = self.head()
+            header += "\n" + ("-" * len(header))
             print(header)
-            print("-" * len(header))
             for no, entry in enumerate(self):
                 print(f'{no+1:^3} | {entry}')
-            print("-" * len(header))
-
         while True:
             table()
             command = input("What do you want to do? [sort, end]")
