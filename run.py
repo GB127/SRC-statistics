@@ -127,7 +127,6 @@ class PB(Run):
     def sortable(self):
         tempo = super().sortable()
         tempo.remove("leaderboard")
-        tempo.remove("WR")
         return tempo
 
     def __init__(self, data):

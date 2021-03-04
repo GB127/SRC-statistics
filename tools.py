@@ -68,6 +68,8 @@ def command_select(iterable, printer=False):
             iterable ([type]): list of options to select
             printer (bool, optional): Print the iterable. Defaults to False.
         """
+    if printer:
+        for one in iterable: print(one)
     while True:
         try:
             commant = input(f"Which option? [1 - {len(iterable)}] ")

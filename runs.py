@@ -1,6 +1,7 @@
 from tools import run_time, command_select
 from run import Run, PB, Save, System, Game
 from generic import table
+import matplotlib.pyplot as plot
 
 class Runs(table):
     def __init__(self, data):
@@ -44,6 +45,18 @@ class PBs(Runs):
 
     def __str__(self):
         return f'{len(self)} PBs ({self.total_time().days()})'
+
+    def plot(self):
+        plot.plot([run.time.time for run in self.data], label=f'PBs')
+        plot.plot([run.WR.time for run in self.data], label=f'WRs', c="gold")
+
+        plot.ylabel("Time")
+        plot.ylim(bottom=0)
+        plot.yticks(plot.yticks()[0],[str(run_time(x)) for x in plot.yticks()[0]])
+        plot.legend()
+        plot.show()
+
+
 
     def total_WR(self):
         return sum([x.WR for x in self.data])

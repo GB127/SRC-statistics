@@ -1,4 +1,4 @@
 from user import user
 
-test = user("Niamek")
-test.Saves()
+test = user("baffan")
+test.PBs()

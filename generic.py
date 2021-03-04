@@ -27,12 +27,19 @@ class table:
                 print(f'{no+1:^3} | {entry}')
             print(self.foot())
         while True:
+            self.data.sort()
             table()
-            command = input("What do you want to do? [sort, end]")
-            if command == "end": break
-            elif command == "sort":
-                self.data[0].change_sort()
-                self.data.sort()
+            command = command_select(self.methods(), printer=True)
+            if command != "end":
+                command()
+            else:
+                break
+
+    def methods(self):
+        return [self.change_sort, self.plot, "end"]
+
+    def change_sort(self):
+        self.data[0].change_sort()
 
     def foot(self):
         pass
@@ -44,6 +51,8 @@ class table:
     def __len__(self):
         return len(self.data)
 
+    def plot(self):
+        pass
 
     def get_header(self):
         types = list(self.data[0].__dict__.keys())
