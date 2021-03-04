@@ -7,7 +7,7 @@ class entry:
     def change_sort(self):
         for no, one in enumerate(self.sortable()):
             print(no + 1, one)
-        self.__class__.sorter = command_select(list(self.__dict__))
+        self.__class__.sorter = command_select(self.sortable())
 
     def __lt__(self, other):
         return self.__dict__[self.sorter] < other.__dict__[self.sorter]
@@ -25,6 +25,7 @@ class table:
             print(header)
             for no, entry in enumerate(self):
                 print(f'{no+1:^3} | {entry}')
+            print(self.foot())
         while True:
             table()
             command = input("What do you want to do? [sort, end]")
@@ -32,6 +33,9 @@ class table:
             elif command == "sort":
                 self.data[0].change_sort()
                 self.data.sort()
+
+    def foot(self):
+        pass
 
     def __getitem__(self, argument):
         return self.data[argument]
@@ -44,12 +48,4 @@ class table:
     def get_header(self):
         types = list(self.data[0].__dict__.keys())
         return types
-
-
-
-    def total_time(self):
-        return sum([x.time for x in self.data])
-
-    def mean_time(self):
-        return run_time(self.total_time() / self.__len__())
 
