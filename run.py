@@ -83,6 +83,7 @@ class Run(entry):
 
 
 class Save(entry):
+    sorter = "PB"
     table_size =  [1, 17, 13, 3, 5, 19, 3]
     def sortable(self):
         tempo = list(self.__dict__)
@@ -147,6 +148,7 @@ class PB(Run):
 
 class Game(entry):
     table_size = [3, 17, 21]
+    sorter = "game"
 
     def __init__(self, game, pbs, runs):
         self.game = game
@@ -184,6 +186,8 @@ class Game(entry):
 
 class System(entry):
     table_size = [3, 17, 21]
+    sorter = "system"
+
 
     def sortable(self):
         tempo = list(self.__dict__)

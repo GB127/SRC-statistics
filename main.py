@@ -13,8 +13,6 @@ if __name__ == "__main__":
     while True:
         clear()
         print(user)
-        for no, attribute in enumerate(commands):
-            print(f'{no + 1} : {attribute}')
         selection = command_select(commands, printer=True)
         if selection == "end":
             break
