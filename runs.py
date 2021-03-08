@@ -102,6 +102,30 @@ class Saves(table):
     def foot(self):  # TODO : user super!
         return "allo"
 
+    def plot_2(self):
+        for category in self.data:
+            plot.plot(list(reversed([run.time.time for run in category.runs])))  #TODO : Move this to elsewhere
+
+        plot.ylabel("Time")
+        plot.ylim(bottom=0)
+        plot.yticks(plot.yticks()[0],[str(run_time(x)) for x in plot.yticks()[0]])
+        plot.legend()
+        plot.show()
+
+
+    def methods(self):
+        return super().methods() + [self.plot_2]
+
+
+    def plot(self):
+        plot.plot([save.first.time for save in self.data], label=f'Firsts', c="red")
+        plot.plot([save.PB.time for save in self.data], label=f'PBs', c="green")
+
+        plot.ylabel("Time")
+        plot.ylim(bottom=0)
+        plot.yticks(plot.yticks()[0],[str(run_time(x)) for x in plot.yticks()[0]])
+        plot.legend()
+        plot.show()
 
 
 
