@@ -29,14 +29,17 @@ class table:
         while True:
             self.data.sort()
             table()
-            command = command_select(self.methods(), printer=True)
+            command_key = command_select(sorted(self.methods().keys()), printer=True)
+            command = self.methods()[command_key]
             if command != "end":
                 command()
             else:
                 break
 
     def methods(self):
-        return [self.change_sort, self.plot, "end"]
+        return {"Change the sorting": self.change_sort,
+                "Plot the table": self.plot,
+                "end": "end"}
 
     def change_sort(self):
         self.data[0].change_sort()

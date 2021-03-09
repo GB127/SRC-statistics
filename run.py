@@ -84,7 +84,7 @@ class Run(entry):
 
 class Save(entry):
     sorter = "PB"
-    table_size =  [1, 17, 13, 3, 5, 19, 3]
+    table_size =  [1, 17, 13, 3, 5, 19, 4]
     def sortable(self):
         tempo = list(self.__dict__)
         tempo.remove("runs")
@@ -117,7 +117,7 @@ class Save(entry):
                             f'{self.X:^3}',
                             f'{self.first:>9}',
                             f'{self.PB:>9}' + f' (-{self.save})',
-                            f'(-{self.perc1st:6}%)'
+                            f'(-{self.perc1st:6} %)'
                         ]) + "|"
 
 
@@ -177,6 +177,11 @@ class Game(entry):
                 ]
         return " | ".join(tempo)
 
+    def sortable(self):
+        tempo = list(self.__dict__)
+        tempo.remove("Pbs")
+        tempo.remove("Runs")
+        return tempo
 
 
 

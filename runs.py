@@ -99,8 +99,12 @@ class Saves(table):
             if tempo.first != tempo.PB:
                 self.data.append(tempo)
 
-    def foot(self):  # TODO : user super!
-        return "allo"
+    def foot(self):
+        total_first = sum([category.first for category in self.data])
+        total_PB = sum([category.PB for category in self.data])
+
+
+        return f'{total_first}, {total_PB}'
 
     def plot_2(self):
         for category in self.data:
@@ -114,7 +118,9 @@ class Saves(table):
 
 
     def methods(self):
-        return super().methods() + [self.plot_2]
+        tempo = super().methods()
+        tempo["Plot the table : alternate"] = self.plot_2
+        return tempo
 
 
     def plot(self):
