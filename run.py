@@ -163,8 +163,8 @@ class Game(entry):
         self.PB_Total = sum([pb.time for pb in self.Pbs])
 
         self.PB_Total_delta = sum([pb.delta_WR for pb in self.Pbs])
-        WR = sum([pb.WR for pb in self.Pbs])
-        self.PB_perc = round(self.PB_Total / WR * 100,2)
+        self.WR_Total = sum([pb.WR for pb in self.Pbs])
+        self.PB_perc = round(self.PB_Total / self.WR_Total * 100,2)
 
     def __str__(self):
         tempo = [
@@ -213,7 +213,8 @@ class System(entry):
         self.PB_count = len(pbs)
         self.PB_Total = sum([pb.time for pb in self.Pbs])
         self.PB_average = run_time(self.PB_Total / self.PB_count)
-        self.PB_Total_delta = sum([pb.delta_WR for pb in self.Pbs])
+        self.WR_Total = sum([pb.WR for pb in self.Pbs])
+        self.PB_Total_delta = self.PB_Total - self.WR_Total
         self.PB_Total_delta_average = run_time(self.PB_Total_delta / self.PB_count)
 
 

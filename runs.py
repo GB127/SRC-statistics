@@ -150,7 +150,14 @@ class Games(table):
     def __str__(self):
         return f'{len(self.data)} Games'
 
-
+    def plot(self):
+        plot.plot([game.PB_Total.time for game in self.data], label=f'Game total PB time', c="blue")
+        plot.plot([game.WR_Total.time for game in self.data], label=f'Game total WR time', c="gold")
+        plot.ylabel("Time")
+        plot.ylim(bottom=0)
+        plot.yticks(plot.yticks()[0],[str(run_time(x)) for x in plot.yticks()[0]])
+        plot.legend()
+        plot.show()
 
 
 
@@ -168,3 +175,12 @@ class Systems(table):
 
     def __str__(self):
         return f'{len(self.data)} systems'
+
+    def plot(self):
+        plot.plot([game.PB_Total.time for game in self.data], label=f'Game total PB time', c="blue")
+        plot.plot([game.WR_Total.time for game in self.data], label=f'Game total WR time', c="gold")
+        plot.ylabel("Time")
+        plot.ylim(bottom=0)
+        plot.yticks(plot.yticks()[0],[str(run_time(x)) for x in plot.yticks()[0]])
+        plot.legend()
+        plot.show()
