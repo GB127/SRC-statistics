@@ -11,12 +11,10 @@ class Runs(table):
                 self.data.append(Run(run))
 
     def foot(self):
-        string1 = f"{'-' * 80}\n" 
+        string1 = f"{'-' * 72}\n" 
         string2 = f"{'Total |':>60}{self.total_time():>11}\n"
         string3 = f"{'Average |':>60}{self.average_time():>11}\n"
         return string1 + string2 + string3
-
-        average = run_time(self.total_time() / len(self))
 
     def __str__(self):
         return f'{len(self)} runs ({self.total_time().days()})'
@@ -36,6 +34,18 @@ class Runs(table):
         return run_time(self.total_time() / self.__len__())
 
 
+    def histo(self):
+        plot.hist([run.time.time for run in self.data], color="red")
+
+        plot.xlabel("Time")
+        plot.xlim(left=0)
+        plot.xticks(plot.xticks()[0],[str(run_time(x)) for x in plot.xticks()[0]])
+        plot.show()
+
+
+
+
+
 class PBs(Runs):
     def __init__(self, data):
         self.data = []
@@ -52,10 +62,26 @@ class PBs(Runs):
 
         plot.ylabel("Time")
         plot.ylim(bottom=0)
+        plot.xlim(left=0)
+
         plot.yticks(plot.yticks()[0],[str(run_time(x)) for x in plot.yticks()[0]])
+        plot.xticks(plot.xticks()[0],[int(x + 1) for x in plot.xticks()[0]])
+
         plot.legend()
+
+        plot.grid(True, which="major", axis="y")
+
+
         plot.show()
 
+    def histo(self):
+        plot.hist([[run.WR.time for run in self.data],[run.time.time for run in self.data]], label=["WR","PBs"], color=["Gold", "Blue"])
+
+        plot.xlabel("Time")
+        plot.xlim(left=0)
+        plot.xticks(plot.xticks()[0],[str(run_time(x)) for x in plot.xticks()[0]])
+        plot.legend()
+        plot.show()
 
 
     def total_WR(self):
@@ -74,10 +100,10 @@ class PBs(Runs):
         return types
 
 
-    def foot(self):  # TODO : user super!
-        string1 = f"{'-' * 107}\n" 
-        string2 = f"{'Total |':>60}{self.total_time():>11}|+ {self.total_deltaWR():9}| {self.mean_percWR()} %\n"
-        string3 = f"{'Average |':>60}{self.average_time():>11}|+ {self.mean_deltaWR():9}| {self.mean_percWR()} %"
+    def foot(self):  # TODO : user super?
+        string1 = f"{'-' * 118}\n"
+        string2 = f"{'Total |':>60}{self.total_time():>11}|+ {self.total_deltaWR():9}|  {self.mean_percWR()} %\n"  # TODO: Fix the perc spacing with :
+        string3 = f"{'Average |':>60}{self.average_time():>11}|+ {self.mean_deltaWR():9}|  {self.mean_percWR()} %"
         return string1 + string2 + string3
 
 
@@ -100,11 +126,18 @@ class Saves(table):
                 self.data.append(tempo)
 
     def foot(self):
+        total_X = sum([category.X for category in self.data])
         total_first = sum([category.first for category in self.data])
         total_PB = sum([category.PB for category in self.data])
+        total_delta = total_first - total_PB
+        perc_delta = round(total_delta / total_first * 100, 2)
+
+        string1 = "-" * 114 + "\n"
+        string2 = f'{len(self.data)} PBs{"":47}Total:|{total_X:^5}| {total_first:>9} | {total_PB:>9} (-{total_delta}) | (- {perc_delta:>5} %)|\n'
+        string3 = f'{"Average:":>59}|{round(total_X/len(self.data)):^5}| {run_time(total_first/len(self.data)):>9} | {run_time(total_PB/len(self.data)):>9} (-{run_time(total_delta/len(self.data))}) | (- {perc_delta:>5} %)|'
 
 
-        return f'{total_first}, {total_PB}'
+        return string1 + string2 + string3
 
     def plot_2(self):
         for category in self.data:
@@ -122,6 +155,15 @@ class Saves(table):
         tempo["Plot the table : alternate"] = self.plot_2
         return tempo
 
+    def histo(self):
+        plot.hist([[run.PB.time for run in self.data], [run.first.time for run in self.data]], label=["First","PBs"], color=["Gold", "Blue"])
+        plot.xlabel("Time")
+        plot.xlim(left=0)
+        plot.xticks(plot.xticks()[0],[str(run_time(x)) for x in plot.xticks()[0]])
+        plot.legend()
+        plot.show()
+
+        
 
     def plot(self):
         plot.plot([save.first.time for save in self.data], label=f'Firsts', c="red")
@@ -132,7 +174,6 @@ class Saves(table):
         plot.yticks(plot.yticks()[0],[str(run_time(x)) for x in plot.yticks()[0]])
         plot.legend()
         plot.show()
-
 
 
 class Games(table):
@@ -159,7 +200,21 @@ class Games(table):
         plot.legend()
         plot.show()
 
+    def foot(self):
+        runs_count = sum([game.Run_count for game in self.data])
+        total_runs = sum([game.Run_Total for game in self.data])
+        total_PBs = sum([game.PB_Total for game in self.data])
+        PBs_count = sum([game.PB_count for game in self.data])
+        total_WRs = sum([game.WR_Total for game in self.data])
+        total_deltas = sum([game.PB_Total_delta for game in self.data])
+        perc_average = round(total_PBs / total_WRs * 100, 2)
 
+
+        string1 = "-" * 93 + "\n"
+        string2 = f"{len(self.data):<3} games{'':28}|{runs_count:3} | {total_runs:9} |{PBs_count:3} | {total_PBs:>9} (+{total_deltas:7})| {perc_average} %\n"
+        string3 = f"{len(self.data):<3} games{'':28}|{int(runs_count/len(self.data)):3} | {run_time(total_runs/len(self.data)):9} |{int(PBs_count/len(self.data)):3} | {run_time(total_PBs/len(self.data)):>9} (+{run_time(total_deltas/len(self.data)):7}) | {perc_average} %"
+
+        return string1 + string2 + string3
 
 class Systems(table):
     def __init__(self, PBs, Runs):
@@ -176,9 +231,14 @@ class Systems(table):
     def __str__(self):
         return f'{len(self.data)} systems'
 
+    def foot(self):
+        return "To complete"
+
+
+
     def plot(self):
-        plot.plot([game.PB_Total.time for game in self.data], label=f'Game total PB time', c="blue")
-        plot.plot([game.WR_Total.time for game in self.data], label=f'Game total WR time', c="gold")
+        plot.plot([game.PB_Total.time for game in self.data], label=f'System total PB time', c="blue")
+        plot.plot([game.WR_Total.time for game in self.data], label=f'System total WR time', c="gold")
         plot.ylabel("Time")
         plot.ylim(bottom=0)
         plot.yticks(plot.yticks()[0],[str(run_time(x)) for x in plot.yticks()[0]])

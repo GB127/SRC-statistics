@@ -39,6 +39,7 @@ class table:
     def methods(self):
         return {"Change the sorting": self.change_sort,
                 "Plot the table": self.plot,
+                "Histogram of the table": self.histo,
                 "end": "end"}
 
     def change_sort(self):
@@ -55,6 +56,9 @@ class table:
         return len(self.data)
 
     def plot(self):
+        pass
+
+    def histo(self):
         pass
 
     def get_header(self):

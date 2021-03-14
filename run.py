@@ -123,7 +123,7 @@ class Save(entry):
 
 
 class PB(Run):
-    table_size = Run.table_size + [2, 3, 4]
+    table_size = Run.table_size + [2, 3, 5, 1]
 
     def sortable(self):
         tempo = super().sortable()
@@ -137,12 +137,14 @@ class PB(Run):
         self.delta_WR = self.time - self.WR
         self.perc_WR = round((self.time) / self.WR * 100, 2)
         self.place = data["place"]
+        self.perc_LB = round((len(self.leaderboard) - self.place) / len(self.leaderboard) * 100,2)
 
     def __str__(self):
         return super().__str__() + " | ".join([
                                     f'+ {self.delta_WR:<8}',
                                     f'{str(self.perc_WR) + " %":>9}',
-                                    f"{f'{self.place}/{len(self.leaderboard)}':9}"]) + "|"
+                                    f"{f'{self.place}/{len(self.leaderboard)}':9}",
+                                    f"{self.perc_LB:6} %"]) + "|"
 
 
 
