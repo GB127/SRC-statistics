@@ -35,14 +35,45 @@ class Runs(table):
 
 
     def histo(self):
-        plot.hist([run.time.time for run in self.data], color="red")
+        plot.hist([run.time.time for run in self.data], color="orange")
 
         plot.xlabel("Time")
         plot.xlim(left=0)
         plot.xticks(plot.xticks()[0],[str(run_time(x)) for x in plot.xticks()[0]])
         plot.show()
 
+    def plot(self):
+        Run.sorter = "time"
+        self.data.sort()
+        data_reversed = list(reversed(self.data))  # FIXME: Tempo hack, remove once fixed.
+        used = {(data_reversed[0].game, data_reversed[0].category) : data_reversed[0].time.time}
 
+        plotted = [0, data_reversed[0].time.time]
+
+        for run in data_reversed[1:]:
+            if (run.game, run.category) not in used.keys():
+                plotted.append(plotted[-1] + run.time.time)
+            elif (run.game, run.category) in used.keys():
+                plotted.append(plotted[-1] + (-used[(run.game, run.category)] + run.time.time))
+            used[(run.game, run.category)] = run.time.time
+
+        print(str(run_time(plotted[-1])))
+        print(len(used))
+
+
+        plot.plot(plotted, label=f'Total PB progression', c="orange")
+        plot.ylabel("Time")
+        plot.ylim(bottom=0)
+        plot.xlim(left=0)
+
+        plot.yticks(plot.yticks()[0],[str(run_time(x)) for x in plot.yticks()[0]])
+
+        plot.legend()
+
+        plot.grid(True, which="major", axis="y")
+
+
+        plot.show()
 
 
 
@@ -156,7 +187,7 @@ class Saves(table):
         return tempo
 
     def histo(self):
-        plot.hist([[run.PB.time for run in self.data], [run.first.time for run in self.data]], label=["First","PBs"], color=["Gold", "Blue"])
+        plot.hist([[run.PB.time for run in self.data], [run.first.time for run in self.data]], label=["PBs","Firsts"], color=["Blue", "Red"])
         plot.xlabel("Time")
         plot.xlim(left=0)
         plot.xticks(plot.xticks()[0],[str(run_time(x)) for x in plot.xticks()[0]])
