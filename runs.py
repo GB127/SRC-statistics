@@ -175,4 +175,6 @@ class Systems(table):
         return f'{len(self.data)} systems'
 
     def foot(self):
-        return "To complete"
+        string1 = f'{len(self)} systems{"":7}{sum([one.Run_count for one in self.data])} Runs ; {sum([one.Run_Total for one in self.data]):>11} | {sum([one.PB_count for one in self.data])} PBs ; {sum([one.PB_Total for one in self.data]):>10} (+{sum([one.PB_Total_delta for one in self.data]):>9})\n'
+        string2 = f'{len(self)} systems{"":7}{int(sum([one.Run_count for one in self.data])/len(self))} Runs ; {run_time(sum([one.Run_Total for one in self.data])/len(self)):>11} | {int(sum([one.PB_count for one in self.data])/len(self))} PBs ; {run_time(sum([one.PB_Total for one in self.data])/len(self)):>10} (+{run_time(sum([one.PB_Total_delta for one in self.data])/len(self)):>9})'
+        return string1 + string2
