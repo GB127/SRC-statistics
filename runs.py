@@ -9,10 +9,10 @@ class Runs(table):
             if run["times"]["primary_t"] >= 180 and not run["level"]:
                 self.data.append(Run(run))
 
-    def foot(self):
+    def foot(self):  # TODO: Move calculs to variables so it uses less computer power?
         string1 = f"{'-' * 72}\n" 
         string2 = f"{'Total |':>60}{sum([x.time for x in self.data]):>11}\n"
-        string3 = f"{'Average |':>60}{run_time(self.total_time() / len(self)):>11}\n"
+        string3 = f"{'Average |':>60}{run_time(sum([x.time for x in self.data]) / len(self)):>11}\n"
         return string1 + string2 + string3
 
     def __str__(self):
@@ -27,22 +27,7 @@ class Runs(table):
         histo_table([[run.time.time for run in self.data]], ["orange"])
 
     def plot(self):
-        Run.sorter = "time"
-        self.data.sort()
-        data_reversed = list(reversed(self.data))  # FIXME: Tempo hack, remove once fixed.
-        used = {(data_reversed[0].game, data_reversed[0].category) : data_reversed[0].time.time}
-
-        plotted = [0, data_reversed[0].time.time]
-
-        for run in data_reversed[1:]:
-            if (run.game, run.category) not in used.keys():
-                plotted.append(plotted[-1] + run.time.time)
-            elif (run.game, run.category) in used.keys():
-                plotted.append(plotted[-1] + (-used[(run.game, run.category)] + run.time.time))
-            used[(run.game, run.category)] = run.time.time
-
-        plot_table(plotted, "orange")
-
+        pass  # TODO: REDO IT
 class PBs(Runs):
     def __init__(self, data):
         self.data = []
