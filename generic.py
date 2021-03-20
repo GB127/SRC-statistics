@@ -1,4 +1,5 @@
 from tools import command_select, run_time
+import matplotlib.pyplot as plot
 
 class entry:
     def sortable(self):
@@ -9,15 +10,21 @@ class entry:
             print(no + 1, one)
         self.__class__.sorter = command_select(self.sortable())
 
-    def __lt__(self, other):
+    def __lt__(self, other):  # FIXME : If equal, it needs to have some sub-sorting.
         return self.__dict__[self.sorter] < other.__dict__[self.sorter]
 
 class table:
+    # TABLE RELATED STUFFS : Calling the class will create the table and the command promp
+    def get_header(self):
+        types = list(self.data[0].__dict__.keys())
+        return types
     def head(self):
         header = " no |"
         for no, size in enumerate(self.data[0].table_size):
             header += f' {self.get_header()[no]}' + " "*size + "|"
         return header        
+    def foot(self):
+        pass
     def __call__(self):
         def table():
             header = self.head()
@@ -36,18 +43,17 @@ class table:
             else:
                 break
 
+    # COMMAND PROMPT related
     def methods(self):
         return {"Change the sorting": self.change_sort,
-                "Plot the table": self.plot,
-                "Histogram of the table": self.histo,
                 "end": "end"}
 
     def change_sort(self):
         self.data[0].change_sort()
 
-    def foot(self):
-        pass
 
+
+    # Basic stuffs for making the stuff an iterable and all.
     def __getitem__(self, argument):
         return self.data[argument]
     def __iter__(self):
@@ -55,13 +61,12 @@ class table:
     def __len__(self):
         return len(self.data)
 
-    def plot(self):
-        pass
+    # graph stuffs
+def plot_table(toplot, plotcolor):
+    for no, topl in enumerate(toplot):  #TODO: Improve this (Pretty sure a zip thingy does this)
+        plot.plot(topl, color=plotcolor[no])
 
-    def histo(self):
-        pass
-
-    def get_header(self):
-        types = list(self.data[0].__dict__.keys())
-        return types
-
+    plot.xlabel("Time")
+    plot.xlim(left=0)
+    plot.yticks(plot.yticks()[0],[str(run_time(x)) for x in plot.yticks()[0]])
+    plot.show()

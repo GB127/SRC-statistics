@@ -1,7 +1,6 @@
 from tools import run_time, command_select
 from run import Run, PB, Save, System, Game
-from generic import table
-import matplotlib.pyplot as plot
+from generic import table, plot_table
 
 class Runs(table):
     def __init__(self, data):
@@ -34,13 +33,6 @@ class Runs(table):
         return run_time(self.total_time() / self.__len__())
 
 
-    def histo(self):
-        plot.hist([run.time.time for run in self.data], color="orange")
-
-        plot.xlabel("Time")
-        plot.xlim(left=0)
-        plot.xticks(plot.xticks()[0],[str(run_time(x)) for x in plot.xticks()[0]])
-        plot.show()
 
     def plot(self):
         Run.sorter = "time"
@@ -57,25 +49,7 @@ class Runs(table):
                 plotted.append(plotted[-1] + (-used[(run.game, run.category)] + run.time.time))
             used[(run.game, run.category)] = run.time.time
 
-        print(str(run_time(plotted[-1])))
-        print(len(used))
-
-
-        plot.plot(plotted, label=f'Total PB progression', c="orange")
-        plot.ylabel("Time")
-        plot.ylim(bottom=0)
-        plot.xlim(left=0)
-
-        plot.yticks(plot.yticks()[0],[str(run_time(x)) for x in plot.yticks()[0]])
-
-        plot.legend()
-
-        plot.grid(True, which="major", axis="y")
-
-
-        plot.show()
-
-
+        plot_table(plotted, "orange")
 
 class PBs(Runs):
     def __init__(self, data):
@@ -88,22 +62,14 @@ class PBs(Runs):
         return f'{len(self)} PBs ({self.total_time().days()})'
 
     def plot(self):
-        plot.plot([run.time.time for run in self.data], label=f'PBs')
-        plot.plot([run.WR.time for run in self.data], label=f'WRs', c="gold")
+        plot_table([
+                        [run.time.time for run in self.data],
+                        [run.WR.time for run in self.data]],
+                    [
+                        "blue",
+                        "gold"]
+                    )
 
-        plot.ylabel("Time")
-        plot.ylim(bottom=0)
-        plot.xlim(left=0)
-
-        plot.yticks(plot.yticks()[0],[str(run_time(x)) for x in plot.yticks()[0]])
-        plot.xticks(plot.xticks()[0],[int(x + 1) for x in plot.xticks()[0]])
-
-        plot.legend()
-
-        plot.grid(True, which="major", axis="y")
-
-
-        plot.show()
 
     def histo(self):
         plot.hist([[run.WR.time for run in self.data],[run.time.time for run in self.data]], label=["WR","PBs"], color=["Gold", "Blue"])
@@ -137,7 +103,6 @@ class PBs(Runs):
         string3 = f"{'Average |':>60}{self.average_time():>11}|+ {self.mean_deltaWR():9}|  {self.mean_percWR()} %"
         return string1 + string2 + string3
 
-
 class Saves(table):
 
     def get_header(self):
@@ -170,7 +135,7 @@ class Saves(table):
 
         return string1 + string2 + string3
 
-    def plot_2(self):
+    def plot_2(self):  #TODO : use the generic plot
         for category in self.data:
             plot.plot(list(reversed([run.time.time for run in category.runs])))  #TODO : Move this to elsewhere
 
@@ -194,17 +159,14 @@ class Saves(table):
         plot.legend()
         plot.show()
 
-        
-
     def plot(self):
-        plot.plot([save.first.time for save in self.data], label=f'Firsts', c="red")
-        plot.plot([save.PB.time for save in self.data], label=f'PBs', c="green")
-
-        plot.ylabel("Time")
-        plot.ylim(bottom=0)
-        plot.yticks(plot.yticks()[0],[str(run_time(x)) for x in plot.yticks()[0]])
-        plot.legend()
-        plot.show()
+        plot_table([
+                        [save.first.time for save in self.data],
+                        [save.PB.time for save in self.data]],
+                    [
+                        "red",
+                        "blue"]
+                    )
 
 
 class Games(table):
@@ -221,15 +183,6 @@ class Games(table):
 
     def __str__(self):
         return f'{len(self.data)} Games'
-
-    def plot(self):
-        plot.plot([game.PB_Total.time for game in self.data], label=f'Game total PB time', c="blue")
-        plot.plot([game.WR_Total.time for game in self.data], label=f'Game total WR time', c="gold")
-        plot.ylabel("Time")
-        plot.ylim(bottom=0)
-        plot.yticks(plot.yticks()[0],[str(run_time(x)) for x in plot.yticks()[0]])
-        plot.legend()
-        plot.show()
 
     def foot(self):
         runs_count = sum([game.Run_count for game in self.data])
@@ -264,14 +217,3 @@ class Systems(table):
 
     def foot(self):
         return "To complete"
-
-
-
-    def plot(self):
-        plot.plot([game.PB_Total.time for game in self.data], label=f'System total PB time', c="blue")
-        plot.plot([game.WR_Total.time for game in self.data], label=f'System total WR time', c="gold")
-        plot.ylabel("Time")
-        plot.ylim(bottom=0)
-        plot.yticks(plot.yticks()[0],[str(run_time(x)) for x in plot.yticks()[0]])
-        plot.legend()
-        plot.show()
