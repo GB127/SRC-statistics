@@ -11,26 +11,17 @@ class Runs(table):
 
     def foot(self):
         string1 = f"{'-' * 72}\n" 
-        string2 = f"{'Total |':>60}{self.total_time():>11}\n"
-        string3 = f"{'Average |':>60}{self.average_time():>11}\n"
+        string2 = f"{'Total |':>60}{sum([x.time for x in self.data]):>11}\n"
+        string3 = f"{'Average |':>60}{run_time(self.total_time() / len(self)):>11}\n"
         return string1 + string2 + string3
 
     def __str__(self):
-        return f'{len(self)} runs ({self.total_time().days()})'
+        return f'{len(self)} runs ({sum([x.time for x in self.data]).days()})'
 
     def get_header(self):
         types = list(self.data[0].__dict__.keys())
         types.remove("IDs")
         return types
-
-    def total_time(self):
-        return sum([x.time for x in self.data])
-
-    def average_time(self):
-        return run_time(self.total_time() / len(self))
-
-    def mean_time(self):
-        return run_time(self.total_time() / self.__len__())
 
     def histo(self):
         histo_table([[run.time.time for run in self.data]], ["orange"])
@@ -60,7 +51,7 @@ class PBs(Runs):
                 self.data.append(PB(pb))
 
     def __str__(self):
-        return f'{len(self)} PBs ({self.total_time().days()})'
+        return f'{len(self)} PBs ({sum([x.time for x in self.data]).days()})'
 
     def plot(self):
         plot_table([
@@ -75,15 +66,6 @@ class PBs(Runs):
     def histo(self):
         histo_table([[run.time.time for run in self.data]], ["blue"])
 
-    def total_WR(self):
-        return sum([x.WR for x in self.data])
-    def mean_percWR(self):
-        return round(self.total_time() / self.total_WR() * 100, 2)
-    def total_deltaWR(self):
-        return sum([x.delta_WR for x in self.data])
-    def mean_deltaWR(self):
-        return run_time(self.total_deltaWR() / self.__len__())
-
     def get_header(self):
         types = super().get_header()
         types.remove("leaderboard")
@@ -91,10 +73,8 @@ class PBs(Runs):
         return types
 
 
-    def foot(self):  # TODO : user super?
-        string1 = f"{'-' * 118}\n"
-        string2 = f"{'Total |':>60}{self.total_time():>11}|+ {self.total_deltaWR():9}|  {self.mean_percWR()} %\n"  # TODO: Fix the perc spacing with :
-        string3 = f"{'Average |':>60}{self.average_time():>11}|+ {self.mean_deltaWR():9}|  {self.mean_percWR()} %"
+    def foot(self):
+        string1, string2, string3 = super().foot()
         return string1 + string2 + string3
 
 class Saves(table):
