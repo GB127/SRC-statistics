@@ -11,7 +11,14 @@ class entry:
         self.__class__.sorter = command_select(self.sortable())
 
     def __lt__(self, other):  # FIXME : If equal, it needs to have some sub-sorting.
-        return self.__dict__[self.sorter] < other.__dict__[self.sorter]
+        if self.__dict__[self.sorter] != other.__dict__[self.sorter]:
+            return self.__dict__[self.sorter] < other.__dict__[self.sorter]
+        elif self.game == other.game and self.category == other.category:
+            return self.time > other.time
+        elif self.game != other.game:
+            return self.game < other.game
+        elif self.category != other.category:
+            return self.category < other.category
 
 class table:
     # TABLE RELATED STUFFS : Calling the class will create the table and the command promp
