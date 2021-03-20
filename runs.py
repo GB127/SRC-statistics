@@ -1,6 +1,6 @@
 from tools import run_time, command_select
 from run import Run, PB, Save, System, Game
-from generic import table, plot_table
+from generic import table, plot_table, histo_table
 
 class Runs(table):
     def __init__(self, data):
@@ -32,7 +32,8 @@ class Runs(table):
     def mean_time(self):
         return run_time(self.total_time() / self.__len__())
 
-
+    def histo(self):
+        histo_table([[run.time.time for run in self.data]], ["orange"])
 
     def plot(self):
         Run.sorter = "time"
@@ -72,14 +73,7 @@ class PBs(Runs):
 
 
     def histo(self):
-        plot.hist([[run.WR.time for run in self.data],[run.time.time for run in self.data]], label=["WR","PBs"], color=["Gold", "Blue"])
-
-        plot.xlabel("Time")
-        plot.xlim(left=0)
-        plot.xticks(plot.xticks()[0],[str(run_time(x)) for x in plot.xticks()[0]])
-        plot.legend()
-        plot.show()
-
+        histo_table([[run.time.time for run in self.data]], ["blue"])
 
     def total_WR(self):
         return sum([x.WR for x in self.data])

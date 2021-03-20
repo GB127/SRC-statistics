@@ -70,3 +70,11 @@ def plot_table(toplot, plotcolor):
     plot.xlim(left=0)
     plot.yticks(plot.yticks()[0],[str(run_time(x)) for x in plot.yticks()[0]])
     plot.show()
+
+def histo_table(toplot, plotcolor):
+    for no, topl in enumerate(toplot):  #TODO: Improve this (Pretty sure a zip thingy does this)
+        plot.hist(topl, color=plotcolor[no])
+
+    plot.xlim(left=0)
+    plot.xticks(plot.xticks()[0],[str(run_time(x)) for x in plot.xticks()[0]])
+    plot.show()
