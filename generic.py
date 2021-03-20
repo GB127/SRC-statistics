@@ -85,3 +85,6 @@ def histo_table(toplot, plotcolor):
     plot.xlim(left=0)
     plot.xticks(plot.xticks()[0],[str(run_time(x)) for x in plot.xticks()[0]])
     plot.show()
+
+def pie_table(toplot):
+    
