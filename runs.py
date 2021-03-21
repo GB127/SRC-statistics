@@ -9,10 +9,12 @@ class Runs(table):
             if run["times"]["primary_t"] >= 180 and not run["level"]:
                 self.data.append(Run(run))
 
-    def foot(self):  # TODO: Move calculs to variables so it uses less computer power?
+    def foot(self):
+        total_time = sum([x.time for x in self.data])
+
         string1 = f"{'-' * 72}\n" 
-        string2 = f"{'Total |':>60}{sum([x.time for x in self.data]):>11}\n"
-        string3 = f"{'Average |':>60}{run_time(sum([x.time for x in self.data]) / len(self)):>11}\n"
+        string2 = f"{'Total |':>60}{total_time:>11}\n"
+        string3 = f"{'Average |':>60}{run_time(total_time/ len(self)):>11}\n"
         return string1 + string2 + string3
 
     def __str__(self):
@@ -58,9 +60,9 @@ class PBs(Runs):
         return types
 
 
-    def foot(self):
-        string1, string2, string3 = super().foot()
-        return string1 + string2 + string3
+    def foot(self):  #TODO: Redo this
+        string1, string2, string3, string4 = super().foot().split("\n")
+        return "\n".join([string1, string2, string3])
 
 class Saves(table):
 
@@ -94,16 +96,12 @@ class Saves(table):
 
         return string1 + string2 + string3
 
-    def plot_2(self):  #TODO : use the generic plot
+    def plot_2(self):
+        all_plots = []
         for category in self.data:
-            plot.plot(list(reversed([run.time.time for run in category.runs])))  #TODO : Move this to elsewhere
+            all_plots.append(list(reversed([run.time.time for run in category.runs])))
 
-        plot.ylabel("Time")
-        plot.ylim(bottom=0)
-        plot.yticks(plot.yticks()[0],[str(run_time(x)) for x in plot.yticks()[0]])
-        plot.legend()
-        plot.show()
-
+        plot_table(all_plots)
 
     def methods(self):
         tempo = super().methods()

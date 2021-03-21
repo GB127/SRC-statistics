@@ -1,4 +1,4 @@
 from user import user
 
 test = user("niamek")
-test.Runs.plot()
+test.Saves.plot_2()

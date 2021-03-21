@@ -69,9 +69,15 @@ class table:
         return len(self.data)
 
     # graph stuffs
-def plot_table(toplot, plotcolor):
-    for no, topl in enumerate(toplot):  #TODO: Improve this (Pretty sure a zip thingy does this)
-        plot.plot(topl, color=plotcolor[no])
+def plot_table(toplot, plotcolor=None):
+    if plotcolor:
+        for no, topl in enumerate(toplot):  #TODO: Improve this (Pretty sure a zip thingy does this)
+            plot.plot(topl, color=plotcolor[no])
+    else:
+        for no, topl in enumerate(toplot):  #TODO: Improve this (Pretty sure a zip thingy does this)
+            plot.plot(topl)
+
+
 
     plot.xlabel("Time")
     plot.xlim(left=0)
@@ -87,4 +93,4 @@ def histo_table(toplot, plotcolor):
     plot.show()
 
 def pie_table(toplot):
-    
+    pass
