@@ -41,4 +41,3 @@ class user:
 
 if __name__ == "__main__":
     test = user("niamek")
-    test.table_data(test.PBs)
