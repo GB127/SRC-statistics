@@ -74,7 +74,7 @@ def plot_table(toplot, plotcolor=None):
         for no, topl in enumerate(toplot):  #TODO: Improve this (Pretty sure a zip thingy does this)
             plot.plot(topl, color=plotcolor[no])
     else:
-        for no, topl in enumerate(toplot):  #TODO: Improve this (Pretty sure a zip thingy does this)
+        for no, topl in enumerate(toplot):
             plot.plot(topl)
 
 
