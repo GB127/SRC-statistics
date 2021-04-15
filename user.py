@@ -23,10 +23,10 @@ class user:
         """
         self.username = username.capitalize()
         print(f"Fetching {self.username}'s data...")
-        self.ID = get_userID(self.username)
+        ID = get_userID(self.username)
 
-        self.PBs = PBs(get_PBs(self.ID))
-        self.Runs = Runs(get_runs(self.ID))
+        self.PBs = PBs(get_PBs(ID))
+        self.Runs = Runs(get_runs(ID))
         self.Saves = Saves(self.PBs, self.Runs)
         self.Systems = Systems(self.PBs, self.Runs)
         self.Games = Games(self.PBs, self.Runs)
@@ -35,8 +35,8 @@ class user:
 
     def __str__(self):
         tempo = list(self.__dict__.values())
-        tempo.pop(1)  # Remove the ID
-        tempo.pop(3)
+        print(tempo)
+        tempo.pop(3)  # Remove saves from the str because we don't want it there.
         return "; ".join([str(x) for x in tempo])
 
 if __name__ == "__main__":
