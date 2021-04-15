@@ -1,6 +1,16 @@
 from api import get_userID, get_PBs, get_runs
 from tools import run_time
-from runs import PBs, Runs, Saves, Systems, Games
+from PBs import PBs
+from allRuns import Runs
+from Saves import Saves
+from Systems import Systems
+from Games import Games
+
+
+
+
+
+
 
 
 class user:

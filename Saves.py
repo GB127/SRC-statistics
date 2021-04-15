@@ -1,3 +1,9 @@
+from tools import run_time, command_select
+from generic import table, entry
+from allRuns import Run
+
+
+
 class Save(entry):
     sorter = "PB"
     table_size =  [1, 17, 13, 3, 5, 19, 4]
@@ -74,11 +80,11 @@ class Saves(table):
         for category in self.data:
             all_plots.append(list(reversed([run.time.time for run in category.runs])))
 
-        plot_table(all_plots)
+        #plot_table(all_plots)
 
     def methods(self):
         tempo = super().methods()
-        tempo["Plot the table : alternate"] = self.plot_2
+        #tempo["Plot the table : alternate"] = self.plot_2
         return tempo
 
     def histo(self):
@@ -90,11 +96,11 @@ class Saves(table):
         plot.show()
 
     def plot(self):
-        plot_table([
-                        [save.first.time for save in self.data],
-                        [save.PB.time for save in self.data]],
-                    [
-                        "red",
-                        "blue"]
-                    )
-
+        #plot_table([
+        #                [save.first.time for save in self.data],
+        #                [save.PB.time for save in self.data]],
+        #            [
+        #                "red",
+        #                "blue"]
+        #            )
+        pass

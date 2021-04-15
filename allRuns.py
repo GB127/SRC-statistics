@@ -1,6 +1,6 @@
 from tools import run_time, command_select
-from run import Run, PB, Save, System, Game
-from generic import table, plot_table, histo_table
+from generic import table, entry
+from api import get_system, get_game, get_category, get_variable
 
 class Runs(table):
     def __init__(self, data):
@@ -27,11 +27,6 @@ class Runs(table):
 
     def histo(self):
         histo_table([[run.time.time for run in self.data]], ["orange"])
-
-    def plot(self):
-        pass  # TODO: REDO IT
-
-
 
 class Run(entry):
     games = {}
