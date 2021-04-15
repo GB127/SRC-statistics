@@ -30,149 +30,85 @@ class Runs(table):
 
     def plot(self):
         pass  # TODO: REDO IT
-class PBs(Runs):
+
+
+
+class Run(entry):
+    games = {}
+    categories = {}
+    systems = {
+        None : "PC",
+        "n5683oev" : "GB",
+        "gde3g9k1" : "GBC",
+        "3167d6q2" : "GBA",
+        "w89rwelk" : "N64",
+        "jm95z9ol" : "NES",
+        "3167jd6q" : "SGB",
+        "83exk6l5" : "SNES",
+        "4p9z06rn" : "GC",
+        "mr6k0ezw" : "S.GEN",
+        "nzelreqp" : "WII VC",
+        "3167jd6q" : "SGB",
+        "n5e147e2" : "SGB2",
+        "wxeod9rn" : "PS",
+        "n5e17e27" : "PS2",
+        "mx6pwe3g" : "PS3",
+        "nzelkr6q" : "PS4",
+        }
+
+    table_size = [1, 17, 13, 6]
+    sorter = "game"
+
     def __init__(self, data):
-        self.data = []
-        for pb in data:
-            if pb["run"]["times"]["primary_t"] > 180 and not pb["run"]["level"]:
-                self.data.append(PB(pb))
+        def clean_gamename(name):
+            if "The Legend of Zelda" in name:
+                return name[14:]
+            if name == "Ocarina of Time Category Extensions":
+                return "Zelda: Ocarina of Time"
+            if name == "Super Mario 64 Category Extensions":
+                return "Super Mario 64"
+
+            else: return name
+        self.IDs = [data["game"], data["category"], {}]
+
+        try:
+            self.system = Run.systems[data["system"]["platform"]]
+        except KeyError:
+            Run.systems[data["system"]["platform"]] = get_system(data["system"]["platform"])
+            self.system = Run.systems[data["system"]["platform"]]
+
+        try:
+            self.game = Run.games[data["game"]]
+        except KeyError:
+            Run.games[data["game"]] = clean_gamename(get_game(data["game"]))
+            self.game = Run.games[data["game"]]
+        try:
+            self.category = Run.categories[data["category"]]
+        except KeyError:
+            Run.categories[data["category"]] = get_category(data["category"])
+            self.category = Run.categories[data["category"]]
+
+        subcateg = []
+        for value, item in data["values"].items():
+            tempo = get_variable(value)
+            if tempo["is-subcategory"]:
+                subcateg.append(tempo["values"]["values"][item]["label"])
+                self.IDs[2][value] = item
+        if subcateg:
+            self.category = f'{self.category} ({",".join(subcateg)})'
+        
+        self.time = run_time(data["times"]["primary_t"])
 
     def __str__(self):
-        return f'{len(self)} PBs ({sum([x.time for x in self.data]).days()})'
+        tempo = [
+                    f'{self.system[:6]:^6}',
+                    f'{self.game[:20]:20}',
+                    f'{self.category[:20]:20}',
+                    f'{self.time:>9}']
+        return " | ".join([str(x) for x in tempo]) + " |"
 
-    def plot(self):
-        plot_table([
-                        [run.time.time for run in self.data],
-                        [run.WR.time for run in self.data]],
-                    [
-                        "blue",
-                        "gold"]
-                    )
-
-
-    def histo(self):
-        histo_table([[run.time.time for run in self.data]], ["blue"])
-
-    def get_header(self):
-        types = super().get_header()
-        types.remove("leaderboard")
-        types.remove("WR")
-        return types
-
-
-    def foot(self):  #TODO: Redo this
-        string1, string2, string3, string4 = super().foot().split("\n")
-        return "\n".join([string1, string2, string3])
-
-class Saves(table):
-
-    def get_header(self):
-        types = list(self.data[0].__dict__.keys())
-        types.remove("runs")
-        types.remove("save")
-        return types
-
-    def __str__(self):
-        return f"{len(self.data)} PBs with multiple runs"
-
-    def __init__(self, PBs, Runs):
-        self.data = []
-        for pb in PBs:
-            tempo = Save(pb, Runs)
-            if tempo.first != tempo.PB:
-                self.data.append(tempo)
-
-    def foot(self):
-        total_X = sum([category.X for category in self.data])
-        total_first = sum([category.first for category in self.data])
-        total_PB = sum([category.PB for category in self.data])
-        total_delta = total_first - total_PB
-        perc_delta = round(total_delta / total_first * 100, 2)
-
-        string1 = "-" * 114 + "\n"
-        string2 = f'{len(self.data)} PBs{"":47}Total:|{total_X:^5}| {total_first:>9} | {total_PB:>9} (-{total_delta}) | (- {perc_delta:>5} %)|\n'
-        string3 = f'{"Average:":>59}|{round(total_X/len(self.data)):^5}| {run_time(total_first/len(self.data)):>9} | {run_time(total_PB/len(self.data)):>9} (-{run_time(total_delta/len(self.data))}) | (- {perc_delta:>5} %)|'
-
-
-        return string1 + string2 + string3
-
-    def plot_2(self):
-        all_plots = []
-        for category in self.data:
-            all_plots.append(list(reversed([run.time.time for run in category.runs])))
-
-        plot_table(all_plots)
-
-    def methods(self):
-        tempo = super().methods()
-        tempo["Plot the table : alternate"] = self.plot_2
+    def sortable(self):
+        tempo = list(self.__dict__)
+        tempo.remove("IDs")
         return tempo
 
-    def histo(self):
-        plot.hist([[run.PB.time for run in self.data], [run.first.time for run in self.data]], label=["PBs","Firsts"], color=["Blue", "Red"])
-        plot.xlabel("Time")
-        plot.xlim(left=0)
-        plot.xticks(plot.xticks()[0],[str(run_time(x)) for x in plot.xticks()[0]])
-        plot.legend()
-        plot.show()
-
-    def plot(self):
-        plot_table([
-                        [save.first.time for save in self.data],
-                        [save.PB.time for save in self.data]],
-                    [
-                        "red",
-                        "blue"]
-                    )
-
-
-class Games(table):
-    def __init__(self, PBs, Runs):
-        self.data = []
-        data_PBs, data_Runs = {},{}
-        for pb in PBs:
-            data_PBs[pb.game] = data_PBs.get(pb.game, []) + [pb]
-        for run in Runs:
-            data_Runs[run.game] = data_Runs.get(run.game, []) + [run]
-
-        for game in data_PBs.keys():
-            self.data.append(Game(game, data_PBs[game], data_Runs[game]))
-
-    def __str__(self):
-        return f'{len(self.data)} Games'
-
-    def foot(self):
-        runs_count = sum([game.Run_count for game in self.data])
-        total_runs = sum([game.Run_Total for game in self.data])
-        total_PBs = sum([game.PB_Total for game in self.data])
-        PBs_count = sum([game.PB_count for game in self.data])
-        total_WRs = sum([game.WR_Total for game in self.data])
-        total_deltas = sum([game.PB_Total_delta for game in self.data])
-        perc_average = round(total_PBs / total_WRs * 100, 2)
-
-
-        string1 = "-" * 93 + "\n"
-        string2 = f"{len(self.data):<3} games{'':28}|{runs_count:3} | {total_runs:9} |{PBs_count:3} | {total_PBs:>9} (+{total_deltas:7})| {perc_average} %\n"
-        string3 = f"{len(self.data):<3} games{'':28}|{int(runs_count/len(self.data)):3} | {run_time(total_runs/len(self.data)):9} |{int(PBs_count/len(self.data)):3} | {run_time(total_PBs/len(self.data)):>9} (+{run_time(total_deltas/len(self.data)):7}) | {perc_average} %"
-
-        return string1 + string2 + string3
-
-class Systems(table):
-    def __init__(self, PBs, Runs):
-        self.data = []
-        data_PBs, data_Runs = {},{}
-        for pb in PBs:
-            data_PBs[pb.system] = data_PBs.get(pb.system, []) + [pb]
-        for run in Runs:
-            data_Runs[run.system] = data_Runs.get(run.system, []) + [run]
-
-        for one_system in data_PBs.keys():
-            self.data.append(System(one_system, data_PBs[one_system], data_Runs[one_system]))
-
-    def __str__(self):
-        return f'{len(self.data)} systems'
-
-    def foot(self):
-        string1 = f'{len(self)} systems{"":7}{sum([one.Run_count for one in self.data])} Runs ; {sum([one.Run_Total for one in self.data]):>11} | {sum([one.PB_count for one in self.data])} PBs ; {sum([one.PB_Total for one in self.data]):>10} (+{sum([one.PB_Total_delta for one in self.data]):>9})\n'
-        string2 = f'{len(self)} systems{"":7}{int(sum([one.Run_count for one in self.data])/len(self))} Runs ; {run_time(sum([one.Run_Total for one in self.data])/len(self)):>11} | {int(sum([one.PB_count for one in self.data])/len(self))} PBs ; {run_time(sum([one.PB_Total for one in self.data])/len(self)):>10} (+{run_time(sum([one.PB_Total_delta for one in self.data])/len(self)):>9})'
-        return string1 + string2
