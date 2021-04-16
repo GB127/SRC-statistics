@@ -1,5 +1,5 @@
 from tools import run_time, command_select
-from generic import table, entry
+from generic import table, entry, histo_table
 from api import get_system, get_game, get_category, get_variable
 
 class Runs(table):

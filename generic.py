@@ -58,8 +58,6 @@ class table:
     def change_sort(self):
         self.data[0].change_sort()
 
-
-
     # Basic stuffs for making the stuff an iterable and all.
     def __getitem__(self, argument):
         return self.data[argument]
