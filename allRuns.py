@@ -13,8 +13,8 @@ class Runs(table):
         total_time = sum([x.time for x in self.data])
 
         string1 = f"{'-' * 72}\n" 
-        string2 = f"{'Total |':>60}{total_time:>11}\n"
-        string3 = f"{'Average |':>60}{run_time(total_time/ len(self)):>11}\n"
+        string2 = f"{'Total |':>60}{total_time:>10}\n"
+        string3 = f"{'Average |':>60}{run_time(total_time/ len(self)):>10}\n"
         return string1 + string2 + string3
 
     def __str__(self):

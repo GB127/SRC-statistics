@@ -34,6 +34,22 @@ class PBs(Runs):
 
     def foot(self):  #TODO: Redo this
         string1, string2, string3, string4 = super().foot().split("\n")
+        
+        total_time = sum([pb.time for pb in self.data])
+        total_wr = sum([pb.WR for pb in self.data])
+
+        percentage = round(100* total_time / total_wr, 2)
+
+        total_deltaWR = sum([pb.delta_WR for pb in self.data])
+
+        string1 += "-" * 46
+        string2 += f' |+ {total_deltaWR} |  {percentage} % |'
+        string3 += f' |+ {run_time(total_deltaWR / len(self))}  |  {percentage} % |'
+
+
+
+
+
         return "\n".join([string1, string2, string3])
 
 

@@ -69,7 +69,7 @@ class Saves(table):
         perc_delta = round(total_delta / total_first * 100, 2)
 
         string1 = "-" * 114 + "\n"
-        string2 = f'{len(self.data)} PBs{"":47}Total:|{total_X:^5}| {total_first:>9} | {total_PB:>9} (-{total_delta}) | (- {perc_delta:>5} %)|\n'
+        string2 = f'{len(self.data)} PBs{"":47}Total:|{total_X:^5}| {total_first:>9} | {total_PB:>9} (-{total_delta})| (- {perc_delta:>5} %)|\n'
         string3 = f'{"Average:":>59}|{round(total_X/len(self.data)):^5}| {run_time(total_first/len(self.data)):>9} | {run_time(total_PB/len(self.data)):>9} (-{run_time(total_delta/len(self.data))}) | (- {perc_delta:>5} %)|'
 
 

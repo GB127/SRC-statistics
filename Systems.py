@@ -3,6 +3,13 @@ from generic import table, entry
 
 
 class Systems(table):
+    def get_header(self):
+        types = ["system", "Runs","PBs"]
+        return types
+
+
+
+
     def __init__(self, PBs, Runs):
         self.data = []
         data_PBs, data_Runs = {},{}
@@ -18,14 +25,13 @@ class Systems(table):
         return f'{len(self.data)} systems'
 
     def foot(self):  #TODO: use local variable to reduce computer usage
-        string1 = f'{len(self)} systems{"":7}{sum([one.Run_count for one in self.data])} Runs ; {sum([one.Run_Total for one in self.data]):>11} | {sum([one.PB_count for one in self.data])} PBs ; {sum([one.PB_Total for one in self.data]):>10} (+{sum([one.PB_Total_delta for one in self.data]):>9})\n'
-        string2 = f'{len(self)} systems{"":7}{int(sum([one.Run_count for one in self.data])/len(self))} Runs ; {run_time(sum([one.Run_Total for one in self.data])/len(self)):>11} | {int(sum([one.PB_count for one in self.data])/len(self))} PBs ; {run_time(sum([one.PB_Total for one in self.data])/len(self)):>10} (+{run_time(sum([one.PB_Total_delta for one in self.data])/len(self)):>9})'
+        string1 = f'               | {sum([one.Run_count for one in self.data]):>3} Runs ;{sum([one.Run_Total for one in self.data]):>10} | {sum([one.PB_count for one in self.data]):>2}  PBs ;{sum([one.PB_Total for one in self.data]):>10} (+{sum([one.PB_Total_delta for one in self.data]):>9})\n'
+        string2 = f'               | {int(sum([one.Run_count for one in self.data])/len(self)):>3} Runs ;{run_time(sum([one.Run_Total for one in self.data])/len(self)):>10} | {int(sum([one.PB_count for one in self.data])/len(self)):>2}  PBs ;{run_time(sum([one.PB_Total for one in self.data])/len(self)):>10} (+{run_time(sum([one.PB_Total_delta for one in self.data])/len(self)):>9})'
         return string1 + string2
 
 
-
 class System(entry):
-    table_size = [3, 17, 21]
+    table_size = [3, 17, 28]
     sorter = "system"
 
 
@@ -59,5 +65,5 @@ class System(entry):
                 f'{self.PB_count:^3} PBs ; {self.PB_Total:>9} (+{self.PB_Total_delta:>8})\n   ',
                 f'        ',
                 f'           {self.Run_average:>9}', 
-                f'          {self.PB_average:>9} (+{self.PB_Total_delta_average:>8})\n' + "-" * 80]
+                f'          {self.PB_average:>9} (+{self.PB_Total_delta_average:>8})\n' + "-" * 72]
         return " | ".join(tempo)

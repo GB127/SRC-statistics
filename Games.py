@@ -4,7 +4,7 @@ from generic import table, entry
 
 
 class Game(entry):
-    table_size = [3, 17, 21]
+    table_size = [27, 2, 1,2,13,5]
     sorter = "game"
 
     def __init__(self, game, pbs, runs):
@@ -69,8 +69,11 @@ class Games(table):
 
 
         string1 = "-" * 93 + "\n"
-        string2 = f"{len(self.data):<3} games{'':28}|{runs_count:3} | {total_runs:9} |{PBs_count:3} | {total_PBs:>9} (+{total_deltas:7})| {perc_average} %\n"
-        string3 = f"{len(self.data):<3} games{'':28}|{int(runs_count/len(self.data)):3} | {run_time(total_runs/len(self.data)):9} |{int(PBs_count/len(self.data)):3} | {run_time(total_PBs/len(self.data)):>9} (+{run_time(total_deltas/len(self.data)):7}) | {perc_average} %"
+        string2 = f"{'Total:':>37}|{runs_count:3} | {total_runs:9} |{PBs_count:3} | {total_PBs:>9} (+{total_deltas:7})| {perc_average} %\n"
+        string3 = f"{'Average:':>37}|{int(runs_count/len(self.data)):3} | {run_time(total_runs/len(self.data)):9} |{int(PBs_count/len(self.data)):3} | {run_time(total_PBs/len(self.data)):>9} (+{run_time(total_deltas/len(self.data)):7}) | {perc_average} %"
 
         return string1 + string2 + string3
 
+    def get_header(self):
+        types = ["Game", "#", "Run total", "#", "PB total", "WR%"]
+        return types
