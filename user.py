@@ -7,12 +7,6 @@ from Systems import Systems
 from Games import Games
 
 
-
-
-
-
-
-
 class user:
     def __init__(self, username):
         """

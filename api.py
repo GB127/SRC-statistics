@@ -1,6 +1,4 @@
-import requests
-import datetime
-import time
+import requests, datetime, time
 
 URL = "https://www.speedrun.com/api/v1"
 
