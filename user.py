@@ -29,7 +29,6 @@ class user:
 
     def __str__(self):
         tempo = list(self.__dict__.values())
-        print(tempo)
         tempo.pop(3)  # Remove saves from the str because we don't want it there.
         return "; ".join([str(x) for x in tempo])
 
