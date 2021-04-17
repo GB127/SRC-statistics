@@ -1,5 +1,6 @@
 from tools import run_time, command_select
-from generic import table, entry, histo_table
+from generic import table, entry
+from plots import plots
 from api import get_system, get_game, get_category, get_variable
 
 class Runs(table):
@@ -17,6 +18,7 @@ class Runs(table):
         string3 = f"{'Average |':>60}{run_time(total_time/ len(self)):>10}\n"
         return string1 + string2 + string3
 
+
     def __str__(self):
         return f'{len(self)} runs ({sum([x.time for x in self.data]).days()})'
 
@@ -25,8 +27,14 @@ class Runs(table):
         types.remove("IDs")
         return types
 
+    def methods(self):
+        metho = super().methods()
+        metho["histo"] = self.histo
+        return metho
+
     def histo(self):
-        histo_table([[run.time.time for run in self.data]], ["orange"])
+        plots(self)()
+    
 
 class Run(entry):
     games = {}

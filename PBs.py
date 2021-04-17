@@ -21,10 +21,6 @@ class PBs(Runs):
                         "gold"]
                     )
 
-
-    def histo(self):
-        histo_table([[run.time.time for run in self.data]], ["blue"])
-
     def get_header(self):
         types = super().get_header()
         types.remove("leaderboard")
