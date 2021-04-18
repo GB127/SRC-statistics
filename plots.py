@@ -11,10 +11,10 @@ class plots:
         self.min_max()
 
     def min_max(self):
-        self.min, self.max = 80000000, 0  #TODO: there is surely a way to avoid that number.
+        self.min_times, self.max_times = 80000000, 0  #TODO: there is surely a way to avoid that number.
         for data in self.times.values():
-            self.min = min(min(data), self.min)
-            self.max = max(max(data), self.min)
+            self.min_times = min(min(data), self.min_times)
+            self.max_times = max(max(data), self.min_times)
 
 
 
@@ -24,22 +24,22 @@ class plots:
             "Runs" : 1,
             "PBs" : 0.50,
             "WRs" : 1
-        }
+            }
         color = {
             "Firsts" : "darkred",
             "Runs" : "cornflowerblue",
             "PBs" : "darkgreen",
             "WRs" : "gold"
-        }
+            }
 
         for key, data in self.times.items():
             plot.hist(data, label=key, 
                         bins=10, 
-                        range=(self.min, self.max), 
+                        range=(self.min_times, self.max_times), 
                         alpha=alpha[key],
                         color=color[key])
         plot.xticks(plot.xticks()[0],[str(run_time(x)) for x in plot.xticks()[0]])
-        plot.xlim(left=self.min, right=self.max)
+        plot.xlim(left=self.min_time, right=self.max_times)
         plot.legend()
         plot.show()
     def __call__(self):
