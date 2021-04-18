@@ -14,8 +14,8 @@ class PBs(Runs):
         return f'{len(self)} PBs ({sum([x.time for x in self.data]).days()})'
 
     def histo(self):
-        plots({"PBs" : [run.time.time for run in self.data],
-                "WRs" : [run.WR.time for run in self.data]}
+        plots({"WRs" : [run.WR.time for run in self.data],
+                "PBs" : [run.time.time for run in self.data]}
             )()
         
 
