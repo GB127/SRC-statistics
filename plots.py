@@ -31,9 +31,6 @@ class plots:
             "PBs" : "darkgreen",
             "WRs" : "gold"
         }
-        #if "Firsts" in self.times.keys():
-        #    alpha["PBs"] = 1
-
 
         for key, data in self.times.items():
             plot.hist(data, label=key, 
