@@ -52,6 +52,11 @@ class Saves(table):
                 "Firsts" : [run.first.time for run in self.data]}
             )()
 
+    def methods(self):
+        metho = super().methods()
+        metho["histo"] = self.histo
+        return metho
+
 
 
 
@@ -91,18 +96,3 @@ class Saves(table):
             all_plots.append(list(reversed([run.time.time for run in category.runs])))
 
         #plot_table(all_plots)
-
-    def methods(self):
-        tempo = super().methods()
-        #tempo["Plot the table : alternate"] = self.plot_2
-        return tempo
-
-    def plot(self):
-        #plot_table([
-        #                [save.first.time for save in self.data],
-        #                [save.PB.time for save in self.data]],
-        #            [
-        #                "red",
-        #                "blue"]
-        #            )
-        pass
