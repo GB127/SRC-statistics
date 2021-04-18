@@ -29,7 +29,7 @@ class Runs(table):
 
     def methods(self):
         metho = super().methods()
-        metho["histo"] = self.histo
+        metho["Histo the table"] = self.histo
         return metho
 
     def histo(self):

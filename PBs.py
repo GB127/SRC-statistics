@@ -19,17 +19,6 @@ class PBs(Runs):
             )()
         
 
-
-
-    def plot(self):
-        plot_table([
-                        [run.time.time for run in self.data],
-                        [run.WR.time for run in self.data]],
-                    [
-                        "blue",
-                        "gold"]
-                    )
-
     def get_header(self):
         types = super().get_header()
         types.remove("leaderboard")

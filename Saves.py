@@ -54,7 +54,7 @@ class Saves(table):
 
     def methods(self):
         metho = super().methods()
-        metho["histo"] = self.histo
+        metho["Histo the table"] = self.histo
         return metho
 
 
