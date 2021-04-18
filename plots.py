@@ -8,8 +8,16 @@ class plots:
         # times is a dictionnary.
 
         self.times = times
-        self.min = 0
-        self.max = None
+        self.limits()
+
+    def limits(self):
+        self.min, self.max = 80000000, 0
+        for data in self.times.values():
+            self.min = min(min(data), self.min)
+            self.max = max(max(data), self.min)
+        print(self.min, self.max)
+
+
 
     def histo_table(self):
         for key, data in self.times.items():
@@ -20,3 +28,4 @@ class plots:
         plot.show()
     def __call__(self):
         self.histo_table()
+        pass
