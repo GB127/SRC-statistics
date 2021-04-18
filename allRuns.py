@@ -33,7 +33,8 @@ class Runs(table):
         return metho
 
     def histo(self):
-        plots(self)()
+        plots({"Runs" : [run.time.time for run in self.data]}
+            )()
     
 
 class Run(entry):
