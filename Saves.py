@@ -47,7 +47,8 @@ class Save(entry):
 class Saves(table):
 
     def histo(self):
-        plots({"PBs" : [run.PB.time for run in self.data],
+        plots({
+                "PBs" : [run.PB.time for run in self.data],
                 "Firsts" : [run.first.time for run in self.data]}
             )()
 
