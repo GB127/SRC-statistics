@@ -1,6 +1,7 @@
 from tools import run_time, command_select
 from generic import table, entry
 from allRuns import Run
+from plots import plots
 
 
 
@@ -45,6 +46,14 @@ class Save(entry):
 
 class Saves(table):
 
+    def histo(self):
+        plots({"PBs" : [run.PB.time for run in self.data],
+                "Firsts" : [run.first.time for run in self.data]}
+            )()
+
+
+
+
     def get_header(self):
         types = list(self.data[0].__dict__.keys())
         types.remove("runs")
@@ -86,14 +95,6 @@ class Saves(table):
         tempo = super().methods()
         #tempo["Plot the table : alternate"] = self.plot_2
         return tempo
-
-    def histo(self):
-        plot.hist([[run.PB.time for run in self.data], [run.first.time for run in self.data]], label=["PBs","Firsts"], color=["Blue", "Red"])
-        plot.xlabel("Time")
-        plot.xlim(left=0)
-        plot.xticks(plot.xticks()[0],[str(run_time(x)) for x in plot.xticks()[0]])
-        plot.legend()
-        plot.show()
 
     def plot(self):
         #plot_table([

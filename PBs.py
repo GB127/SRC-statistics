@@ -1,6 +1,7 @@
 from allRuns import Runs, Run
 from api import get_leaderboard
 from tools import run_time
+from plots import plots
 
 class PBs(Runs):
     def __init__(self, data):
@@ -11,6 +12,14 @@ class PBs(Runs):
 
     def __str__(self):
         return f'{len(self)} PBs ({sum([x.time for x in self.data]).days()})'
+
+    def histo(self):
+        plots({"PBs" : [run.time.time for run in self.data],
+                "WRs" : [run.WR.time for run in self.data]}
+            )()
+        
+
+
 
     def plot(self):
         plot_table([
