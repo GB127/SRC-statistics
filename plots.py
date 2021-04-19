@@ -2,13 +2,9 @@ import matplotlib.pyplot as plot
 from tools import run_time
 
 
-class plots:
-
-    def __init__(self, times):
-        # times is a dictionnary.
-
-        self.times = times
-        self.min_max()
+class plots_generic:
+    def __init__(self):
+        raise Exception("Cannot create an object of this class")
 
     def min_max(self):
         self.min_times, self.max_times = 80000000, 0  #TODO: there is surely a way to avoid that number.
@@ -16,9 +12,7 @@ class plots:
             self.min_times = min(min(data), self.min_times)
             self.max_times = max(max(data), self.min_times)
 
-
-
-    def histo_table(self):
+    def histo_times(self):
         alpha = {
             "Firsts": 0.7,
             "Runs" : 1,
@@ -32,6 +26,7 @@ class plots:
             "WRs" : "gold"
             }
 
+        self.min_max()
         for key, data in self.times.items():
             plot.hist(data, label=key, 
                         bins=10, 
@@ -39,8 +34,11 @@ class plots:
                         alpha=alpha[key],
                         color=color[key])
         plot.xticks(plot.xticks()[0],[str(run_time(x)) for x in plot.xticks()[0]])
-        plot.xlim(left=self.min_time, right=self.max_times)
+        plot.xlim(left=self.min_times, right=self.max_times)
+
         plot.legend()
         plot.show()
+
     def __call__(self):
-        self.histo_table()
+        self.histo_times()
+
