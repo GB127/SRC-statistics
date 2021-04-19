@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plot
-from tools import run_time
+from tools import run_time, command_select
 
 
 class plots_generic:
@@ -23,11 +23,18 @@ class plots_generic:
     def histo_percents(self, min_perc, max_perc):
         plot.xticks(plot.xticks()[0],[f'{x} %' for x in plot.xticks()[0]])
         plot.xlim(left=min_perc, right=max_perc)
-        plot.legend()
         plot.show()
 
     def __call__(self):
+        commands = {"end" : "end"}
         if self.times:
-            self.histo_times()
+            commands["Histogram of times"] = self.histo_times
         if self.percents:
-            self.histo_percents()
+            commands["Histogram of percent"] = self.histo_percents
+        while True:
+            command_key = command_select(sorted(commands.keys()), printer=True)
+            command = commands[command_key]
+            if command != "end":
+                command()
+            else:
+                break
