@@ -2,6 +2,8 @@ from tools import run_time, command_select
 from generic import table, entry
 from allRuns import Run
 from plots import plots_generic
+import matplotlib.pyplot as plot
+
 
 
 
@@ -96,5 +98,17 @@ class Saves(table):
 
 class plots_Saves(plots_generic):
     def __init__(self, Saves):
+        super().__init__()
         self.times = {"PBs" : [run.PB.time for run in Saves.data],
                     "Firsts" : [run.first.time for run in Saves.data]}
+        self.percents = [run.perc1st for run in Saves.data]
+
+
+    def histo_percents(self):
+        plot.hist(self.percents, 
+                        bins=10,
+                        range=(0, 100)
+                )
+        print(max(self.percents))
+        plot.xlim(left=0, right=100)
+        super().histo_percents()

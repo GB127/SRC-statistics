@@ -4,7 +4,8 @@ from tools import run_time
 
 class plots_generic:
     def __init__(self):
-        raise Exception("Cannot create an object of this class")
+        self.times = None
+        self.percents = None
 
     def min_max(self):
         self.min_times, self.max_times = 80000000, 0  #TODO: there is surely a way to avoid that number.
@@ -12,7 +13,7 @@ class plots_generic:
             self.min_times = min(min(data), self.min_times)
             self.max_times = max(max(data), self.min_times)
 
-    def histo_times(self):
+    def histo_times(self):  #TODO : transfert to child classes
         alpha = {
             "Firsts": 0.7,
             "Runs" : 1,
@@ -39,6 +40,21 @@ class plots_generic:
         plot.legend()
         plot.show()
 
+
+    def histo_percents(self):
+        plot.xticks(plot.xticks()[0],[f'{x} %' for x in plot.xticks()[0]])
+        plot.legend()
+        plot.show()
+
+
+
+
+
+
     def __call__(self):
-        self.histo_times()
+        if self.times:
+            pass
+            #self.histo_times()
+        if self.percents:
+            self.histo_percents()
 

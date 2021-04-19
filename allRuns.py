@@ -118,4 +118,6 @@ class Run(entry):
 
 class plots_Runs(plots_generic):
     def __init__(self,runs):
+        super().__init__()
+
         self.times = {"Runs" : [run.time.time for run in runs.data]}

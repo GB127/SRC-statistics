@@ -2,6 +2,8 @@ from allRuns import Runs, Run
 from api import get_leaderboard
 from tools import run_time
 from plots import plots_generic
+import matplotlib.pyplot as plot
+
 
 class PBs(Runs):
     def __init__(self, data):
@@ -72,7 +74,17 @@ class PB(Run):
 
 class plot_PBs(plots_generic):
     def __init__(self, PBs):
+        super().__init__()
         self.times = {"WRs" : [run.WR.time for run in PBs.data],
                         "PBs" : [run.time.time for run in PBs.data]
                         }
-        self.min_max()
+        self.percents = [run.perc_WR for run in PBs.data]
+
+    def histo_percents(self):
+        plot.hist(self.percents, 
+                        bins=10,
+                        range=(100, max(self.percents))
+                )
+        print(max(self.percents))
+        plot.xlim(left=100, right=max(self.percents))
+        super().histo_percents()
