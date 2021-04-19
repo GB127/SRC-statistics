@@ -1,6 +1,7 @@
 from tools import run_time, command_select
 from generic import table, entry
 from plots import plots_generic
+import matplotlib.pyplot as plot
 from api import get_system, get_game, get_category, get_variable
 
 class Runs(table):
@@ -121,3 +122,14 @@ class plots_Runs(plots_generic):
         super().__init__()
 
         self.times = {"Runs" : [run.time.time for run in runs.data]}
+
+    def histo_times(self):
+
+        self.min_max()
+        for key, data in self.times.items():
+            plot.hist(data, label=key, 
+                        bins=10, 
+                        range=(self.min_times, self.max_times), 
+                        color="cornflowerblue")
+
+        super().histo_times()

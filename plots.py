@@ -13,48 +13,21 @@ class plots_generic:
             self.min_times = min(min(data), self.min_times)
             self.max_times = max(max(data), self.min_times)
 
-    def histo_times(self):  #TODO : transfert to child classes
-        alpha = {
-            "Firsts": 0.7,
-            "Runs" : 1,
-            "PBs" : 0.50,
-            "WRs" : 1
-            }
-        color = {
-            "Firsts" : "darkred",
-            "Runs" : "cornflowerblue",
-            "PBs" : "darkgreen",
-            "WRs" : "gold"
-            }
-
-        self.min_max()
-        for key, data in self.times.items():
-            plot.hist(data, label=key, 
-                        bins=10, 
-                        range=(self.min_times, self.max_times), 
-                        alpha=alpha[key],
-                        color=color[key])
+    def histo_times(self):
         plot.xticks(plot.xticks()[0],[str(run_time(x)) for x in plot.xticks()[0]])
         plot.xlim(left=self.min_times, right=self.max_times)
-
         plot.legend()
         plot.show()
 
 
-    def histo_percents(self):
+    def histo_percents(self, min_perc, max_perc):
         plot.xticks(plot.xticks()[0],[f'{x} %' for x in plot.xticks()[0]])
+        plot.xlim(left=min_perc, right=max_perc)
         plot.legend()
         plot.show()
-
-
-
-
-
 
     def __call__(self):
         if self.times:
-            pass
-            #self.histo_times()
+            self.histo_times()
         if self.percents:
             self.histo_percents()
-

@@ -85,6 +85,23 @@ class plot_PBs(plots_generic):
                         bins=10,
                         range=(100, max(self.percents))
                 )
-        print(max(self.percents))
-        plot.xlim(left=100, right=max(self.percents))
-        super().histo_percents()
+        super().histo_percents(100, max(self.percents))
+
+    def histo_times(self):
+        alpha = {
+            "PBs" : 0.50,
+            "WRs" : 1
+            }
+        color = {
+            "PBs" : "darkgreen",
+            "WRs" : "gold"
+            }
+
+        self.min_max()
+        for key, data in self.times.items():
+            plot.hist(data, label=key, 
+                        bins=10, 
+                        range=(self.min_times, self.max_times), 
+                        alpha=alpha[key],
+                        color=color[key])
+        super().histo_times()

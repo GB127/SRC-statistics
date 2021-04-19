@@ -104,6 +104,27 @@ class plots_Saves(plots_generic):
         self.percents = [run.perc1st for run in Saves.data]
 
 
+
+    def histo_times(self):
+        alpha = {
+            "Firsts": 0.7,
+            "PBs" : 1,
+            }
+        color = {
+            "Firsts" : "darkred",
+            "PBs" : "darkgreen",
+            }
+
+        self.min_max()
+        for key, data in self.times.items():
+            plot.hist(data, label=key, 
+                        bins=10, 
+                        range=(self.min_times, self.max_times), 
+                        alpha=alpha[key],
+                        color=color[key])
+
+        super().histo_times()
+
     def histo_percents(self):
         plot.hist(self.percents, 
                         bins=10,
@@ -111,4 +132,4 @@ class plots_Saves(plots_generic):
                 )
         print(max(self.percents))
         plot.xlim(left=0, right=100)
-        super().histo_percents()
+        super().histo_percents(0, 100)
