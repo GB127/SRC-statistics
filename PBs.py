@@ -1,7 +1,7 @@
 from allRuns import Runs, Run
 from api import get_leaderboard
 from tools import run_time
-from plots import plots
+from plots import plots_generic
 
 class PBs(Runs):
     def __init__(self, data):
@@ -14,9 +14,7 @@ class PBs(Runs):
         return f'{len(self)} PBs ({sum([x.time for x in self.data]).days()})'
 
     def histo(self):
-        plots({"WRs" : [run.WR.time for run in self.data],
-                "PBs" : [run.time.time for run in self.data]}
-            )()
+        plot_PBs(self)()
         
 
     def get_header(self):
@@ -71,3 +69,10 @@ class PB(Run):
                                     f"{f'{self.place}/{len(self.leaderboard)}':9}",
                                     f"{self.perc_LB:6} %"]) + "|"
 
+
+class plot_PBs(plots_generic):
+    def __init__(self, PBs):
+        self.times = {"WRs" : [run.WR.time for run in PBs.data],
+                        "PBs" : [run.time.time for run in PBs.data]
+                        }
+        self.min_max()

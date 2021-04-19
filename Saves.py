@@ -1,7 +1,7 @@
 from tools import run_time, command_select
 from generic import table, entry
 from allRuns import Run
-from plots import plots
+from plots import plots_generic
 
 
 
@@ -47,10 +47,7 @@ class Save(entry):
 class Saves(table):
 
     def histo(self):
-        plots({
-                "PBs" : [run.PB.time for run in self.data],
-                "Firsts" : [run.first.time for run in self.data]}
-            )()
+        plots_Saves(self)()
 
     def methods(self):
         metho = super().methods()
@@ -96,3 +93,8 @@ class Saves(table):
             all_plots.append(list(reversed([run.time.time for run in category.runs])))
 
         #plot_table(all_plots)
+
+class plots_Saves(plots_generic):
+    def __init__(self, Saves):
+        self.times = {"PBs" : [run.PB.time for run in Saves.data],
+                    "Firsts" : [run.first.time for run in Saves.data]}

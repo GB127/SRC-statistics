@@ -1,6 +1,6 @@
 from tools import run_time, command_select
 from generic import table, entry
-from plots import plots
+from plots import plots_generic
 from api import get_system, get_game, get_category, get_variable
 
 class Runs(table):
@@ -33,8 +33,7 @@ class Runs(table):
         return metho
 
     def histo(self):
-        plots({"Runs" : [run.time.time for run in self.data]}
-            )()
+        plots_Runs(self)()
     
 
 class Run(entry):
@@ -116,3 +115,7 @@ class Run(entry):
         tempo.remove("IDs")
         return tempo
 
+
+class plots_Runs(plots_generic):
+    def __init__(self,runs):
+        self.times = {"Runs" : [run.time.time for run in runs.data]}
