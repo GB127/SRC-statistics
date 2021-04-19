@@ -1,7 +1,7 @@
 from allRuns import Runs, Run
 from api import get_leaderboard
 from tools import run_time
-from plots import plots_generic
+from plots import histo_generic
 import matplotlib.pyplot as plot
 
 
@@ -16,7 +16,7 @@ class PBs(Runs):
         return f'{len(self)} PBs ({sum([x.time for x in self.data]).days()})'
 
     def histo(self):
-        plot_PBs(self)()
+        histo_PBs(self)()
         
 
     def get_header(self):
@@ -72,14 +72,14 @@ class PB(Run):
                                     f"{self.perc_LB:6} %"]) + "|"
 
 
-class plot_PBs(plots_generic):
+class histo_PBs(histo_generic):
     def __init__(self, PBs):
         super().__init__()
         self.times = {"WRs" : [run.WR.time for run in PBs.data],
                         "PBs" : [run.time.time for run in PBs.data]
                         }
         self.percents = [run.perc_WR for run in PBs.data]
-
+        self.deltas = {"PBs" : [run.delta_WR.time for run in PBs.data]}
     def histo_percents(self):
         plot.hist(self.percents, 
                         bins=10,
@@ -105,3 +105,21 @@ class plot_PBs(plots_generic):
                         alpha=alpha[key],
                         color=color[key])
         super().histo_times()
+
+
+
+    def histo_deltatimes(self):
+        alpha = {
+            "PBs" : 0.50,
+            "WRs" : 1
+            }
+        color = {
+            "PBs" : "darkgreen",
+            "WRs" : "gold"
+            }
+        for key, data in self.deltas.items():
+            plot.hist(data, label=key, 
+                        bins=10, 
+                        alpha=alpha[key],
+                        color=color[key])
+        super().histo_deltatimes()

@@ -1,7 +1,7 @@
 from tools import run_time, command_select
 from generic import table, entry
 from allRuns import Run
-from plots import plots_generic
+from plots import histo_generic
 import matplotlib.pyplot as plot
 
 
@@ -49,7 +49,7 @@ class Save(entry):
 class Saves(table):
 
     def histo(self):
-        plots_Saves(self)()
+        histo_Saves(self)()
 
     def methods(self):
         metho = super().methods()
@@ -96,13 +96,13 @@ class Saves(table):
 
         #plot_table(all_plots)
 
-class plots_Saves(plots_generic):
+class histo_Saves(histo_generic):
     def __init__(self, Saves):
         super().__init__()
         self.times = {"PBs" : [run.PB.time for run in Saves.data],
                     "Firsts" : [run.first.time for run in Saves.data]}
         self.percents = [run.perc1st for run in Saves.data]
-
+        self.deltas = {"Firsts" : [run.save.time for run in Saves.data]}
 
 
     def histo_times(self):
@@ -133,3 +133,21 @@ class plots_Saves(plots_generic):
         print(max(self.percents))
         plot.xlim(left=0, right=100)
         super().histo_percents(0, 100)
+
+
+    def histo_deltatimes(self):
+        alpha = {
+            "Firsts": 0.7,
+            "PBs" : 1,
+            }
+        color = {
+            "Firsts" : "darkred",
+            "PBs" : "darkgreen",
+            }
+
+        for key, data in self.deltas.items():
+            plot.hist(data, label=key, 
+                        bins=10, 
+                        alpha=alpha[key],
+                        color=color[key])
+        super().histo_deltatimes()

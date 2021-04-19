@@ -1,6 +1,6 @@
 from tools import run_time, command_select
 from generic import table, entry
-from plots import plots_generic
+from plots import histo_generic
 import matplotlib.pyplot as plot
 from api import get_system, get_game, get_category, get_variable
 
@@ -34,7 +34,7 @@ class Runs(table):
         return metho
 
     def histo(self):
-        plots_Runs(self)()
+        histo_Runs(self)()
     
 
 class Run(entry):
@@ -117,7 +117,7 @@ class Run(entry):
         return tempo
 
 
-class plots_Runs(plots_generic):
+class histo_Runs(histo_generic):
     def __init__(self,runs):
         super().__init__()
 
