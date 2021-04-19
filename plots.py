@@ -1,7 +1,6 @@
 import matplotlib.pyplot as plot
 from tools import run_time, command_select
 
-
 class histo_generic:
     def __init__(self):
         self.times = None
