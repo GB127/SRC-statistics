@@ -4,48 +4,6 @@ from allRuns import Run
 from plots import histo_generic
 import matplotlib.pyplot as plot
 
-
-
-
-class Save(entry):
-    sorter = "PB"
-    table_size =  [1, 17, 13, 3, 5, 19, 4]
-    def sortable(self):
-        tempo = list(self.__dict__)
-        tempo.remove("runs")
-        return tempo
-
-
-
-    def __init__(self, PB, Runs):
-        self.system = PB.system
-        self.game = PB.game
-        self.category = PB.category
-        self.runs = []
-        for run in Runs:
-            if run.game == self.game and run.category == self.category:
-                self.runs.append(run)
-        self.X = len(self.runs)
-
-        Run.sorter = "time"
-        self.runs.sort()
-        self.first = self.runs[-1].time
-        self.PB = PB.time
-        self.save = self.first - self.PB
-        self.perc1st = round(self.save/self.first * 100, 2)
-
-    def __str__(self):
-        return " | ".join([
-                            f'{self.system[:6]:^6}',
-                            f'{self.game[:20]:20}',
-                            f'{self.category[:20]:20}',
-                            f'{self.X:^3}',
-                            f'{self.first:>9}',
-                            f'{self.PB:>9}' + f' (-{self.save})',
-                            f'(-{self.perc1st:6} %)'
-                        ]) + "|"
-
-
 class Saves(table):
 
     def histo(self):
@@ -95,6 +53,48 @@ class Saves(table):
             all_plots.append(list(reversed([run.time.time for run in category.runs])))
 
         #plot_table(all_plots)
+
+
+class Save(entry):
+    sorter = "PB"
+    table_size =  [1, 17, 13, 3, 5, 19, 4]
+    def sortable(self):
+        tempo = list(self.__dict__)
+        tempo.remove("runs")
+        return tempo
+
+
+
+    def __init__(self, PB, Runs):
+        self.system = PB.system
+        self.game = PB.game
+        self.category = PB.category
+        self.runs = []
+        for run in Runs:
+            if run.game == self.game and run.category == self.category:
+                self.runs.append(run)
+        self.X = len(self.runs)
+
+        Run.sorter = "time"
+        self.runs.sort()
+        self.first = self.runs[-1].time
+        self.PB = PB.time
+        self.save = self.first - self.PB
+        self.perc1st = round(self.save/self.first * 100, 2)
+
+    def __str__(self):
+        return " | ".join([
+                            f'{self.system[:6]:^6}',
+                            f'{self.game[:20]:20}',
+                            f'{self.category[:20]:20}',
+                            f'{self.X:^3}',
+                            f'{self.first:>9}',
+                            f'{self.PB:>9}' + f' (-{self.save})',
+                            f'(-{self.perc1st:6} %)'
+                        ]) + "|"
+
+
+
 
 class histo_Saves(histo_generic):
     def __init__(self, Saves):

@@ -3,73 +3,6 @@ from generic import table, entry
 import matplotlib.pyplot as plot
 
 
-class pie_systems:
-    def __init__(self, systems):
-        self.data = {"Runs":{},
-                    "PBs":{}}
-        for one_system in systems:
-            self.data["Runs"][one_system.system] = [run.time.time for run in one_system.Runs]
-            self.data["PBs"][one_system.system] = [run.time.time for run in one_system.Pbs]
-
-    def pie_time(self):
-
-        fig, axs = plot.subplots(1, 2)
-
-        fig.suptitle(f'systems')
-
-        axs[0].set_title("Runs Total time")
-        axs[0].pie([sum(x) for x in self.data["Runs"].values()], 
-                    labels=self.data["Runs"].keys(), 
-                    autopct='%1.1f%%', 
-                    pctdistance=0.8,
-                    labeldistance=1.1,
-                    startangle=90)
-
-        axs[1].set_title("PBs Total time")
-        axs[1].pie([sum(x) for x in self.data["PBs"].values()], 
-                    labels=self.data["Runs"].keys(), 
-                    autopct='%1.1f%%',
-                    pctdistance=0.8,
-                    labeldistance=1.1,
-                    startangle=90)
-        plot.show()
-
-    def pie_frequency(self):
-
-        fig, axs = plot.subplots(1, 2)
-
-        fig.suptitle(f'systems')
-
-        axs[0].set_title("Runs #")
-        axs[0].pie([len(x) for x in self.data["Runs"].values()], 
-                    labels=self.data["Runs"].keys(), 
-                    autopct='%1.1f%%', 
-                    pctdistance=0.8,
-                    labeldistance=1.1,
-                    startangle=90)
-
-        axs[1].set_title("PBs #")
-        axs[1].pie([len(x) for x in self.data["PBs"].values()], 
-                    labels=self.data["Runs"].keys(), 
-                    autopct='%1.1f%%',
-                    pctdistance=0.8,
-                    labeldistance=1.1,
-                    startangle=90)
-        plot.show()
-
-    def __call__(self):
-        commands = {"end" : "end",
-                    "Pie chart : Frequency" : self.pie_frequency,
-                    "Pie chart : total time" : self.pie_time}
-        while True:
-            command_key = command_select(sorted(commands.keys()), printer=True)
-            command = commands[command_key]
-            if command != "end":
-                command()
-            else:
-                break
-
-
 
 class Systems(table):
     def get_header(self):
@@ -144,3 +77,72 @@ class System(entry):
                 f'           {self.Run_average:>9}', 
                 f'          {self.PB_average:>9} (+{self.PB_Total_delta_average:>8})\n' + "-" * 72]
         return " | ".join(tempo)
+
+
+
+class pie_systems:
+    def __init__(self, systems):
+        self.data = {"Runs":{},
+                    "PBs":{}}
+        for one_system in systems:
+            self.data["Runs"][one_system.system] = [run.time.time for run in one_system.Runs]
+            self.data["PBs"][one_system.system] = [run.time.time for run in one_system.Pbs]
+
+    def pie_time(self):
+
+        fig, axs = plot.subplots(1, 2)
+
+        fig.suptitle(f'systems')
+
+        axs[0].set_title("Runs Total time")
+        axs[0].pie([sum(x) for x in self.data["Runs"].values()], 
+                    labels=self.data["Runs"].keys(), 
+                    autopct='%1.1f%%', 
+                    pctdistance=0.8,
+                    labeldistance=1.1,
+                    startangle=90)
+
+        axs[1].set_title("PBs Total time")
+        axs[1].pie([sum(x) for x in self.data["PBs"].values()], 
+                    labels=self.data["Runs"].keys(), 
+                    autopct='%1.1f%%',
+                    pctdistance=0.8,
+                    labeldistance=1.1,
+                    startangle=90)
+        plot.show()
+
+    def pie_frequency(self):
+
+        fig, axs = plot.subplots(1, 2)
+
+        fig.suptitle(f'systems')
+
+        axs[0].set_title("Runs #")
+        axs[0].pie([len(x) for x in self.data["Runs"].values()], 
+                    labels=self.data["Runs"].keys(), 
+                    autopct='%1.1f%%', 
+                    pctdistance=0.8,
+                    labeldistance=1.1,
+                    startangle=90)
+
+        axs[1].set_title("PBs #")
+        axs[1].pie([len(x) for x in self.data["PBs"].values()], 
+                    labels=self.data["Runs"].keys(), 
+                    autopct='%1.1f%%',
+                    pctdistance=0.8,
+                    labeldistance=1.1,
+                    startangle=90)
+        plot.show()
+
+    def __call__(self):
+        commands = {"end" : "end",
+                    "Pie chart : Frequency" : self.pie_frequency,
+                    "Pie chart : total time" : self.pie_time}
+        while True:
+            command_key = command_select(sorted(commands.keys()), printer=True)
+            command = commands[command_key]
+            if command != "end":
+                command()
+            else:
+                break
+
