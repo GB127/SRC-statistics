@@ -1,24 +1,4 @@
 from tools import command_select, run_time
-
-class entry:
-    def sortable(self):
-        return list(self.__dict__)
-
-    def change_sort(self):
-        for no, one in enumerate(self.sortable()):
-            print(no + 1, one)
-        self.__class__.sorter = command_select(self.sortable())
-
-    def __lt__(self, other):  # FIXME : If equal, it needs to have some sub-sorting.
-        if self.__dict__[self.sorter] != other.__dict__[self.sorter]:
-            return self.__dict__[self.sorter] < other.__dict__[self.sorter]
-        elif self.game == other.game and self.category == other.category:
-            return self.time > other.time
-        elif self.game != other.game:
-            return self.game < other.game
-        elif self.category != other.category:
-            return self.category < other.category
-
 class table:
     # TABLE RELATED STUFFS : Calling the class will create the table and the command promp
     def get_header(self):
@@ -65,22 +45,22 @@ class table:
     def __len__(self):
         return len(self.data)
 
-    # graph stuffs
-def plot_table(toplot, plotcolor=None):
-    if plotcolor:
-        for no, topl in enumerate(toplot):  #TODO: Improve this (Pretty sure a zip thingy does this)
-            plot.plot(topl, color=plotcolor[no])
-    else:
-        for no, topl in enumerate(toplot):
-            plot.plot(topl)
+class entry:
+    def sortable(self):
+        return list(self.__dict__)
 
+    def change_sort(self):
+        for no, one in enumerate(self.sortable()):
+            print(no + 1, one)
+        self.__class__.sorter = command_select(self.sortable())
 
+    def __lt__(self, other):  # FIXME : If equal, it needs to have some sub-sorting.
+        if self.__dict__[self.sorter] != other.__dict__[self.sorter]:
+            return self.__dict__[self.sorter] < other.__dict__[self.sorter]
+        elif self.game == other.game and self.category == other.category:
+            return self.time > other.time
+        elif self.game != other.game:
+            return self.game < other.game
+        elif self.category != other.category:
+            return self.category < other.category
 
-    plot.xlabel("Time")
-    plot.xlim(left=0)
-    plot.yticks(plot.yticks()[0],[str(run_time(x)) for x in plot.yticks()[0]])
-    plot.show()
-
-
-def pie_table(toplot):
-    pass
