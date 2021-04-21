@@ -22,6 +22,20 @@ def get_leaderboard(IDs):
         ranking.append((int(run["place"]),run["run"]["times"]["primary_t"]))
     return ranking
 
+
+def get_leaderboard2(IDs):
+    varistr = ""
+    if IDs[2] != {}:
+        tempo = []
+        for key in IDs[2]:
+            tempo.append(f"var-{key}={IDs[2][key]}")
+        varistr = "&".join(tempo)
+        if varistr != "": varistr = "?" + varistr
+    rep = requester(f"/leaderboards/{IDs[0]}/category/{IDs[1]}" + varistr)
+    return rep
+
+
+
 def get_leaderboards(gameID, categID, vari):
     # TODO: Enlever les temps sans date! (Ils sont dans toutes les années)
     varistr = ""
@@ -169,7 +183,13 @@ def get_runs(ID):
     recursive_requester(link_1, runs)  # Recursive request will update the list.
     return runs
 
-
+def get_user(ID):
+    """Get the user  of a user ID.
+        Returns:
+            ID (str)
+        """
+    rep = requester(f"/users/{ID}")
+    return rep["data"]["names"]["international"]
 
 if __name__ == "__main__":
     get_leaderboards("o1y9wo6q","7dgrrxk4", vari={}).keys()
