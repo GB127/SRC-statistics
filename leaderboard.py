@@ -26,9 +26,28 @@ class entry:
         #except KeyError:
         #    self.player = data["run"]["players"][0]["name"]  # TODO: For now solo runs only
         self.time = run_time(data["run"]["times"]["primary_t"])
-    
+        self.delta = self.time - self.WR
+
+        if self.place != 1:
+            self.moy_rank = run_time((self.time-self.WR) / (self.place-1))
+        else:
+            self.moy_rank = run_time(0)
+        self.perc = round(self.time / self.WR * 100, 2)
+
+
+
+
+
+
+
+
+
     def __str__(self):
-        return f'{self.time:>9} |'
+        tempo = [f'{self.time:>9}',
+                f"+{self.delta:>8}",
+                f'{self.perc:<6} %',
+                f'{self.moy_rank}']
+        return " | ".join(tempo)
 
     def __lt__(self, other):
         return self.time < other.time
