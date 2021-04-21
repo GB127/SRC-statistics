@@ -7,6 +7,7 @@ import matplotlib.pyplot as plot
 
 class PBs(Runs):
     def __init__(self, data):
+        print("Initializing PBs data")
         self.data = []
         for pb in data:
             if pb["run"]["times"]["primary_t"] > 180 and not pb["run"]["level"]:

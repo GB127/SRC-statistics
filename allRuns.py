@@ -6,6 +6,7 @@ from api import get_system, get_game, get_category, get_variable
 
 class Runs(table):
     def __init__(self, data):
+        print("collecting Runs data")
         self.data = []
         for run in data:
             if run["times"]["primary_t"] >= 180 and not run["level"]:

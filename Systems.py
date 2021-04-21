@@ -15,6 +15,7 @@ class Systems(table):
 
 
     def __init__(self, PBs, Runs):
+        print("Initializing Systems data")
         self.data = []
         data_PBs, data_Runs = {},{}
         for pb in PBs:
