@@ -1,6 +1,7 @@
 from allRuns import Runs, Run
 from api import get_leaderboard
-from tools import run_time
+from leaderboard import leaderboard
+from tools import run_time, command_select, clear
 from plots import histo_generic
 import matplotlib.pyplot as plot
 
@@ -12,6 +13,19 @@ class PBs(Runs):
         for pb in data:
             if pb["run"]["times"]["primary_t"] > 180 and not pb["run"]["level"]:
                 self.data.append(PB(pb))
+
+    def stats_leaderboard(self):
+        clear()
+        which = command_select(self.data, printer=True)
+        which.leaderboard()
+
+    def methods(self):
+        metho = super().methods()
+        metho["Leaderboard"] = self.stats_leaderboard
+        return metho
+
+
+
 
     def __str__(self):
         return f'{len(self)} PBs ({sum([x.time for x in self.data]).days()})'
@@ -58,8 +72,8 @@ class PB(Run):
 
     def __init__(self, data):
         super().__init__(data["run"])
-        self.leaderboard = get_leaderboard(self.IDs)  # NOTE : In the future I will create a class leaderboards so I can do fancy stuffs with leaderboards.
-        self.WR = run_time(self.leaderboard[0][1])
+        self.leaderboard = leaderboard(self.IDs, self.game, self.category)
+        self.WR = self.leaderboard.WR
         self.delta_WR = self.time - self.WR
         self.perc_WR = round((self.time) / self.WR * 100, 2)
         self.place = data["place"]

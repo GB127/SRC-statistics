@@ -3,8 +3,10 @@ from generic import table
 from tools import run_time
 
 class leaderboard(table):
-    def __init__(self, IDs):
-        print("Initializing leaderboard data, please wait")
+    def __init__(self, IDs, game, category):
+        self.game = game
+        self.category = category
+        print(f"Initializing {self.game} - {self.category}'s leaderboard data")
         infos = get_leaderboard2(IDs)["data"]["runs"]
         self.data = []
 
@@ -14,6 +16,13 @@ class leaderboard(table):
 
     def __len__(self):
         return len(self.data)
+
+
+
+    def head(self):
+        tempo = super().head()
+        return f'{self.game} - {self.category} | {len(self)} runs\n' + tempo
+
 
 class entry:
     table_size = [10,10]
@@ -35,13 +44,6 @@ class entry:
         self.perc = round(self.time / self.WR * 100, 2)
 
 
-
-
-
-
-
-
-
     def __str__(self):
         tempo = [f'{self.time:>9}',
                 f"+{self.delta:>8}",
@@ -55,5 +57,5 @@ class entry:
 
 if __name__ == "__main__":
     test = ['j1l9qz1g', '9d85yqdn', {}]
-    test = leaderboard(test)
+    test = leaderboard(test, "Ocarina of time", "GSR")
     test()
