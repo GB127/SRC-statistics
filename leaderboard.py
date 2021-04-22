@@ -1,23 +1,37 @@
 from api import get_leaderboard2, get_user
 from generic import table
 from tools import run_time
+import matplotlib.pyplot as plot
+
 
 class leaderboard(table):
-    def __init__(self, IDs, game, category):
+    def __init__(self, IDs, game, category, rank):
         self.game = game
         self.category = category
+        self.place = rank
         print(f"Initializing {self.game} - {self.category}'s leaderboard data")
         infos = get_leaderboard2(IDs)["data"]["runs"]
         self.data = []
 
         self.WR = run_time(infos[0]["run"]["times"]["primary_t"])
-        for one in infos:
-            self.data.append(entry(one, self.WR))
+        for no, one in enumerate(infos):
+            self.data.append(entry(one, self.WR, no==rank -1))
+
+    def methods(self):
+        return {"Plot the position" : self.plot,
+                "end": "end"}
+
 
     def __len__(self):
         return len(self.data)
 
+    def plot(self):
+        plot.plot([x.time.time for x in self.data[::-1]])
+        plot.plot([len(self) - self.place], [self.data[self.place-1].time.time], 'o', color="red")
+        plot.title(f'{self.game} - {self.category}')
+        plot.yticks(plot.yticks()[0],[str(run_time(x)) for x in plot.yticks()[0]])
 
+        plot.show()
 
     def head(self):
         tempo = super().head()
@@ -26,7 +40,8 @@ class leaderboard(table):
 
 class entry:
     table_size = [10,10]
-    def __init__(self, data, WR):
+    def __init__(self, data, WR, place=False):
+        self.user = place
         self.WR = WR
         self.place = data["place"]
         # WONTFIX : The thing with the current api is that it returns IDs. If I want all of them I have to update all of them...
@@ -49,6 +64,8 @@ class entry:
                 f"+{self.delta:>8}",
                 f'{self.perc:<6} %',
                 f'{self.moy_rank}']
+        if self.user:
+            tempo.append(f'<----')
         return " | ".join(tempo)
 
     def __lt__(self, other):
@@ -57,5 +74,5 @@ class entry:
 
 if __name__ == "__main__":
     test = ['j1l9qz1g', '9d85yqdn', {}]
-    test = leaderboard(test, "Ocarina of time", "GSR")
-    test()
+    test = leaderboard(test, "Ocarina of time", "GSR", 523)
+    test.plot()
