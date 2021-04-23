@@ -2,24 +2,50 @@ from api import get_leaderboard2, get_user
 from generic import table
 from tools import run_time
 import matplotlib.pyplot as plot
+from copy import deepcopy
 
 
 class leaderboard(table):
+    filter = 600
+
+    def change_filter(self):
+        while True:
+            try:
+                leaderboard.filter = int(input("Enter a number >100 %: "))
+                if leaderboard.filter > 100:
+                    break
+            except:
+                pass
+        self.filter_data()
+
+
+
     def __init__(self, IDs, game, category, rank):
         self.game = game
         self.category = category
         self.place = rank
         print(f"Initializing {self.game} - {self.category}'s leaderboard data")
         infos = get_leaderboard2(IDs)["data"]["runs"]
-        self.data = []
-
+        self.backup = []
         self.WR = run_time(infos[0]["run"]["times"]["primary_t"])
         for no, one in enumerate(infos):
-            self.data.append(entry(one, self.WR, no==rank -1))
+            self.backup.append(entry(one, self.WR, no==rank -1))
+        self.filter_data()
 
     def methods(self):
         return {"Plot the position" : self.plot,
+                "Change filter" : self.change_filter,
                 "end": "end"}
+
+    def filter_data(self):
+        backup = deepcopy(self.backup)
+        self.data = []
+        self.removed = []
+        for entry in backup:
+            if entry.perc > leaderboard.filter:
+                self.removed.append(entry)
+            else:
+                self.data.append(entry)
 
 
     def __len__(self):
@@ -27,10 +53,10 @@ class leaderboard(table):
 
     def plot(self):
         plot.plot([x.time.time for x in self.data[::-1]])
-        plot.plot([len(self) - self.place], [self.data[self.place-1].time.time], 'o', color="red")
+        if len(self) > self.place:
+            plot.plot([len(self) - self.place], [self.data[self.place-1].time.time], 'o', color="red")
         plot.title(f'{self.game} - {self.category}')
         plot.yticks(plot.yticks()[0],[str(run_time(x)) for x in plot.yticks()[0]])
-
         plot.show()
 
     def head(self):
@@ -74,5 +100,5 @@ class entry:
 
 if __name__ == "__main__":
     test = ['j1l9qz1g', '9d85yqdn', {}]
-    test = leaderboard(test, "Ocarina of time", "GSR", 523)
-    test.plot()
+    test = leaderboard(test, "Ocarina of time", "GSR", 2)
+    test()
