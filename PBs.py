@@ -137,4 +137,5 @@ class histo_PBs(histo_generic):
                         bins=10, 
                         alpha=alpha[key],
                         color=color[key])
+        plot.title("Histogram of PB times")
         super().histo_deltatimes()
