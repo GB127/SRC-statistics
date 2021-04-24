@@ -69,7 +69,7 @@ def command_select(iterable, printer=False):
             printer (bool, optional): Print the iterable. Defaults to False.
         """
     if printer:
-        for no, one in enumerate(iterable): print(f'{no + 1} - {one}')
+        for no, one in enumerate(iterable): print(f'{no + 1:>4} - {one}')
     while True:
         try:
             commant = input(f"Which option? [1 - {len(iterable)}] ")
