@@ -8,6 +8,12 @@ from copy import deepcopy
 class leaderboard(table):
     filter = 600
 
+    def __call__(self):
+        super().__call__()
+        leaderboard.filter = 600
+        self.filter_data()
+
+
     def change_filter(self):
         while True:
             try:
