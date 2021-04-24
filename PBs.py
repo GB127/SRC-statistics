@@ -100,6 +100,7 @@ class histo_PBs(histo_generic):
                         bins=10,
                         range=(100, max(self.percents))
                 )
+        plot.title("Histogram of WR percentages")
         super().histo_percents(100, max(self.percents))
 
     def histo_times(self):
@@ -119,6 +120,7 @@ class histo_PBs(histo_generic):
                         range=(self.min_times, self.max_times), 
                         alpha=alpha[key],
                         color=color[key])
+        plot.title("Histogram of PBs times and WRs")
         super().histo_times()
 
 
@@ -135,7 +137,8 @@ class histo_PBs(histo_generic):
         for key, data in self.deltas.items():
             plot.hist(data, label=key, 
                         bins=10, 
+                        range=(min(self.deltas["PBs"]), max(self.deltas["PBs"])),
                         alpha=alpha[key],
                         color=color[key])
-        plot.title("Histogram of PB times")
-        super().histo_deltatimes()
+        plot.title("Histogram of times behind the WRs")
+        super().histo_deltatimes(min(self.deltas["PBs"]), max(self.deltas["PBs"]))

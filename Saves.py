@@ -151,4 +151,5 @@ class histo_Saves(histo_generic):
                         bins=10, 
                         alpha=alpha[key],
                         color=color[key])
-        super().histo_deltatimes()
+
+        super().histo_deltatimes(min(self.deltas["Firsts"]), max(self.deltas["Firsts"]))

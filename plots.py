@@ -13,14 +13,15 @@ class histo_generic:
             self.min_times = min(min(data), self.min_times)
             self.max_times = max(max(data), self.min_times)
 
-    def histo_times(self):  # TODO : combine with deltas...
+    def histo_times(self, left=None, right=None):
         plot.xticks(plot.xticks()[0],[str(run_time(x)) for x in plot.xticks()[0]])
         plot.xlim(left=self.min_times, right=self.max_times)
         plot.legend()
         plot.show()
 
-    def histo_deltatimes(self):
+    def histo_deltatimes(self, left, right):
         plot.xticks(plot.xticks()[0],[str(run_time(x)) for x in plot.xticks()[0]])
+        plot.xlim(left=left, right=right)
         plot.legend()
         plot.show()
 
