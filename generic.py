@@ -17,7 +17,7 @@ class table:
             header += "\n" + ("-" * len(header))
             print(header)
             for no, entry in enumerate(self):
-                print(f'{no+1:^3} | {entry}')
+                print(f'{no+1:^4} | {entry}')
             print(self.foot())
         while True:
             self.data.sort()

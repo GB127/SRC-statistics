@@ -73,7 +73,7 @@ class System(entry):
     def __str__(self):
         tempo = [f"{self.system:^8}",
                 f'{self.Run_count:^3} Runs ; {self.Run_Total:>9}',
-                f'{self.PB_count:^3} PBs ; {self.PB_Total:>9} (+{self.PB_Total_delta:>8})\n   ',
+                f'{self.PB_count:^3} PBs ; {self.PB_Total:>9} (+{self.PB_Total_delta:>8})\n    ',
                 f'        ',
                 f'           {self.Run_average:>9}', 
                 f'          {self.PB_average:>9} (+{self.PB_Total_delta_average:>8})\n' + "-" * 72]

@@ -8,6 +8,18 @@ from copy import deepcopy
 class leaderboard(table):
     filter = 600
 
+    def foot(self):
+        tempo = " | ".join([
+                f'Total time  ',
+                f'{sum([x.time for x in self.data])}'])
+
+        tempo2 = " | ".join([
+                f'Average time',
+                f'{run_time(sum([x.time for x in self.data])/len(self))}'])
+
+
+        return f'{"-" * 47}\n{tempo}\n{tempo2}'
+
     def __call__(self):
         super().__call__()
         leaderboard.filter = 600
