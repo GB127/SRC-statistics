@@ -1,5 +1,7 @@
 from datetime import timedelta
 from os import system
+import matplotlib.pyplot as plot
+
 
 clear = lambda: system('cls')
 
@@ -58,6 +60,30 @@ class run_time:
 
     def __round__(self, number):
         return run_time(round(self.time, number))
+
+
+
+def plot_line(data, title, ymin=0, ymax=None):
+    for one in data:
+        assert isinstance(one, run_time), "Must be a run_time"
+    data_float = [one.time for one in data]
+    plot.title(title)
+    plot.plot(data_float)
+
+    # Y axis
+    plot.ylim(bottom=ymin, top=ymax)
+    plot.yticks(plot.yticks()[0],[str(run_time(x)) for x in plot.yticks()[0]])
+
+
+
+
+
+    plot.show()
+
+
+
+
+
 
 
 def command_select(iterable, printer=False):
