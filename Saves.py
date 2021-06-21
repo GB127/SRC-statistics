@@ -1,17 +1,11 @@
 from tools import run_time, command_select
 from generic import table, entry
 from allRuns import Run
-from plots import histo_generic
 import matplotlib.pyplot as plot
 
 class Saves(table):
-
-    def histo(self):
-        histo_Saves(self)()
-
     def methods(self):
         metho = super().methods()
-        metho["Histo the table"] = self.histo
         return metho
 
 
@@ -27,7 +21,7 @@ class Saves(table):
         return f"{len(self.data)} PBs with multiple runs"
 
     def __init__(self, PBs, Runs):
-        print("Initizlizing Saves")
+        print("Initializing Saves")
         self.data = []
         for pb in PBs:
             tempo = Save(pb, Runs)
@@ -93,63 +87,3 @@ class Save(entry):
                             f'{self.PB:>9}' + f' (-{self.save})',
                             f'(-{self.perc1st:6} %)'
                         ]) + "|"
-
-
-
-
-class histo_Saves(histo_generic):
-    def __init__(self, Saves):
-        super().__init__()
-        self.times = {"PBs" : [run.PB.time for run in Saves.data],
-                    "Firsts" : [run.first.time for run in Saves.data]}
-        self.percents = [run.perc1st for run in Saves.data]
-        self.deltas = {"Firsts" : [run.save.time for run in Saves.data]}
-
-
-    def histo_times(self):
-        alpha = {
-            "Firsts": 0.7,
-            "PBs" : 1,
-            }
-        color = {
-            "Firsts" : "darkred",
-            "PBs" : "darkgreen",
-            }
-
-        self.min_max()
-        for key, data in self.times.items():
-            plot.hist(data, label=key, 
-                        bins=10, 
-                        range=(self.min_times, self.max_times), 
-                        alpha=alpha[key],
-                        color=color[key])
-
-        super().histo_times()
-
-    def histo_percents(self):
-        plot.hist(self.percents, 
-                        bins=10,
-                        range=(0, 100)
-                )
-        print(max(self.percents))
-        plot.xlim(left=0, right=100)
-        super().histo_percents(0, 100)
-
-
-    def histo_deltatimes(self):
-        alpha = {
-            "Firsts": 0.7,
-            "PBs" : 1,
-            }
-        color = {
-            "Firsts" : "darkred",
-            "PBs" : "darkgreen",
-            }
-
-        for key, data in self.deltas.items():
-            plot.hist(data, label=key, 
-                        bins=10, 
-                        alpha=alpha[key],
-                        color=color[key])
-
-        super().histo_deltatimes(min(self.deltas["Firsts"]), max(self.deltas["Firsts"]))
