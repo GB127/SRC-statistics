@@ -1,14 +1,17 @@
 from tools import run_time, command_select
 from generic import table, entry
+from tools import plot_line
 from allRuns import Run
-import matplotlib.pyplot as plot
 
 class Saves(table):
     def methods(self):
         metho = super().methods()
+        metho["Plot saves"] = self.plot_save
         return metho
 
-
+    def plot_save(self):
+        select = command_select(self.data)
+        select.plot_improvement()
 
 
     def get_header(self):
@@ -49,7 +52,6 @@ class Saves(table):
 
         #plot_table(all_plots)
 
-
 class Save(entry):
     sorter = "PB"
     table_size =  [1, 17, 13, 3, 5, 19, 4]
@@ -76,6 +78,11 @@ class Save(entry):
         self.PB = PB.time
         self.save = self.first - self.PB
         self.perc1st = round(self.save/self.first * 100, 2)
+
+    def plot_improvement(self):
+        data = [one.time for one in self.runs]
+        data.reverse()
+        plot_line(data, f"{self.game}-{self.category} Improvement", ymin=None)
 
     def __str__(self):
         return " | ".join([
