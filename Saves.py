@@ -1,6 +1,6 @@
 from tools import run_time, command_select
 from generic import table, entry
-from tools import plot_line
+from tools import plot_line, plot_histo
 from allRuns import Run
 
 class Saves(table):
@@ -52,6 +52,22 @@ class Saves(table):
         for category in self.data:
             all_plots.append(list(reversed([run.time for run in category.runs])))
         plot_line(all_plots, "All improvements")
+
+
+    def plot_histo(self):
+        command = command_select(["PB%", "Improvements"], printer=True)
+        if command == "PB%":
+            plot_histo(sorted([one.perc1st for one in self.data]), "Histogram of %PB", typ="%", max_data=100)
+        elif command == "Improvements":
+            tempo = sorted([one.save.time for one in self.data])
+            plot_histo(tempo, "Histogram of PBs-1st deltas", typ="time")
+        elif command == "time":
+            tempo = sorted([one.time.time for one in self.data])
+            plot_histo(tempo, "Histogram of PBs time", typ="time")
+
+
+
+
 
 class Save(entry):
     sorter = "PB"
