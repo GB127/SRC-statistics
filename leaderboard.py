@@ -1,8 +1,6 @@
-from api import get_leaderboard, get_user, get_leaderboard_level
+from api import get_leaderboard, get_user, get_leaderboard_level, get_leaderboards
 from generic import table
 from tools import run_time, plot_line
-from copy import deepcopy
-
 
 class leaderboard(table):
     def foot(self):
@@ -22,6 +20,7 @@ class leaderboard(table):
 
 
     def __init__(self, IDs, game, category, rank, level=None):
+        self.IDs = IDs
         self.game = game
         self.category = category
         self.place = rank
@@ -38,7 +37,15 @@ class leaderboard(table):
 
     def methods(self):
         return {"Plot the position" : self.plot,
+                "Plot the leaderboard evolution" : self.plot_evolution,
                 "end": "end"}
+    
+    def plot_evolution(self):
+        if not self.IDs[2]:
+            toplot = get_leaderboards(self.IDs)
+            plot_line(toplot.values(), f"{self.game} - {self.category}\nLeaderboard evolution\n{min(toplot.keys())}-{max(toplot.keys())}", mirror=True)
+        if self.IDs[2]:
+            pass
 
     def __len__(self):
         return len(self.data)
@@ -86,6 +93,6 @@ class entry:
 
 
 if __name__ == "__main__":
-    test = ['j1l9qz1g', '9d85yqdn', {}]
+    test = ['j1l9qz1g', '9d85yqdn',None, {}]
     test = leaderboard(test, "Ocarina of time", "GSR", 2)
-    test()
+    test.plot_evolution()
