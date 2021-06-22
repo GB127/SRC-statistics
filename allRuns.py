@@ -9,6 +9,16 @@ class Runs(table):
         for run in data:
             self.data.append(Run(run))
 
+    # STRING RELATED
+    def __str__(self):
+        return f'{len(self)} runs ({sum([x.time for x in self.data]).days()})'
+
+
+    def get_header(self):
+        types = list(self.data[0].__dict__.keys())
+        types.remove("IDs")
+        return types
+
     def foot(self):
         total_time = sum([x.time for x in self.data])
 
@@ -18,22 +28,16 @@ class Runs(table):
         return string1 + string2 + string3
 
 
-    def __str__(self):
-        return f'{len(self)} runs ({sum([x.time for x in self.data]).days()})'
+    # PLOTS
+    def plot_histo(self):
+        plot_histo(sorted([one.time.time for one in self.data]), 
+            "Runs", typ="time")
 
-    def get_header(self):
-        types = list(self.data[0].__dict__.keys())
-        types.remove("IDs")
-        return types
-
+    #OTHERS
     def methods(self):
         metho = super().methods()
         metho["Histo"] = self.plot_histo
         return metho    
-
-    def plot_histo(self):
-        plot_histo(sorted([one.time.time for one in self.data]), 
-            "Runs", typ="time")
 
 
 class Run(entry):
@@ -73,6 +77,8 @@ class Run(entry):
 
             else: return name
         self.IDs = [data["game"], data["category"], {}]
+
+        self.level = data["level"]
 
         try:
             self.system = Run.systems[data["system"]["platform"]]

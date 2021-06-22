@@ -11,30 +11,8 @@ class PBs(Runs):
         for pb in data:
             self.data.append(PB(pb))
 
-    def stats_leaderboard(self):
-        clear()
-        which = command_select(self.data, printer=True)
-        which.leaderboard()
 
-    def methods(self):
-        metho = super().methods()
-        metho["Leaderboard"] = self.stats_leaderboard
-        return metho
-
-    def plot_histo(self):
-        command = command_select(["WR%", "delta_WR", "time"], printer=True)
-        if command == "WR%":
-            plot_histo(sorted([one.perc_WR for one in self.data]), "Histogram of %WR", typ="%", min_data=100)
-        if command == "time":
-            tempo = sorted([one.time.time for one in self.data])
-            plot_histo(tempo, "Histogram of PBs time", typ="time")
-        elif command == "delta_WR":
-            tempo = sorted([one.delta_WR.time for one in self.data])
-            plot_histo(tempo, "Histogram of PBs-WR deltas", typ="time")
-
-
-
-
+    # STRING RELATED
     def __str__(self):
         return f'{len(self)} PBs ({sum([x.time for x in self.data]).days()})'
 
@@ -66,6 +44,32 @@ class PBs(Runs):
         return "\n".join([string1, string2, string3])
 
 
+
+
+
+    def stats_leaderboard(self):
+        clear()
+        which = command_select(self.data, printer=True)
+        which.leaderboard()
+
+    def methods(self):
+        metho = super().methods()
+        metho["Leaderboard"] = self.stats_leaderboard
+        return metho
+
+    def plot_histo(self):
+        command = command_select(["WR%", "delta_WR", "time"], printer=True)
+        if command == "WR%":
+            plot_histo(sorted([one.perc_WR for one in self.data]), "Histogram of %WR", typ="%", min_data=100)
+        if command == "time":
+            tempo = sorted([one.time.time for one in self.data])
+            plot_histo(tempo, "Histogram of PBs time", typ="time")
+        elif command == "delta_WR":
+            tempo = sorted([one.delta_WR.time for one in self.data])
+            plot_histo(tempo, "Histogram of PBs-WR deltas", typ="time")
+
+
+
 class PB(Run):
     table_size = Run.table_size + [2, 3, 5, 1]
 
@@ -77,7 +81,7 @@ class PB(Run):
     def __init__(self, data):
         super().__init__(data["run"])
         self.place = data["place"]
-        self.leaderboard = leaderboard(self.IDs, self.game, self.category, self.place)
+        self.leaderboard = leaderboard(self.IDs, self.game, self.category, self.place, self.level)
         self.WR = self.leaderboard.WR
         self.delta_WR = self.time - self.WR
         self.perc_WR = round((self.time) / self.WR * 100, 2)
