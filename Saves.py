@@ -55,7 +55,7 @@ class Saves(table):
 
 
     def plot_histo(self):
-        command = command_select(["PB%", "Improvements"], printer=True)
+        command = command_select(["PB%", "Improvements", "time"], printer=True)
         if command == "PB%":
             plot_histo(sorted([one.perc1st for one in self.data]), "Histogram of %PB", typ="%", max_data=100)
         elif command == "Improvements":
