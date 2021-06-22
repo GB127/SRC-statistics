@@ -3,6 +3,22 @@ import requests, datetime, time
 URL = "https://www.speedrun.com/api/v1"
 
 
+def get_leaderboard_level(IDs):
+    print(IDs)
+    varistr = ""
+    if IDs[2] != {}:
+        tempo = []
+        for key in IDs[3]:
+            tempo.append(f"var-{key}={IDs[2][key]}")
+        varistr = "&".join(tempo)
+        if varistr != "": varistr = "?" + varistr
+
+
+
+    rep = requester(f"/leaderboards/{IDs[0]}/category/{IDs[1]}" + varistr)
+    return rep
+
+
 
 def get_leaderboards(gameID, categID, vari):
     # TODO: Enlever les temps sans date! (Ils sont dans toutes les années)
@@ -35,8 +51,8 @@ def get_leaderboard(IDs):
     varistr = ""
     if IDs[2] != {}:
         tempo = []
-        for key in IDs[2]:
-            tempo.append(f"var-{key}={IDs[2][key]}")
+        for key in IDs[3]:
+            tempo.append(f"var-{key}={IDs[3][key]}")
         varistr = "&".join(tempo)
         if varistr != "": varistr = "?" + varistr
     rep = requester(f"/leaderboards/{IDs[0]}/category/{IDs[1]}" + varistr)
@@ -112,7 +128,7 @@ def requester(link):
         elif rep.status_code == 404:
             print(rep.status_code)
             print(f"{URL}{link}")
-            raise BaseException("Incorrect info, please check again")
+            raise BaseException(f"Incorrect info, please check again\n{URL}{link}")
         else:
             raise BaseException(f"Please report this, {rep.status_code} - {URL}{link}\n{rep.json()['message']}")
 
@@ -173,5 +189,26 @@ def get_user(ID):
     rep = requester(f"/users/{ID}")
     return rep["data"]["names"]["international"]
 
+
+
+
+
+
+
+#####################
+
+
+def get_level(ID):
+    """Fetch the full name of the level with an ID.
+        """
+    rep = requester(f"/levels/{ID}")
+    return rep["data"]["name"]
+
+     #"Slip Slide Icecapades" of Crash Twinsanity.
+
+
+
+
+
 if __name__ == "__main__":
-    get_leaderboards("o1y9wo6q","7dgrrxk4", vari={}).keys()
+    print(get_level("nwl6ky0w"))

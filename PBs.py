@@ -80,7 +80,7 @@ class PB(Run):
     def __init__(self, data):
         super().__init__(data["run"])
         self.place = data["place"]
-        self.leaderboard = leaderboard(self.IDs, self.game, self.category, self.place, self.level)
+        self.leaderboard = leaderboard(self.IDs, self.game, self.category, self.place, level=self.level)
         self.WR = self.leaderboard.WR
         self.delta_WR = self.time - self.WR
         self.perc_WR = round((self.time) / self.WR * 100, 2)

@@ -1,6 +1,6 @@
 from tools import run_time, command_select, plot_histo
 from generic import table, entry
-from api import get_system, get_game, get_category, get_variable
+from api import get_system, get_game, get_category, get_variable, get_level
 
 class Runs(table):
     def __init__(self, data):
@@ -76,9 +76,7 @@ class Run(entry):
                 return "Super Mario 64"
 
             else: return name
-        self.IDs = [data["game"], data["category"], {}]
-
-        self.level = data["level"]
+        self.IDs = [data["game"], data["category"], data["level"], {}]
 
         try:
             self.system = Run.systems[data["system"]["platform"]]
@@ -102,10 +100,13 @@ class Run(entry):
             tempo = get_variable(value)
             if tempo["is-subcategory"]:
                 subcateg.append(tempo["values"]["values"][item]["label"])
-                self.IDs[2][value] = item
+                self.IDs[3][value] = item
         if subcateg:
             self.category = f'{self.category} ({",".join(subcateg)})'
         
+        if self.IDs[2]:
+            self.level = get_level(self.IDs[2])
+
         self.time = run_time(data["times"]["primary_t"])
 
     def __str__(self):
