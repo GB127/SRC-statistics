@@ -85,12 +85,13 @@ def plot_histo(data, title, typ):
 
 
 
-def plot_line(data, title, ymin=0, ymax=None):
-    for one in data:
-        assert isinstance(one, run_time), "Must be a run_time"
-    data_float = [one.time for one in data]
+def plot_line(datas, title, ymin=0, ymax=None):
     plot.title(title)
-    plot.plot(data_float)
+    for data in datas:
+        for one in data:
+            assert isinstance(one, run_time), "Must be a run_time"
+        data_float = [one.time for one in data]
+        plot.plot(data_float)
 
     # Y axis
     plot.ylim(bottom=ymin, top=ymax)
