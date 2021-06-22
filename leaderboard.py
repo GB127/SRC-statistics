@@ -5,8 +5,6 @@ from copy import deepcopy
 
 
 class leaderboard(table):
-    filter = 600
-
     def foot(self):
         tempo = " | ".join([
                 f'Total time  ',
@@ -21,20 +19,6 @@ class leaderboard(table):
 
     def __call__(self):
         super().__call__()
-        leaderboard.filter = 600
-        self.filter_data()
-
-
-    def change_filter(self):
-        while True:
-            try:
-                leaderboard.filter = int(input("Enter a number >100 %: "))
-                if leaderboard.filter > 100:
-                    break
-            except:
-                pass
-        self.filter_data()
-
 
 
     def __init__(self, IDs, game, category, rank, level=None):
@@ -47,27 +31,14 @@ class leaderboard(table):
         else:
             print(f"Initializing {self.game} - {level} - {self.category}'s leaderboard data")
             infos = get_leaderboard_level(IDs)["data"]["runs"]
-        self.backup = []
+        self.data = []
         self.WR = run_time(infos[0]["run"]["times"]["primary_t"])
         for no, one in enumerate(infos):
-            self.backup.append(entry(one, self.WR, no==rank -1))
-        self.filter_data()
+            self.data.append(entry(one, self.WR, no==rank -1))
 
     def methods(self):
         return {"Plot the position" : self.plot,
-                "Change filter" : self.change_filter,
                 "end": "end"}
-
-    def filter_data(self):
-        backup = deepcopy(self.backup)
-        self.data = []
-        self.removed = []
-        for entry in backup:
-            if entry.perc > leaderboard.filter:
-                self.removed.append(entry)
-            else:
-                self.data.append(entry)
-
 
     def __len__(self):
         return len(self.data)
