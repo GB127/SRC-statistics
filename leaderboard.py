@@ -1,4 +1,4 @@
-from api import get_leaderboard, get_user, get_leaderboard_level, get_leaderboards
+from api import get_leaderboard, get_user, get_leaderboard_level, get_leaderboards, get_leaderboards_level
 from generic import table
 from tools import run_time, plot_line
 
@@ -24,6 +24,7 @@ class leaderboard(table):
         self.game = game
         self.category = category
         self.place = rank
+        self.level = level
         if not IDs[2]:
             print(f"Initializing {self.game} - {self.category}'s leaderboard data")
             infos = get_leaderboard(IDs)["data"]["runs"]
@@ -45,7 +46,8 @@ class leaderboard(table):
             toplot = get_leaderboards(self.IDs)
             plot_line(toplot.values(), f"{self.game} - {self.category}\nLeaderboard evolution\n{min(toplot.keys())}-{max(toplot.keys())}", mirror=True)
         if self.IDs[2]:
-            pass
+            toplot = get_leaderboards_level(self.IDs)
+            plot_line(toplot.values(), f"{self.game} - {self.level} - {self.category}\nLeaderboard evolution\n{min(toplot.keys())}-{max(toplot.keys())}", mirror=True)
 
     def __len__(self):
         return len(self.data)

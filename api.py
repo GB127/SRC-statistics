@@ -44,6 +44,36 @@ def get_leaderboards(IDs):
             rankings[year] = tempo
     return rankings
 
+def get_leaderboards_level(IDs):
+    # TODO: Enlever les temps sans date! (Ils sont dans toutes les années)
+    varistr = ""
+    if IDs[3] != {}:
+        tempo = []
+        for key in IDs[3]:
+            tempo.append(f"var-{key}={IDs[3][key]}")
+        varistr = "&".join(tempo)
+        if varistr != "": varistr = "?" + varistr
+
+
+    game_date = requester(f"/games/{IDs[0]}")['data']["release-date"]
+    now = str(datetime.date.today())
+
+    rankings = {}
+    for year in range(int(now[:4]), int(game_date[:4]), -1):
+        print(f"Getting year {year} leaderboard")
+        tempo = []
+        rep = requester(f"/leaderboards/{IDs[0]}/level/{IDs[2]}/{IDs[1]}?date={f'{year}-{now[5:7]}-{now[8:10]}'}" + varistr)
+
+        for run in rep["data"]["runs"]:
+            tempo.append((run_time(run["run"]["times"]["primary_t"])))
+        if len(tempo) == 0: break
+        else: 
+            rankings[year] = tempo
+    return rankings
+
+
+
+
 ########### Below this are function that works. No need of improving.
 
 def get_leaderboard(IDs):
