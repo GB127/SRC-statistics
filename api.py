@@ -2,17 +2,6 @@ import requests, datetime, time
 
 URL = "https://www.speedrun.com/api/v1"
 
-def get_leaderboard(IDs):
-    varistr = ""
-    if IDs[2] != {}:
-        tempo = []
-        for key in IDs[2]:
-            tempo.append(f"var-{key}={IDs[2][key]}")
-        varistr = "&".join(tempo)
-        if varistr != "": varistr = "?" + varistr
-    rep = requester(f"/leaderboards/{IDs[0]}/category/{IDs[1]}" + varistr)
-    return rep
-
 
 
 def get_leaderboards(gameID, categID, vari):
@@ -41,6 +30,20 @@ def get_leaderboards(gameID, categID, vari):
     return rankings
 
 ########### Below this are function that works. No need of improving.
+
+def get_leaderboard(IDs):
+    varistr = ""
+    if IDs[2] != {}:
+        tempo = []
+        for key in IDs[2]:
+            tempo.append(f"var-{key}={IDs[2][key]}")
+        varistr = "&".join(tempo)
+        if varistr != "": varistr = "?" + varistr
+    rep = requester(f"/leaderboards/{IDs[0]}/category/{IDs[1]}" + varistr)
+    return rep
+
+
+
 
 def get_variable(variID):
     """ Returns json data about the speedrun variable identified by ID.
