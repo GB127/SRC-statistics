@@ -32,7 +32,7 @@ class Runs(table):
         return metho    
 
     def plot_histo(self):
-        plot_histo(self.get_raws([one.time.time for one in self.data]), 
+        plot_histo(sorted([one.time.time for one in self.data]), 
             "Runs", typ="time")
 
 
