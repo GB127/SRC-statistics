@@ -1,4 +1,4 @@
-from api import get_leaderboard2, get_user
+from api import get_leaderboard, get_user
 from generic import table
 from tools import run_time, plot_line
 from copy import deepcopy
@@ -37,12 +37,16 @@ class leaderboard(table):
 
 
 
-    def __init__(self, IDs, game, category, rank):
+    def __init__(self, IDs, game, category, rank, level):
+        self.level = level
         self.game = game
         self.category = category
         self.place = rank
         print(f"Initializing {self.game} - {self.category}'s leaderboard data")
-        infos = get_leaderboard2(IDs)["data"]["runs"]
+        if not level:
+            infos = get_leaderboard(IDs)["data"]["runs"]
+        else:
+            raise BaseException()
         self.backup = []
         self.WR = run_time(infos[0]["run"]["times"]["primary_t"])
         for no, one in enumerate(infos):

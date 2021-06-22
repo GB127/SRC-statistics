@@ -2,7 +2,7 @@ import requests, datetime, time
 
 URL = "https://www.speedrun.com/api/v1"
 
-def get_leaderboard2(IDs):
+def get_leaderboard(IDs):
     varistr = ""
     if IDs[2] != {}:
         tempo = []
