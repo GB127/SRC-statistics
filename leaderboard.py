@@ -1,7 +1,6 @@
 from api import get_leaderboard2, get_user
 from generic import table
-from tools import run_time
-import matplotlib.pyplot as plot
+from tools import run_time, plot_line
 from copy import deepcopy
 
 
@@ -70,12 +69,7 @@ class leaderboard(table):
         return len(self.data)
 
     def plot(self):
-        plot.plot([x.time.time for x in self.data[::-1]])
-        if len(self) > self.place:
-            plot.plot([len(self) - self.place], [self.data[self.place-1].time.time], 'o', color="red")
-        plot.title(f'{self.game} - {self.category}')
-        plot.yticks(plot.yticks()[0],[str(run_time(x)) for x in plot.yticks()[0]])
-        plot.show()
+        plot_line([[x.time for x in self.data[::-1]]], f'{self.game} - {self.category}', ymin=None)
 
     def head(self):
         tempo = super().head()
