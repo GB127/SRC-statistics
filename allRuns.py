@@ -106,6 +106,8 @@ class Run(entry):
         
         if self.IDs[2]:
             self.level = get_level(self.IDs[2])
+        else:
+            self.level = None
 
         self.time = run_time(data["times"]["primary_t"])
 

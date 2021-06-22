@@ -4,18 +4,15 @@ URL = "https://www.speedrun.com/api/v1"
 
 
 def get_leaderboard_level(IDs):
-    print(IDs)
     varistr = ""
     if IDs[2] != {}:
         tempo = []
         for key in IDs[3]:
-            tempo.append(f"var-{key}={IDs[2][key]}")
+            tempo.append(f"var-{key}={IDs[3][key]}")
         varistr = "&".join(tempo)
         if varistr != "": varistr = "?" + varistr
 
-
-
-    rep = requester(f"/leaderboards/{IDs[0]}/category/{IDs[1]}" + varistr)
+    rep = requester(f"/leaderboards/{IDs[0]}/level/{IDs[2]}/{IDs[1]}" + varistr)
     return rep
 
 
