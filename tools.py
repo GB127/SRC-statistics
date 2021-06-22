@@ -62,22 +62,15 @@ class run_time:
         return run_time(round(self.time, number))
 
 
-def plot_histo(data, title, typ, perc_dir=None):
+def plot_histo(data, title, typ, perc_dir=None, min_data=None, max_data=None, ):
+    if not min_data: min_data = min(data)
+    if not max_data: max_data = max(data)
+    plot.hist(data, bins=10, range=(min_data, max_data))
+
     plot.title(title)
     if typ == "time":
-        for one in data:
-            assert isinstance(one, run_time), "Must be a run_time"
-        data_float = [one.time for one in data]
-        plot.hist(data_float, bins=10)
         plot.xticks(plot.xticks()[0],[str(run_time(x)) for x in plot.xticks()[0]])
-        plot.xlim(left=data_float[0], right=data_float[-1])
-    elif typ == "%":
-        assert perc_dir in ["left", "right"]  #TODO : Use in instead
-        for one in data:
-            assert isinstance(one, float), "Must be a float"
-        data.sort()
-    else:
-        raise BaseException("Must use a typ argument")
+    plot.xlim(left=min_data, right=max_data)
 
 
     plot.show()

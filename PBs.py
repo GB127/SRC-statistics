@@ -24,12 +24,13 @@ class PBs(Runs):
     def plot_histo(self):
         command = command_select(["WR%", "delta_WR", "time"], printer=True)
         if command == "WR%":
-            plot_histo(sorted([one.perc_WR for one in self.data]), "Runs", typ="%")
-
+            plot_histo(sorted([one.perc_WR for one in self.data]), "Histogram of %WR", typ="%", min_data=100)
         if command == "time":
-            plot_histo(sorted([one.time for one in self.data]), "PBs time", typ="time")
+            tempo = sorted([one.time.time for one in self.data])
+            plot_histo(tempo, "Histogram of PBs time", typ="time")
         elif command == "delta_WR":
-            plot_histo(sorted([one.delta_WR for one in self.data]), "PBs-WR deltas", typ="time")
+            tempo = sorted([one.delta_WR.time for one in self.data])
+            plot_histo(tempo, "Histogram of PBs-WR deltas", typ="time")
 
 
 
