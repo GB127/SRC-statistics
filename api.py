@@ -2,27 +2,6 @@ import requests, datetime, time
 
 URL = "https://www.speedrun.com/api/v1"
 
-def get_leaderboard(IDs):
-    # TODO: Doublons à éliminer quand possible!
-
-    varistr = ""
-    if IDs[2] != {}:
-        tempo = []
-        for key in IDs[2]:
-            tempo.append(f"var-{key}={IDs[2][key]}")
-        varistr = "&".join(tempo)
-        if varistr != "": varistr = "?" + varistr
-
-    # First, get all the data.
-    rep = requester(f"/leaderboards/{IDs[0]}/category/{IDs[1]}" + varistr)
-
-    # Now, we only keep the rank - time infos.
-    ranking = []
-    for run in rep["data"]["runs"]:
-        ranking.append((int(run["place"]),run["run"]["times"]["primary_t"]))
-    return ranking
-
-
 def get_leaderboard2(IDs):
     varistr = ""
     if IDs[2] != {}:

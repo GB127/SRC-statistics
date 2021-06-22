@@ -1,5 +1,4 @@
 from allRuns import Runs, Run
-from api import get_leaderboard
 from leaderboard import leaderboard
 from tools import run_time, command_select, clear, plot_histo
 
