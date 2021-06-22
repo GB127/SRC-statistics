@@ -62,6 +62,28 @@ class run_time:
         return run_time(round(self.time, number))
 
 
+def plot_histo(data, title, typ):
+    plot.title(title)
+    if typ == "time":
+        for one in data:
+            assert isinstance(one, run_time), "Must be a run_time"
+        data_float = sorted([one.time for one in data])
+        plot.hist(data_float, bins=10)
+        plot.xticks(plot.xticks()[0],[str(run_time(x)) for x in plot.xticks()[0]])
+        plot.xlim(left=data_float[0], right=data_float[-1])
+    elif typ == "%":
+        for one in data:
+            assert isinstance(one, float), "Must be a float"
+        data.sort()
+        plot.hist(data, bins=10)
+        plot.xlim(left=100, right=data[-1])
+    else:
+        raise BaseException("Must use a typ argument")
+
+
+    plot.show()
+
+
 
 def plot_line(data, title, ymin=0, ymax=None):
     for one in data:

@@ -10,6 +10,7 @@ class Saves(table):
         return metho
 
     def plot_save(self):
+        print("Select one run to plot")
         select = command_select(self.data)
         select.plot_improvement()
 

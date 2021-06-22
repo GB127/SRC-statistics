@@ -1,6 +1,5 @@
-from tools import run_time, command_select
+from tools import run_time, command_select, plot_histo
 from generic import table, entry
-import matplotlib.pyplot as plot
 from api import get_system, get_game, get_category, get_variable
 
 class Runs(table):
@@ -30,7 +29,12 @@ class Runs(table):
 
     def methods(self):
         metho = super().methods()
+        metho["Histo"] = self.plot_histo
         return metho    
+
+    def plot_histo(self):
+        plot_histo([one.time for one in self.data], "Runs", typ="time")
+
 
 class Run(entry):
     games = {}

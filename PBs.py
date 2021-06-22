@@ -1,8 +1,7 @@
 from allRuns import Runs, Run
 from api import get_leaderboard
 from leaderboard import leaderboard
-from tools import run_time, command_select, clear
-import matplotlib.pyplot as plot
+from tools import run_time, command_select, clear, plot_histo
 
 
 class PBs(Runs):
@@ -22,6 +21,16 @@ class PBs(Runs):
         metho = super().methods()
         metho["Leaderboard"] = self.stats_leaderboard
         return metho
+
+    def plot_histo(self):
+        command = command_select(["WR%", "delta_WR", "time"], printer=True)
+        if command == "WR%":
+            plot_histo([one.perc_WR for one in self.data], "Runs", typ="%")
+
+        if command == "time":
+            plot_histo([one.time for one in self.data], "PBs time", typ="time")
+        elif command == "delta_WR":
+            plot_histo([one.delta_WR for one in self.data], "PBs-WR deltas", typ="time")
 
 
 
