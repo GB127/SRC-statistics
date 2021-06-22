@@ -6,7 +6,8 @@ from allRuns import Run
 class Saves(table):
     def methods(self):
         metho = super().methods()
-        metho["Plot saves"] = self.plot_save
+        metho["Plot 1 game's saves"] = self.plot_save
+        metho["Plot all saves"] = self.plot_all_saves
         return metho
 
     def plot_save(self):
@@ -46,12 +47,11 @@ class Saves(table):
 
         return string1 + string2 + string3
 
-    def plot_2(self):
+    def plot_all_saves(self):
         all_plots = []
         for category in self.data:
-            all_plots.append(list(reversed([run.time.time for run in category.runs])))
-
-        #plot_table(all_plots)
+            all_plots.append(list(reversed([run.time for run in category.runs])))
+        plot_line(all_plots, "All improvements")
 
 class Save(entry):
     sorter = "PB"
@@ -83,7 +83,7 @@ class Save(entry):
     def plot_improvement(self):
         data = [one.time for one in self.runs]
         data.reverse()
-        plot_line(data, f"{self.game}-{self.category} Improvement", ymin=None)
+        plot_line([data], f"{self.game}-{self.category} Improvement", ymin=None)
 
     def __str__(self):
         return " | ".join([
