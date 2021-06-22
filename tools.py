@@ -77,7 +77,7 @@ def plot_histo(data, title, typ, perc_dir=None, min_data=None, max_data=None, ):
 
 
 
-def plot_line(datas, title, ymin=0, ymax=None):
+def plot_line(datas, title, ymin=0, ymax=None, mirror=False):
     plot.title(title)
     for data in datas:
         for one in data:
@@ -90,8 +90,9 @@ def plot_line(datas, title, ymin=0, ymax=None):
     plot.yticks(plot.yticks()[0],[str(run_time(x)) for x in plot.yticks()[0]])
 
 
-
-
+    if mirror:
+        ax = plot.gca()
+        ax.invert_xaxis()
 
     plot.show()
 
