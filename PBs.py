@@ -9,8 +9,7 @@ class PBs(Runs):
         print("Initializing PBs data")
         self.data = []
         for pb in data:
-            if pb["run"]["times"]["primary_t"] > 180 and not pb["run"]["level"]:
-                self.data.append(PB(pb))
+            self.data.append(PB(pb))
 
     def stats_leaderboard(self):
         clear()

@@ -7,8 +7,7 @@ class Runs(table):
         print("collecting Runs data")
         self.data = []
         for run in data:
-            if run["times"]["primary_t"] >= 180 and not run["level"]:
-                self.data.append(Run(run))
+            self.data.append(Run(run))
 
     def foot(self):
         total_time = sum([x.time for x in self.data])
