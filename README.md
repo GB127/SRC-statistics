@@ -85,17 +85,17 @@ This section gather all the PBs of the specified user.
 
 ## Commands:
 ### Change the sorting
-- Change the sorting of the entire table.
-    - system : Sort by systems
-    - game : Sort by games
-    - category : Sort by categories
-    - level : Sort by level names
-    - time : sort by PB times
-    - WR : Sort by WR 
-        - Note : WR times are not displayed on tabl)
-    - delta_WR : Sort by difference of PB-WR
-    - perc_WR : Sort by Percentage relative to WR
-    - perc_LB : Sort by percentage of people ranked under the user
+Change the sorting of the entire table.
+- system : Sort by systems
+- game : Sort by games
+- category : Sort by categories
+- level : Sort by level names
+- time : sort by PB times
+- WR : Sort by WR 
+    - Note : WR times are not displayed on tabl)
+- delta_WR : Sort by difference of PB-WR
+- perc_WR : Sort by Percentage relative to WR
+- perc_LB : Sort by percentage of people ranked under the user
 
 ### Histogram of the PBs:
 You have three kind of histogram available:
@@ -113,25 +113,129 @@ This section gather all the Runs of the specified user, including the obsoleted 
 > No of PB | System | Game | Category | time
 
 - system : Systems of the PB
-    - EXAMPLE : WII VC ; The PB is ran on the WII Virtual Console. 
-- game : Game of the PB
+    - EXAMPLE : WII VC ; The run is ran on the WII Virtual Console. 
+- game : Game of the run
     - EXAMPLE : Super Mario 64, Super Mario Bros., Donkey Kong Country, etc.
-- category : Category of the PB
+- category : Category of the run
     - EXAMPLE : Any%, 100%, etc.
 - time : PB times
     - If run is over 24 hours, it will still display hours.
-    - EXAMPLE : 1:50:07 ; The PB is One hour, 50 minutes and 7 seconds.
+    - EXAMPLE : 1:50:07 ; The run is One hour, 50 minutes and 7 seconds.
 
 
 ## Commands:
 ### Change the sorting
-- Change the sorting of the entire table.
-    - system : Sort by systems
-    - game : Sort by games
-    - category : Sort by categories
-    - level : Sort by level names
-    - time : sort by Run times
+Change the sorting of the entire table.
+- system : Sort by systems
+- game : Sort by games
+- category : Sort by categories
+- level : Sort by level names
+- time : sort by Run times
 
 ### Histogram of the Runs:
 There is only one format of histogram supported, so no selection is prompted here. The histogram of the times will be generated.
 
+# Saves section
+This section gathers all the PBs that have more than one run.
+
+## The table:
+>system | game | category | x | first | PB | perc1st
+
+- system : Systems of the PB
+    - EXAMPLE : WII VC ; The run is ran on the WII Virtual Console. 
+- game : Game of the run
+    - EXAMPLE : Super Mario 64, Super Mario Bros., Donkey Kong Country, etc.
+- category : Category of the run
+    - EXAMPLE : Any%, 100%, etc.
+- X : Number of runs of this specific game - category.
+    - EXAMPLE : 5 ; 5 runs on this game - category. In other words : 4 total improvements over the first run ever.
+- first : The time of the very first PB of this game-category
+    - EXAMPLE : 2:53:59 : the first PB is 2 hours, 53 minutes and 59 seconds.
+
+- PB : PB times and the total of time saved
+    - EXAMPLE : 0:32:58 (-2:21:01) ; 
+        - The current PB is 32 minutes and 58 seconds.
+        - The current PB shaves 2 hours, 21 minutes and 1 seconds of the the very first PBs that was 2:53:59.
+- perc1st : Percentage shaved
+    - Example: 81.05 % : 81.05 % of the time is shaved.
+
+
+## Commands:
+### Plot 1 game's saves:
+Selecting this command will then ask you to select one PB to plot. This will plot the progression of the PB, from the first PB to the last run submitted.
+
+NOTE : If you have run(s) not accepted yet that is better than your accepted run, the plot will differ from the table because  they are included in the plot.
+
+### Plot all saves:
+This will generate a giant plot that will plot all the saves. Expect to witness a giant spaghetti if the user has a lot of runs. I made this because it's fun.
+
+### Histogram of the Saves:
+You have three kind of histogram available:
+- PB%: Histogram of the Percentages shaved. Maximum will always be at least 100%
+- Improvements : Histogram of the difference of PB-first run
+- time : Histogram of the PB times
+    - Note: The difference here vs. the PB section is that this will include only PBs that have at least one improvements.
+
+# Systems section:
+This gathers all the runs and regroup them by system.
+
+## The table:
+> System | # Runs ; Total Runs | # PBs ; Total PBs (+ Total delta WR-PB)
+>
+>        |    Average run time |        Average PB (Average delta WR-PB)
+
+- System : System
+- Quantity of runs : How many runs are ran on this system
+- Total runs : Total time of runs ran on this system
+- Average run time : Average time of runs ran on this system
+- Quantity of PBs : How many Pbs on this system
+- Total PBs : Total time of PBs on this system
+- Total delta WR-PB : Total deltas Wr-PB on this system
+- Average PB : Average PBs on this system
+- Average delta WR-PB : Average of deltas Wr-PB on this system
+  
+
+## Commands:
+### Change the sorting:
+- system : Sort by system.
+- Run_count : Sort by Total runs amount
+- Run_Total : Sort by total runs time 
+- Run_average : Sort by Run average
+- PB_count : Sort by total PBs amount
+- PB_Total : Sort by total PBs time
+- PB_average : Sort by PBs average
+- WR_Total : Sort by Total WR time
+    - Not displayed on the table
+- PB_Total_delta : Sort by total delta of PB-WR
+
+### Pie the table:
+Two informations can be generated in a pie: the frequency of the runs (X) and the total time. The pies will always have both the runs' pie and the PBs' pie.
+
+# Games section:
+This section gathers all the PBs and split them by games.
+
+## The table:
+> Game | # | Run total | # | PB total (delta PB-WR) | WR%
+
+- Game : Game name
+- Quantity of runs : How many runs on a specific game
+- Run total : Total time of all runs on a specific game
+- Quantity of PBs : How many PBs on a specific game
+- PB Total (delta PB-WR):
+    - Total PB time on a specific game
+    - Total delta PB-WR on a specific game
+- WR% : Percentage of PBs times vs. WR.
+
+
+## Commands:
+### Change the sorting:
+- game : Sort by game
+- Run_count : Sort by Amount of runs
+- Run_Total : Sort by total runs time
+- PB_count : Sort by PBs
+- PB_Total : Sort by Total PBs time
+- PB_Total_delta : Sort by total delta of PB-WR
+- WR_Total : Sort by total WRs
+    - WRs aren't displayed on the table
+- PB_perc
+    - Sort by PB percentage relative to WR
