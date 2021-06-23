@@ -152,7 +152,7 @@ This section gathers all the PBs that have more than one run.
 - first : The time of the very first PB of this game-category
     - EXAMPLE : 2:53:59 : the first PB is 2 hours, 53 minutes and 59 seconds.
 
-- PB : PB times and the total of time saved
+- time : PB times and the total of time saved
     - EXAMPLE : 0:32:58 (-2:21:01) ; 
         - The current PB is 32 minutes and 58 seconds.
         - The current PB shaves 2 hours, 21 minutes and 1 seconds of the the very first PBs that was 2:53:59.
@@ -161,6 +161,16 @@ This section gathers all the PBs that have more than one run.
 
 
 ## Commands:
+### Change the sorting:
+- system : Sort by system
+- game : Sort by game
+- category : Sort by category name
+- X : Sort by Amount of time a category has been improved
+- first : Sort by first PBs' times
+- time : sort by current PBs' times.
+- save : Sort by time saved of first PBs
+- perc1st : Sort by percentage saved.
+
 ### Plot 1 game's saves:
 Selecting this command will then ask you to select one PB to plot. This will plot the progression of the PB, from the first PB to the last run submitted.
 
@@ -218,13 +228,20 @@ This section gathers all the PBs and split them by games.
 > Game | # | Run total | # | PB total (delta PB-WR) | WR%
 
 - Game : Game name
+    - EXAMPLE : Super Mario 64, Donkey Kong Country
 - Quantity of runs : How many runs on a specific game
+    - 5 ; 5 runs are made on this game
 - Run total : Total time of all runs on a specific game
+    - 4:35:02 ; Total time of all the runs on the specific game
 - Quantity of PBs : How many PBs on a specific game
+    - 4 : The user have 4 PBs in this game.
 - PB Total (delta PB-WR):
     - Total PB time on a specific game
+        - EXAMPLE : 1:28:12 : The combined time of all the PBs of the user on this game is one hour, 28 minutes and 12 seconds.
     - Total delta PB-WR on a specific game
+        - EXAMPLE : (+3:10:41) ; The total time of deltas PB-WR is 3 hours, 10 minutes and 41 seconds.
 - WR% : Percentage of PBs times vs. WR.
+    - EXAMPLE : 200.0% : All the times of this game is 2x longer the total time of the WRs.
 
 
 ## Commands:
@@ -239,3 +256,31 @@ This section gathers all the PBs and split them by games.
     - WRs aren't displayed on the table
 - PB_perc
     - Sort by PB percentage relative to WR
+
+
+
+# Leaderboard section:
+This section gathers the leaderboard of the selected game on the specific category (and level).
+
+## the table:
+> time | delta | perc | moy_rank
+
+- time : time of the leaderboard entry
+    - EXAMPLE : 1:13:50 ; This entry's run is 1 hours, 13 minutes and 50 seconds long.
+- delta : difference of the entry compared to the first entry
+    - EXAMPLE : 0:00:00 ; This run is the WR (unless the difference is smaller than one second)
+    - EXAMPLE : 0:01:01 ; This run is 1 minutes and 1 second slower than WR.
+- perc : Percentage of this run compared to the WR.
+    - EXAMPLE : 200.0 % The run is twice as long as the WR.
+    - EXAMPLE : 100.0 % : This run is the WR.
+- moy_rank : Average time to save in order to gain one rank on the leaderboard.
+    - NOTE : The average can be very very small if there are a lot of runs and/or not a big difference from WR.
+    - EXAMPLE : 0:00:05 ; On average, 5 seconds will improve this entry's rank by one. Improving this run by 25 seconds COULD improve the rank by 5.
+    - EXAMPLE : 0:00:00 : Either it's the WR, either the average is smaller than 1 second.
+
+## Commands:
+### Plot the leaderboard evolution:
+This command will plot the leaderboard line for each year since the earliest run on the leaderboard. If there are 2 lines, it means there are only 2 years to plot (so the earliest run is 2 years old.)
+
+### Plot the position:
+This command will plot the current leaderboard with a dot of the position of the user.
