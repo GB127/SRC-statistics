@@ -26,10 +26,10 @@ class leaderboard(table):
         self.place = rank
         self.level = level
         if not IDs[2]:
-            print(f"Fetching {self.game} - {self.category}'s leaderboard data")
+            print(f"Fetching {self.game} - {self.category}")
             infos = get_leaderboard(IDs)["data"]["runs"]
         else:
-            print(f"Fetching {self.game} - {level} - {self.category}'s leaderboard data")
+            print(f"Fetching {self.game} - {level} - {self.category}")
             infos = get_leaderboard_level(IDs)["data"]["runs"]
         self.data = []
         self.WR = run_time(infos[0]["run"]["times"]["primary_t"])
