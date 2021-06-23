@@ -17,6 +17,7 @@ class Runs(table):
     def get_header(self):
         types = list(self.data[0].__dict__.keys())
         types.remove("IDs")
+        types.remove("level")
         return types
 
     def foot(self):

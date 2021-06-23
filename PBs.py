@@ -19,6 +19,7 @@ class PBs(Runs):
         types = super().get_header()
         types.remove("leaderboard")
         types.remove("WR")
+        types.remove("level")
         return types
 
 
