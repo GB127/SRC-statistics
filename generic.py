@@ -5,7 +5,7 @@ class table:
         types = list(self.data[0].__dict__.keys())
         return types
     def head(self):
-        header = " no |"
+        header = " no  |"
         for no, size in enumerate(self.data[0].table_size):
             header += f' {self.get_header()[no]}' + " "*size + "|"
         return header        

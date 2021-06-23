@@ -26,10 +26,10 @@ class leaderboard(table):
         self.place = rank
         self.level = level
         if not IDs[2]:
-            print(f"Initializing {self.game} - {self.category}'s leaderboard data")
+            print(f"Fetching {self.game} - {self.category}'s leaderboard data")
             infos = get_leaderboard(IDs)["data"]["runs"]
         else:
-            print(f"Initializing {self.game} - {level} - {self.category}'s leaderboard data")
+            print(f"Fetching {self.game} - {level} - {self.category}'s leaderboard data")
             infos = get_leaderboard_level(IDs)["data"]["runs"]
         self.data = []
         self.WR = run_time(infos[0]["run"]["times"]["primary_t"])
@@ -60,25 +60,32 @@ class leaderboard(table):
         return f'{self.game} - {self.category} | {len(self)} runs\n' + tempo
 
 
+    def get_header(self):
+        types = list(self.data[0].__dict__.keys())
+        types.remove("user")
+        types.remove("WR")
+        types.remove("place")
+        return types
+
+
 class entry:
-    table_size = [10,10]
+    table_size = [6,5, 5, 0]
     def __init__(self, data, WR, place=False):
         self.user = place
         self.WR = WR
         self.place = data["place"]
-        # WONTFIX : The thing with the current api is that it returns IDs. If I want all of them I have to update all of them...
-        #try:
-        #    self.player = [data["run"]["players"][0]["id"]]  # TODO: For now solo runs only
-        #except KeyError:
-        #    self.player = data["run"]["players"][0]["name"]  # TODO: For now solo runs only
         self.time = run_time(data["run"]["times"]["primary_t"])
         self.delta = self.time - self.WR
+        self.perc = round(self.time / self.WR * 100, 2)
 
         if self.place != 1:
             self.moy_rank = run_time((self.time-self.WR) / (self.place-1))
         else:
             self.moy_rank = run_time(0)
-        self.perc = round(self.time / self.WR * 100, 2)
+
+
+
+
 
 
     def __str__(self):
@@ -97,4 +104,4 @@ class entry:
 if __name__ == "__main__":
     test = ['j1l9qz1g', '9d85yqdn',None, {}]
     test = leaderboard(test, "Ocarina of time", "GSR", 2)
-    test.plot_evolution()
+    test()
