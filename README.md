@@ -12,6 +12,7 @@ Once you have the folder opened on the correct terminal, type this to run the sc
 
 Note : You'll likely need to install two modules I use for this script: the module requests and the matplotlib modules. Just type these in the terminal and hit enter:
 >pip install requests
+>
 >pip install matplotlib
 
 # Overview:
@@ -20,10 +21,10 @@ this script fetches all the runs made from a specified account on speedrun.com. 
 # The Main section : The user
 This section is the smallest section of the currently available, but is the section that unites all the other sections.
 
-Informations :
-    Username ; # of PBs (Total time) ; # of runs (Total runs time) ; # of systems ; # of games
+## Informations :
+>Username ; # of PBs (Total time) ; # of runs (Total runs time) ; # of systems ; # of games
 
-Commands :
+## Commands :
 1. Open the PBs section
 2. Open the Runs section
 3. Open the Saves section
