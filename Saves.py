@@ -31,13 +31,13 @@ class Saves(table):
         self.data = []
         for pb in PBs:
             tempo = Save(pb, Runs)
-            if tempo.first != tempo.PB:
+            if tempo.first != tempo.time:
                 self.data.append(tempo)
 
     def foot(self):
         total_X = sum([category.X for category in self.data])
         total_first = sum([category.first for category in self.data])
-        total_PB = sum([category.PB for category in self.data])
+        total_PB = sum([category.time for category in self.data])
         total_delta = total_first - total_PB
         perc_delta = round(total_delta / total_first * 100, 2)
 
@@ -65,13 +65,12 @@ class Saves(table):
         elif command == "time":
             tempo = sorted([one.time.time for one in self.data])
             plot_histo(tempo, "Histogram of PBs time", typ="time")
-
-
+        
 
 
 
 class Save(entry):
-    sorter = "PB"
+    sorter = "time"
     table_size =  [1, 17, 13, 3, 5, 19, 4]
     def sortable(self):
         tempo = list(self.__dict__)
@@ -93,8 +92,8 @@ class Save(entry):
         Run.sorter = "time"
         self.runs.sort()
         self.first = self.runs[-1].time
-        self.PB = PB.time
-        self.save = self.first - self.PB
+        self.time = PB.time
+        self.save = self.first - self.time
         self.perc1st = round(self.save/self.first * 100, 2)
 
     def plot_improvement(self):
@@ -109,6 +108,6 @@ class Save(entry):
                             f'{self.category[:20]:20}',
                             f'{self.X:^3}',
                             f'{self.first:>9}',
-                            f'{self.PB:>9}' + f' (-{self.save})',
+                            f'{self.time:>9}' + f' (-{self.save})',
                             f'(-{self.perc1st:6} %)'
                         ]) + "|"
