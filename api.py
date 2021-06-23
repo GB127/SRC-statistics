@@ -3,6 +3,18 @@ from tools import run_time
 
 URL = "https://www.speedrun.com/api/v1"
 
+amount = 0
+
+def request_counter():
+    global amount
+    amount += 1
+
+    if amount == 100:
+        print("Slowing down...")
+        time.sleep(60)
+        amount = 0
+
+
 
 def get_leaderboard_level(IDs):
     varistr = ""
@@ -137,7 +149,6 @@ def recursive_requester(link, toupdate):
     for run in rep["data"]:
         toupdate.append(run)
     if rep["pagination"]["size"] == rep["pagination"]["max"]:
-        time.sleep(10)
         recursive_requester(rep["pagination"]["links"][-1]["uri"], toupdate)
     if rep["pagination"]["size"] < rep["pagination"]["max"]:
         pass
@@ -151,6 +162,7 @@ def requester(link):
     while True:
         # It's in a loop in order to bypass the 502 status code.
         rep = requests.get(f"{URL}{link}")
+        request_counter()
         if rep.status_code == 200:
             return rep.json()
         elif rep.status_code == 502:
