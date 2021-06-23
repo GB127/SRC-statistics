@@ -8,6 +8,7 @@ class Saves(table):
         metho = super().methods()
         metho["Plot 1 game's saves"] = self.plot_save
         metho["Plot all saves"] = self.plot_all_saves
+        metho["Histo"] = self.plot_histo
         return metho
 
     def plot_save(self):

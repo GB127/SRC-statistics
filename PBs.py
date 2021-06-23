@@ -19,7 +19,6 @@ class PBs(Runs):
         types = super().get_header()
         types.remove("leaderboard")
         types.remove("WR")
-        types.remove("level")
         return types
 
 
@@ -76,15 +75,19 @@ class PB(Run):
     def sortable(self):
         tempo = super().sortable()
         tempo.remove("leaderboard")
+        tempo.remove("place")
         return tempo
 
     def __init__(self, data):
         super().__init__(data["run"])
-        self.place = data["place"]
-        self.leaderboard = leaderboard(self.IDs, self.game, self.category, self.place, level=self.level)
-        self.WR = self.leaderboard.WR
+        tempo_place = data["place"]
+        tempo_leaderboard = leaderboard(self.IDs, self.game, self.category, tempo_place, level=self.level)
+
+        self.WR = tempo_leaderboard.WR
         self.delta_WR = self.time - self.WR
         self.perc_WR = round((self.time) / self.WR * 100, 2)
+        self.place = data["place"]
+        self.leaderboard = tempo_leaderboard
         self.perc_LB = round((len(self.leaderboard) - self.place) / len(self.leaderboard) * 100,2)
 
     def __str__(self):
