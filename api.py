@@ -137,6 +137,7 @@ def recursive_requester(link, toupdate):
     for run in rep["data"]:
         toupdate.append(run)
     if rep["pagination"]["size"] == rep["pagination"]["max"]:
+        time.sleep(10)
         recursive_requester(rep["pagination"]["links"][-1]["uri"], toupdate)
     if rep["pagination"]["size"] < rep["pagination"]["max"]:
         pass
