@@ -110,7 +110,7 @@ Selecting this command will ask you to select one PB. After selecting the PB, it
 This section gather all the Runs of the specified user, including the obsoleted runs.
 
 ## The table:
-> No of PB | System | Game | Category | time
+> System | Game | Category | time
 
 - system : Systems of the PB
     - EXAMPLE : WII VC ; The run is ran on the WII Virtual Console. 
@@ -180,9 +180,9 @@ NOTE : If you have run(s) not accepted yet that is better than your accepted run
 This will generate a giant plot that will plot all the saves. Expect to witness a giant spaghetti if the user has a lot of runs. I made this because it's fun.
 
 ### Histogram of the Saves:
-You have three kind of histogram available:
+You have three kinds of histogram available:
 - PB%: Histogram of the Percentages shaved. Maximum will always be at least 100%
-- Improvements : Histogram of the difference of PB-first run
+- Improvements : Histogram of the differences of PB-first run
 - time : Histogram of the PB times
     - Note: The difference here vs. the PB section is that this will include only PBs that have at least one improvements.
 
