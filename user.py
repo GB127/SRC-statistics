@@ -1,5 +1,5 @@
 from api import get_userID, get_PBs, get_runs
-from tools import run_time
+from tools import run_time, command_select
 from PBs import PBs
 from allRuns import Runs
 from Saves import Saves
@@ -31,6 +31,10 @@ class user:
         tempo = list(self.__dict__.values())
         tempo.pop(3)  # Remove saves from the str because we don't want it there.
         return "; ".join([str(x) for x in tempo])
+
+    def __call__(self):
+        command = command_select(self.__dict__.keys())
+        self.Runs()
 
 if __name__ == "__main__":
     test = user("niamek")
