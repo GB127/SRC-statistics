@@ -11,7 +11,7 @@ def request_counter():
 
     if amount == 150:
         print("Slowing down...")
-        time.sleep(60)
+        time.sleep(20)
         amount = 0
 
 
