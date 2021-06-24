@@ -97,6 +97,12 @@ Change the sorting of the entire table.
 - perc_WR : Sort by Percentage relative to WR
 - perc_LB : Sort by percentage of people ranked under the user
 
+### Filter the data:
+You have three options to filter the data while you are in the section.
+- Enter a range (two numbers, separated by a "-") in order to take out all the entries of the table that aren't in the range. Be sure to sort before!
+- Enter a single number to remove the specified entry from the list.
+- reset : Remove the filters.
+
 ### Histogram of the PBs:
 You have three kind of histogram available:
 - WR%: Histogram of the Percentages of the WRs. Minimum will always be at least 100%
@@ -171,6 +177,15 @@ This section gathers all the PBs that have more than one run.
 - save : Sort by time saved of first PBs
 - perc1st : Sort by percentage saved.
 
+
+
+
+### Filter the data:
+You have three options to filter the data while you are in the section.
+- Enter a range (two numbers, separated by a "-") in order to take out all the entries of the table that aren't in the range. Be sure to sort before!
+- Enter a single number to remove the specified entry from the list.
+- reset : Remove the filters.
+
 ### Plot 1 game's saves:
 Selecting this command will then ask you to select one PB to plot. This will plot the progression of the PB, from the first PB to the last run submitted.
 
@@ -218,6 +233,12 @@ This gathers all the runs and regroup them by system.
     - Not displayed on the table
 - PB_Total_delta : Sort by total delta of PB-WR
 
+### Filter the data:
+You have three options to filter the data while you are in the section.
+- Enter a range (two numbers, separated by a "-") in order to take out all the entries of the table that aren't in the range. Be sure to sort before!
+- Enter a single number to remove the specified entry from the list.
+- reset : Remove the filters.
+
 ### Pie the table:
 Two informations can be generated in a pie: the frequency of the runs (X) and the total time. The pies will always have both the runs' pie and the PBs' pie.
 
@@ -257,6 +278,11 @@ This section gathers all the PBs and split them by games.
 - PB_perc
     - Sort by PB percentage relative to WR
 
+### Filter the data:
+You have three options to filter the data while you are in the section.
+- Enter a range (two numbers, separated by a "-") in order to take out all the entries of the table that aren't in the range. Be sure to sort before!
+- Enter a single number to remove the specified entry from the list.
+- reset : Remove the filters.
 
 
 # Leaderboard section:
@@ -279,6 +305,15 @@ This section gathers the leaderboard of the selected game on the specific catego
     - EXAMPLE : 0:00:00 : Either it's the WR, either the average is smaller than 1 second.
 
 ## Commands:
+
+
+### Truncate the data:
+You have two options to filter the data while you are in the section.
+- Enter the number of the last entry you want to keep. The script will  take out all the entries of the table that below the number.
+- reset : Untruncate the data.
+
+
+
 ### Plot the leaderboard evolution:
 This command will plot the leaderboard line for each year since the earliest run on the leaderboard. If there are 2 lines, it means there are only 2 years to plot (so the earliest run is 2 years old.)
 
