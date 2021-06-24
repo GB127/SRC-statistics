@@ -108,7 +108,12 @@ class Run(entry):
             self.category = f'{self.category} ({",".join(subcateg)})'
         
         if self.IDs[2]:
-            self.level = get_level(self.IDs[2])
+            try:
+                self.level = Run.levels[(self.game, self.IDs)]
+            except KeyError:
+                Run.levels[(self.game, self.IDS)] = (self.game, self.IDs)
+                self.level = Run.levels[(self.game, self.IDs)]
+
         else:
             self.level = None
 
