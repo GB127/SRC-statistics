@@ -20,6 +20,8 @@ class leaderboard(table):
 
 
     def __init__(self, IDs, game, category, rank, level=None):
+        super().__init__()
+
         self.IDs = IDs
         self.game = game
         self.category = category
@@ -31,16 +33,37 @@ class leaderboard(table):
         else:
             print(f"Fetching {self.game} - {level} - {self.category}")
             infos = get_leaderboard_level(IDs)["data"]["runs"]
-        self.data = []
         self.WR = run_time(infos[0]["run"]["times"]["primary_t"])
         for no, one in enumerate(infos):
             self.data.append(entry(one, self.WR, no==rank -1))
 
     def methods(self):
-        return {"Plot the position" : self.plot,
+        return {"Truncate the leaderboard": self.filter_select,
+                "Plot the position" : self.plot,
                 "Plot the leaderboard evolution" : self.plot_evolution,
                 "end": "end"}
     
+    def filter_select(self):
+        while True:
+            print("Select the last entry you want to keep by entering a number.\nTo reset the filtering, enter reset\nTo cancel, type end")
+            command = input()
+            if command == "reset":
+                self.reset_filter()
+                break
+            elif command == "end":
+                break
+            else:
+                try:
+                    self.filter(0, int(command))
+                    break
+                except:
+                    pass
+
+
+
+
+
+
     def plot_evolution(self):
         if not self.IDs[2]:
             toplot = get_leaderboards(self.IDs)

@@ -27,8 +27,9 @@ class Saves(table):
         return f"{len(self.data)} PBs with multiple runs"
 
     def __init__(self, PBs, Runs):
+        super().__init__()
+
         print("Initializing Saves")
-        self.data = []
         for pb in PBs:
             tempo = Save(pb, Runs)
             if tempo.first != tempo.time:

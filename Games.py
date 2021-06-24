@@ -3,7 +3,8 @@ from generic import table, entry
 
 class Games(table):
     def __init__(self, PBs, Runs):
-        self.data = []
+        super().__init__()
+
         data_PBs, data_Runs = {},{}
         for pb in PBs:
             data_PBs[pb.game] = data_PBs.get(pb.game, []) + [pb]

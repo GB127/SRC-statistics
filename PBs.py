@@ -5,8 +5,10 @@ from tools import run_time, command_select, clear, plot_histo
 
 class PBs(Runs):
     def __init__(self, data):
-        print("Initializing PBs data")
         self.data = []
+        self.backup = []
+
+
         for pb in data:
             self.data.append(PB(pb))
 

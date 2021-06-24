@@ -1,5 +1,10 @@
 from tools import command_select, run_time
 class table:
+    def __init__(self):
+        self.backup = []
+        self.data = []
+
+
     # TABLE RELATED STUFFS : Calling the class will create the table and the command promp
     def get_header(self):
         types = list(self.data[0].__dict__.keys())
@@ -8,7 +13,7 @@ class table:
         header = " no  |"
         for no, size in enumerate(self.data[0].table_size):
             header += f' {self.get_header()[no]}' + " "*size + "|"
-        return header        
+        return header
     def foot(self):
         pass
     def __call__(self):
@@ -27,12 +32,47 @@ class table:
             if command != "end":
                 command()
             else:
+                self.reset_filter()
                 break
 
     # COMMAND PROMPT related
     def methods(self):
         return {"Change the sorting": self.change_sort,
+                "Filter the table" : self.filter_select,
                 "end": "end"}
+
+    def filter_select(self):
+        while True:
+            print("To remove a single run, enter a single number\nTo remove a range, enter 2 numbers serparated by a -\nTo reset the filtering, enter reset\nTo cancel, type end")
+            command = input()
+            if command == "reset":
+                self.reset_filter()
+                break
+            elif command == "end":
+                break
+            else:
+                try:
+                    number1, number2 = command.split("-")
+                    self.filter(int(number1) -1, int(number2))
+                    break
+                except ValueError:
+                    self.filter(int(command)-1)
+                    break
+                except:
+                    pass
+
+    def filter(self, start, end=None):
+        if end:
+            self.backup += self.data[:start]
+            self.backup += self.data[end:]
+            self.data = self.data[start: end]
+        else:  # This works
+            self.back = self.data[start]
+            self.data.pop(start)
+
+    def reset_filter(self):
+        self.data = self.backup + self.data
+        self.backup = []
 
     def change_sort(self):
         self.data[0].change_sort()
