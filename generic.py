@@ -5,9 +5,23 @@ class table:
         self.data = []
 
     def __str__(self):
+        head_prep = []
+        for attribut, value in self.data[0].__dict__.items():
+            if isinstance(value, run_time):
+                head_prep.append(f'{attribut:^9}')
+            elif attribut == "game":
+                head_prep.append(f'{attribut:50}')
+            elif attribut == "system":
+                head_prep.append(f'{"syst":^5}')
+            elif attribut == "category":
+                head_prep.append(f'{attribut:40}')
+
+        head = "|".join(head_prep)
+
+
         line = f'{"-" * len(str(self.data[0]))}'
         body = "\n".join([str(x) for x in self.data])
-        return  f'{line}\n{body}\n{line}'
+        return  f'{head}\n{line}\n{body}\n{line}'
 
 
     def __call__(self):
@@ -81,7 +95,7 @@ class entry:
         tempo = []
         for cle, valeur in self.__dict__.items():
             if isinstance(valeur, run_time):
-                tempo.append(f'{str(valeur):>9}')
+                tempo.append(f'{valeur:^9}')
             elif cle == "game":
                 tempo.append(f'{valeur:50}')
             elif cle == "system":
