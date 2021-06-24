@@ -31,7 +31,6 @@ def get_leaderboard_level(IDs):
 
 
 def get_leaderboards(IDs):
-    # TODO: Enlever les temps sans date! (Ils sont dans toutes les années)
     varistr = ""
     if IDs[3] != {}:
         tempo = []
@@ -57,7 +56,6 @@ def get_leaderboards(IDs):
     return rankings
 
 def get_leaderboards_level(IDs):
-    # TODO: Enlever les temps sans date! (Ils sont dans toutes les années)
     varistr = ""
     if IDs[3] != {}:
         tempo = []
@@ -83,10 +81,6 @@ def get_leaderboards_level(IDs):
             rankings[year] = tempo
     return rankings
 
-
-
-
-########### Below this are function that works. No need of improving.
 
 def get_leaderboard(IDs):
     varistr = ""

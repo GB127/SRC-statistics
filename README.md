@@ -55,7 +55,7 @@ It displays some general informations.
 This section gather all the PBs of the specified user.
 
 ## The table:
-> No of PB | System | Game | Category | time | Delta of PB-WR | Percentage relative to WR | Rank/Total runners | % of runners ranked under
+> System | Game | Category | time | Delta of PB-WR | Percentage relative to WR | Rank/Total runners | % of runners ranked under
 
 - system : Systems of the PB
     - EXAMPLE : WII VC ; The PB is ran on the WII Virtual Console. 
