@@ -12,36 +12,6 @@ class PBs(Runs):
         for pb in data:
             self.data.append(PB(pb))
 
-    def get_header(self):
-        types = super().get_header()
-        types.remove("leaderboard")
-        types.remove("WR")
-        return types
-
-
-    def foot(self):  #TODO: Redo this
-        string1, string2, string3, string4 = super().foot().split("\n")
-        
-        total_time = sum([pb.time for pb in self.data])
-        total_wr = sum([pb.WR for pb in self.data])
-
-        percentage = round(100* total_time / total_wr, 2)
-
-        total_deltaWR = sum([pb.delta_WR for pb in self.data])
-
-        string1 += "-" * 46
-        string2 += f' |+ {total_deltaWR} |  {percentage} % |'
-        string3 += f' |+ {run_time(total_deltaWR / len(self))}  |  {percentage} % |'
-
-
-
-
-
-        return "\n".join([string1, string2, string3])
-
-
-
-
 
     def stats_leaderboard(self):
         clear()
@@ -80,15 +50,6 @@ class PB(Run):
         self.place = data["place"]
         self.leaderboard = tempo_leaderboard
         self.perc_LB = round((len(self.leaderboard) - self.place) / len(self.leaderboard) * 100,2)
-
-    def __str__(self):
-        return super().__str__() + " | ".join([
-                                    f'+ {self.delta_WR:<8}',
-                                    f'{str(self.perc_WR) + " %":>9}',
-                                    f"{f'{self.place}/{len(self.leaderboard)}':9}",
-                                    f"{self.perc_LB:6} %"]) + "|"
-
-
 
 
     def sortable(self):

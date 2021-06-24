@@ -1,5 +1,5 @@
 from api import get_userID, get_PBs, get_runs
-from tools import run_time, command_select
+from tools import run_time, command_select, clear
 from PBs import PBs
 from allRuns import Runs
 from Saves import Saves
@@ -28,13 +28,18 @@ class user:
         print("user initialized!")
 
     def __str__(self):
-        tempo = list(self.__dict__.values())
-        tempo.pop(3)  # Remove saves from the str because we don't want it there.
-        return "; ".join([str(x) for x in tempo])
+        tempo = list(self.__dict__.values())[1:]
+        return self.username + " ; ".join([f'{len(x)} {x.__class__.__name__}' for x in tempo])
 
     def __call__(self):
-        command = command_select(self.__dict__.keys())
-        self.Runs()
+        while True:
+            liste = list(self.__dict__.keys())
+            liste.remove("username")
+            clear()
+            print(self)
+            command = command_select(liste + ["end"], printer=True)
+            if command == "end": break
+            self.__dict__[command]()
 
 if __name__ == "__main__":
-    test = user("niamek")
+    user("libre")()

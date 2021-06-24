@@ -8,6 +8,7 @@ class Systems(table):
     def __init__(self, PBs, Runs):
         print("Initializing Systems data")
         self.data = []
+        self.backup = []
         data_PBs, data_Runs = {},{}
         for pb in PBs:
             data_PBs[pb.system] = data_PBs.get(pb.system, []) + [pb]
@@ -58,22 +59,6 @@ class System(entry):
         self.WR_Total = sum([pb.WR for pb in self.Pbs])
         self.PB_Total_delta = self.PB_Total - self.WR_Total
         self.PB_Total_delta_average = run_time(self.PB_Total_delta / self.PB_count)
-
-
-    def __str__(self):
-        tempo = [f"{self.system:^8}",
-                f'{self.Run_count:^3} Runs ; {self.Run_Total:>9}',
-                f'{self.PB_count:^3} PBs ; {self.PB_Total:>9} (+{self.PB_Total_delta:>8})\n    ',
-                f'        ',
-                f'           {self.Run_average:>9}', 
-                f'          {self.PB_average:>9} (+{self.PB_Total_delta_average:>8})\n' + "-" * 72]
-        return " | ".join(tempo)
-
-
-
-
-
-
 
     def sortable(self):
         tempo = list(self.__dict__)

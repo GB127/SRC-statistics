@@ -27,27 +27,6 @@ class Saves(table):
         select.plot_improvement()
 
 
-    def get_header(self):
-        types = list(self.data[0].__dict__.keys())
-        types.remove("runs")
-        types.remove("save")
-        return types
-
-
-    def foot(self):
-        total_X = sum([category.X for category in self.data])
-        total_first = sum([category.first for category in self.data])
-        total_PB = sum([category.time for category in self.data])
-        total_delta = total_first - total_PB
-        perc_delta = round(total_delta / total_first * 100, 2)
-
-        string1 = "-" * 114 + "\n"
-        string2 = f'{len(self.data)} PBs{"":47}Total:|{total_X:^5}| {total_first:>9} | {total_PB:>9} (-{total_delta})| (- {perc_delta:>5} %)|\n'
-        string3 = f'{"Average:":>59}|{round(total_X/len(self.data)):^5}| {run_time(total_first/len(self.data)):>9} | {run_time(total_PB/len(self.data)):>9} (-{run_time(total_delta/len(self.data))}) | (- {perc_delta:>5} %)|'
-
-
-        return string1 + string2 + string3
-
     def plot_all_saves(self):
         all_plots = []
         for category in self.data:
@@ -89,19 +68,6 @@ class Save(entry):
         self.time = PB.time
         self.save = self.first - self.time
         self.perc1st = round(self.save/self.first * 100, 2)
-
-    def __str__(self):
-        return " | ".join([
-                            f'{self.system[:6]:^6}',
-                            f'{self.game[:20]:20}',
-                            f'{self.category[:20]:20}',
-                            f'{self.X:^3}',
-                            f'{self.first:>9}',
-                            f'{self.time:>9}' + f' (-{self.save})',
-                            f'(-{self.perc1st:6} %)'
-                        ]) + "|"
-
-
 
     def sortable(self):
         tempo = list(self.__dict__)

@@ -11,26 +11,6 @@ class Runs(table):
         for run in data:
             self.data.append(Run(run))
 
-    # STRING RELATED
-    def __str__(self):
-        return super().__str__() + f' ({sum([x.time for x in self.data]).days()})'
-
-
-    def get_header(self):
-        types = list(self.data[0].__dict__.keys())
-        types.remove("IDs")
-        types.remove("level")
-        return types
-
-    def foot(self):
-        total_time = sum([x.time for x in self.data])
-
-        string1 = f"{'-' * 72}\n" 
-        string2 = f"{'Total |':>60}{total_time:>10}\n"
-        string3 = f"{'Average |':>60}{run_time(total_time/ len(self)):>10}\n"
-        return string1 + string2 + string3
-
-
     # PLOTS
     def plot_histo(self):
         plot_histo(sorted([one.time.time for one in self.data]), 
@@ -109,14 +89,6 @@ class Run(entry):
             self.level = repertoire(Run.levels, self.IDs[2], get_level)
 
         self.time = run_time(data["times"]["primary_t"])
-
-    def __str__(self):
-        tempo = [
-                    f'{self.system[:6]:^6}',
-                    f'{self.game[:20]:20}',
-                    f'{self.category[:20]:20}',
-                    f'{self.time:>9}']
-        return " | ".join([str(x) for x in tempo]) + " |"
 
     def sortable(self):
         tempo = list(self.__dict__)

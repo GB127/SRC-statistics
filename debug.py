@@ -1,6 +1,5 @@
 from user import user
 
-test = user("niamek")
+test = user("libre")
 
-
-test.Runs()
+test()

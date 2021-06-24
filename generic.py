@@ -4,29 +4,16 @@ class table:
         self.backup = []
         self.data = []
 
+    def __str__(self):
+        line = f'{"-" * len(str(self.data[0]))}'
+        body = "\n".join([str(x) for x in self.data])
+        return  f'{line}\n{body}\n{line}'
 
-    # TABLE RELATED STUFFS : Calling the class will create the table and the command promp
-    def get_header(self):
-        types = list(self.data[0].__dict__.keys())
-        return types
-    def head(self):
-        header = " no  |"
-        for no, size in enumerate(self.data[0].table_size):
-            header += f' {self.get_header()[no]}' + " "*size + "|"
-        return header
-    def foot(self):
-        pass
+
     def __call__(self):
-        def table():
-            header = self.head()
-            header += "\n" + ("-" * len(header))
-            print(header)
-            for no, entry in enumerate(self):
-                print(f'{no+1:^4} | {entry}')
-            print(self.foot())
         while True:
             self.data.sort()
-            table()
+            print(self)
             command_key = command_select(sorted(self.methods().keys()), printer=True)
             command = self.methods()[command_key]
             if command != "end":
@@ -87,12 +74,21 @@ class table:
 
 
 
-    def __str__(self):
-        return f'{len(self)} {self.__class__.__name__}'
 
 class entry:
-    def sortable(self):
-        return list(self.__dict__)
+
+    def __str__(self):
+        tempo = []
+        for cle, valeur in self.__dict__.items():
+            if isinstance(valeur, run_time):
+                tempo.append(f'{str(valeur):>9}')
+            elif cle == "game":
+                tempo.append(f'{valeur:50}')
+            elif cle == "system":
+                tempo.append(f'{valeur:^5}')
+            elif cle == "category":
+                tempo.append(f'{valeur:40}')
+        return "|".join(tempo)
 
     def change_sort(self):
         for no, one in enumerate(self.sortable()):
