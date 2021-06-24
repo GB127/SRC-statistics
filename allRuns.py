@@ -80,24 +80,20 @@ class Run(entry):
                 return "Super Mario 64"
 
             else: return name
+        def repertoire(lequel, data, requester):
+            try:
+                return lequel[data]
+            except KeyError:
+                lequel[data] = requester(data)
+                return lequel[data]
+
         self.IDs = [data["game"], data["category"], data["level"], {}]
+        self.system = repertoire(Run.systems, data["system"]["platform"], get_system)
 
-        try:
-            self.system = Run.systems[data["system"]["platform"]]
-        except KeyError:
-            Run.systems[data["system"]["platform"]] = get_system(data["system"]["platform"])
-            self.system = Run.systems[data["system"]["platform"]]
+        self.game = repertoire(Run.games, data["game"], get_game)
 
-        try:
-            self.game = Run.games[data["game"]]
-        except KeyError:
-            Run.games[data["game"]] = clean_gamename(get_game(data["game"]))
-            self.game = Run.games[data["game"]]
-        try:
-            self.category = Run.categories[data["category"]]
-        except KeyError:
-            Run.categories[data["category"]] = get_category(data["category"])
-            self.category = Run.categories[data["category"]]
+        self.category = repertoire(Run.categories, data["category"], get_category)
+
 
         subcateg = []
         for value, item in data["values"].items():
@@ -108,15 +104,9 @@ class Run(entry):
         if subcateg:
             self.category = f'{self.category} ({",".join(subcateg)})'
         
+        self.level = None
         if self.IDs[2]:
-            try:
-                self.level = Run.levels[self.IDs[2]]
-            except KeyError:
-                Run.levels[self.IDs[2]] = get_level(self.IDs[2])
-                self.level = Run.levels[self.IDs[2]]
-
-        else:
-            self.level = None
+            self.level = repertoire(Run.levels, self.IDs[2], get_level)
 
         self.time = run_time(data["times"]["primary_t"])
 
