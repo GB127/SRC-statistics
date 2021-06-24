@@ -74,12 +74,6 @@ class PBs(Runs):
 class PB(Run):
     table_size = Run.table_size + [2, 3, 5, 1]
 
-    def sortable(self):
-        tempo = super().sortable()
-        tempo.remove("leaderboard")
-        tempo.remove("place")
-        return tempo
-
     def __init__(self, data):
         super().__init__(data["run"])
         tempo_place = data["place"]
@@ -98,3 +92,14 @@ class PB(Run):
                                     f'{str(self.perc_WR) + " %":>9}',
                                     f"{f'{self.place}/{len(self.leaderboard)}':9}",
                                     f"{self.perc_LB:6} %"]) + "|"
+
+
+
+
+    def sortable(self):
+        tempo = super().sortable()
+        tempo.remove("leaderboard")
+        tempo.remove("place")
+        return tempo
+
+

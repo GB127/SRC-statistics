@@ -5,15 +5,6 @@ import matplotlib.pyplot as plot
 
 
 class Systems(table):
-    def get_header(self):
-        types = ["system", "Runs","PBs"]
-        return types
-
-
-    def pie(self):
-        pie_systems(self)()
-
-
     def __init__(self, PBs, Runs):
         print("Initializing Systems data")
         self.data = []
@@ -28,6 +19,20 @@ class Systems(table):
 
     def __str__(self):
         return f'{len(self.data)} systems'
+
+
+
+
+
+    def get_header(self):
+        types = ["system", "Runs","PBs"]
+        return types
+
+
+    def pie(self):
+        pie_systems(self)()
+
+
 
     def foot(self):  #TODO: use local variable to reduce computer usage
         string1 = f'               | {sum([one.Run_count for one in self.data]):>3} Runs ;{sum([one.Run_Total for one in self.data]):>10} | {sum([one.PB_count for one in self.data]):>2}  PBs ;{sum([one.PB_Total for one in self.data]):>10} (+{sum([one.PB_Total_delta for one in self.data]):>9})\n'
@@ -44,15 +49,6 @@ class Systems(table):
 class System(entry):
     table_size = [3, 17, 28]
     sorter = "system"
-
-
-    def sortable(self):
-        tempo = list(self.__dict__)
-        tempo.remove("Pbs")
-        tempo.remove("Runs")
-        return tempo
-
-
     def __init__(self, system, pbs, runs):
         self.system = system
         self.Runs = runs
@@ -79,6 +75,17 @@ class System(entry):
                 f'          {self.PB_average:>9} (+{self.PB_Total_delta_average:>8})\n' + "-" * 72]
         return " | ".join(tempo)
 
+
+
+
+
+
+
+    def sortable(self):
+        tempo = list(self.__dict__)
+        tempo.remove("Pbs")
+        tempo.remove("Runs")
+        return tempo
 
 
 class pie_systems:

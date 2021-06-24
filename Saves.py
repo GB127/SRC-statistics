@@ -4,6 +4,16 @@ from tools import plot_line, plot_histo
 from allRuns import Run
 
 class Saves(table):
+    def __init__(self, PBs, Runs):
+        super().__init__()
+
+        print("Initializing Saves")
+        for pb in PBs:
+            tempo = Save(pb, Runs)
+            if tempo.first != tempo.time:
+                self.data.append(tempo)
+
+
     def methods(self):
         metho = super().methods()
         metho["Plot 1 game's saves"] = self.plot_save
@@ -25,15 +35,6 @@ class Saves(table):
 
     def __str__(self):
         return f"{len(self.data)} PBs with multiple runs"
-
-    def __init__(self, PBs, Runs):
-        super().__init__()
-
-        print("Initializing Saves")
-        for pb in PBs:
-            tempo = Save(pb, Runs)
-            if tempo.first != tempo.time:
-                self.data.append(tempo)
 
     def foot(self):
         total_X = sum([category.X for category in self.data])
@@ -73,12 +74,6 @@ class Saves(table):
 class Save(entry):
     sorter = "time"
     table_size =  [1, 17, 13, 3, 5, 19, 4]
-    def sortable(self):
-        tempo = list(self.__dict__)
-        tempo.remove("runs")
-        return tempo
-
-
 
     def __init__(self, PB, Runs):
         self.system = PB.system
@@ -97,11 +92,6 @@ class Save(entry):
         self.save = self.first - self.time
         self.perc1st = round(self.save/self.first * 100, 2)
 
-    def plot_improvement(self):
-        data = [one.time for one in self.runs]
-        data.reverse()
-        plot_line([data], f"{self.game}-{self.category} Improvement", ymin=None)
-
     def __str__(self):
         return " | ".join([
                             f'{self.system[:6]:^6}',
@@ -112,3 +102,17 @@ class Save(entry):
                             f'{self.time:>9}' + f' (-{self.save})',
                             f'(-{self.perc1st:6} %)'
                         ]) + "|"
+
+
+
+    def sortable(self):
+        tempo = list(self.__dict__)
+        tempo.remove("runs")
+        return tempo
+
+
+    def plot_improvement(self):
+        data = [one.time for one in self.runs]
+        data.reverse()
+        plot_line([data], f"{self.game}-{self.category} Improvement", ymin=None)
+
