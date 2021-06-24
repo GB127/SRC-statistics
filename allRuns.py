@@ -110,10 +110,10 @@ class Run(entry):
         
         if self.IDs[2]:
             try:
-                self.level = Run.levels[(self.game, self.IDs)]
+                self.level = self.levels[self.IDs[2]]
             except KeyError:
-                Run.levels[(self.game, self.IDS)] = (self.game, self.IDs)
-                self.level = Run.levels[(self.game, self.IDs)]
+                self.levels[self.IDs[2]] = get_level(self.IDs[2])
+                self.level = Run.levels[self.IDs[2]]
 
         else:
             self.level = None
