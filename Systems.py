@@ -17,12 +17,6 @@ class Systems(table):
         for one_system in data_PBs.keys():
             self.data.append(System(one_system, data_PBs[one_system], data_Runs[one_system]))
 
-    def __str__(self):
-        return f'{len(self.data)} systems'
-
-
-
-
 
     def get_header(self):
         types = ["system", "Runs","PBs"]

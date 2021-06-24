@@ -85,6 +85,11 @@ class table:
     def __len__(self):
         return len(self.data)
 
+
+
+    def __str__(self):
+        return f'{len(self)} {self.__class__.__name__}'
+
 class entry:
     def sortable(self):
         return list(self.__dict__)

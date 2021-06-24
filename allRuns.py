@@ -13,7 +13,7 @@ class Runs(table):
 
     # STRING RELATED
     def __str__(self):
-        return f'{len(self)} runs ({sum([x.time for x in self.data]).days()})'
+        return super().__str__() + f' ({sum([x.time for x in self.data]).days()})'
 
 
     def get_header(self):

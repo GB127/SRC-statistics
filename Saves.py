@@ -33,8 +33,6 @@ class Saves(table):
         types.remove("save")
         return types
 
-    def __str__(self):
-        return f"{len(self.data)} PBs with multiple runs"
 
     def foot(self):
         total_X = sum([category.X for category in self.data])

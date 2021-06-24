@@ -12,11 +12,6 @@ class PBs(Runs):
         for pb in data:
             self.data.append(PB(pb))
 
-
-    # STRING RELATED
-    def __str__(self):
-        return f'{len(self)} PBs ({sum([x.time for x in self.data]).days()})'
-
     def get_header(self):
         types = super().get_header()
         types.remove("leaderboard")
