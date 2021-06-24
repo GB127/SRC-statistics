@@ -66,6 +66,7 @@ class Run(entry):
         "nzelkr6q" : "PS4",
         }
 
+    levels = {}
     table_size = [1, 17, 13, 6]
     sorter = "game"
 
