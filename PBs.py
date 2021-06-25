@@ -35,3 +35,35 @@ class PB(Run):
         self.leaderboard = tempo_leaderboard
         self.ranking = f'{data["place"]:>4}/{len(self.leaderboard):<4}'
         self.perc_LB = round((len(tempo_leaderboard) - self.place) / len(tempo_leaderboard) * 100,2)
+
+
+    def __truediv__(self, other):
+        if isinstance(self.leaderboard, leaderboard):
+            self.leaderboard = len(self.leaderboard)
+        tempo = super().__truediv__(other)
+        tempo.leaderboard = int(tempo.leaderboard)
+        tempo.place = int(tempo.place)
+
+        self.ranking = f'{tempo.place:>4}/{tempo.leaderboard:<4}'
+        self.perc_LB = round((tempo.leaderboard - self.place) / tempo.leaderboard * 100,2)
+
+        tempo.perc_WR = round((tempo.time) / tempo.WR * 100, 2)
+        return tempo
+
+
+    def __add__(self, other):
+        if isinstance(self.leaderboard, leaderboard):
+            self.leaderboard = len(self.leaderboard)
+        if isinstance(other.leaderboard, leaderboard):
+            other.leaderboard = len(other.leaderboard)
+        tempo = super().__add__(other)
+        tempo.leaderboard = int(tempo.leaderboard)
+        tempo.place = int(tempo.place)
+
+        self.ranking = f'{tempo.place:>4}/{tempo.leaderboard:<4}'
+        self.perc_LB = round((tempo.leaderboard - self.place) / tempo.leaderboard * 100,2)
+
+
+
+        tempo.perc_WR = round((tempo.time) / tempo.WR * 100, 2)
+        return tempo

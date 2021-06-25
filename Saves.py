@@ -73,3 +73,12 @@ class Save(entry):
         data.reverse()
         plot_line([data], f"{self.game}-{self.category} Improvement", ymin=None)
 
+    def __add__(self, other):
+        tempo = super().__add__(other)
+        tempo.perc1st = round(tempo.delta_m/tempo.first * 100, 2)
+        return tempo
+
+    def __truediv__(self, other):
+        tempo = super().__truediv__(other)
+        tempo.perc1st = round(tempo.delta_m/tempo.first * 100, 2)
+        return tempo

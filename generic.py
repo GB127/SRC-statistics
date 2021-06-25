@@ -1,4 +1,5 @@
 from tools import command_select, run_time
+from copy import deepcopy
 
 def formatting(cle, valeur, which):
     tostr = {"cle":cle, "valeur":valeur}
@@ -61,7 +62,11 @@ class table:
         for no, x in enumerate(self.data):
             body += f"{no:>3} |{x}\n"
 
-        return  f'{head()}\n{line}\n{body}{line}'
+        total = str(sum(self.data[1:], deepcopy(self.data[0])))  # FIXME
+        average = str(sum(self.data[1:], deepcopy(self.data[0])) / len(self))  # FIXME
+
+        return  f'{head()}\n{line}\n{body}{line}\nTotal{total}\nAvera{average}'
+
 
 
     def __call__(self):
@@ -90,6 +95,40 @@ class entry:
             else:
                 tempo.append(formatting(cle, valeur, "valeur"))
         return " | ".join(tempo)
+
+
+    def __add__(self, other):
+        for cle, value in self.__dict__.items():
+            if isinstance(value, run_time):
+                self.__dict__[cle] += other.__dict__[cle]
+            elif isinstance(value, int) or isinstance(value, float):
+                self.__dict__[cle] += other.__dict__[cle]
+            else:
+                self.__dict__[cle] = ""
+        return self
+
+    __radd__ = __add__
+
+    def __truediv__(self, integ):
+        for cle, value in self.__dict__.items():
+            if isinstance(value, run_time):
+                self.__dict__[cle] = run_time(self.__dict__[cle] / integ)
+            elif isinstance(value, int) or isinstance(value, float):
+                print(cle, self.__dict__[cle], "/", integ)
+                self.__dict__[cle] /= integ
+                if "count" in cle:
+                    self.__dict__[cle] = int(self.__dict__[cle])
+
+            else:
+                pass
+        return self
+
+
+
+
+
+
+
 
 
     def __lt__(self, other):  # FIXME : If equal, it needs to have some sub-sorting.
