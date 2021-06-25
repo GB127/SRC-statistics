@@ -37,6 +37,8 @@ def formatting(cle, valeur, which):
 
 
 class table:
+
+    # method_list = [func for func in dir(Foo) if callable(getattr(Foo, func))]
     def __init__(self):
         if self.__class__.__name__ != "leaderboard":
             print(f"Prepping the {self.__class__.__name__} table...")

@@ -13,14 +13,6 @@ class Saves(table):
             if tempo.first != tempo.time:
                 self.data.append(tempo)
 
-
-    def methods(self):
-        metho = super().methods()
-        metho["Plot 1 game's saves"] = self.plot_save
-        metho["Plot all saves"] = self.plot_all_saves
-        metho["Histo"] = self.plot_histo
-        return metho
-
     def plot_save(self):
         print("Select one run to plot")
         select = command_select(self.data)
@@ -45,8 +37,6 @@ class Saves(table):
             tempo = sorted([one.time.time for one in self.data])
             plot_histo(tempo, "Histogram of PBs time", typ="time")
         
-
-
 
 class Save(entry):
     sorter = "time"
