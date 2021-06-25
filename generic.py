@@ -1,4 +1,4 @@
-from tools import command_select, run_time
+from tools import command_select, run_time, clear
 from copy import deepcopy
 
 def formatting(cle, valeur, which):
@@ -38,7 +38,6 @@ def formatting(cle, valeur, which):
 
 class table:
 
-    # method_list = [func for func in dir(Foo) if callable(getattr(Foo, func))]
     def __init__(self):
         if self.__class__.__name__ != "leaderboard":
             print(f"Prepping the {self.__class__.__name__} table...")
@@ -72,10 +71,22 @@ class table:
 
 
     def __call__(self):
+        def methods_fetcher():
+            toreturn = []
+            method_list = [func for func in dir(self) if callable(getattr(self, func))]
+            for method in method_list:
+                if "__" not in method:
+                    toreturn.append(method)
+            return toreturn + ["end"]
+
         while True:
+            clear()
             print(self)
-            if input("end?") == "end":
+            command = command_select(methods_fetcher(), printer=True)
+            if command == "end":
                 break
+            getattr(self.__class__, command)(self)
+
 
     # Basic stuffs for making the stuff an iterable and all.
     def __getitem__(self, argument):
