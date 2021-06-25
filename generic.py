@@ -1,43 +1,50 @@
 from tools import command_select, run_time
+
+def formatting(cle, valeur, which):
+    tostr = {"cle":cle, "valeur":valeur}
+    if "count" in cle:
+        return f'{"#":^3}'
+    elif isinstance(valeur, run_time):
+        tempo = "-" if "delta" in cle else ""
+        return f'{tempo + str(tostr[which])[:9]:^9}'
+    elif cle == "game":
+        return f'{tostr[which][:30]:30}'
+    elif cle == "system":
+        return f'{tostr[which][:6]:^6}'
+    elif cle == "category":
+        return f'{tostr[which][:20]:20}'
+    elif "perc" in cle:
+        return f'{tostr[which]:^9}'
+    elif cle == "ranking":
+        return f'{tostr[which]:^10}'
+    else:
+        return tostr[which]
+
+
 class table:
     def __init__(self):
         self.backup = []
         self.data = []
 
     def __str__(self):
-        head_prep = [f"{'':3}"]
-        for attribut, value in self.data[0].__dict__.items():
-            if attribut in ["leaderboard", "place", "IDs", "runs", "pbs"]:
-                pass
-            elif attribut == "level":
-                pass
-            elif "count" in attribut:
-                head_prep.append(f'{"#":^3}')
-            elif isinstance(value, run_time):
-                head_prep.append(f'{attribut[:9]:^9}')
-            elif attribut == "game":
-                head_prep.append(f'{attribut[:30]:30}')
-            elif attribut == "system":
-                head_prep.append(f'{"syst":^6}')
-            elif attribut == "category":
-                head_prep.append(f'{attribut[:20]:20}')
-            elif "perc" in attribut:
-                head_prep.append(f'{attribut:^9}')
-            elif attribut == "ranking":
-                head_prep.append(f'{attribut:^10}')
+        def head():
+            head_prep = []
+            for cle , valeur in self.data[0].__dict__.items():
+                if cle in ["leaderboard", "place", "IDs", "runs", "pbs"]:
+                    pass
+                elif cle == "level":
+                    pass
+                else:
+                    head_prep.append(formatting(cle, valeur, "cle"))
 
-            else:
-                head_prep.append(attribut)
-
-        head = " | ".join(head_prep)
-
+            return f"{'':4}|" + " | ".join(head_prep)
 
         line = f'{"-" * len(str(self.data[0]))}-----'
         body = ""
         for no, x in enumerate(self.data):
             body += f"{no:>3} |{x}\n"
-        # body = "\n".join([str(x) for x in self.data])
-        return  f'{head}\n{line}\n{body}{line}'
+
+        return  f'{head()}\n{line}\n{body}{line}'
 
 
     def __call__(self):
@@ -107,29 +114,12 @@ class entry:
     def __str__(self):
         tempo = []
         for cle, valeur in self.__dict__.items():
-
-            if isinstance(valeur, run_time):
-                string = f'{valeur:>9}'
-                if "delta" in cle: string = "-" + string[1:]
-                tempo.append(f'{string:>9}')
-            elif "count" in cle:
-                tempo.append(f'{valeur:>3}')
-            elif cle == "game":
-                tempo.append(f'{valeur[:30]:30}')
-            elif cle == "system":
-                tempo.append(f'{valeur:^7}')
-            elif cle == "category":
-                tempo.append(f'{valeur[:20]:20}')
-            elif cle == "ranking":
-                tempo.append(f'{valeur:^10}')
-            elif "perc" in cle:
-                tempo2 = str(valeur)
-                if tempo2[-2] == "." : tempo2 += "0"
-                tempo.append(f'{tempo2:>7} %')
-            elif cle == "X":
-                tempo.append(f'{valeur:2}')
-
-
+            if cle in ["leaderboard", "place", "IDs", "runs", "pbs"]:
+                pass
+            elif cle == "level":
+                pass
+            else:
+                tempo.append(formatting(cle, valeur, "valeur"))
         return " | ".join(tempo)
 
 
