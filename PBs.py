@@ -6,20 +6,8 @@ from tools import run_time, command_select, clear, plot_histo
 class PBs(Runs):
     def __init__(self, data):
         super().__init__()
-
         for pb in data:
             self.data.append(PB(pb))
-
-
-    def stats_leaderboard(self):
-        clear()
-        which = command_select(self.data, printer=True)
-        which.leaderboard()
-
-    def methods(self):
-        metho = super().methods()
-        metho["Leaderboard"] = self.stats_leaderboard
-        return metho
 
     def plot_histo(self):
         command = command_select(["WR%", "delta_WR", "time"], printer=True)
@@ -41,7 +29,7 @@ class PB(Run):
 
         self.place = data["place"]
         self.WR = tempo_leaderboard.WR
-        self.delta_WR =self.time - tempo_leaderboard.WR  
+        self.delta_p = self.time - tempo_leaderboard.WR  
         self.perc_WR = round((self.time) / tempo_leaderboard.WR * 100, 2)
 
         self.leaderboard = tempo_leaderboard

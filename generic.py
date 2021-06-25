@@ -2,10 +2,18 @@ from tools import command_select, run_time
 
 def formatting(cle, valeur, which):
     tostr = {"cle":cle, "valeur":valeur}
-    if "count" in cle:
+    if "count" in cle:  #FIXME
         return f'{"#":^3}'
     elif isinstance(valeur, run_time):
-        tempo = "-" if "delta" in cle else ""
+        tempo = ""
+        if "delta" in cle:
+            if which == "valeur":
+                if "p" in cle:
+                    tempo += "+"
+                elif "m" in cle:
+                    tempo += "-"
+            elif which == "cle" :
+                tostr[which] = tostr[which][:-2]
         return f'{tempo + str(tostr[which])[:9]:^9}'
     elif cle == "game":
         return f'{tostr[which][:30]:30}'
@@ -14,7 +22,11 @@ def formatting(cle, valeur, which):
     elif cle == "category":
         return f'{tostr[which][:20]:20}'
     elif "perc" in cle:
-        return f'{tostr[which]:^9}'
+        tempo = "" if which == "cle" else " %"
+        tempo2 = str(tostr[which])
+        if tempo2[-2] == "." :
+            tempo2 += "0"
+        return f'{ tempo2 + tempo:>9}'
     elif cle == "ranking":
         return f'{tostr[which]:^10}'
     else:
@@ -23,6 +35,8 @@ def formatting(cle, valeur, which):
 
 class table:
     def __init__(self):
+        if self.__class__.__name__ != "leaderboard":
+            print(f"Prepping the {self.__class__.__name__} table...")
         self.backup = []
         self.data = []
 
@@ -40,6 +54,7 @@ class table:
             return f"{'':4}|" + " | ".join(head_prep)
 
         line = f'{"-" * len(str(self.data[0]))}-----'
+
         body = ""
         for no, x in enumerate(self.data):
             body += f"{no:>3} |{x}\n"
@@ -49,54 +64,9 @@ class table:
 
     def __call__(self):
         while True:
-            self.data.sort()
             print(self)
-            command_key = command_select(sorted(self.methods().keys()), printer=True)
-            command = self.methods()[command_key]
-            if command != "end":
-                command()
-            else:
-                self.reset_filter()
+            if input("end?") == "end":
                 break
-
-    # COMMAND PROMPT related
-    def methods(self):
-        return {
-                "Filter the table" : self.filter_select,
-                "end": "end"}
-
-    def filter_select(self):
-        while True:
-            print("To remove a single run, enter a single number\nTo remove a range, enter 2 numbers serparated by a -\nTo reset the filtering, enter reset\nTo cancel, type end")
-            command = input()
-            if command == "reset":
-                self.reset_filter()
-                break
-            elif command == "end":
-                break
-            else:
-                try:
-                    number1, number2 = command.split("-")
-                    self.filter(int(number1) -1, int(number2))
-                    break
-                except ValueError:
-                    self.filter(int(command)-1)
-                    break
-                except:
-                    pass
-
-    def filter(self, start, end=None):
-        if end:
-            self.backup += self.data[:start]
-            self.backup += self.data[end:]
-            self.data = self.data[start: end]
-        else:  # This works
-            self.back = self.data[start]
-            self.data.pop(start)
-
-    def reset_filter(self):
-        self.data = self.backup + self.data
-        self.backup = []
 
     # Basic stuffs for making the stuff an iterable and all.
     def __getitem__(self, argument):
@@ -107,10 +77,7 @@ class table:
         return len(self.data)
 
 
-
-
 class entry:
-
     def __str__(self):
         tempo = []
         for cle, valeur in self.__dict__.items():
@@ -132,4 +99,3 @@ class entry:
             return self.game < other.game
         elif self.category != other.category:
             return self.category < other.category
-
