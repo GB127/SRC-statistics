@@ -47,7 +47,6 @@ class Run(entry):
         }
 
     levels = {}
-    table_size = [1, 17, 13, 6]
     sorter = "game"
 
     def __init__(self, data):
@@ -70,7 +69,8 @@ class Run(entry):
         self.IDs = [data["game"], data["category"], data["level"], {}]
         self.system = repertoire(Run.systems, data["system"]["platform"], get_system)
 
-        self.game = repertoire(Run.games, data["game"], get_game)
+        self.game = clean_gamename(
+            repertoire(Run.games, data["game"], get_game))
 
         self.category = repertoire(Run.categories, data["category"], get_category)
 
@@ -89,9 +89,3 @@ class Run(entry):
             self.level = repertoire(Run.levels, self.IDs[2], get_level)
 
         self.time = run_time(data["times"]["primary_t"])
-
-    def sortable(self):
-        tempo = list(self.__dict__)
-        tempo.remove("IDs")
-        return tempo
-

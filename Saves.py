@@ -50,7 +50,6 @@ class Saves(table):
 
 class Save(entry):
     sorter = "time"
-    table_size =  [1, 17, 13, 3, 5, 19, 4]
 
     def __init__(self, PB, Runs):
         self.system = PB.system
@@ -60,20 +59,14 @@ class Save(entry):
         for run in Runs:
             if run.game == self.game and run.category == self.category:
                 self.runs.append(run)
-        self.X = len(self.runs)
+        self.count = len(self.runs)
 
         Run.sorter = "time"
         self.runs.sort()
         self.first = self.runs[-1].time
         self.time = PB.time
-        self.save = self.first - self.time
-        self.perc1st = round(self.save/self.first * 100, 2)
-
-    def sortable(self):
-        tempo = list(self.__dict__)
-        tempo.remove("runs")
-        return tempo
-
+        self.delta = self.time - self.first
+        self.perc1st = round(self.delta/self.first * 100, 2)
 
     def plot_improvement(self):
         data = [one.time for one in self.runs]

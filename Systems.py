@@ -42,29 +42,22 @@ class Systems(table):
 
 
 class System(entry):
-    table_size = [3, 17, 28]
     sorter = "system"
     def __init__(self, system, pbs, runs):
         self.system = system
-        self.Runs = runs
-        self.Run_count = len(self.Runs)
-        self.Run_Total = sum([run.time for run in self.Runs])
-        self.Run_average = run_time(sum([run.time for run in self.Runs]) / self.Run_count)
+        self.runs = runs
+        self.Run_count = len(self.runs)
+        self.Run_Total = sum([run.time for run in self.runs])
+        self.Run_average = run_time(sum([run.time for run in self.runs]) / self.Run_count)
 
 
-        self.Pbs = pbs
+        self.pbs = pbs
         self.PB_count = len(pbs)
-        self.PB_Total = sum([pb.time for pb in self.Pbs])
+        self.PB_Total = sum([pb.time for pb in self.pbs])
         self.PB_average = run_time(self.PB_Total / self.PB_count)
-        self.WR_Total = sum([pb.WR for pb in self.Pbs])
+        self.WR_Total = sum([pb.WR for pb in self.pbs])
         self.PB_Total_delta = self.PB_Total - self.WR_Total
         self.PB_Total_delta_average = run_time(self.PB_Total_delta / self.PB_count)
-
-    def sortable(self):
-        tempo = list(self.__dict__)
-        tempo.remove("Pbs")
-        tempo.remove("Runs")
-        return tempo
 
 
 class pie_systems:

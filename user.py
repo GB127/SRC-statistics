@@ -29,7 +29,7 @@ class user:
 
     def __str__(self):
         tempo = list(self.__dict__.values())[1:]
-        return self.username + " ; ".join([f'{len(x)} {x.__class__.__name__}' for x in tempo])
+        return f'{self.username} ' + " ; ".join([f'{len(x)} {x.__class__.__name__}' for x in tempo])
 
     def __call__(self):
         while True:

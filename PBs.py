@@ -37,25 +37,15 @@ class PBs(Runs):
 
 
 class PB(Run):
-    table_size = Run.table_size + [2, 3, 5, 1]
-
     def __init__(self, data):
         super().__init__(data["run"])
-        tempo_place = data["place"]
-        tempo_leaderboard = leaderboard(self.IDs, self.game, self.category, tempo_place, level=self.level)
+        tempo_leaderboard = leaderboard(self.IDs, self.game, self.category, data["place"], level=self.level)
 
-        self.WR = tempo_leaderboard.WR
-        self.delta_WR = self.time - self.WR
-        self.perc_WR = round((self.time) / self.WR * 100, 2)
         self.place = data["place"]
+        self.WR = tempo_leaderboard.WR
+        self.delta_WR = tempo_leaderboard.WR - self.time 
+        self.perc_WR = round((self.time) / tempo_leaderboard.WR * 100, 2)
+
         self.leaderboard = tempo_leaderboard
-        self.perc_LB = round((len(self.leaderboard) - self.place) / len(self.leaderboard) * 100,2)
-
-
-    def sortable(self):
-        tempo = super().sortable()
-        tempo.remove("leaderboard")
-        tempo.remove("place")
-        return tempo
-
-
+        self.ranking = f'{data["place"]:>4}/{len(self.leaderboard):<4}'
+        self.perc_LB = round((len(tempo_leaderboard) - self.place) / len(tempo_leaderboard) * 100,2)

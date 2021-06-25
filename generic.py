@@ -7,16 +7,29 @@ class table:
     def __str__(self):
         head_prep = []
         for attribut, value in self.data[0].__dict__.items():
-            if isinstance(value, run_time):
-                head_prep.append(f'{attribut:^9}')
+            if attribut in ["leaderboard", "place", "IDs", "runs", "pbs"]:
+                pass
+            elif attribut == "level":
+                pass
+            elif "count" in attribut:
+                head_prep.append(f'{"#":^3}')
+            elif isinstance(value, run_time):
+                head_prep.append(f'{attribut[:9]:^9}')
             elif attribut == "game":
-                head_prep.append(f'{attribut:50}')
+                head_prep.append(f'{attribut[:30]:30}')
             elif attribut == "system":
-                head_prep.append(f'{"syst":^5}')
+                head_prep.append(f'{"syst":^7}')
             elif attribut == "category":
-                head_prep.append(f'{attribut:40}')
+                head_prep.append(f'{attribut[:20]:20}')
+            elif "perc" in attribut:
+                head_prep.append(f'{attribut:^9}')
+            elif attribut == "ranking":
+                head_prep.append(f'{attribut:^10}')
 
-        head = "|".join(head_prep)
+            else:
+                head_prep.append(attribut)
+
+        head = " | ".join(head_prep)
 
 
         line = f'{"-" * len(str(self.data[0]))}'
@@ -94,15 +107,28 @@ class entry:
     def __str__(self):
         tempo = []
         for cle, valeur in self.__dict__.items():
+
             if isinstance(valeur, run_time):
-                tempo.append(f'{valeur:^9}')
+                tempo.append(f'{valeur:>9}')
+            elif "count" in cle:
+                tempo.append(f'{valeur:>3}')
             elif cle == "game":
-                tempo.append(f'{valeur:50}')
+                tempo.append(f'{valeur[:30]:30}')
             elif cle == "system":
-                tempo.append(f'{valeur:^5}')
+                tempo.append(f'{valeur:^7}')
             elif cle == "category":
-                tempo.append(f'{valeur:40}')
-        return "|".join(tempo)
+                tempo.append(f'{valeur[:20]:20}')
+            elif cle == "ranking":
+                tempo.append(f'{valeur:^10}')
+            elif "perc" in cle:
+                tempo2 = str(valeur)
+                if tempo2[-2] == "." : tempo2 += "0"
+                tempo.append(f'{tempo2:>7} %')
+            elif cle == "X":
+                tempo.append(f'{valeur:2}')
+
+
+        return " | ".join(tempo)
 
     def change_sort(self):
         for no, one in enumerate(self.sortable()):
