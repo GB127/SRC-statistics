@@ -2,8 +2,10 @@ from tools import command_select, run_time
 
 def formatting(cle, valeur, which):
     tostr = {"cle":cle, "valeur":valeur}
-    if "count" in cle:  #FIXME
-        return f'{"#":^3}'
+    if "count" in cle:
+        if which == "cle":
+            return f'{"#":^3}'
+        return f'{tostr[which]:^3}'
     elif isinstance(valeur, run_time):
         tempo = ""
         if "delta" in cle:
