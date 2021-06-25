@@ -18,27 +18,8 @@ class Systems(table):
         for one_system in data_PBs.keys():
             self.data.append(System(one_system, data_PBs[one_system], data_Runs[one_system]))
 
-
-    def get_header(self):
-        types = ["system", "Runs","PBs"]
-        return types
-
-
     def pie(self):
         pie_systems(self)()
-
-
-
-    def foot(self):  #TODO: use local variable to reduce computer usage
-        string1 = f'               | {sum([one.Run_count for one in self.data]):>3} Runs ;{sum([one.Run_Total for one in self.data]):>10} | {sum([one.PB_count for one in self.data]):>2}  PBs ;{sum([one.PB_Total for one in self.data]):>10} (+{sum([one.PB_Total_delta for one in self.data]):>9})\n'
-        string2 = f'               | {int(sum([one.Run_count for one in self.data])/len(self)):>3} Runs ;{run_time(sum([one.Run_Total for one in self.data])/len(self)):>10} | {int(sum([one.PB_count for one in self.data])/len(self)):>2}  PBs ;{run_time(sum([one.PB_Total for one in self.data])/len(self)):>10} (+{run_time(sum([one.PB_Total_delta for one in self.data])/len(self)):>9})'
-        return string1 + string2
-
-
-    def methods(self):
-        metho = super().methods()
-        metho["Pie the table"] = self.pie
-        return metho
 
 
 class System(entry):
