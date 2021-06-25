@@ -3,13 +3,12 @@ from generic import table, entry
 from api import get_system, get_game, get_category, get_variable, get_level
 
 class Runs(table):
-    def __init__(self, data):
+    def __init__(self, data=None):
         super().__init__()
-        print("collecting Runs data")
 
-
-        for run in data:
-            self.data.append(Run(run))
+        if data:
+            for run in data:
+                self.data.append(Run(run))
 
     # PLOTS
     def plot_histo(self):
