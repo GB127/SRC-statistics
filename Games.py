@@ -16,7 +16,6 @@ class Games(table):
 
 
 class Game(entry):
-    table_size = [27, 2, 1,2,13,5]
     sorter = "game"
 
     def __init__(self, game, pbs, runs):
