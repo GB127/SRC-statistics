@@ -5,7 +5,7 @@ class table:
         self.data = []
 
     def __str__(self):
-        head_prep = []
+        head_prep = [f"{'':3}"]
         for attribut, value in self.data[0].__dict__.items():
             if attribut in ["leaderboard", "place", "IDs", "runs", "pbs"]:
                 pass
@@ -18,7 +18,7 @@ class table:
             elif attribut == "game":
                 head_prep.append(f'{attribut[:30]:30}')
             elif attribut == "system":
-                head_prep.append(f'{"syst":^7}')
+                head_prep.append(f'{"syst":^6}')
             elif attribut == "category":
                 head_prep.append(f'{attribut[:20]:20}')
             elif "perc" in attribut:
@@ -32,9 +32,12 @@ class table:
         head = " | ".join(head_prep)
 
 
-        line = f'{"-" * len(str(self.data[0]))}'
-        body = "\n".join([str(x) for x in self.data])
-        return  f'{head}\n{line}\n{body}\n{line}'
+        line = f'{"-" * len(str(self.data[0]))}-----'
+        body = ""
+        for no, x in enumerate(self.data):
+            body += f"{no:>3} |{x}\n"
+        # body = "\n".join([str(x) for x in self.data])
+        return  f'{head}\n{line}\n{body}{line}'
 
 
     def __call__(self):
@@ -51,7 +54,7 @@ class table:
 
     # COMMAND PROMPT related
     def methods(self):
-        return {"Change the sorting": self.change_sort,
+        return {
                 "Filter the table" : self.filter_select,
                 "end": "end"}
 
@@ -88,9 +91,6 @@ class table:
         self.data = self.backup + self.data
         self.backup = []
 
-    def change_sort(self):
-        self.data[0].change_sort()
-
     # Basic stuffs for making the stuff an iterable and all.
     def __getitem__(self, argument):
         return self.data[argument]
@@ -109,7 +109,9 @@ class entry:
         for cle, valeur in self.__dict__.items():
 
             if isinstance(valeur, run_time):
-                tempo.append(f'{valeur:>9}')
+                string = f'{valeur:>9}'
+                if "delta" in cle: string = "-" + string[1:]
+                tempo.append(f'{string:>9}')
             elif "count" in cle:
                 tempo.append(f'{valeur:>3}')
             elif cle == "game":
@@ -130,10 +132,6 @@ class entry:
 
         return " | ".join(tempo)
 
-    def change_sort(self):
-        for no, one in enumerate(self.sortable()):
-            print(no + 1, one)
-        self.__class__.sorter = command_select(self.sortable())
 
     def __lt__(self, other):  # FIXME : If equal, it needs to have some sub-sorting.
         if self.__dict__[self.sorter] != other.__dict__[self.sorter]:

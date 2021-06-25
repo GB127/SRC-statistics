@@ -43,7 +43,7 @@ class PB(Run):
 
         self.place = data["place"]
         self.WR = tempo_leaderboard.WR
-        self.delta_WR = tempo_leaderboard.WR - self.time 
+        self.delta_WR =self.time - tempo_leaderboard.WR  
         self.perc_WR = round((self.time) / tempo_leaderboard.WR * 100, 2)
 
         self.leaderboard = tempo_leaderboard

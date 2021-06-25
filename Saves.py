@@ -65,7 +65,7 @@ class Save(entry):
         self.runs.sort()
         self.first = self.runs[-1].time
         self.time = PB.time
-        self.delta = self.time - self.first
+        self.delta = self.first - self.time
         self.perc1st = round(self.delta/self.first * 100, 2)
 
     def plot_improvement(self):

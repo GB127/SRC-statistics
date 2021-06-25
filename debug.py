@@ -1,5 +1,5 @@
 from user import user
 
-test = user("niamek")
+test = user("libre")
 # libre a peu de runs, utile pour debugger.
 test()
