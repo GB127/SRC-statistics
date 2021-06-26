@@ -63,8 +63,8 @@ class table:
         for no, x in enumerate(self.data):
             body += f"{no:>3} |{x}\n"
 
-        total = str(sum(self.data[1:], deepcopy(self.data[0])))  # FIXME
-        average = str(sum(self.data[1:], deepcopy(self.data[0])) / len(self))  # FIXME
+        total = str(sum(self))
+        average = str(sum(self) / len(self))
 
         return  f'{head()}\n{line}\n{body}{line}\nTotal{total}\nAvera{average}'
 
@@ -111,6 +111,8 @@ class entry:
 
 
     def __add__(self, other):
+        if other == 0:
+            return self
         for cle, value in self.__dict__.items():
             if isinstance(value, run_time):
                 self.__dict__[cle] += other.__dict__[cle]
