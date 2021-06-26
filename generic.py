@@ -68,8 +68,6 @@ class table:
 
         return  f'{head()}\n{line}\n{body}{line}\nTotal{total}\nAvera{average}'
 
-
-
     def __call__(self):
         def methods_fetcher():
             toreturn = []
@@ -81,11 +79,23 @@ class table:
 
         while True:
             clear()
+            self.data.sort()
             print(self)
             command = command_select(methods_fetcher(), printer=True)
             if command == "end":
                 break
             getattr(self.__class__, command)(self)
+
+
+    def change_sorting(self):
+        options = deepcopy(list(self.data[0].__dict__.keys()))
+        options.remove("IDs")
+        options.remove("level")  # FIXME
+
+        new_sorter = command_select(options, printer=True)
+        if new_sorter != "end":
+            self.data[0].__class__.sorter = new_sorter
+
 
 
     # Basic stuffs for making the stuff an iterable and all.
@@ -111,16 +121,17 @@ class entry:
 
 
     def __add__(self, other):
+        tempo = deepcopy(self)
         if other == 0:
-            return self
+            return tempo
         for cle, value in self.__dict__.items():
             if isinstance(value, run_time):
-                self.__dict__[cle] += other.__dict__[cle]
+                tempo.__dict__[cle] += other.__dict__[cle]
             elif isinstance(value, int) or isinstance(value, float):
-                self.__dict__[cle] += other.__dict__[cle]
+                tempo.__dict__[cle] += other.__dict__[cle]
             else:
-                self.__dict__[cle] = ""
-        return self
+                tempo.__dict__[cle] = ""
+        return tempo
 
     __radd__ = __add__
 
