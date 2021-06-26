@@ -27,20 +27,38 @@ class System(entry):
     def __init__(self, system, pbs, runs):
         self.system = system
         self.runs = runs
+        self.pbs = pbs
+
         self.Run_count = len(self.runs)
         self.Run_Total = sum([run.time for run in self.runs])
-        self.Run_average = run_time(sum([run.time for run in self.runs]) / self.Run_count)
 
 
-        self.pbs = pbs
         self.PB_count = len(pbs)
         self.PB_Total = sum([pb.time for pb in self.pbs])
-        self.PB_average = run_time(self.PB_Total / self.PB_count)
         self.WR_Total = sum([pb.WR for pb in self.pbs])
-        self.PB_Total_delta = self.PB_Total - self.WR_Total
-        self.PB_Total_delta_average = run_time(self.PB_Total_delta / self.PB_count)
+        self.PB_delta = self.PB_Total - self.WR_Total
 
 
+        self.Run_average = run_time(sum([run.time for run in self.runs]) / self.Run_count)
+        self.PB_average = run_time(self.PB_Total / self.PB_count)
+        self.WR_average = run_time(self.WR_Total / self.PB_count)
+        self.PB_delta_average = run_time(self.PB_delta / self.PB_count)
+
+
+    def __str__(self):
+        original = super().__str__()
+        tempo = original.split(" | ")
+        totals = tempo[:-4]
+        averages = tempo[-4:]
+
+        averages.insert(1, "   ")
+
+
+
+        tempo2 = " | ".join(totals)
+        tempo3 = " | ".join(averages)
+
+        return f'{tempo2}\n{"":18}| {tempo3}'
 class pie_systems:
     def __init__(self, systems):
         self.data = {"Runs":{},
