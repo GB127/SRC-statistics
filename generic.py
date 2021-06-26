@@ -87,11 +87,7 @@ class table:
             getattr(self.__class__, command)(self)
 
 
-    def change_sorting(self):
-        options = deepcopy(list(self.data[0].__dict__.keys()))
-        options.remove("IDs")
-        options.remove("level")  # FIXME
-
+    def change_sorting(self, options):
         new_sorter = command_select(options, printer=True)
         if new_sorter != "end":
             self.data[0].__class__.sorter = new_sorter
@@ -140,7 +136,6 @@ class entry:
             if isinstance(value, run_time):
                 self.__dict__[cle] = run_time(self.__dict__[cle] / integ)
             elif isinstance(value, int) or isinstance(value, float):
-                print(cle, self.__dict__[cle], "/", integ)
                 self.__dict__[cle] /= integ
                 if "count" in cle:
                     self.__dict__[cle] = int(self.__dict__[cle])
