@@ -15,13 +15,6 @@ class Runs(table):
         plot_histo(sorted([one.time.time for one in self.data]), 
             "Runs", typ="time")
 
-    #OTHERS
-    def methods(self):
-        metho = super().methods()
-        metho["Histo"] = self.plot_histo
-        return metho    
-
-
 class Run(entry):
     games = {}
     categories = {}
