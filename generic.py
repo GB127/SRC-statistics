@@ -61,7 +61,7 @@ class table:
 
         body = ""
         for no, x in enumerate(self.data):
-            body += f"{no:>3} |{x}\n"
+            body += f"{no+1:>3} |{x}\n"
 
         total = str(sum(self))
         average = str(sum(self) / len(self))
