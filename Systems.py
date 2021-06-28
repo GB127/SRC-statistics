@@ -29,17 +29,19 @@ class System(entry):
         self.runs = runs
         self.pbs = pbs
 
+        sum_Runs = sum(runs)
+        sum_Pbs = sum(pbs)
+
         self.Run_count = len(self.runs)
-        self.Run_Total = sum([run.time for run in self.runs])
+        self.Run_Total = sum_Runs.time
 
 
         self.PB_count = len(pbs)
-        self.PB_Total = sum([pb.time for pb in self.pbs])
-        self.WR_Total = sum([pb.WR for pb in self.pbs])
-        self.PB_delta = self.PB_Total - self.WR_Total
+        self.PB_Total = sum_Pbs.time
+        self.WR_Total = sum_Pbs.WR
+        self.PB_delta = sum_Pbs.delta_p
 
-
-        self.Run_average = run_time(sum([run.time for run in self.runs]) / self.Run_count)
+        self.Run_average = run_time(self.Run_Total / self.Run_count)
         self.PB_average = run_time(self.PB_Total / self.PB_count)
         self.WR_average = run_time(self.WR_Total / self.PB_count)
         self.PB_delta_average = run_time(self.PB_delta / self.PB_count)
@@ -59,6 +61,20 @@ class System(entry):
         tempo3 = " | ".join(averages)
 
         return f'{tempo2}\n{"":18}| {tempo3}'
+
+
+
+    def __add__(self, other):
+        tempo = super().__add__(other)
+
+        tempo.Run_average = run_time(tempo.Run_Total / tempo.Run_count)
+        tempo.PB_average = run_time(tempo.PB_Total / tempo.Run_count)
+        tempo.WR_average = run_time(tempo.WR_Total / tempo.Run_count)
+        tempo.PB_delta_average = run_time(tempo.PB_delta / tempo.Run_count)
+
+
+        return tempo
+
 class pie_systems:
     def __init__(self, systems):
         self.data = {"Runs":{},
