@@ -49,7 +49,7 @@ class System(entry):
         self.PB_count = len(pbs)
         self.PB_Total = sum_Pbs.time
         self.WR_Total = sum_Pbs.WR
-        self.PB_delta = sum_Pbs.delta_p
+        self.PB_delta = sum_Pbs.delta
 
         self.Run_average = run_time(self.Run_Total / self.Run_count)
         self.PB_average = run_time(self.PB_Total / self.PB_count)
