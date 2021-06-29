@@ -10,14 +10,8 @@ def formatting(cle, valeur, which):
     elif isinstance(valeur, run_time):
         tempo = ""
         if "delta" in cle:
-            if which == "valeur":
-                if "p" in cle:
-                    tempo += "+"
-                elif "m" in cle:
-                    tempo += "-"
-            elif which == "cle" :
-                tostr[which] = tostr[which][:-2]
-        return f'{tempo + str(tostr[which])[:9]:^9}'
+            tempo = "+"
+        return f'{tempo + str(tostr[which])[:9]:>9}'
     elif cle == "game":
         return f'{tostr[which][:30]:30}'
     elif cle == "system":
