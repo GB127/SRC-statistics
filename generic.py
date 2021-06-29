@@ -50,6 +50,8 @@ class table:
             for cle , valeur in self.data[0].__dict__.items():
                 if cle in ["leaderboard", "place", "IDs", "runs", "pbs"]:
                     pass
+                elif "average" in cle:
+                    pass
                 elif cle == "level":
                     pass
                 else:
@@ -87,8 +89,11 @@ class table:
             getattr(self.__class__, command)(self)
 
 
-    def change_sorting(self, options):
-        new_sorter = command_select(options, printer=True)
+    def change_sorting(self):
+        sortables = list(self.data[0].__dict__.keys())
+        for not_sortable in ["IDs", "runs", "pbs"]:
+            if not_sortable in sortables: sortables.remove(not_sortable)
+        new_sorter = command_select(sortables, printer=True)
         if new_sorter != "end":
             self.data[0].__class__.sorter = new_sorter
 
@@ -132,17 +137,18 @@ class entry:
     __radd__ = __add__
 
     def __truediv__(self, integ):
-        for cle, value in self.__dict__.items():
+        tempo = deepcopy(self)
+        for cle, value in tempo.__dict__.items():
             if isinstance(value, run_time):
-                self.__dict__[cle] = run_time(self.__dict__[cle] / integ)
+                tempo.__dict__[cle] = run_time(tempo.__dict__[cle] / integ)
             elif isinstance(value, int) or isinstance(value, float):
-                self.__dict__[cle] /= integ
+                tempo.__dict__[cle] /= integ
                 if "count" in cle:
-                    self.__dict__[cle] = int(self.__dict__[cle])
+                    tempo.__dict__[cle] = int(tempo.__dict__[cle])
 
             else:
                 pass
-        return self
+        return tempo
 
 
 
