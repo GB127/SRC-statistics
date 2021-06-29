@@ -28,9 +28,9 @@ class Systems(table):
         head, body, foot_original = tostr.split(f'{"-" * len(str(self.data[0]))}-----')
 
         foot = foot_original.split("\n")
-        foot = "\n".join(foot[:3])
+        foot = "\n".join([foot[1],foot[4]])
 
-        return f'{head}{"-" * len(head)}{body[:-1]}{foot}'
+        return f'{head}{"-" * len(head)}{body}{foot}'
 
 class System(entry):
     sorter = "system"
