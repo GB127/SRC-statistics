@@ -1,5 +1,5 @@
 from tools import run_time, command_select
-from generic import table, entry
+from generic import table, entry, formatting
 import matplotlib.pyplot as plot
 
 
@@ -21,6 +21,16 @@ class Systems(table):
     def pie(self):
         pie_systems(self)()
 
+    def __str__(self):
+
+        tostr = super().__str__()
+
+        head, body, foot_original = tostr.split(f'{"-" * len(str(self.data[0]))}-----')
+
+        foot = foot_original.split("\n")
+        foot = "\n".join(foot[:3])
+
+        return f'{head}{"-" * len(head)}{body[:-1]}{foot}'
 
 class System(entry):
     sorter = "system"
@@ -60,7 +70,7 @@ class System(entry):
         tempo2 = " | ".join(totals)
         tempo3 = " | ".join(averages)
 
-        return f'{tempo2}\n{"":18}| {tempo3}'
+        return f'{tempo2}\n{"":18}| {tempo3}\n----{"-" * len(tempo2)}'
 
 
 
