@@ -44,8 +44,8 @@ class PB(Run):
         tempo.leaderboard = int(tempo.leaderboard)
         tempo.place = int(tempo.place)
 
-        self.ranking = f'{tempo.place:>4}/{tempo.leaderboard:<4}'
-        self.perc_LB = round((tempo.leaderboard - self.place) / tempo.leaderboard * 100,2)
+        tempo.ranking = f'{tempo.place:>4}/{tempo.leaderboard:<4}'
+        tempo.perc_LB = round((tempo.leaderboard - tempo.place) / tempo.leaderboard * 100,2)
 
         tempo.perc_WR = round((tempo.time) / tempo.WR * 100, 2)
         return tempo
