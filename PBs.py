@@ -21,6 +21,15 @@ class PBs(Runs):
             plot_histo(tempo, "Histogram of PBs-WR deltas", typ="time")
 
 
+    def __str__(self):
+        tostr = super().__str__()
+        line = f'{"-" * len(str(self.data[0]))}-----'
+        head, body, foot_original = tostr.split(line)
+        head_split = head.split(" | ")
+        reordered = head_split[:3] + [head_split[4]] + [head_split[3]] + head_split[5:]
+        head = " | ".join(reordered)
+        return line.join([head, body, foot_original])
+
 
 class PB(Run):
     def __init__(self, data):
@@ -29,12 +38,19 @@ class PB(Run):
 
         self.place = data["place"]
         self.WR = tempo_leaderboard.WR
-        self.delta_p = self.time - tempo_leaderboard.WR  
+        self.delta = self.time - tempo_leaderboard.WR  
         self.perc_WR = round((self.time) / tempo_leaderboard.WR * 100, 2)
 
         self.leaderboard = tempo_leaderboard
         self.ranking = f'{data["place"]:>4}/{len(self.leaderboard):<4}'
         self.perc_LB = round((len(tempo_leaderboard) - self.place) / len(tempo_leaderboard) * 100,2)
+
+    def __str__(self):
+        tostr = super().__str__()
+        liste_tostr = tostr.split(" | ")
+        reordered = liste_tostr[:3] + [liste_tostr[4]] + [liste_tostr[3]] + liste_tostr[5:]
+        
+        return " | ".join(reordered)
 
 
     def __truediv__(self, other):
