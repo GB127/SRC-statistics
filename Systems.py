@@ -47,9 +47,10 @@ class System(entry):
 
 
         self.PB_count = len(pbs)
-        self.PB_Total = sum_Pbs.time
         self.WR_Total = sum_Pbs.WR
+        self.PB_Total = sum_Pbs.time
         self.PB_delta = sum_Pbs.delta
+        self.perc = round((self.PB_Total) / self.WR_Total * 100, 2)
 
         self.Run_average = run_time(self.Run_Total / self.Run_count)
         self.PB_average = run_time(self.PB_Total / self.PB_count)
@@ -81,10 +82,18 @@ class System(entry):
         tempo.PB_average = run_time(tempo.PB_Total / tempo.Run_count)
         tempo.WR_average = run_time(tempo.WR_Total / tempo.Run_count)
         tempo.PB_delta_average = run_time(tempo.PB_delta / tempo.Run_count)
+        tempo.perc = round((tempo.PB_Total) / tempo.WR_Total * 100, 2)
 
 
         return tempo
 
+
+
+    def __truediv__(self, integ):
+        tempo = super().__truediv__(integ)
+        tempo.perc = round((tempo.PB_Total) / tempo.WR_Total * 100, 2)
+
+        return tempo
 class pie_systems:
     def __init__(self, systems):
         self.data = {"Runs":{},
