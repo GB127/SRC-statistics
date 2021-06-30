@@ -145,19 +145,13 @@ class entry:
         return tempo
 
 
-
-
-
-
-
-
-
-    def __lt__(self, other):  # FIXME : If equal, it needs to have some sub-sorting.
+    def __lt__(self, other):
         if self.__dict__[self.sorter] != other.__dict__[self.sorter]:
             return self.__dict__[self.sorter] < other.__dict__[self.sorter]
-        elif self.game == other.game and self.category == other.category:
-            return self.time > other.time
-        elif self.game != other.game:
-            return self.game < other.game
-        elif self.category != other.category:
-            return self.category < other.category
+        for attribut in ["system", "game", "category", "time"]:
+            try:
+                if self.__dict__[attribut] != other.__dict__[attribut]:
+                    return self.__dict__[attribut] < other.__dict__[attribut]
+            except KeyError:
+                pass
+        raise BaseException(f'\n{self}\n{other}\n{list(self.__dict__.keys())}')
