@@ -18,6 +18,8 @@ class Saves(table):
         select = command_select(self.data)
         select.plot_improvement()
 
+    def __str__(self):
+        return super().__str__().replace("+", "-")
 
     def plot_all_saves(self):
         all_plots = []
@@ -55,8 +57,8 @@ class Save(entry):
         self.runs.sort()
         self.first = self.runs[-1].time
         self.time = PB.time
-        self.delta_m = self.first - self.time
-        self.perc1st = round(self.delta_m/self.first * 100, 2)
+        self.delta = self.first - self.time
+        self.perc1st = round(self.delta/self.first * 100, 2)
 
     def plot_improvement(self):
         data = [one.time for one in self.runs]
@@ -65,10 +67,13 @@ class Save(entry):
 
     def __add__(self, other):
         tempo = super().__add__(other)
-        tempo.perc1st = round(tempo.delta_m/tempo.first * 100, 2)
+        tempo.perc1st = round(tempo.delta/tempo.first * 100, 2)
         return tempo
 
     def __truediv__(self, other):
         tempo = super().__truediv__(other)
-        tempo.perc1st = round(tempo.delta_m/tempo.first * 100, 2)
+        tempo.perc1st = round(tempo.delta/tempo.first * 100, 2)
         return tempo
+
+    def __str__(self):
+        return super().__str__().replace("+", "-")
