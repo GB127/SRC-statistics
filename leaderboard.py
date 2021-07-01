@@ -33,6 +33,12 @@ class leaderboard(table):
     def plot(self):
         plot_line([[x.time for x in self.data[::-1]]], f'{self.game} - {self.category}', ymin=None)
 
+    def __add__(self, other):
+        if isinstance(other, leaderboard):
+            return len(self) + len(other)
+        elif isinstance(other, int):
+            return len(self) + other
+    __radd__ = __add__
 
 class ranking(entry):
     def __init__(self, data, WR):

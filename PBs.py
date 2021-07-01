@@ -30,6 +30,8 @@ class PBs(Runs):
         head = " | ".join(reordered)
         return line.join([head, body, foot_original])
 
+    def open_a_leaderboard(self):
+        command_select(self.data).leaderboard()
 
 class PB(Run):
     def __init__(self, data):
@@ -68,15 +70,8 @@ class PB(Run):
 
 
     def __add__(self, other):
-        if isinstance(self.leaderboard, leaderboard):
-            self.leaderboard = len(self.leaderboard)
-        if isinstance(other.leaderboard, leaderboard):
-            other.leaderboard = len(other.leaderboard)
         tempo = super().__add__(other)
-        tempo.leaderboard = int(tempo.leaderboard)
         tempo.place = int(tempo.place)
-
-
         tempo.ranking = f'{tempo.place:>4}/{tempo.leaderboard:<4}'
         tempo.perc_LB = round((tempo.leaderboard - self.place) / tempo.leaderboard * 100,2)
 
