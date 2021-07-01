@@ -124,6 +124,8 @@ class entry:
                 tempo.__dict__[cle] += other.__dict__[cle]
             elif isinstance(value, int) or isinstance(value, float):
                 tempo.__dict__[cle] += other.__dict__[cle]
+            elif cle == "leaderboard":
+                tempo.__dict__[cle] += other.__dict__[cle]
             else:
                 tempo.__dict__[cle] = ""
         return tempo
