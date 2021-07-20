@@ -1,7 +1,8 @@
 from tools import run_time, command_select
 from generic import table, entry
-from tools import plot_line, plot_histo
 from allRuns import Run
+import matplotlib.pyplot as plot
+
 
 class Saves(table):
     def __init__(self, PBs, Runs):
@@ -28,17 +29,28 @@ class Saves(table):
         plot_line(all_plots, "All improvements")
 
 
-    def plot_histo(self):
-        command = command_select(["PB%", "Improvements", "time"], printer=True)
-        if command == "PB%":
-            plot_histo(sorted([one.perc1st for one in self.data]), "Histogram of %PB", typ="%", max_data=100)
-        elif command == "Improvements":
-            tempo = sorted([one.save.time for one in self.data])
-            plot_histo(tempo, "Histogram of PBs-1st deltas", typ="time")
-        elif command == "time":
-            tempo = sorted([one.time.time for one in self.data])
-            plot_histo(tempo, "Histogram of PBs time", typ="time")
-        
+    def histo_times(self):
+        plot.title(f"{self.__class__.__name__}")
+        data_PBs = [one.time.time for one in self.data]
+        data_WRs = [one.first.time for one in self.data]
+
+
+
+        plot.hist([data_PBs],color="darkgreen", bins=10,
+            range=(
+                    min(min(data_PBs), min(data_WRs)), 
+                    max(max(data_PBs), max(data_WRs))
+                    ))
+        plot.hist([data_WRs],color="darkred", bins=10, alpha=0.7,
+            range=(
+                    min(min(data_PBs), min(data_WRs)), 
+                    max(max(data_PBs), max(data_WRs))
+                    ))
+
+        plot.xticks(plot.xticks()[0],[str(run_time(x)) for x in plot.xticks()[0]])
+        plot.xlim(left=min(min(data_PBs), min(data_WRs)),right=max(max(data_PBs), max(data_WRs)))
+        plot.show()
+
 
 class Save(entry):
     sorter = "time"

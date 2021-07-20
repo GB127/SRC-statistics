@@ -1,6 +1,7 @@
 from allRuns import Runs, Run
 from leaderboard import leaderboard
 from tools import run_time, command_select, clear, plot_histo
+import matplotlib.pyplot as plot
 
 
 class PBs(Runs):
@@ -8,17 +9,6 @@ class PBs(Runs):
         super().__init__()
         for pb in data:
             self.data.append(PB(pb))
-
-    def plot_histo(self):
-        command = command_select(["WR%", "delta_WR", "time"], printer=True)
-        if command == "WR%":
-            plot_histo(sorted([one.perc_WR for one in self.data]), "Histogram of %WR", typ="%", min_data=100)
-        if command == "time":
-            tempo = sorted([one.time.time for one in self.data])
-            plot_histo(tempo, "Histogram of PBs time", typ="time")
-        elif command == "delta_WR":
-            tempo = sorted([one.delta_WR.time for one in self.data])
-            plot_histo(tempo, "Histogram of PBs-WR deltas", typ="time")
 
 
     def __str__(self):
@@ -29,6 +19,30 @@ class PBs(Runs):
         reordered = head_split[:3] + [head_split[4]] + [head_split[3]] + head_split[5:]
         head = " | ".join(reordered)
         return line.join([head, body, foot_original])
+
+    def histo_times(self):
+        plot.title(f"{self.__class__.__name__}")
+        data_PBs = [one.time.time for one in self.data]
+        data_WRs = [one.WR.time for one in self.data]
+
+
+
+        plot.hist([data_WRs],color="gold", bins=10,
+            range=(
+                    min(min(data_PBs), min(data_WRs)), 
+                    max(max(data_PBs), max(data_WRs))
+                    ))
+        plot.hist([data_PBs], bins=10,color="darkgreen", alpha=0.65,
+            range=(
+                    min(min(data_PBs), min(data_WRs)), 
+                    max(max(data_PBs), max(data_WRs))
+                    ))
+
+        plot.xticks(plot.xticks()[0],[str(run_time(x)) for x in plot.xticks()[0]])
+        plot.xlim(left=min(min(data_PBs), min(data_WRs)),right=max(max(data_PBs), max(data_WRs)))
+        plot.show()
+
+
 
     def open_a_leaderboard(self):
         command_select(self.data).leaderboard()
