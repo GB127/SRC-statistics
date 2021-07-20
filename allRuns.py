@@ -1,6 +1,9 @@
 from tools import run_time, command_select, plot_histo
 from generic import table, entry
 from api import get_system, get_game, get_category, get_variable, get_level
+import matplotlib.pyplot as plot
+
+
 
 class Runs(table):
     def __init__(self, data=None):
@@ -10,10 +13,16 @@ class Runs(table):
             for run in data:
                 self.data.append(Run(run))
 
-    # PLOTS
-    def plot_histo(self):
-        plot_histo(sorted([one.time.time for one in self.data]), 
-            "Runs", typ="time")
+    def histo_times(self):
+        plot.title(f"{self.__class__.__name__}")
+        data = [one.time.time for one in self.data]
+        plot.hist(data, bins=10, range=(min(data), max(data)))
+        plot.xticks(plot.xticks()[0],[str(run_time(x)) for x in plot.xticks()[0]])
+        plot.xlim(left=min(data), right=max(data))
+        plot.show()
+
+
+
 
 class Run(entry):
     games = {}
