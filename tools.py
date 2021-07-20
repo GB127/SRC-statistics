@@ -62,46 +62,6 @@ class run_time:
         return run_time(round(self.time, number))
 
 
-def plot_histo(data, title, typ, perc_dir=None, min_data=None, max_data=None, ):
-    if not min_data: min_data = min(data)
-    if not max_data: max_data = max(data)
-    plot.hist(data, bins=10, range=(min_data, max_data))
-
-    plot.title(title)
-    if typ == "time":
-        plot.xticks(plot.xticks()[0],[str(run_time(x)) for x in plot.xticks()[0]])
-    plot.xlim(left=min_data, right=max_data)
-
-
-    plot.show()
-
-
-
-def plot_line(datas, title, ymin=0, ymax=None, mirror=False):
-    plot.title(title)
-    for data in datas:
-        for one in data:
-            assert isinstance(one, run_time), "Must be a run_time"
-        data_float = [one.time for one in data]
-        plot.plot(data_float)
-
-    # Y axis
-    plot.ylim(bottom=ymin, top=ymax)
-    plot.yticks(plot.yticks()[0],[str(run_time(x)) for x in plot.yticks()[0]])
-
-
-    if mirror:
-        ax = plot.gca()
-        ax.invert_xaxis()
-
-    plot.show()
-
-
-
-
-
-
-
 def command_select(iterable, printer=False):
     """Reusable function for command selection.
         Returns the selection.
@@ -111,7 +71,7 @@ def command_select(iterable, printer=False):
             printer (bool, optional): Print the iterable. Defaults to False.
         """
     if printer:
-        for no, one in enumerate(iterable): print(f'{no + 1:>4} - {one}')
+        for no, one in enumerate(iterable): print(f'{no + 1:>4} - {one}'.replace("_", " "))
     while True:
         try:
             commant = input(f"Which option? [1 - {len(iterable)}] ")
