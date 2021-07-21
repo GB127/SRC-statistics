@@ -1,6 +1,6 @@
 from allRuns import Runs, Run
 from leaderboard import leaderboard
-from tools import run_time, command_select, clear, plot_histo
+from tools import run_time, command_select, clear
 import matplotlib.pyplot as plot
 
 
@@ -27,12 +27,12 @@ class PBs(Runs):
 
 
 
-        plot.hist([data_WRs],color="gold", bins=10,
+        plot.hist([data_WRs],color="gold", bins=10, label="WRs",
             range=(
                     min(min(data_PBs), min(data_WRs)), 
                     max(max(data_PBs), max(data_WRs))
                     ))
-        plot.hist([data_PBs], bins=10,color="darkgreen", alpha=0.65,
+        plot.hist([data_PBs], bins=10,color="darkgreen", alpha=0.65,label="PBs",
             range=(
                     min(min(data_PBs), min(data_WRs)), 
                     max(max(data_PBs), max(data_WRs))
@@ -40,6 +40,7 @@ class PBs(Runs):
 
         plot.xticks(plot.xticks()[0],[str(run_time(x)) for x in plot.xticks()[0]])
         plot.xlim(left=min(min(data_PBs), min(data_WRs)),right=max(max(data_PBs), max(data_WRs)))
+        plot.legend()
         plot.show()
 
 
@@ -50,9 +51,10 @@ class PBs(Runs):
 class PB(Run):
     def __init__(self, data):
         super().__init__(data["run"])
-        tempo_leaderboard = leaderboard(self.IDs, self.game, self.category, data["place"], level=self.level)
 
         self.place = data["place"]
+
+        tempo_leaderboard = leaderboard(self.IDs, self.game, self.category, (self.place, self.time), level=self.level)
         self.WR = tempo_leaderboard.WR
         self.delta = self.time - tempo_leaderboard.WR  
         self.perc_WR = round((self.time) / tempo_leaderboard.WR * 100, 2)
