@@ -1,4 +1,4 @@
-from tools import run_time, command_select, plot_histo
+from tools import run_time, command_select
 from generic import table, entry
 from api import get_system, get_game, get_category, get_variable, get_level
 import matplotlib.pyplot as plot
@@ -46,7 +46,7 @@ class Run(entry):
         "mx6pwe3g" : "PS3",
         "nzelkr6q" : "PS4",
         }
-
+    subcategories = {}
     levels = {}
     sorter = "game"
 
@@ -70,15 +70,13 @@ class Run(entry):
         self.IDs = [data["game"], data["category"], data["level"], {}]
         self.system = repertoire(Run.systems, data["system"]["platform"], get_system)
 
-        self.game = clean_gamename(
-            repertoire(Run.games, data["game"], get_game))
-
+        self.game = clean_gamename(repertoire(Run.games, data["game"], get_game))
         self.category = repertoire(Run.categories, data["category"], get_category)
 
 
         subcateg = []
         for value, item in data["values"].items():
-            tempo = get_variable(value)
+            tempo = repertoire(Run.subcategories, value, get_variable)
             if tempo["is-subcategory"]:
                 subcateg.append(tempo["values"]["values"][item]["label"])
                 self.IDs[3][value] = item
