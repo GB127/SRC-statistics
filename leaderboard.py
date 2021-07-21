@@ -1,6 +1,8 @@
 from api import get_leaderboard, get_user, get_leaderboard_level, get_leaderboards, get_leaderboards_level
 from generic import table, entry
-from tools import run_time, plot_line
+from tools import run_time
+import matplotlib.pyplot as plot
+
 
 class leaderboard(table):
     def __init__(self, IDs, game, category, rank, level=None):
@@ -22,16 +24,24 @@ class leaderboard(table):
             self.data.append(ranking(one, self.WR))
 
     def plot_evolution(self):
+        print(self.IDs)
+        input("test")
         if not self.IDs[2]:
             toplot = get_leaderboards(self.IDs)
-            plot_line(toplot.values(), f"{self.game} - {self.category}\nLeaderboard evolution\n{min(toplot.keys())}-{max(toplot.keys())}", mirror=True)
         if self.IDs[2]:
             toplot = get_leaderboards_level(self.IDs)
-            plot_line(toplot.values(), f"{self.game} - {self.level} - {self.category}\nLeaderboard evolution\n{min(toplot.keys())}-{max(toplot.keys())}", mirror=True)
+
+        for year, times in toplot.items():
+            data = [one.time for one in times]
+            plot.plot(data, label=year)
+        plot.show()
+
 
 
     def plot(self):
-        plot_line([[x.time for x in self.data[::-1]]], f'{self.game} - {self.category}', ymin=None)
+        plot.plot([x.time.time for x in self.data[::-1]])
+        plot.plot(len(self.data) - self.place[0], self.place[1].time, "ro")
+        plot.show()
 
     def __add__(self, other):
         if isinstance(other, leaderboard):
@@ -58,5 +68,5 @@ class ranking(entry):
 
 if __name__ == "__main__":
     test = ['j1l9qz1g', '9d85yqdn',None, {}]
-    test = leaderboard(test, "Ocarina of time", "GSR", 2)
-    test()
+    test = leaderboard(test, "Ocarina of time", "GSR", (2, run_time(5420)))
+    test.plot()
