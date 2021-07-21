@@ -24,22 +24,28 @@ class leaderboard(table):
             self.data.append(ranking(one, self.WR))
 
     def plot_evolution(self):
-        print(self.IDs)
-        input("test")
-        if not self.IDs[2]:
+        if not self.IDs[2]:  # FIXME : Issue if Variables
             toplot = get_leaderboards(self.IDs)
         if self.IDs[2]:
             toplot = get_leaderboards_level(self.IDs)
 
         for year, times in toplot.items():
             data = [one.time for one in times]
-            plot.plot(data, label=year)
+            if len(data) > 1:
+                plot.plot(data, label=year)
+            else:
+                plot.plot(data,"o", label=year)
+
         plot.show()
 
 
 
     def plot(self):
-        plot.plot([x.time.time for x in self.data[::-1]])
+        if len(self.data) > 1:
+            plot.plot([x.time.time for x in self.data[::-1]])
+        else:
+            plot.plot([x.time.time for x in self.data[::-1]], "o")
+
         plot.plot(len(self.data) - self.place[0], self.place[1].time, "ro")
         plot.show()
 
