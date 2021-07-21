@@ -18,8 +18,55 @@ class Systems(table):
         for one_system in data_PBs.keys():
             self.data.append(System(one_system, data_PBs[one_system], data_Runs[one_system]))
 
-    def pie(self):
-        pie_systems(self)()
+    def pie_total_times(self):
+        fig, axs = plot.subplots(1, 2)
+
+        fig.suptitle(f'Systems')
+
+        axs[0].set_title("Runs Total time")
+        axs[0].pie([x.Run_Total.time for x in self.data], 
+                    labels=[x.system for x in self.data], 
+                    autopct='%1.1f%%', 
+                    pctdistance=0.8,
+                    labeldistance=1.1,
+                    startangle=90)
+
+        axs[1].set_title("PBs Total time")
+        axs[1].pie([x.PB_Total.time for x in self.data], 
+                    labels=[x.system for x in self.data], 
+                    autopct='%1.1f%%',
+                    pctdistance=0.8,
+                    labeldistance=1.1,
+                    startangle=90)
+
+        plot.show()
+
+    def pie_frequency(self):
+        fig, axs = plot.subplots(1, 2)
+
+        fig.suptitle(f'Systems')
+
+        axs[0].set_title("Runs #")
+        axs[0].pie([x.Run_count for x in self.data], 
+                    labels=[x.system for x in self.data], 
+                    autopct='%1.1f%%', 
+                    pctdistance=0.8,
+                    labeldistance=1.1,
+                    startangle=90)
+
+        axs[1].set_title("PBs #")
+        axs[1].pie([x.PB_count for x in self.data], 
+                    labels=[x.system for x in self.data], 
+                    autopct='%1.1f%%',
+                    pctdistance=0.8,
+                    labeldistance=1.1,
+                    startangle=90)
+
+        plot.show()
+
+
+
+
 
     def __str__(self):
 
@@ -94,6 +141,7 @@ class System(entry):
         tempo.perc = round((tempo.PB_Total) / tempo.WR_Total * 100, 2)
 
         return tempo
+
 class pie_systems:
     def __init__(self, systems):
         self.data = {"Runs":{},
@@ -101,29 +149,6 @@ class pie_systems:
         for one_system in systems:
             self.data["Runs"][one_system.system] = [run.time.time for run in one_system.Runs]
             self.data["PBs"][one_system.system] = [run.time.time for run in one_system.Pbs]
-
-    def pie_time(self):
-
-        fig, axs = plot.subplots(1, 2)
-
-        fig.suptitle(f'systems')
-
-        axs[0].set_title("Runs Total time")
-        axs[0].pie([sum(x) for x in self.data["Runs"].values()], 
-                    labels=self.data["Runs"].keys(), 
-                    autopct='%1.1f%%', 
-                    pctdistance=0.8,
-                    labeldistance=1.1,
-                    startangle=90)
-
-        axs[1].set_title("PBs Total time")
-        axs[1].pie([sum(x) for x in self.data["PBs"].values()], 
-                    labels=self.data["Runs"].keys(), 
-                    autopct='%1.1f%%',
-                    pctdistance=0.8,
-                    labeldistance=1.1,
-                    startangle=90)
-        plot.show()
 
     def pie_frequency(self):
 
