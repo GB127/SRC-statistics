@@ -25,8 +25,12 @@ class Saves(table):
     def plot_all_saves(self):
         all_plots = []
         for category in self.data:
-            all_plots.append(list(reversed([run.time for run in category.runs])))
-        plot_line(all_plots, "All improvements")
+            all_plots.append(list(reversed([run.time.time for run in category.runs])))
+        print(all_plots)
+        for saves in all_plots:
+            plot.plot(saves)
+        plot.yticks(plot.yticks()[0],[str(run_time(x)) for x in plot.yticks()[0]])
+        plot.show()
 
 
     def histo_times(self):
@@ -73,10 +77,12 @@ class Save(entry):
         self.perc1st = round(self.delta/self.first * 100, 2)
 
     def plot_improvement(self):
-        data = [one.time for one in self.runs]
+        data = [one.time.time for one in self.runs]
         data.reverse()
-        plot_line([data], f"{self.game}-{self.category} Improvement", ymin=None)
+        plot.plot(data)
+        plot.yticks(plot.yticks()[0],[str(run_time(x)) for x in plot.yticks()[0]])
 
+        plot.show()
     def __add__(self, other):
         tempo = super().__add__(other)
         tempo.perc1st = round(tempo.delta/tempo.first * 100, 2)
