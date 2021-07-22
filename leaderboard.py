@@ -47,6 +47,8 @@ class leaderboard(table):
             plot.plot([x.time.time for x in self.data[::-1]], "o")
 
         plot.plot(len(self.data) - self.place[0], self.place[1].time, "ro")
+        plot.yticks(plot.yticks()[0],[str(run_time(x)) for x in plot.yticks()[0]])
+        plot.title(f"{self.game}\n{self.category}")
         plot.show()
 
     def __add__(self, other):
@@ -73,6 +75,7 @@ class ranking(entry):
 
 
 if __name__ == "__main__":
-    test = ['j1l9qz1g', '9d85yqdn',None, {}]
-    test = leaderboard(test, "Ocarina of time", "GSR", (2, run_time(5420)))
+
+    test = ['o6g7xx62', '7dgw5724', None, {}]
+    test = leaderboard(test, " Donkey Kong Land III", "Any%", (2, run_time(5420)))
     test.plot()
