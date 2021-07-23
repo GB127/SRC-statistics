@@ -26,7 +26,6 @@ class Saves(table):
         all_plots = []
         for category in self.data:
             all_plots.append(list(reversed([run.time.time for run in category.runs])))
-        print(all_plots)
         for saves in all_plots:
             plot.plot(saves)
         plot.yticks(plot.yticks()[0],[str(run_time(x)) for x in plot.yticks()[0]])
@@ -76,10 +75,14 @@ class Save(entry):
         self.delta = self.first - self.time
         self.perc1st = round(self.delta/self.first * 100, 2)
 
+        self.WR = PB.WR
+
     def plot_improvement(self):
         data = [one.time.time for one in self.runs]
         data.reverse()
         plot.plot(data)
+        plot.axhline(self.WR.time, color="gold")
+        plot.title(f"{self.game}\n{self.category}")
         plot.yticks(plot.yticks()[0],[str(run_time(x)) for x in plot.yticks()[0]])
 
         plot.show()
