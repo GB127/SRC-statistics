@@ -63,6 +63,7 @@ class leaderboard(table):
 
 class ranking(entry):
     def __init__(self, data, WR):
+        self.WR = WR
         self.place = data["place"]
         self.time = run_time(data["run"]["times"]["primary_t"])
         self.delta_p = self.time - WR
@@ -76,9 +77,26 @@ class ranking(entry):
     def __lt__(self, other):
         return self.time < other.time
 
+    def __str__(self):
+        tempo = super().__str__()
+        datas = tempo.split(" | ")
+        datas2 = " | ".join(datas[1:])
+        return datas2
+
+    def __add__(self, integ):
+        tempo = super().__add__(integ)
+        tempo.perc = round((tempo.time/ tempo.WR) * 100,2)
+        return tempo
+
+
+
+    def __truediv__(self, integ):
+        tempo = super().__truediv__(integ)
+        tempo.perc = round((tempo.time/ tempo.WR) * 100,2)
+        return tempo
 
 if __name__ == "__main__":
 
     test = ['o6g7xx62', '7dgw5724', None, {}]
     test = leaderboard(test, " Donkey Kong Land III", "Any%", (2, run_time(5420)))
-    test.plot()
+    print(test)
