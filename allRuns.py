@@ -54,11 +54,8 @@ class Run(entry):
         def clean_gamename(name):
             if "The Legend of Zelda" in name:
                 return name[14:]
-            if name == "Ocarina of Time Category Extensions":
-                return "Zelda: Ocarina of Time"
-            if name == "Super Mario 64 Category Extensions":
-                return "Super Mario 64"
-
+            if name[-19:] == "Category Extensions":
+                return name[:-19]
             else: return name
         def repertoire(lequel, data, requester):
             try:
