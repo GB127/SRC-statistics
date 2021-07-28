@@ -2,6 +2,7 @@ from api import get_leaderboard, get_user, get_leaderboard_level, get_leaderboar
 from generic import table, entry
 from tools import run_time
 import matplotlib.pyplot as plot
+import numpy as np
 
 
 class leaderboard(table):
@@ -49,6 +50,8 @@ class leaderboard(table):
         plot.plot(len(self.data) - self.place[0], self.place[1].time, "ro")
         plot.yticks(plot.yticks()[0],[str(run_time(x)) for x in plot.yticks()[0]])
         plot.title(f"{self.game}\n{self.category}")
+        plot.xticks(np.arange(0, len(self.data), 1.0))
+
         plot.show()
 
     def __add__(self, other):

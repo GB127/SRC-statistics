@@ -1,6 +1,7 @@
 from tools import run_time, command_select
 from generic import table, entry
 from allRuns import Run
+import numpy as np
 import matplotlib.pyplot as plot
 
 
@@ -29,6 +30,7 @@ class Saves(table):
         for saves in all_plots:
             plot.plot(saves)
         plot.yticks(plot.yticks()[0],[str(run_time(x)) for x in plot.yticks()[0]])
+        plot.xticks(np.arange(0, max([len(x.runs) for x in self.data]), 1.0))
         plot.show()
 
 
@@ -85,6 +87,7 @@ class Save(entry):
         plot.title(f"{self.game}\n{self.category}")
         plot.yticks(plot.yticks()[0],[str(run_time(x)) for x in plot.yticks()[0]])
 
+        plot.xticks(np.arange(0, len(self.runs), 1.0))
         plot.show()
     def __add__(self, other):
         tempo = super().__add__(other)
