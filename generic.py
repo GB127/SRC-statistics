@@ -150,7 +150,7 @@ class entry:
     def __lt__(self, other):
         if self.__dict__[self.sorter] != other.__dict__[self.sorter]:
             return self.__dict__[self.sorter] < other.__dict__[self.sorter]
-        for attribut in ["system", "game", "category", "time"]:
+        for attribut in ["system", "game", "category","level", "time"]:
             try:
                 if self.__dict__[attribut] != other.__dict__[attribut]:
                     return self.__dict__[attribut] < other.__dict__[attribut]
