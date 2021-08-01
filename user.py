@@ -22,7 +22,7 @@ class user:
         self.Runs = Runs(get_runs(ID))
         self.Saves = Saves(self.PBs, self.Runs)
         self.Systems = Systems(self.PBs, self.Runs)
-        #.Games = Games(self.PBs, self.Runs)
+        self.Games = Games(self.PBs, self.Runs)
         
         print("user initialized!")
 
