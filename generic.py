@@ -156,4 +156,5 @@ class entry:
                     return self.__dict__[attribut] < other.__dict__[attribut]
             except KeyError:
                 pass
-        raise BaseException(f'\n{self}\n{other}\n{list(self.__dict__.keys())}')
+        return True
+        #raise BaseException(f'\n{self}\n{other}\n{list(self.__dict__.keys())}')
