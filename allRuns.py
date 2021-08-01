@@ -55,7 +55,7 @@ class Run(entry):
             if "The Legend of Zelda" in name:
                 return name[14:]
             if name[-19:] == "Category Extensions":
-                return name[:-19]
+                return name[:-20]
             else: return name
         def repertoire(lequel, data, requester):
             try:
