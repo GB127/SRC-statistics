@@ -1,4 +1,4 @@
-from api import get_leaderboard, get_user, get_leaderboard_level, get_leaderboards, get_leaderboards_level
+from api import get_leaderboard, get_user, get_leaderboards
 from generic import table, entry
 from tools import run_time
 import matplotlib.pyplot as plot
@@ -6,29 +6,22 @@ import numpy as np
 
 
 class leaderboard(table):
-    def __init__(self, IDs, game, category, rank, level=None):
+    def __init__(self, IDs, game, category, rank):
         super().__init__()
 
         self.IDs = IDs
         self.game = game
         self.category = category
         self.place = rank
-        self.level = level
-        if not IDs[2]:
-            print(f"     Fetching {self.game} - {self.category}")
-            infos = get_leaderboard(IDs)["data"]["runs"]
-        else:
-            print(f"     Fetching {self.game} - {level} - {self.category}")
-            infos = get_leaderboard_level(IDs)["data"]["runs"]
+
+        print(f"     Fetching {self.game} - {self.category}")
+        infos = get_leaderboard(IDs)["data"]["runs"]
         self.WR = run_time(infos[0]["run"]["times"]["primary_t"])
         for no, one in enumerate(infos):
             self.data.append(ranking(one, self.WR))
 
     def plot_evolution(self):
-        if not self.IDs[2]:  # FIXME : Issue if Variables
-            toplot = get_leaderboards(self.IDs)
-        if self.IDs[2]:
-            toplot = get_leaderboards_level(self.IDs)
+        toplot = get_leaderboards(self.IDs)
 
         for year, times in toplot.items():
             data = [one.time for one in times]

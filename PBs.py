@@ -54,7 +54,7 @@ class PB(Run):
 
         self.place = data["place"]
 
-        tempo_leaderboard = leaderboard(self.IDs, self.game, self.category, (self.place, self.time), level=self.level)
+        tempo_leaderboard = leaderboard(self.IDs, self.game, self.category, (self.place, self.time))
         self.WR = tempo_leaderboard.WR
         self.delta = self.time - tempo_leaderboard.WR  
         self.perc_WR = round((self.time) / tempo_leaderboard.WR * 100, 2)

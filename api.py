@@ -16,7 +16,14 @@ def request_counter():
 
 
 
-def get_leaderboard_level(IDs):
+def get_leaderboard(IDs):
+    base_URL = f"/leaderboards/{IDs[0]}/"
+    if IDs[2]:
+        full_level = f'level/{IDs[2]}/{IDs[1]}'
+    else:
+        full_level = f"category/{IDs[1]}"
+
+
     varistr = ""
     if IDs[3] != {}:
         tempo = []
@@ -25,9 +32,8 @@ def get_leaderboard_level(IDs):
         varistr = "&".join(tempo)
         if varistr != "": varistr = "?" + varistr
 
-    rep = requester(f"/leaderboards/{IDs[0]}/level/{IDs[2]}/{IDs[1]}" + varistr)
+    rep = requester(f"{base_URL}{full_level}{varistr}")
     return rep
-
 
 
 def get_leaderboards(IDs):
@@ -43,57 +49,27 @@ def get_leaderboards(IDs):
     game_date = requester(f"/games/{IDs[0]}")['data']["release-date"]
     now = str(datetime.date.today())
 
+
+
+
     rankings = {}
     for year in range(int(now[:4]), int(game_date[:4]), -1):
+        base_URL = f'/leaderboards/{IDs[0]}/'
+        base_date = f"?date={f'{year}-{now[5:7]}-{now[8:10]}'}"
+        if IDs[2]:
+            full_level = f"level/{IDs[2]}/{IDs[1]}"
+        else:
+            full_level = f'category/{IDs[1]}'
+
         print(f"Getting year {year} leaderboard")
         tempo = []
-        rep = requester(f"/leaderboards/{IDs[0]}/category/{IDs[1]}?date={f'{year}-{now[5:7]}-{now[8:10]}'}" + varistr)
+        rep = requester(f"{base_URL}{full_level}{base_date}{varistr}")
         for run in rep["data"]["runs"]:
             tempo.append((run_time(run["run"]["times"]["primary_t"])))
         if len(tempo) == 0: break
         else: 
             rankings[year] = tempo
     return rankings
-
-def get_leaderboards_level(IDs):
-    varistr = ""
-    if IDs[3] != {}:
-        tempo = []
-        for key in IDs[3]:
-            tempo.append(f"var-{key}={IDs[3][key]}")
-        varistr = "&".join(tempo)
-        if varistr != "": varistr = "?" + varistr
-
-
-    game_date = requester(f"/games/{IDs[0]}")['data']["release-date"]
-    now = str(datetime.date.today())
-
-    rankings = {}
-    for year in range(int(now[:4]), int(game_date[:4]), -1):
-        print(f"Getting year {year} leaderboard")
-        tempo = []
-        rep = requester(f"/leaderboards/{IDs[0]}/level/{IDs[2]}/{IDs[1]}?date={f'{year}-{now[5:7]}-{now[8:10]}'}" + varistr)
-
-        for run in rep["data"]["runs"]:
-            tempo.append((run_time(run["run"]["times"]["primary_t"])))
-        if len(tempo) == 0: break
-        else: 
-            rankings[year] = tempo
-    return rankings
-
-
-def get_leaderboard(IDs):
-    varistr = ""
-    if IDs[2] != {}:
-        tempo = []
-        for key in IDs[3]:
-            tempo.append(f"var-{key}={IDs[3][key]}")
-        varistr = "&".join(tempo)
-        if varistr != "": varistr = "?" + varistr
-    rep = requester(f"/leaderboards/{IDs[0]}/category/{IDs[1]}" + varistr)
-    return rep
-
-
 
 
 def get_variable(variID):
