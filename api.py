@@ -141,6 +141,9 @@ def requester(link):
             print(rep.status_code)
             print(f"{URL}{link}")
             raise BaseException(f"Incorrect info, please check again\n{URL}{link}")
+        elif rep.status_code == 420 and rep.json()['message'] == "The service is too busy to handle your request. Please try again later.":
+            print("Server is busy, pausing...")
+            time.sleep(60)
         else:
             raise BaseException(f"Please report this, {rep.status_code} - {URL}{link}\n{rep.json()['message']}")
 
