@@ -28,7 +28,7 @@ class leaderboard(table):
             if len(data) > 1:
                 plot.plot(data, label=year)
             else:
-                plot.plot(data,"o", label=year)
+                plot.plot(data, "o", label=year)
 
         plot.show()
 
