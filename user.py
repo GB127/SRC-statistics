@@ -38,12 +38,11 @@ class user:
             self.Saves = Saves(self.PBs, self.Runs)
             self.Systems = Systems(self.PBs, self.Runs)
             self.Games = Games(self.PBs, self.Runs)
-
-
-        self.Runs_level = Runs_levels(Runs_level_data)
-        self.PBs_level = PBs_levels(PBs_level_data)
-        self.Systems_level = Systems(self.PBs_level, self.Runs_level)
-        self.Games_level = Games(self.PBs_level, self.Runs_level)
+        if PBs_level_data:
+            self.Runs_level = Runs_levels(Runs_level_data)
+            self.PBs_level = PBs_levels(PBs_level_data)
+            self.Systems_level = Systems(self.PBs_level, self.Runs_level)
+            self.Games_level = Games(self.PBs_level, self.Runs_level)
 
 
 
