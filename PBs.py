@@ -1,4 +1,4 @@
-from allRuns import Runs, Run
+from allRuns import Runs, Run, Run_level
 from leaderboard import leaderboard
 from tools import run_time, command_select, clear
 import matplotlib.pyplot as plot
@@ -95,3 +95,15 @@ class PB(Run):
 
         tempo.perc_WR = round((tempo.time) / tempo.WR * 100, 2)
         return tempo
+
+class PB_levels(PB):
+    def __init__(self, data):
+        super().__init__(data)
+        self.level = Run_level.levels[self.IDs[2]]
+
+
+class PBs_levels(PBs):
+    def __init__(self, data):
+        self.data = []
+        for run in data:
+            self.data.append(PB_levels(run))

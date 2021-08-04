@@ -47,7 +47,6 @@ class Run(entry):
         "nzelkr6q" : "PS4",
         }
     subcategories = {}
-    levels = {}
     sorter = "game"
 
     def __init__(self, data):
@@ -80,8 +79,25 @@ class Run(entry):
         if subcateg:
             self.category = f'{self.category} ({",".join(subcateg)})'
         
-        self.level = None
-        if self.IDs[2]:
-            self.level = repertoire(Run.levels, self.IDs[2], get_level)
-
         self.time = run_time(data["times"]["primary_t"])
+
+
+
+
+class Run_level(Run):
+    levels = {}
+
+    def __init__(self, data):
+        super().__init__(data)
+        try:
+            self.level = Run_level.levels[self.IDs[2]]
+        except KeyError:
+            Run_level.levels[self.IDs[2]] = get_level(self.IDs[2])
+            self.level = Run_level.levels[self.IDs[2]]
+
+class Runs_levels(Runs):
+    def __init__(self, data=None):
+        self.data = []
+        if data:
+            for run in data:
+                self.data.append(Run_level(run))

@@ -1,7 +1,7 @@
 from api import get_userID, get_PBs, get_runs
 from tools import run_time, command_select, clear
-from PBs import PBs
-from allRuns import Runs
+from PBs import PBs, PBs_levels
+from allRuns import Runs, Runs_levels
 from Saves import Saves
 from Systems import Systems
 from games import Games
@@ -19,12 +19,34 @@ class user:
         print(f"Fetching {self.username}'s data...")
         ID = get_userID(self.username)
 
-        self.PBs = PBs(get_PBs(ID))
-        self.Runs = Runs(get_runs(ID))
+        PBs_level_data, PBs_full_data = [], []
+        for one in get_PBs(ID):
+            if one["run"]["level"]:
+                PBs_level_data.append(one)
+            else:
+                PBs_full_data.append(one)
+
+        Runs_level_data, Runs_full_data = [], []
+        for one in get_runs(ID):
+            if one["level"]:
+                Runs_level_data.append(one)
+            else:
+                Runs_full_data.append(one)
+
+        self.Runs = Runs(Runs_full_data)
+        self.PBs = PBs(PBs_full_data)
         self.Saves = Saves(self.PBs, self.Runs)
         self.Systems = Systems(self.PBs, self.Runs)
         self.Games = Games(self.PBs, self.Runs)
-        
+
+
+        self.Runs_level = Runs_levels(Runs_level_data)
+        self.PBs_level = PBs_levels(PBs_level_data)
+        self.Systems_level = Systems(self.PBs_level, self.Runs_level)
+        self.Games_level = Games(self.PBs_level, self.Runs_level)
+
+
+
         print("user initialized!")
 
     def __str__(self):
