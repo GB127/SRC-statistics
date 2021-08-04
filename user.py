@@ -33,6 +33,7 @@ class user:
             else:
                 Runs_full_data.append(one)
 
+        if PBs_full_data:
             self.Runs = Runs(Runs_full_data)
             self.PBs = PBs(PBs_full_data)
             self.Saves = Saves(self.PBs, self.Runs)
