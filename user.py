@@ -33,11 +33,11 @@ class user:
             else:
                 Runs_full_data.append(one)
 
-        self.Runs = Runs(Runs_full_data)
-        self.PBs = PBs(PBs_full_data)
-        self.Saves = Saves(self.PBs, self.Runs)
-        self.Systems = Systems(self.PBs, self.Runs)
-        self.Games = Games(self.PBs, self.Runs)
+            self.Runs = Runs(Runs_full_data)
+            self.PBs = PBs(PBs_full_data)
+            self.Saves = Saves(self.PBs, self.Runs)
+            self.Systems = Systems(self.PBs, self.Runs)
+            self.Games = Games(self.PBs, self.Runs)
 
 
         self.Runs_level = Runs_levels(Runs_level_data)
