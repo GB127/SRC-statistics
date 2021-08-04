@@ -101,6 +101,14 @@ class PB_levels(PB):
         super().__init__(data)
         self.level = Run_level.levels[self.IDs[2]]
 
+    def __str__(self):
+        tempo = super().__str__()
+        # Temporary code. Table won't be neat, but will be okay for now
+        tempo2 = tempo.split("|")
+        tempo2.insert(2, self.level)
+        tempo3 = "|".join(tempo2)
+        return tempo3
+
 
 class PBs_levels(PBs):
     def __init__(self, data):
