@@ -19,7 +19,7 @@ def formatting(cle, valeur, which):
     elif cle == "category":
         return f'{tostr[which][:20]:20}'
     elif cle == "level":
-        return f'{tostr[which][:15]:15}'
+        return f'{tostr[which][:12]:12}'
 
     elif "perc" in cle:
         tempo = "" if which == "cle" else " %"

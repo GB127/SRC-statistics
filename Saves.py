@@ -101,3 +101,28 @@ class Save(entry):
 
     def __str__(self):
         return super().__str__().replace("+", "-")
+
+
+
+class Saves_levels(Saves):
+    def __init__(self, PBs, Runs):
+        self.data = []
+        print("Initializing Saves")
+        for pb in PBs:
+            tempo = Save_levels(pb, Runs)
+            if tempo.first != tempo.time:
+                self.data.append(tempo)
+
+
+
+class Save_levels(Save):
+    def __init__(self, PB, Runs):
+        super().__init__(PB, Runs)
+        self.level = PB.level
+
+    def __str__(self):
+        tempo = super().__str__()
+        tempo2 = tempo.split("|")
+        tempo2.insert(2, tempo2[-1])
+        return "|".join(tempo2[:-1])
+

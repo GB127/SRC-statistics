@@ -2,7 +2,7 @@ from api import get_userID, get_PBs, get_runs
 from tools import run_time, command_select, clear
 from PBs import PBs, PBs_levels
 from allRuns import Runs, Runs_levels
-from Saves import Saves
+from Saves import Saves, Saves_levels
 from Systems import Systems
 from games import Games
 
@@ -42,6 +42,7 @@ class user:
         if PBs_level_data:
             self.Runs_level = Runs_levels(Runs_level_data)
             self.PBs_level = PBs_levels(PBs_level_data)
+            self.Saves_level = Saves_levels(self.PBs_level, self.Runs_level)
             self.Systems_level = Systems(self.PBs_level, self.Runs_level)
             self.Games_level = Games(self.PBs_level, self.Runs_level)
 
