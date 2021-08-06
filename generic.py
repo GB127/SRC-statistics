@@ -156,5 +156,4 @@ class entry:
                 pass
             except TypeError:
                 raise TypeError(f'\n{self}\n{other}\n{list(self.__dict__.keys())}')                
-        return True
-        #raise BaseException(f'\n{self}\n{other}\n{list(self.__dict__.keys())}')
+        raise BaseException(f'\n{self}\n{other}\n{list(self.__dict__.keys())}')
