@@ -1,6 +1,6 @@
 from tools import run_time, command_select
 from generic import table, entry
-from allRuns import Run  # Is this still used?
+from allRuns import Run
 import numpy as np
 import matplotlib.pyplot as plot
 
@@ -70,7 +70,7 @@ class Save(entry):
                 self.runs.append(run)
         self.count = len(self.runs)
 
-        Run.sorter = "time"
+        Run.sorter = "time"  # TODO : Try to avoid using "Run" here.
         self.runs.sort()
         self.first = self.runs[-1].time
         self.time = PB.time
