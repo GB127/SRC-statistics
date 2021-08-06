@@ -76,7 +76,7 @@ class Save(entry):
         self.time = PB.time
         self.delta = self.first - self.time
         self.perc1st = round(self.delta/self.first * 100, 2)
-
+        self.percmax = round((self.first - PB.WR)/self.first * 100, 2)
         self.WR = PB.WR
 
     def plot_improvement(self):
@@ -92,11 +92,13 @@ class Save(entry):
     def __add__(self, other):
         tempo = super().__add__(other)
         tempo.perc1st = round(tempo.delta/tempo.first * 100, 2)
+        tempo.percmax = round((tempo.first - tempo.WR)/tempo.first * 100, 2)
         return tempo
 
     def __truediv__(self, other):
         tempo = super().__truediv__(other)
         tempo.perc1st = round(tempo.delta/tempo.first * 100, 2)
+        tempo.percmax = round((tempo.first - tempo.WR)/tempo.first * 100, 2)
         return tempo
 
     def __str__(self):
