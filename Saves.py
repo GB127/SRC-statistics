@@ -1,6 +1,6 @@
 from tools import run_time, command_select
 from generic import table, entry
-from allRuns import Run
+from allRuns import Run  # Is this still used?
 import numpy as np
 import matplotlib.pyplot as plot
 
