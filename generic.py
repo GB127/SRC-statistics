@@ -18,6 +18,9 @@ def formatting(cle, valeur, which):
         return f'{tostr[which][:6]:^6}'
     elif cle == "category":
         return f'{tostr[which][:20]:20}'
+    elif cle == "level":
+        return f'{tostr[which][:15]:15}'
+
     elif "perc" in cle:
         tempo = "" if which == "cle" else " %"
         tempo2 = str(tostr[which])
@@ -26,9 +29,6 @@ def formatting(cle, valeur, which):
         return f'{ tempo2 + tempo:>9}'
     elif cle == "ranking":
         return f'{tostr[which]:^10}'
-    else:
-        return tostr[which]
-
 
 class table:
 
@@ -107,8 +107,6 @@ class entry:
         tempo = []
         for cle, valeur in self.__dict__.items():
             if cle in ["leaderboard", "place", "IDs", "runs", "pbs"]:
-                pass
-            elif cle == "level":
                 pass
             else:
                 tempo.append(formatting(cle, valeur, "valeur"))

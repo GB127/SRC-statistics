@@ -97,11 +97,9 @@ class Run_level(Run):
 
     def __str__(self):
         tempo = super().__str__()
-        # Temporary code. Table won't be neat, but will be okay for now
         tempo2 = tempo.split("|")
-        tempo2.insert(2, self.level)
-        tempo3 = "|".join(tempo2)
-        return tempo3
+        tempo2.insert(2, tempo2[-1])
+        return "|".join(tempo2[:-1])
 
 class Runs_levels(Runs):
     def __init__(self, data=None):
