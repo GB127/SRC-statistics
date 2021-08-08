@@ -102,7 +102,9 @@ class Save(entry):
         return tempo
 
     def __str__(self):
-        return super().__str__().replace("+", "-")
+        tempo = super().__str__().replace("+", "-")
+        tempo2 = tempo.split("|")
+        return "|".join(tempo2[:-1])
 
 
 
