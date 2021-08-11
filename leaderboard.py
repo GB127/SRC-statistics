@@ -1,4 +1,4 @@
-from api import get_leaderboard, get_user, get_leaderboards
+from api import get_leaderboard, get_leaderboards
 from generic import table, entry
 from tools import run_time
 import matplotlib.pyplot as plot

@@ -202,23 +202,6 @@ def get_runs(ID):
     recursive_requester(link_1, runs)  # Recursive request will update the list.
     return runs
 
-def get_user(ID):
-    """Get the user  of a user ID.
-        Returns:
-            ID (str)
-        """
-    rep = requester(f"/users/{ID}")
-    return rep["data"]["names"]["international"]
-
-
-
-
-
-
-
-#####################
-
-
 def get_level(ID):
     """Fetch the full name of the level with an ID.
         """
