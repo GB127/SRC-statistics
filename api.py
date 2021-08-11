@@ -5,6 +5,22 @@ URL = "https://www.speedrun.com/api/v1"
 
 amount = 0
 
+def response_analyser(response):
+    if response.status_code == 200:
+        return True
+    elif response.status_code == 502:
+        time.sleep(10)
+    elif response.status_code == 404:
+        print(response.status_code)
+        raise BaseException(f"Incorrect info, please check again\n")
+    elif response.status_code == 420 and response.json()['message'] == "The service is too busy to handle your request. Please try again later.":
+        print("Server is busy, pausing...")
+        time.sleep(60)
+    else:
+        raise BaseException(f"Please report this, {response.status_code}\n{response.json()['message']}")
+    return False
+
+
 def request_counter():
     global amount
     amount += 1
@@ -113,9 +129,12 @@ def recursive_requester(link, toupdate):
 
         Returns nothing, but modify the "toupdate" list that can then be used elsewhere.
         """
-    rep = requests.get(link)
-    if rep.status_code == 200:
-        rep = rep.json()
+    while True:
+        rep = requests.get(link)  #FIXME : Make sure it can work and doesn't stop... Use requester?
+        if response_analyser(rep):
+            rep = rep.json()
+            break
+
     for run in rep["data"]:
         toupdate.append(run)
     if rep["pagination"]["size"] == rep["pagination"]["max"]:
@@ -130,23 +149,10 @@ def requester(link):
         Returns : data in a json form
         """
     while True:
-        # It's in a loop in order to bypass the 502 status code.
         rep = requests.get(f"{URL}{link}")
         request_counter()
-        if rep.status_code == 200:
+        if response_analyser(rep):
             return rep.json()
-        elif rep.status_code == 502:
-            time.sleep(10)
-        elif rep.status_code == 404:
-            print(rep.status_code)
-            print(f"{URL}{link}")
-            raise BaseException(f"Incorrect info, please check again\n{URL}{link}")
-        elif rep.status_code == 420 and rep.json()['message'] == "The service is too busy to handle your request. Please try again later.":
-            print("Server is busy, pausing...")
-            time.sleep(60)
-        else:
-            raise BaseException(f"Please report this, {rep.status_code} - {URL}{link}\n{rep.json()['message']}")
-
 
 def get_PBs(ID):
     """Requests the PBs of the said username identified with the ID.
