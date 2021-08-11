@@ -25,7 +25,7 @@ class Runs(table):
 
 
 class Run(entry):
-    games = {}
+    games = {"76rkv4d8" : "Zelda: Ocarina of Time"}
     categories = {}
     systems = {
         None : "PC",
@@ -51,11 +51,12 @@ class Run(entry):
 
     def __init__(self, data):
         def clean_gamename(name):
-            if "The Legend of Zelda" in name:
-                return name[14:]
-            if name[-19:] == "Category Extensions":
-                return name[:-20]
-            else: return name
+            toreturn = name
+            if "The Legend of Zelda" in toreturn:
+                toreturn = toreturn[14:]
+            if toreturn[-19:] == "Category Extensions":
+                toreturn = toreturn[:-20]
+            return toreturn
         def repertoire(lequel, data, requester):
             try:
                 return lequel[data]
