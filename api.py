@@ -25,7 +25,7 @@ def request_counter():
     global amount
     amount += 1
 
-    if amount == 120:
+    if amount == 100:
         print("Slowing down...")
         time.sleep(20)
         amount = 0
@@ -130,7 +130,7 @@ def recursive_requester(link, toupdate):
         Returns nothing, but modify the "toupdate" list that can then be used elsewhere.
         """
     while True:
-        rep = requests.get(link)  #FIXME : Make sure it can work and doesn't stop... Use requester?
+        rep = requests.get(link)
         if response_analyser(rep):
             rep = rep.json()
             break
@@ -212,4 +212,9 @@ def get_level(ID):
 
 
 if __name__ == "__main__":
-    print(get_level("nwl6ky0w"))
+    #print(get_game("ootextras"))
+
+
+
+    rep = requester(f"/games/{'ootextras'}")
+    print(rep["data"]["id"])

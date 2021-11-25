@@ -89,6 +89,7 @@ class Save(entry):
 
         plot.xticks(np.arange(0, len(self.runs), 1.0))
         plot.show()
+
     def __add__(self, other):
         tempo = super().__add__(other)
         tempo.perc1st = round(tempo.delta/tempo.first * 100, 2)

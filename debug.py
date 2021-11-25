@@ -1,6 +1,8 @@
 from user import user
 
 test = user("libre")
-#test = user("niamek")
-# libre a peu de runs, utile pour debugger.
-test()
+# test = user("shenef")
+# test = user("niamek")
+# libre a peu de runs, 
+
+print(test.Runs)
