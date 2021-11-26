@@ -1,68 +1,72 @@
+from time import time
 from tools import command_select, run_time, clear
 from copy import deepcopy
 
-def formatting(cle, valeur, which):
-    tostr = {"cle":cle, "valeur":valeur}
-    if "count" in cle:
-        if which == "cle":
-            return f'{"#":^3}'
-        return f'{tostr[which]:^3}'
-    elif isinstance(valeur, run_time):
-        tempo = ""
-        if "delta" in cle:
-            tempo = "+"
-        return f'{tempo + str(tostr[which])[:9]:>9}'
-    elif cle == "game":
-        return f'{tostr[which][:30]:30}'
-    elif cle == "system":
-        return f'{tostr[which][:6]:^6}'
-    elif cle == "category":
-        return f'{tostr[which][:20]:20}'
-    elif cle == "level":
-        return f'{tostr[which][:12]:12}'
+times_format = 8
+perc_format = 5
+format_string = {
+                    "category":13,
+                    "count" : 3,
+                    "delta" : times_format,
+                    "first": times_format,
+                    "game" : 30,
+                    "perc" : perc_format,
+                    "Run_average" : times_format,
+                    "PB_average" : times_format,
+                    "PB_count" : 3,
+                    "PB_delta_average" : times_format,
+                    "PB_Total": times_format,
+                    "PB_time" : times_format,
+                    "PB_delta" : times_format,
+                    "perc1st": perc_format,
+                    "percmax": perc_format,
+                    "perc_LB" : perc_format,
+                    "perc_WR" : perc_format,
+                    "Run_count" : 3,
+                    "Run_Total": times_format,
+                    "ranking" : 10,
+                    "runs_count" : 3,
+                    "runs_time" : times_format,
+                    "system" : 3, 
+                    "time" : times_format,
+                    "WR" : times_format,
+                    "WR_time" : times_format,
+                    "WR_average" : times_format,
+                    "WR_Total": times_format
+                }
 
-    elif "perc" in cle:
-        tempo = "" if which == "cle" else " %"
-        tempo2 = str(tostr[which])
-        if tempo2[-2] == "." :
-            tempo2 += "0"
-        return f'{ tempo2 + tempo:>9}'
-    elif cle == "ranking":
-        return f'{tostr[which]:^10}'
+
 
 class table:
-
     def __init__(self):
-        if self.__class__.__name__ != "leaderboard":
-            print(f"Prepping the {self.__class__.__name__} table...")
         self.backup = []
         self.data = []
 
     def __str__(self):
+        line = f'{"-" * len(str(self.data[0]))}-----'
+
         def head():
             head_prep = []
-            for cle , valeur in self.data[0].__dict__.items():
-                if cle in ["leaderboard", "place", "IDs", "runs", "pbs"]:
-                    pass
-                elif "average" in cle:
-                    pass
-                elif cle == "level":
-                    pass
-                else:
-                    head_prep.append(formatting(cle, valeur, "cle"))
+            for cle in self.data[0].__dict__.keys():
+                if cle in ["runs", "pbs", "IDs", "leaderboard", "place"] :
+                    continue
+                head_prep.append(f'{cle[:min(len(cle), format_string[cle])]:{format_string[cle]}}')
+                if "perc" in cle:
+                    head_prep[-1] += "  "
 
             return f"{'':4}|" + " | ".join(head_prep)
 
-        line = f'{"-" * len(str(self.data[0]))}-----'
+        def body():
+            body_str = ""
+            for no, x in enumerate(self.data):
+                body_str += f"{no+1:>3} |{x}\n"
+            return body_str.rstrip("\n")
 
-        body = ""
-        for no, x in enumerate(self.data):
-            body += f"{no+1:>3} |{x}\n"
+        def foot():
+            total = str(sum(self))
+            average = str(sum(self) / len(self))
 
-        total = str(sum(self))
-        average = str(sum(self) / len(self))
-
-        return  f'{head()}\n{line}\n{body}{line}\nTotal{total}\nAvera{average}'
+        return  f"\n{line}\n".join([head(), body(), str(foot)])
 
     def __call__(self):
         def methods_fetcher():
@@ -107,9 +111,10 @@ class entry:
         tempo = []
         for cle, valeur in self.__dict__.items():
             if cle in ["leaderboard", "place", "IDs", "runs", "pbs"]:
-                pass
-            else:
-                tempo.append(formatting(cle, valeur, "valeur"))
+                continue
+            tempo.append(f'{str(valeur)[:min(len(str(valeur)), format_string[cle])]:{format_string[cle]}}')
+            if "perc" in cle:
+                tempo[-1] += " %"
         return " | ".join(tempo)
 
 

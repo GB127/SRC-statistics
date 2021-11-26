@@ -1,5 +1,5 @@
 from tools import run_time, command_select
-from generic import table, entry, formatting
+from generic import table, entry
 import matplotlib.pyplot as plot
 
 
@@ -75,7 +75,7 @@ class Systems(table):
         head, body, foot_original = tostr.split(f'{"-" * len(str(self.data[0]))}-----')
 
         foot = foot_original.split("\n")
-        foot = "\n".join([foot[1],foot[4]])
+        foot = "\n".join([foot[1],foot[-1]])
 
         return f'{head}{"-" * len(head)}{body}{foot}'
 
