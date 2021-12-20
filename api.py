@@ -98,27 +98,6 @@ def get_variable(variID):
     return rep["data"]
 
 
-def get_newsystem(newsystem):
-    """Debug function to find a new system to give a new acronym in the dictionnary.
-
-        Args:
-            newsystem (str): string to "acronymize". Need to be exact.
-
-        Result : print([ID] : "Full name")
-            NOTE: If no system matches, print all available systems.
-
-        """
-    rep = requester(f"/platforms?max=200")
-    for system in rep["data"]:
-        if system["name"] == newsystem: 
-            print("-------------------------------------")
-            print(f'"{system["id"]}" : "{system["name"]}",')
-            print("-------------------------------------")
-            return
-    for system in rep["data"]:
-        print(system["name"])
-
-
 def recursive_requester(link, toupdate):
     """Recursive requester with the provided link.
 
