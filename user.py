@@ -65,4 +65,4 @@ class user:
             self.__dict__[command]()
 
 if __name__ == "__main__":
-    user("libre")()
+    user("Niamek")()

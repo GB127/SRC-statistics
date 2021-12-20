@@ -5,13 +5,14 @@ from copy import deepcopy
 times_format = 8
 perc_format = 5
 format_string = {
-                    "category":13,
+                    "category":13, # Ok
                     "count" : 3,
                     "delta" : times_format,
+                    "delta_p" : times_format,
                     "first": times_format,
-                    "game" : 30,
+                    "game" : 30,  # Ok
+                    "moy_rank" : 10,
                     "perc" : perc_format,
-                    "Run_average" : times_format,
                     "PB_average" : times_format,
                     "PB_count" : 3,
                     "PB_delta_average" : times_format,
@@ -22,6 +23,7 @@ format_string = {
                     "percmax": perc_format,
                     "perc_LB" : perc_format,
                     "perc_WR" : perc_format,
+                    "Run_average" : times_format,
                     "Run_count" : 3,
                     "Run_Total": times_format,
                     "ranking" : 10,
@@ -60,13 +62,15 @@ class table:
             body_str = ""
             for no, x in enumerate(self.data):
                 body_str += f"{no+1:>3} |{x}\n"
-            return body_str.rstrip("\n")
+            return body_str.rstrip()
 
         def foot():
-            total = str(sum(self))
-            average = str(sum(self) / len(self))
-
-        return  f"\n{line}\n".join([head(), body(), str(foot)])
+            total = "Total: | " + str(sum(self)).lstrip(" |")
+            average = "Average: | " + str(sum(self) / len(self)).lstrip(" |")
+            return "\n".join([f'{total:>{len(str(self.data[0])) + 5}}',
+                            f'{average:>{len(str(self.data[0])) + 5}}'])
+        
+        return  f"\n{line}\n".join([head(), body(), foot()])
 
     def __call__(self):
         def methods_fetcher():
@@ -84,7 +88,7 @@ class table:
             command = command_select(methods_fetcher(), printer=True)
             if command == "end":
                 break
-            getattr(self.__class__, command)(self)
+            getattr(self.__class__, command)(self)  # What is this???
 
 
     def change_sorting(self):
