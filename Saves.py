@@ -1,6 +1,5 @@
 from tools import run_time, command_select
 from generic import table, entry
-from allRuns import Run
 import numpy as np
 import matplotlib.pyplot as plot
 

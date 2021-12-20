@@ -133,61 +133,11 @@ def requester(link):
         if response_analyser(rep):
             return rep.json()
 
-def get_PBs(ID):
-    """Requests the PBs of the said username identified with the ID.
-        Returns: data (json format)
-        """
-    rep = requester(f"/users/{ID}/personal-bests")
-    return rep["data"]
-
-def get_userID(username):
-    """Get the user ID of a username.
-        Returns:
-            ID (str)
-        """
-    rep = requester(f"/users/{username}")
-    return rep["data"]["id"]
-
-def get_game(ID):
-    """Fetch the full name of the game with an ID or acronym(str).
-        """
-    rep = requester(f"/games/{ID}")
-    return rep["data"]["names"]["international"]
-
-def get_category(ID):
-    """Fetch the full name of the category with an ID.
-        Returns (str): Full name of the category
-        """
-    rep = requester(f'/categories/{ID}')
-    return rep["data"]["name"]
-
-
-def get_system(ID):
-    """Return the system.
-        Returns: (str) full name of the system.
-        """
-    rep = requester(f"/platforms/{ID}")
-    return rep["data"]["name"]
-
-def get_runs(ID):
-    """Returns a list of all the runs (json form) by the user 
-        identified with the ID provided. Uses the recursive requester.
-
-        Returns (list) : list of all runs of the user (still in json data form).
-    """
-    runs = []  # List to update with the recursive requester.
-    link_1 = f"{URL}/runs?user={ID}&max=200"  # First link of the recursive requester.
-
-    recursive_requester(link_1, runs)  # Recursive request will update the list.
-    return runs
-
 def get_level(ID):
     """Fetch the full name of the level with an ID.
         """
     rep = requester(f"/levels/{ID}")
     return rep["data"]["name"]
-
-
 
 
 if __name__ == "__main__":

@@ -1,7 +1,5 @@
 from datetime import timedelta
 from os import system
-import matplotlib.pyplot as plot
-
 
 clear = lambda: system('cls')
 
@@ -60,25 +58,3 @@ class run_time:
 
     def __round__(self, number):
         return run_time(round(self.time, number))
-
-
-def command_select(iterable, printer=False):
-    """Reusable function for command selection.
-        Returns the selection.
-
-        Args:
-            iterable ([type]): list of options to select
-            printer (bool, optional): Print the iterable. Defaults to False.
-        """
-    if printer:
-        for no, one in enumerate(iterable): print(f'{no + 1:>4} - {one}'.replace("_", " "))
-    while True:
-        try:
-            commant = input(f"Which option? [1 - {len(iterable)}] ")
-            if int(commant) != 0:
-                return list(iterable)[int(commant) - 1]
-            raise BaseException
-        except:
-            if commant == "end":
-                return "end"
-            pass
