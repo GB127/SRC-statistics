@@ -71,13 +71,15 @@ class Entry:
 
         self.__dict__ = data
         self.__dict__["system"] = data["system"]["platform"]
+
         if not level:
             del self.level
 
         for attribute, repertoire, funct_req in zip(
-                ["game", "category", "system"], 
-                [Entry.games, Entry.categories, Entry.systems], 
-                [get_game, get_category, get_system]):
+                ["game",        "category",         "system"], 
+                [Entry.games,   Entry.categories,   Entry.systems], 
+                [get_game,      get_category,       get_system]
+                ):
             try:
                 self.__dict__[attribute] = repertoire[data[attribute]]
             except KeyError:
