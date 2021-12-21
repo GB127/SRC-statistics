@@ -1,6 +1,6 @@
 from api import requester
 
-spacing = {"game" : 20, "system" : 4, "category":15}
+spacing = {"game" : 20, "system" : 4, "category":15, "time":12}
 
 
 class table:
@@ -87,10 +87,17 @@ class Entry:
                 self.__dict__[attribute] = repertoire[data[attribute]]
 
     def __str__(self):
+        time_str = lambda x : f'{int(x)//3600:02}:{int(x) % 3600 // 60:02}:{int(x) % 3600 % 60 % 60:02}'
+
         stringed = []
         for attribu, value in self.__dict__.items():
+            print(attribu)
             try:
-                stringed.append(f'{str(value)[:spacing[attribu]]:{spacing[attribu]}}')
+                if "time" not in attribu:
+                    stringed.append(f'{str(value)[:spacing[attribu]]:{spacing[attribu]}}')
+                else:
+                    stringed.append(f'{time_str(value)[:spacing["time"]]:{spacing["time"]}}')
+
             except KeyError:
                 stringed.append(f'{str(value)[:10]:10}')
         return " | ".join(stringed)
