@@ -34,8 +34,18 @@ class table:
 class Entry:
     games = {}
     categories = {}
+    subcategories = {}
     systems = {}
     def __init__(self, data, level=None):
+        def get_variable(variID):
+            """ Returns json data about the speedrun variable identified by ID.
+                => Notable infos: 
+                    "is-subcategory"
+                    "values", "values", "label"
+                """
+            rep = requester(f'/variables/{variID}')
+            return rep["data"]
+
         def get_system(ID):
             """Return the system.
                 Returns: (str) full name of the system.
