@@ -70,26 +70,19 @@ class Entry:
             return rep["data"]["name"]
 
         self.__dict__ = data
-        try:
-            self.game = Entry.games[data["game"]]
-        except KeyError:
-            Entry.games[data["game"]] = get_game(data["game"])
-            self.game = Entry.games[data["game"]]
-
-        try:
-            self.category = Entry.categories[data["category"]]
-        except KeyError:
-            Entry.categories[data["category"]] = get_category(data["category"])
-            self.category = Entry.categories[data["category"]]
-
-        try:
-            self.system = Entry.systems[data["system"]["platform"]]
-        except KeyError:
-            Entry.systems[data["system"]["platform"]] = get_system(data["system"]["platform"])
-            self.system = Entry.systems[data["system"]["platform"]]
-        
+        self.__dict__["system"] = data["system"]["platform"]
         if not level:
             del self.level
+
+        for attribute, repertoire, funct_req in zip(
+                ["game", "category", "system"], 
+                [Entry.games, Entry.categories, Entry.systems], 
+                [get_game, get_category, get_system]):
+            try:
+                self.__dict__[attribute] = repertoire[data[attribute]]
+            except KeyError:
+                repertoire[data[attribute]] = funct_req(data[attribute])
+                self.__dict__[attribute] = repertoire[data[attribute]]
 
     def __str__(self):
         stringed = []
