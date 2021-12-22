@@ -1,10 +1,11 @@
 from api import requester
 
-spacing = {"game" : 20, "system" : 4, "category":15, "time":12}
+spacing = {"game" : 25, "system" : 4, "category":25, "time":12}
 
 
 class table:
     def __init__(self,classe, list_data, level=False):
+        # Idea : Add an argument that is the filter!
         self.data = []
         for one in list_data:
             self.data.append(classe(one))
@@ -37,37 +38,67 @@ class Entry:
     subcategories = {}
     systems = {}
     def __init__(self, data, level=None):
-        def get_variable(variID):
-            """ Returns json data about the speedrun variable identified by ID.
-                => Notable infos: 
-                    "is-subcategory"
-                    "values", "values", "label"
-                """
-            rep = requester(f'/variables/{variID}')
-            return rep["data"]
+        def game_system_category():
+            def get_system(ID):
+                """Return the system.
+                    Returns: (str) full name of the system.
+                    """
+                rep = requester(f"/platforms/{ID}")
+                print(f"Got system : {rep['data']['name']}")
+                return rep["data"]["name"]
 
-        def get_system(ID):
-            """Return the system.
-                Returns: (str) full name of the system.
-                """
-            rep = requester(f"/platforms/{ID}")
-            print(f"Got system : {rep['data']['name']}")
-            return rep["data"]["name"]
+            def get_game(ID):
+                """Fetch the full name of the game with an ID or acronym(str).
+                    """
+                rep = requester(f"/games/{ID}")
+                print(f"Got game name : {rep['data']['names']['international']}")
+                return rep["data"]["names"]["international"]
 
-        def get_game(ID):
-            """Fetch the full name of the game with an ID or acronym(str).
-                """
-            rep = requester(f"/games/{ID}")
-            print(f"Got game name : {rep['data']['names']['international']}")
-            return rep["data"]["names"]["international"]
+            def get_category(ID):
+                """Fetch the full name of the category with an ID.
+                    Returns (str): Full name of the category
+                    """
+                rep = requester(f'/categories/{ID}')
+                print(f"Got {self.game}'s category: {rep['data']['name']}")
+                return rep["data"]["name"]
 
-        def get_category(ID):
-            """Fetch the full name of the category with an ID.
-                Returns (str): Full name of the category
-                """
-            rep = requester(f'/categories/{ID}')
-            print(f"Got {self.game}'s category: {rep['data']['name']}")
-            return rep["data"]["name"]
+            for attribute, repertoire, funct_req in zip(
+                    ["game",        "category",         "system"], 
+                    [Entry.games,   Entry.categories,   Entry.systems], 
+                    [get_game,      get_category,       get_system]
+                    ):
+                try:
+                    self.__dict__[attribute] = repertoire[data[attribute]]
+                except KeyError:
+                    repertoire[data[attribute]] = funct_req(data[attribute])
+                    self.__dict__[attribute] = repertoire[data[attribute]]
+
+        def subcateg():
+            def get_variable(variID):
+                """ Returns json data about the speedrun variable identified by ID.
+                    => Notable infos: 
+                        "is-subcategory"
+                        "values", "values", "label"
+                    """
+                rep = requester(f'/variables/{variID}')
+                return rep["data"]
+
+            sub = []
+            for category, subcat in self.values.items():
+                try:
+                    if Entry.subcategories[category]:
+                        sub.append(Entry.subcategories[category][subcat])
+                except KeyError:
+                    Entry.subcategories[category] = {}
+                    données = get_variable(category)
+                    if données["is-subcategory"]:
+                        Entry.subcategories[category][subcat] = f"{données['values']['values'][subcat]['label']}"
+                        sub.append(Entry.subcategories[category][subcat])
+                    else:
+                        Entry.subcategories[category] = False
+            if sub:
+                self.category += f' ({", ".join(sub)})'
+            del self.values
 
         self.__dict__ = data
         self.__dict__["system"] = data["system"]["platform"]
@@ -76,28 +107,11 @@ class Entry:
             del self.level
         del self.date
 
-        for attribute, repertoire, funct_req in zip(
-                ["game",        "category",         "system"], 
-                [Entry.games,   Entry.categories,   Entry.systems], 
-                [get_game,      get_category,       get_system]
-                ):
-            try:
-                self.__dict__[attribute] = repertoire[data[attribute]]
-            except KeyError:
-                repertoire[data[attribute]] = funct_req(data[attribute])
-                self.__dict__[attribute] = repertoire[data[attribute]]
-
-        def fix_subcateg():
-            for category, subcat in self.values.items():
-                données = get_variable(category)
-                if données["mandatory"]:
-                    self.category += f" {données['values']['values'][subcat]['label']} "
-            del self.values
-
-        fix_subcateg()
+        game_system_category()
+        subcateg()
 
     def __str__(self):
-        time_str = lambda x : f'{int(x)//3600:02}:{int(x) % 3600 // 60:02}:{int(x) % 3600 % 60 % 60:02}'
+        time_str = lambda x : f'{int(x)//3600:>3}:{int(x) % 3600 // 60:02}:{int(x) % 3600 % 60 % 60:02}'
 
         stringed = []
         for attribu, value in self.__dict__.items():
@@ -111,6 +125,6 @@ class Entry:
         return " | ".join(stringed)
 
 if __name__ == "__main__":
-    entry_data = {'id': 'z073gloy','place': 14 , 'weblink': 'https://www.speedrun.com/bhero/run/z073gloy', 'game': 'nd2eeqd0', 'level': None, 'category': 'zd3yzr2n', 'videos': {'links': [{'uri': 'https://www.twitch.tv/videos/1110770410'}]}, 'comment': 'Blind race. Stellar hitboxes right here.', 'status': {'status': 'verified', 'examiner': '98rpeqj1', 'verify-date': '2021-08-08T19:00:00Z'}, 'players': [{'rel': 'user', 'id': 'x7qz6qq8', 'uri': 'https://www.speedrun.com/api/v1/users/x7qz6qq8'}], 'date': '2021-08-06', 'submitted': '2021-08-07T05:35:16Z', 'times': 14560, 'system': {'platform': 'nzelreqp', 'emulated': False, 'region': 'pr184lqn'}, 'splits': None, 'values': {}, 'links': [{'rel': 'self', 'uri': 'https://www.speedrun.com/api/v1/runs/z073gloy'}, {'rel': 'game', 'uri': 'https://www.speedrun.com/api/v1/games/nd2eeqd0'}, {'rel': 'category', 'uri': 'https://www.speedrun.com/api/v1/categories/zd3yzr2n'}, {'rel': 'platform', 'uri': 'https://www.speedrun.com/api/v1/platforms/nzelreqp'}, {'rel': 'region', 'uri': 'https://www.speedrun.com/api/v1/regions/pr184lqn'}, {'rel': 'examiner', 'uri': 'https://www.speedrun.com/api/v1/users/98rpeqj1'}]}
+    entry_data = {'place': 14 , 'game': 'nd2eeqd0', 'level': None, 'category': 'zd3yzr2n', 'date': '2021-08-06', 'times': 14560, 'system': {'platform': 'nzelreqp', 'emulated': False, 'region': 'pr184lqn'}, 'values': {}}
     test_class = Entry(entry_data)
     print(test_class)
