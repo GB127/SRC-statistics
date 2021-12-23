@@ -5,14 +5,13 @@ spacing = {"game" : 25, "system" : 4, "category":25, "time":12}
 
 class table:
     def __init__(self,classe, list_data, level=False):
-        # Idea : Add an argument that is the filter!
         self.data = []
         for one in list_data:
             self.data.append(classe(one))
 
     def __str__(self):
         header = []
-        for attribu, value in self.data[0].__dict__.items():
+        for attribu in self.data[0].str_order:
             try:
                 header.append(f'{attribu[:spacing[attribu]]:^{spacing[attribu]}}')
             except KeyError:
@@ -33,6 +32,7 @@ class table:
         return len(self.data)
 
 class Entry:
+    str_order = ["game", "category"]
     games = {}
     categories = {}
     subcategories = {}
@@ -111,6 +111,23 @@ class Entry:
         subcateg()
 
     def __str__(self):
+        time_str = lambda x : f'{int(x)//3600:>3}:{int(x) % 3600 // 60:02}:{int(x) % 3600 % 60 % 60:02}'
+        stringed = []
+
+        for attribu in self.str_order:
+            try:
+                if "time" not in attribu:
+                    stringed.append(f'{str(self.__dict__[attribu])[:spacing[attribu]]:{spacing[attribu]}}')
+                else:
+                    stringed.append(f'{time_str(self.__dict__[attribu]):{spacing["time"]}}')
+            except KeyError:
+                stringed.append(f'{str(self.__dict__[attribu])[:10]:10}')
+
+        return " | ".join(stringed)
+
+
+
+    def __str2(self):
         time_str = lambda x : f'{int(x)//3600:>3}:{int(x) % 3600 // 60:02}:{int(x) % 3600 % 60 % 60:02}'
 
         stringed = []
