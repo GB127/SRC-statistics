@@ -4,18 +4,10 @@ spacing = {"game" : 25, "system" : 4, "category":25, "time":12}
 
 
 class table:
-    def __init__(self,classe, list_data, level=False, filtreur=False):
-        data = list_data
-        if filtreur:
-            data = []
-            for filter in set([x.__dict__[filtreur] for x in list_data]):
-                filtered = []
-                for one in list_data:
-                    if one.__dict__[filtreur] == filter:
-                        filtered.append(one)
-                data.append(filtered)
+    def __init__(self,classe, list_data, level=False):
+        # Idea : Add an argument that is the filter!
         self.data = []
-        for one in data:
+        for one in list_data:
             self.data.append(classe(one))
 
     def __str__(self):
@@ -70,7 +62,6 @@ class Entry:
                 print(f"Got {self.game}'s category: {rep['data']['name']}")
                 return rep["data"]["name"]
 
-            self.__dict__["system"] = data["system"]["platform"]
             for attribute, repertoire, funct_req in zip(
                     ["game",        "category",         "system"], 
                     [Entry.games,   Entry.categories,   Entry.systems], 
@@ -110,6 +101,7 @@ class Entry:
             del self.values
 
         self.__dict__ = data
+        self.__dict__["system"] = data["system"]["platform"]
 
         if not level:
             del self.level
