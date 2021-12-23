@@ -10,6 +10,7 @@ class table:
             self.data.append(classe(one))
 
     def __str__(self):
+        self.data.sort()
         header = []
         for attribu in self.data[0].str_order:
             try:
@@ -17,7 +18,6 @@ class table:
             except KeyError:
                 header.append(f'{attribu[:10]:^10}')
         header = " | ".join(header)
-
 
         stringed = "\n".join([str(x) for x in self.data])
         return "\n".join([header, stringed])
@@ -33,10 +33,9 @@ class table:
 
 class Entry:
     str_order = ["game", "category"]
-    games = {}
-    categories = {}
-    subcategories = {}
-    systems = {}
+    sorter = "time"
+    systems, games, categories, subcategories = {}, {}, {}, {}
+
     def __init__(self, data, level=None):
         def game_system_category():
             def get_system(ID):
@@ -126,20 +125,9 @@ class Entry:
         return " | ".join(stringed)
 
 
-
-    def __str2(self):
-        time_str = lambda x : f'{int(x)//3600:>3}:{int(x) % 3600 // 60:02}:{int(x) % 3600 % 60 % 60:02}'
-
-        stringed = []
-        for attribu, value in self.__dict__.items():
-            try:
-                if "time" not in attribu:
-                    stringed.append(f'{str(value)[:spacing[attribu]]:{spacing[attribu]}}')
-                else:
-                    stringed.append(f'{time_str(value):{spacing["time"]}}')
-            except KeyError:
-                stringed.append(f'{str(value)[:10]:10}')
-        return " | ".join(stringed)
+    def __lt__(self, other):
+        assert type(self) == type(other), "Can only sort things of same type."
+        return self.__dict__[self.sorter] <= other.__dict__[other.sorter]
 
 if __name__ == "__main__":
     entry_data = {'place': 14 , 'game': 'nd2eeqd0', 'level': None, 'category': 'zd3yzr2n', 'date': '2021-08-06', 'times': 14560, 'system': {'platform': 'nzelreqp', 'emulated': False, 'region': 'pr184lqn'}, 'values': {}}
