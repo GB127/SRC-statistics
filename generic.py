@@ -10,7 +10,6 @@ class table:
             self.data.append(classe(one))
 
     def __str__(self):
-        self.data.sort()
         header = []
         for attribu in self.data[0].str_order:
             try:
@@ -26,7 +25,7 @@ class table:
             foot += entry
 
 
-        return "\n".join([header, stringed, str(foot), str(foot/len(self))])
+        return ("\n" + "-" * len(str(self.data[0])) + "\n").join([header, stringed,str(foot), str(foot/len(self))])
 
 
     # Basic stuffs for making the stuff an iterable and all.
@@ -36,6 +35,26 @@ class table:
         return iter(self.data)        
     def __len__(self):
         return len(self.data)
+
+
+class filtered_table(table):
+    def __init__(self, filter, *datas):
+        self.data = []
+        clés = set()
+        def filtered(data):
+            filtré = {}
+            for run in data:
+                filtré[run.__dict__[filter]] = filtré.get(run.__dict__[filter], []) + [run]
+                clés.add(run.__dict__[filter])
+            return filtré
+
+
+        données_filtrées = list(map(filtered, datas))
+
+
+        for clé in clés:
+            self.data.append(Filtered_Entry([données_filtrées[x][clé] for x in range(len(données_filtrées))]))
+
 
 class Entry:
     str_order = ["game", "category", "times"]
@@ -56,7 +75,7 @@ class Entry:
                 """Fetch the full name of the game with an ID or acronym(str).
                     """
                 rep = requester(f"/games/{ID}")
-                print(f"Got game name : {rep['data']['names']['international']}")
+                print(f"    Got game name : {rep['data']['names']['international']}")
                 return rep["data"]["names"]["international"]
 
             def get_category(ID):
@@ -64,7 +83,7 @@ class Entry:
                     Returns (str): Full name of the category
                     """
                 rep = requester(f'/categories/{ID}')
-                print(f"Got {self.game}'s category: {rep['data']['name']}")
+                print(f"        Got {self.game}'s category: {rep['data']['name']}")
                 return rep["data"]["name"]
 
             for attribute, repertoire, funct_req in zip(
@@ -86,6 +105,7 @@ class Entry:
                         "values", "values", "label"
                     """
                 rep = requester(f'/variables/{variID}')
+                print(f"                Got {self.game}'s variable: {rep['data']['name']}")
                 return rep["data"]
 
             sub = []
@@ -156,12 +176,23 @@ class Entry:
             if isinstance(self.__dict__[attribute], (int, float)) :
                 self.__dict__[attribute] /= other
             elif isinstance(self.__dict__[attribute], set):
-                self.__dict__[attribute] = set([x for x in range(len(self.__dict__[attribute])//other)])
+                self.__dict__[attribute] = f'{round(len(self.__dict__[attribute])/other, 1)} {attribute}' # set([x for x in range(len(self.__dict__[attribute])//other)])
             else:
                 self.__dict__[attribute] = ""
         return self
 
 
+class Filtered_Entry(Entry):
+    def __init__(self, data):
+        def sommation(données):
+            somme = données[0]
+            for run in données[1:]:
+                somme += run
+            return somme
+        for sorte in data:
+            self.__dict__[type(sorte[0]).__name__] = sommation(sorte)
+    def __str__(self):
+        return str(self.PB)
 
 if __name__ == "__main__":
     entry_data = {  'place': 14 ,
