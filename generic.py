@@ -129,6 +129,17 @@ class Entry:
         assert type(self) == type(other), "Can only sort things of same type."
         return self.__dict__[self.sorter] <= other.__dict__[other.sorter]
 
+    def __add__(self, other):
+        assert isinstance(other, self.__class__), "Can only add two entries of the same class."
+        for attribute in self.__dict__:
+            if isinstance(self.__dict__[attribute], int):
+                self.__dict__[attribute] += other.__dict__[attribute]
+            else:
+                self.__dict__[attribute] = ""
+        return self
+
+
+
 if __name__ == "__main__":
     entry_data = {'place': 14 , 'game': 'nd2eeqd0', 'level': None, 'category': 'zd3yzr2n', 'date': '2021-08-06', 'times': 14560, 'system': {'platform': 'nzelreqp', 'emulated': False, 'region': 'pr184lqn'}, 'values': {}}
     test_class = Entry(entry_data)
