@@ -1,6 +1,7 @@
 from api import requester
+from copy import deepcopy
 
-spacing = {"game" : 25, "system" : 4, "category":25, "time":12}
+spacing = {"game" : 30, "system" : 4, "category":20, "time":9}
 
 
 class table:
@@ -12,6 +13,9 @@ class table:
     def __str__(self):
         header = []
         for attribu in self.data[0].str_order:
+            if "time" in attribu:
+                header.append(f'{attribu[:spacing["time"]]:^{spacing["time"]}}')
+                continue
             try:
                 header.append(f'{attribu[:spacing[attribu]]:^{spacing[attribu]}}')
             except KeyError:
@@ -91,6 +95,9 @@ class Entry:
                     [Entry.games,   Entry.categories,   Entry.systems], 
                     [get_game,      get_category,       get_system]
                     ):
+                if not data[attribute]:
+                    self.__dict__[attribute] = "???"
+                    continue
                 try:
                     self.__dict__[attribute] = repertoire[data[attribute]]
                 except KeyError:
@@ -114,7 +121,8 @@ class Entry:
                     if Entry.subcategories[category]:
                         sub.append(Entry.subcategories[category][subcat])
                 except KeyError:
-                    Entry.subcategories[category] = {}
+                    if not Entry.subcategories.get(category):
+                        Entry.subcategories[category] = {}
                     données = get_variable(category)
                     if données["is-subcategory"]:
                         Entry.subcategories[category][subcat] = f"{données['values']['values'][subcat]['label']}"
@@ -124,7 +132,6 @@ class Entry:
             if sub:
                 self.category += f' ({", ".join(sub)})'
             del self.values
-
         self.__dict__ = data
         self.__dict__["system"] = data["system"]["platform"]
 
@@ -159,16 +166,20 @@ class Entry:
 
     def __add__(self, other):
         assert isinstance(other, self.__class__), "Can only add two entries of the same class."
-        for attribute in self.__dict__:
-            if isinstance(self.__dict__[attribute], (int, float)) :
-                self.__dict__[attribute] += other.__dict__[attribute]
-            elif self.__dict__[attribute] == other.__dict__[attribute]:
+        tempo = deepcopy(self)
+        for attribute in tempo.__dict__:
+            if isinstance(tempo.__dict__[attribute], (int, float)) :
+                tempo.__dict__[attribute] += other.__dict__[attribute]
+            elif tempo.__dict__[attribute] == other.__dict__[attribute]:
                 pass
             else:
-                if not isinstance(self.__dict__[attribute], set):
-                        self.__dict__[attribute] = {self.__dict__[attribute]}
-                self.__dict__[attribute].add(other.__dict__[attribute])
-        return self
+                if not isinstance(tempo.__dict__[attribute], set):
+                        tempo.__dict__[attribute] = {tempo.__dict__[attribute]}
+                if isinstance(other.__dict__[attribute], set):
+                    tempo.__dict__[attribute] |= other.__dict__[attribute]
+                else:
+                    tempo.__dict__[attribute].add(other.__dict__[attribute])
+        return tempo
 
     def __truediv__(self, other):
         assert isinstance(other, int), "Can only add two entries of the same class."
@@ -204,14 +215,3 @@ if __name__ == "__main__":
                     'system': {'platform': 'nzelreqp', 'emulated': False, 'region': 'pr184lqn'}, 
                     'values': {}}
     test_class = Entry(entry_data)
-    entry_data2 = {  'place': 14 ,
-                    'game': 'supermetroid',
-                    'level': None, 
-                    'category': 'zd3yzr2n',
-                    'date': '2021-08-06',
-                    'times': 14560, 
-                    'system': {'platform': 'nzelreqp', 'emulated': False, 'region': 'pr184lqn'}, 
-                    'values': {}}
-
-    test_class2 = Entry(entry_data2)
-    print(test_class + test_class2)

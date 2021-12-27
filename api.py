@@ -1,5 +1,4 @@
 import requests, datetime, time
-from tools import run_time
 
 URL = "https://www.speedrun.com/api/v1"
 
@@ -11,8 +10,7 @@ def response_analyser(response):
     elif response.status_code == 502:
         time.sleep(10)
     elif response.status_code == 404:
-        print(response.status_code)
-        raise BaseException(f"Incorrect info, please check again\n")
+        raise BaseException(f"Error {response.status_code} : Incorrect info, please check again\n")
     elif response.status_code == 420 and response.json()['message'] == "The service is too busy to handle your request. Please try again later.":
         print("Server is busy, pausing...")
         time.sleep(60)
@@ -29,27 +27,6 @@ def request_counter():
         print("Slowing down...")
         time.sleep(20)
         amount = 0
-
-
-
-def get_leaderboard(IDs):
-    base_URL = f"/leaderboards/{IDs[0]}/"
-    if IDs[2]:
-        full_level = f'level/{IDs[2]}/{IDs[1]}'
-    else:
-        full_level = f"category/{IDs[1]}"
-
-
-    varistr = ""
-    if IDs[3] != {}:
-        tempo = []
-        for key in IDs[3]:
-            tempo.append(f"var-{key}={IDs[3][key]}")
-        varistr = "&".join(tempo)
-        if varistr != "": varistr = "?" + varistr
-
-    rep = requester(f"{base_URL}{full_level}{varistr}")
-    return rep
 
 
 def get_leaderboards(IDs):
@@ -86,16 +63,6 @@ def get_leaderboards(IDs):
         else: 
             rankings[year] = tempo
     return rankings
-
-
-def get_variable(variID):
-    """ Returns json data about the speedrun variable identified by ID.
-        => Notable infos: 
-            "is-subcategory"
-            "values", "values", "label"
-    """
-    rep = requester(f'/variables/{variID}')
-    return rep["data"]
 
 
 def recursive_requester(link, toupdate):
@@ -142,8 +109,6 @@ def get_level(ID):
 
 if __name__ == "__main__":
     #print(get_game("ootextras"))
-
-
 
     rep = requester(f"/games/{'ootextras'}")
     print(rep["data"]["id"])

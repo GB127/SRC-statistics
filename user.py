@@ -1,6 +1,8 @@
 from api import requester, URL, recursive_requester
-from generic import table
+from generic import table, filtered_table
 from entries import Run, PB
+
+# Note for later : https://saralgyaan.com/posts/f-string-in-python-usage-guide/#Python_f-strings_padding
 
 class user:
     def __init__(self, username):
@@ -33,8 +35,13 @@ class user:
         self.Runs = table(Run,[x for x in Runs if not x["level"]])
         self.PBs = table(PB,[x for x in PBs if not x["run"]["level"]])
 
+
+        self.Games = filtered_table("game", self.Runs, self.PBs)
+
+        self.Systems = filtered_table("system", self.Runs, self.PBs)
+
         print(f"user {self.username} initialized!")
 
 if __name__ == "__main__":
-    test = user("niamek")
-    print(test.PBs)
+    test = user("libre")
+    print(test.Runs)
