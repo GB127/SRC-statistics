@@ -55,7 +55,6 @@ class filtered_table(table):
 
         données_filtrées = list(map(filtered, datas))
 
-
         for clé in clés:
             self.data.append(Filtered_Entry([données_filtrées[x][clé] for x in range(len(données_filtrées))]))
 
@@ -182,14 +181,15 @@ class Entry:
         return tempo
 
     def __truediv__(self, other):
+        tempo = deepcopy(self)
         assert isinstance(other, int), "Can only add two entries of the same class."
-        for attribute in self.__dict__:
-            if isinstance(self.__dict__[attribute], (int, float)) :
-                self.__dict__[attribute] /= other
-            elif isinstance(self.__dict__[attribute], set):
-                self.__dict__[attribute] = f'{round(len(self.__dict__[attribute])/other, 1)} {attribute}' # set([x for x in range(len(self.__dict__[attribute])//other)])
+        for attribute in tempo.__dict__:
+            if isinstance(tempo.__dict__[attribute], (int, float)) :
+                tempo.__dict__[attribute] /= other
+            elif isinstance(tempo.__dict__[attribute], set):
+                tempo.__dict__[attribute] = f'{round(len(tempo.__dict__[attribute])/other, 1)} {attribute}' # set([x for x in range(len(self.__dict__[attribute])//other)])
             else:
-                self.__dict__[attribute] = ""
+                tempo.__dict__[attribute] = ""
         return self
 
 
