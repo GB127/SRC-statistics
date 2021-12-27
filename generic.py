@@ -1,7 +1,7 @@
 from api import requester
 from copy import deepcopy
 
-spacing = {"game" : 30, "system" : 4, "category":20, "time":9}
+spacing = {"game" : 30, "system" : 4, "category":20, "time":9, "%":8}
 
 
 class table:
@@ -15,6 +15,9 @@ class table:
         for attribu in self.data[0].str_order:
             if "time" in attribu:
                 header.append(f'{attribu[:spacing["time"]]:^{spacing["time"]}}')
+                continue
+            elif "%" in attribu:
+                header.append(f'{attribu[:spacing["%"]]:^{spacing["%"]}}')
                 continue
             try:
                 header.append(f'{attribu[:spacing[attribu]]:^{spacing[attribu]}}')
@@ -149,6 +152,8 @@ class Entry:
             try:
                 if isinstance(self.__dict__[attribu], set):
                     stringed.append(f"{f'{len(self.__dict__[attribu])} {attribu}'[:spacing[attribu]]:{spacing[attribu]}}")
+                elif "%" in attribu:
+                    stringed.append(f'{self.__dict__[attribu]:.2%}')
                 elif "time" not in attribu:
                     stringed.append(f'{str(self.__dict__[attribu])[:spacing[attribu]]:{spacing[attribu]}}')
                 else:
@@ -190,7 +195,7 @@ class Entry:
                 tempo.__dict__[attribute] = f'{round(len(tempo.__dict__[attribute])/other, 1)} {attribute}' # set([x for x in range(len(self.__dict__[attribute])//other)])
             else:
                 tempo.__dict__[attribute] = ""
-        return self
+        return tempo
 
 
 class Filtered_Entry(Entry):

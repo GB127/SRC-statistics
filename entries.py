@@ -1,3 +1,4 @@
+from copy import deepcopy
 from generic import Entry, table
 from api import requester
 
@@ -17,6 +18,11 @@ class Leaderboard(table):
         data = get_leaderboard(IDs)
 
         super().__init__(Ranking, data["runs"], level)
+        for rank in self.data:
+            rank.__dict__["WR time"] = self.data[0].time
+            rank.__dict__["delta time"] = rank.time - rank.__dict__["WR time"]
+            rank.__dict__["%"] = rank.time / rank.__dict__["WR time"]
+
 
 
 class Run(Entry):
@@ -32,19 +38,31 @@ class Run(Entry):
 
 
 class Ranking(Run):
-    str_order = ["place", "time"]
+    str_order = ["place", "time","delta time", "%"]
     def __init__(self, data):
         corrected_data = data["run"]
         corrected_data["place"] = data["place"]
         super().__init__(corrected_data)
 
+    def __add__(self, other):
+        tempo = super().__add__(other)
+        tempo.__dict__["%"] = tempo.time / self.__dict__["WR time"]
+        return tempo
+
+    def __truediv__(self, other):
+        tempo = super().__truediv__(other)
+        tempo.__dict__["%"] = tempo.time / tempo.__dict__["WR time"]
+        return tempo
+
 class PB(Ranking):
-    str_order = ["system", "game", "category", "time", "WR time", "place"]
+    str_order = ["system", "game", "category", "time", "WR time","delta time", "%", "place"]
     def __init__(self, data):
         tempo = [data["run"]["game"], data["run"]["category"]]
         super().__init__(data)
         self.leaderboard = Leaderboard(tempo)
         self.__dict__["WR time"] = self.leaderboard[0].time
+        self.__dict__["delta time"] = self.time - self.__dict__["WR time"]
+        self.__dict__["%"] = self.time / self.__dict__["WR time"]
 
 
 if __name__ == "__main__":
@@ -56,6 +74,12 @@ if __name__ == "__main__":
                         'game': 'nd2eeqd0', 
                         'level': None, 
                         'category': 'zd3yzr2n', 
-                        'videos': {'links': [{'uri': 'https://www.twitch.tv/videos/1110770410'}]}, 'comment': 'Blind race. Stellar hitboxes right here.', 'status': {'status': 'verified', 'examiner': '98rpeqj1', 'verify-date': '2021-08-08T19:00:00Z'}, 'players': [{'rel': 'user', 'id': 'x7qz6qq8', 'uri': 'https://www.speedrun.com/api/v1/users/x7qz6qq8'}], 'date': '2021-08-06', 'submitted': '2021-08-07T05:35:16Z', 'times': {'primary': 'PT4H2M40S', 'primary_t': 14560, 'realtime': 'PT4H2M40S', 'realtime_t': 14560, 'realtime_noloads': None, 'realtime_noloads_t': 0, 'ingame': None, 'ingame_t': 0}, 'system': {'platform': 'nzelreqp', 'emulated': False, 'region': 'pr184lqn'}, 'splits': None, 'values': {}, 'links': [{'rel': 'self', 'uri': 'https://www.speedrun.com/api/v1/runs/z073gloy'}, {'rel': 'game', 'uri': 'https://www.speedrun.com/api/v1/games/nd2eeqd0'}, {'rel': 'category', 'uri': 'https://www.speedrun.com/api/v1/categories/zd3yzr2n'}, {'rel': 'platform', 'uri': 'https://www.speedrun.com/api/v1/platforms/nzelreqp'}, {'rel': 'region', 'uri': 'https://www.speedrun.com/api/v1/regions/pr184lqn'}, {'rel': 'examiner', 'uri': 'https://www.speedrun.com/api/v1/users/98rpeqj1'}]}}
+                        'videos': {'links': [{'uri': 'https://www.twitch.tv/videos/1110770410'}]}, 
+                        'comment': 'Blind race. Stellar hitboxes right here.', 
+                        'status': {'status': 'verified', 'examiner': '98rpeqj1', 'verify-date': '2021-08-08T19:00:00Z'}, 
+                        'players': [{'rel': 'user', 'id': 'x7qz6qq8', 'uri': 'https://www.speedrun.com/api/v1/users/x7qz6qq8'}], 
+                        'date': '2021-08-06', 'submitted': '2021-08-07T05:35:16Z',
+                        'times': {'primary': 'PT4H2M40S', 'primary_t': 28418, 'realtime': 'PT4H2M40S', 'realtime_t': 14560, 'realtime_noloads': None, 'realtime_noloads_t': 0, 'ingame': None, 'ingame_t': 0}, 'system': {'platform': 'nzelreqp', 'emulated': False, 'region': 'pr184lqn'}, 'splits': None, 'values': {}, 'links': [{'rel': 'self', 'uri': 'https://www.speedrun.com/api/v1/runs/z073gloy'}, {'rel': 'game', 'uri': 'https://www.speedrun.com/api/v1/games/nd2eeqd0'}, {'rel': 'category', 'uri': 'https://www.speedrun.com/api/v1/categories/zd3yzr2n'}, {'rel': 'platform', 'uri': 'https://www.speedrun.com/api/v1/platforms/nzelreqp'}, {'rel': 'region', 'uri': 'https://www.speedrun.com/api/v1/regions/pr184lqn'}, {'rel': 'examiner', 
+                        'uri': 'https://www.speedrun.com/api/v1/users/98rpeqj1'}]}}
     test_class = PB(entry_data)
-    print(test_class)
+    print(test_class.leaderboard)
