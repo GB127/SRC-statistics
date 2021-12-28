@@ -1,7 +1,7 @@
 from api import requester
 from copy import deepcopy
 
-spacing = {"game" : 30, "system" : 4, "category":20, "time":9, "%":8}
+spacing = {"game" : 30, "system" : 4, "category":20, "time":9, "%":7}
 
 
 class table:
@@ -32,7 +32,7 @@ class table:
             foot += entry
 
 
-        return ("\n" + "-" * len(str(self.data[0])) + "\n").join([header, stringed,str(foot), str(foot/len(self))])
+        return ("\n" + "-" * len(str(self.data[0])) + "\n").join([header, stringed,f'{foot}\n{foot/len(self)}'])
 
 
     # Basic stuffs for making the stuff an iterable and all.

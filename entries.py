@@ -1,4 +1,3 @@
-from copy import deepcopy
 from generic import Entry, table
 from api import requester
 
@@ -46,16 +45,19 @@ class Ranking(Run):
 
     def __add__(self, other):
         tempo = super().__add__(other)
-        tempo.__dict__["%"] = tempo.time / self.__dict__["WR time"]
+        tempo.__dict__["%"] = tempo.time / tempo.__dict__["WR time"]
         return tempo
 
     def __truediv__(self, other):
         tempo = super().__truediv__(other)
         tempo.__dict__["%"] = tempo.time / tempo.__dict__["WR time"]
+        tempo.LB = int(tempo.LB)
+        tempo.place = int(tempo.place)
+
         return tempo
 
 class PB(Ranking):
-    str_order = ["system", "game", "category", "time", "WR time","delta time", "%", "place"]
+    str_order = ["system", "game", "category", "time", "WR time","delta time", "%", "place", "LB", "% LB"]
     def __init__(self, data):
         tempo = [data["run"]["game"], data["run"]["category"]]
         super().__init__(data)
@@ -63,13 +65,26 @@ class PB(Ranking):
         self.__dict__["WR time"] = self.leaderboard[0].time
         self.__dict__["delta time"] = self.time - self.__dict__["WR time"]
         self.__dict__["%"] = self.time / self.__dict__["WR time"]
+        self.__dict__["LB"] = len(self.leaderboard)
+        self.__dict__["% LB"] = (len(self.leaderboard) - self.place) / len(self.leaderboard)
+
+    def __truediv__(self, other):
+        tempo = super().__truediv__(other)
+        tempo.__dict__["% LB"] = (tempo.LB - tempo.place) / tempo.LB
+        return tempo
+
+    def __add__(self, other):
+        tempo = super().__add__(other)
+        tempo.__dict__["% LB"] = (tempo.LB - tempo.place) / tempo.LB
+        return tempo
+
+
 
 
 if __name__ == "__main__":
-    entry_data = {  "place" : 15, 
+    entry_data = {  "place" : 14, 
                     "run": {
                         'id': 'z073gloy' ,
-                        "place": 15, 
                         'weblink': 'https://www.speedrun.com/bhero/run/z073gloy',
                         'game': 'nd2eeqd0', 
                         'level': None, 
@@ -83,3 +98,4 @@ if __name__ == "__main__":
                         'uri': 'https://www.speedrun.com/api/v1/users/98rpeqj1'}]}}
     test_class = PB(entry_data)
     print(test_class.leaderboard)
+    print(test_class)
