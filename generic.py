@@ -58,6 +58,11 @@ class filtered_table(table):
 
         données_filtrées = list(map(filtered, datas))
 
+        for clé in données_filtrées[0].keys():
+            for run_type in données_filtrées[1:]:
+                if not clé in run_type:
+                    run_type[clé] = []
+
         for clé in clés:
             self.data.append(Filtered_Entry([données_filtrées[x][clé] for x in range(len(données_filtrées))]))
 
