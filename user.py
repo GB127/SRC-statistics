@@ -42,4 +42,4 @@ class user:
 
 if __name__ == "__main__":
     test = user("niamek")
-    print(test.Systems)
+    print(test.Saves)

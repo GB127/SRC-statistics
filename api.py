@@ -11,7 +11,6 @@ def SRC_request(link, initial=[]):
     def request_counter():
         global amount
         amount += 1
-        print(amount)
         if amount % 80 == 0:
             print("Slowing down...")
             sleep(20)
