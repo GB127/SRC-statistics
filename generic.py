@@ -136,8 +136,10 @@ class Entry:
                         self.sub_IDs.append((category, subcat))
                 except KeyError:
                     données = get_variable(category)
-                    if données["is-subcategory"]:  # TODO
-                        Entry.subcategories[category][subcat] = f"{données['values']['values'][subcat]['label']}"
+                    if données["is-subcategory"]:
+                        for ID, subcat_name in données["values"]["values"].items():
+                            # {'e8m7em86': {'5lmoxk01': 'EMU'}, 'kn04ewol': False}
+                            Entry.subcategories[category][ID] = f"{subcat_name['label']}"
                         sub.append(Entry.subcategories[category][subcat])
                         self.sub_IDs.append((category, subcat))
                     else:
@@ -164,7 +166,7 @@ class Entry:
                 if isinstance(self.__dict__[attribu], set):
                     stringed.append(f"{f'{len(self.__dict__[attribu])} {attribu}'[:spacing[attribu]]:{spacing[attribu]}}")
                 elif "%" in attribu:
-                    stringed.append(f'{self.__dict__[attribu]:.2%}')
+                    stringed.append(f'{self.__dict__[attribu]:^.2%}')
                 elif "time" not in attribu:
                     stringed.append(f'{str(self.__dict__[attribu])[:spacing[attribu]]:{spacing[attribu]}}')
                 else:

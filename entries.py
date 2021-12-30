@@ -36,7 +36,7 @@ class Run(Entry):
                 continue
 
 class Ranking(Run):
-    str_order = ["place", "time","delta time", "%"]
+    str_order = ["place", "time", "delta time", "% WR"]
     def __init__(self, data):
         corrected_data = data["run"]
         corrected_data["place"] = data["place"]
@@ -44,7 +44,7 @@ class Ranking(Run):
 
     def __add__(self, other):
         tempo = super().__add__(other)
-        tempo.__dict__["%"] = tempo.time / tempo.__dict__["WR time"]
+        tempo.__dict__["% WR"] = tempo.time / tempo.__dict__["WR time"]
         return tempo
 
     def __truediv__(self, other):
@@ -55,14 +55,14 @@ class Ranking(Run):
         return tempo
 
 class PB(Ranking):
-    str_order = ["system", "game", "category", "time", "WR time","delta time", "%", "place", "LB", "% LB"]
+    str_order = ["system", "game", "category", "time", "WR time","delta time", "% WR", "place", "LB", "% LB"]
     def __init__(self, data):
         tempo = [data["run"]["game"], data["run"]["category"]]
         super().__init__(data)
         self.leaderboard = Leaderboard(tempo + [self.sub_IDs])
         self.__dict__["WR time"] = self.leaderboard[0].time
         self.__dict__["delta time"] = self.time - self.__dict__["WR time"]
-        self.__dict__["%"] = self.time / self.__dict__["WR time"]
+        self.__dict__["% WR"] = self.time / self.__dict__["WR time"]
         self.__dict__["LB"] = len(self.leaderboard)
         self.__dict__["% LB"] = (len(self.leaderboard) - self.place) / len(self.leaderboard)
 
@@ -100,10 +100,6 @@ class Save(Entry):
         self.__dict__["Saved time"] = self.__dict__["1st time"] - self.__dict__["PB time"]
         self.__dict__["%"] = (self.__dict__["1st time"] - self.__dict__["PB time"])/self.__dict__["1st time"]
         self.__dict__["#"] = len(self.Runs)
-
-
-    def __str__(self):
-        return super().__str__()
 
     def __add__(self, other):
         tempo = super().__add__(other)

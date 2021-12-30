@@ -42,6 +42,6 @@ class user:
         print(f"user {self.username} initialized!")
 
 if __name__ == "__main__":
-    # test = user("rudestjade")
     test = user("niamek")
-    print(test.Saves)
+    # test = user("niamek")
+    print(test.Systems)

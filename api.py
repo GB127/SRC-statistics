@@ -23,7 +23,7 @@ def request_counter():
     global amount
     amount += 1
 
-    if amount == 100:
+    if amount == 80:
         print("Slowing down...")
         time.sleep(20)
         amount = 0
