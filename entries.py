@@ -1,5 +1,5 @@
 from generic import Entry, Filtered_Entry, table
-from api import requester
+from api import SRC_request, URL
 
 class Leaderboard(table):
     def __init__(self, IDs, level=False):
@@ -14,7 +14,8 @@ class Leaderboard(table):
             if len(IDs) == 3:
                 subcategories = "?" + "&var".join([f'var-{variable}={selection}' for variable, selection in IDs[2]])
             category = f"category/{IDs[1]}"
-            rep = requester(f"/leaderboards/{IDs[0]}/{category}{subcategories}")
+            rep = SRC_request(f"{URL}/leaderboards/{IDs[0]}/{category}{subcategories}")
+            print(f"                Got a leaderboard...")
             return rep["data"]
         data = get_leaderboard(IDs)
 

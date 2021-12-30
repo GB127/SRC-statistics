@@ -1,4 +1,4 @@
-from api import requester
+from api import SRC_request, URL
 from copy import deepcopy
 
 spacing = {"game" : 30, "system" : 4, "category":20, "time":9, "%":7, "#":3}
@@ -79,14 +79,14 @@ class Entry:
                 """Return the system.
                     Returns: (str) full name of the system.
                     """
-                rep = requester(f"/platforms/{ID}")
+                rep = SRC_request(f"{URL}/platforms/{ID}")
                 print(f"Got system : {rep['data']['name']}")
                 return rep["data"]["name"]
 
             def get_game(ID):
                 """Fetch the full name of the game with an ID or acronym(str).
                     """
-                rep = requester(f"/games/{ID}")
+                rep = SRC_request(f"{URL}/games/{ID}")
                 print(f"    Got game name : {rep['data']['names']['international']}")
                 return rep["data"]["names"]["international"]
 
@@ -94,7 +94,7 @@ class Entry:
                 """Fetch the full name of the category with an ID.
                     Returns (str): Full name of the category
                     """
-                rep = requester(f'/categories/{ID}')
+                rep = SRC_request(f'{URL}/categories/{ID}')
                 print(f"        Got {self.game}'s category: {rep['data']['name']}")
                 return rep["data"]["name"]
 
@@ -119,7 +119,7 @@ class Entry:
                         "is-subcategory"
                         "values", "values", "label"
                     """
-                rep = requester(f'/variables/{variID}')
+                rep = SRC_request(f'{URL}/variables/{variID}')
                 print(f"                Got {self.game}'s variable: {rep['data']['name']}")
                 return rep["data"]
 
@@ -138,7 +138,6 @@ class Entry:
                     données = get_variable(category)
                     if données["is-subcategory"]:
                         for ID, subcat_name in données["values"]["values"].items():
-                            # {'e8m7em86': {'5lmoxk01': 'EMU'}, 'kn04ewol': False}
                             Entry.subcategories[category][ID] = f"{subcat_name['label']}"
                         sub.append(Entry.subcategories[category][subcat])
                         self.sub_IDs.append((category, subcat))

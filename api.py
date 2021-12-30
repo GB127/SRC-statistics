@@ -1,32 +1,50 @@
-import requests, datetime, time
+import requests, datetime
+from copy import deepcopy
+from time import sleep
 
 URL = "https://www.speedrun.com/api/v1"
 
 amount = 0
 
-def response_analyser(response):
-    if response.status_code == 200:
-        return True
-    elif response.status_code == 502:
-        time.sleep(10)
-    elif response.status_code == 404:
-        raise BaseException(f"Error {response.status_code} : Incorrect info, please check again\n")
-    elif response.status_code == 420 and response.json()['message'] == "The service is too busy to handle your request. Please try again later.":
-        print("Server is busy, pausing...")
-        time.sleep(60)
-    else:
-        raise BaseException(f"Please report this, {response.status_code}\n{response.json()['message']}")
-    return False
+def SRC_request(link, initial=[]):
+    toupdate = deepcopy(initial)
+    def request_counter():
+        global amount
+        amount += 1
+        print(amount)
+        if amount % 80 == 0:
+            print("Slowing down...")
+            sleep(20)
+
+    def valid_link(response):
+        if response.status_code == 200:
+            return True
+        elif response.status_code == 420:
+            print(response.json()["message"])  # FIXME
+            sleep(60)
+        elif response.status_code == 404:
+            raise BaseException(f"Error {response.status_code} : Incorrect info, please check again\nlink: {URL}{link}")
+        else:
+            raise BaseException(f"Please report the following informations on github => https://github.com/GB127/SRC-statistics/issues\nLink: {URL}{link}\nResponse code: {response.status_code}\nResponse message: {response.json()['message']}")
+
+    request_counter()
+    rep = requests.get(f"{link}")
+    while not valid_link(rep):
+        request_counter()
+        rep = requests.get(f"{link}")
+    rep = rep.json()
+    if isinstance(rep["data"], list):
+        toupdate += rep["data"]
+    try:
+        if rep["pagination"]["size"] == rep["pagination"]["max"]:
+            SRC_request(rep["pagination"]["links"][-1]["uri"], toupdate)
+        if rep["pagination"]["size"] < rep["pagination"]["max"]:
+            pass
+    except KeyError:
+        return rep
+    return toupdate
 
 
-def request_counter():
-    global amount
-    amount += 1
-
-    if amount == 80:
-        print("Slowing down...")
-        time.sleep(20)
-        amount = 0
 
 
 def get_leaderboards(IDs):
@@ -65,41 +83,6 @@ def get_leaderboards(IDs):
     return rankings
 
 
-def recursive_requester(link, toupdate):
-    """Recursive requester with the provided link.
-
-        Args:
-            link (string): Complete link of the request to do. 
-            toupdate (list): list to update with all the recursive requests.
-                Should be an empty list as the goal of this function is to "return" a list.
-
-        Returns nothing, but modify the "toupdate" list that can then be used elsewhere.
-        """
-    while True:
-        rep = requests.get(link)
-        if response_analyser(rep):
-            rep = rep.json()
-            break
-
-    for run in rep["data"]:
-        toupdate.append(run)
-    if rep["pagination"]["size"] == rep["pagination"]["max"]:
-        recursive_requester(rep["pagination"]["links"][-1]["uri"], toupdate)
-    if rep["pagination"]["size"] < rep["pagination"]["max"]:
-        pass
-
-
-def requester(link):
-    """Generic requester that request data with the link provided.
-        Raises: BaseException: Raise error if bad data is given in the link.
-        Returns : data in a json form
-        """
-    while True:
-        rep = requests.get(f"{URL}{link}")
-        request_counter()
-        if response_analyser(rep):
-            return rep.json()
-
 def get_level(ID):
     """Fetch the full name of the level with an ID.
         """
@@ -110,5 +93,6 @@ def get_level(ID):
 if __name__ == "__main__":
     #print(get_game("ootextras"))
 
-    rep = requester(f"/games/{'ootextras'}")
-    print(rep["data"]["id"])
+    rep = SRC_request(f"{URL}/games/{'ootextras'}")
+
+    rep_recu = SRC_request("https://www.speedrun.com/api/v1/runs?user=x7qz6qq8&max=200")
