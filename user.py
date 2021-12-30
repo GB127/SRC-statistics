@@ -1,6 +1,6 @@
 from api import requester, URL, recursive_requester
 from generic import table, filtered_table
-from entries import Run, PB
+from entries import Run, PB, Saves
 
 class user:
     def __init__(self, username):
@@ -35,11 +35,13 @@ class user:
 
 
         self.Games = filtered_table("game", self.Runs, self.PBs)
-
         self.Systems = filtered_table("system", self.Runs, self.PBs)
 
+
+        self.Saves = Saves(self.PBs, self.Runs)
         print(f"user {self.username} initialized!")
 
 if __name__ == "__main__":
-    test = user("V0oid")
-    print(test.Systems)
+    # test = user("rudestjade")
+    test = user("niamek")
+    print(test.Saves)

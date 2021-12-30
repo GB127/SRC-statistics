@@ -1,4 +1,4 @@
-from generic import Entry, table
+from generic import Entry, Filtered_Entry, table
 from api import requester
 
 class Leaderboard(table):
@@ -24,8 +24,6 @@ class Leaderboard(table):
             rank.__dict__["delta time"] = rank.time - rank.__dict__["WR time"]
             rank.__dict__["%"] = rank.time / rank.__dict__["WR time"]
 
-
-
 class Run(Entry):
     str_order = ["system", "game", "category", "time"]
     def __init__(self, data):
@@ -36,7 +34,6 @@ class Run(Entry):
                 del self.__dict__[unwanted]
             except KeyError:
                 continue
-
 
 class Ranking(Run):
     str_order = ["place", "time","delta time", "%"]
@@ -80,7 +77,42 @@ class PB(Ranking):
         tempo.__dict__["% LB"] = (tempo.LB - tempo.place) / tempo.LB
         return tempo
 
+class Saves(table):
+    def __init__(self, PBs, Runs):
+        self.data = []
+        for pb in PBs:
+            same_categ = []
+            for run in Runs:
+                if run.game == pb.game and run.category == pb.category:
+                    same_categ.append(run)
+            if len(same_categ) > 1:
+                self.data.append(Save(pb, same_categ))
 
+class Save(Entry):
+    str_order = ["game", "category","#", "1st time", "PB time", "Saved time", "%"]
+    def __init__(self, PB, Runs):
+        self.game = PB.game
+        self.category = PB.category
+        self.PB = PB
+        self.Runs = Runs
+        self.__dict__["PB time"] = PB.time
+        self.__dict__["1st time"] = max([x.time for x in self.Runs])
+        self.__dict__["Saved time"] = self.__dict__["1st time"] - self.__dict__["PB time"]
+        self.__dict__["%"] = (self.__dict__["1st time"] - self.__dict__["PB time"])/self.__dict__["1st time"]
+        self.__dict__["#"] = len(self.Runs)
+
+
+    def __str__(self):
+        return super().__str__()
+
+    def __add__(self, other):
+        tempo = super().__add__(other)
+        tempo.__dict__["%"] = (tempo.__dict__["1st time"] - tempo.__dict__["PB time"])/tempo.__dict__["1st time"]
+        return tempo
+    def __truediv__(self, other):
+        tempo = super().__truediv__(other)
+        tempo.__dict__["%"] = (tempo.__dict__["1st time"] - tempo.__dict__["PB time"])/tempo.__dict__["1st time"]
+        return tempo
 
 
 if __name__ == "__main__":

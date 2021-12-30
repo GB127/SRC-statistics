@@ -1,7 +1,7 @@
 from api import requester
 from copy import deepcopy
 
-spacing = {"game" : 30, "system" : 4, "category":20, "time":9, "%":7}
+spacing = {"game" : 30, "system" : 4, "category":20, "time":9, "%":7, "#":3}
 
 
 class table:
@@ -50,6 +50,7 @@ class filtered_table(table):
         clés = set()
         def filtered(data):
             filtré = {}
+            # TODO: See if I can add an empty list here instead of a loop outside of the filter.
             for run in data:
                 filtré[run.__dict__[filter]] = filtré.get(run.__dict__[filter], []) + [run]
                 clés.add(run.__dict__[filter])
@@ -103,7 +104,6 @@ class Entry:
                     [get_game,      get_category,       get_system]
                     ):
                 if not data[attribute]:
-                    print(attribute, "wtfff")
                     self.__dict__[attribute] = "???"
                     continue
                 try:
