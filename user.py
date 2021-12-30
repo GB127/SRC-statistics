@@ -2,8 +2,6 @@ from api import requester, URL, recursive_requester
 from generic import table, filtered_table
 from entries import Run, PB
 
-# Note for later : https://saralgyaan.com/posts/f-string-in-python-usage-guide/#Python_f-strings_padding
-
 class user:
     def __init__(self, username):
         """ Class of a Speedrun.com user. The class contains informations such as username, runs, etc.
@@ -43,5 +41,5 @@ class user:
         print(f"user {self.username} initialized!")
 
 if __name__ == "__main__":
-    test = user("niamek")
-    print(test.PBs)
+    test = user("V0oid")
+    print(test.Systems)

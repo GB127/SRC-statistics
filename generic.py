@@ -103,6 +103,7 @@ class Entry:
                     [get_game,      get_category,       get_system]
                     ):
                 if not data[attribute]:
+                    print(attribute, "wtfff")
                     self.__dict__[attribute] = "???"
                     continue
                 try:
@@ -123,17 +124,22 @@ class Entry:
                 return rep["data"]
 
             sub = []
+            self.sub_IDs = []
             for category, subcat in self.values.items():
+                if not category in Entry.subcategories:
+                    Entry.subcategories[category] = {}
+                elif not Entry.subcategories[category]:
+                    continue
                 try:
-                    if Entry.subcategories[category]:
+                    if Entry.subcategories[category][subcat]:
                         sub.append(Entry.subcategories[category][subcat])
+                        self.sub_IDs.append((category, subcat))
                 except KeyError:
-                    if not Entry.subcategories.get(category):
-                        Entry.subcategories[category] = {}
                     données = get_variable(category)
-                    if données["is-subcategory"]:
+                    if données["is-subcategory"]:  # TODO
                         Entry.subcategories[category][subcat] = f"{données['values']['values'][subcat]['label']}"
                         sub.append(Entry.subcategories[category][subcat])
+                        self.sub_IDs.append((category, subcat))
                     else:
                         Entry.subcategories[category] = False
             if sub:
@@ -176,18 +182,21 @@ class Entry:
     def __add__(self, other):
         assert isinstance(other, self.__class__), "Can only add two entries of the same class."
         tempo = deepcopy(self)
-        for attribute in tempo.__dict__:
-            if isinstance(tempo.__dict__[attribute], (int, float)) :
-                tempo.__dict__[attribute] += other.__dict__[attribute]
-            elif tempo.__dict__[attribute] == other.__dict__[attribute]:
-                pass
-            else:
-                if not isinstance(tempo.__dict__[attribute], set):
-                        tempo.__dict__[attribute] = {tempo.__dict__[attribute]}
-                if isinstance(other.__dict__[attribute], set):
-                    tempo.__dict__[attribute] |= other.__dict__[attribute]
+        for attribute in self.__dict__:
+            try:
+                if isinstance(tempo.__dict__[attribute], (int, float)) :
+                    tempo.__dict__[attribute] += other.__dict__[attribute]
+                elif tempo.__dict__[attribute] == other.__dict__[attribute]:
+                    pass
                 else:
-                    tempo.__dict__[attribute].add(other.__dict__[attribute])
+                    if not isinstance(tempo.__dict__[attribute], set):
+                            tempo.__dict__[attribute] = {tempo.__dict__[attribute]}
+                    if isinstance(other.__dict__[attribute], set):
+                        tempo.__dict__[attribute] |= other.__dict__[attribute]
+                    else:
+                        tempo.__dict__[attribute].add(other.__dict__[attribute])
+            except TypeError:
+                del tempo.__dict__[attribute]
         return tempo
 
     def __truediv__(self, other):
@@ -210,8 +219,12 @@ class Filtered_Entry(Entry):
             for run in données[1:]:
                 somme += run
             return somme
-        for sorte in data:
-            self.__dict__[type(sorte[0]).__name__] = sommation(sorte)
+
+        for id, sorte in enumerate(data):
+            try:
+                self.__dict__[type(sorte[0]).__name__] = sommation(sorte)
+            except IndexError:
+                self.__dict__[["Run", "PB"][id]] = ""
     def __str__(self):
         return str(self.PB)
 
