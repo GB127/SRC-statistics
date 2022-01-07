@@ -40,12 +40,21 @@ class User:
         self.Saves = Saves(self.PBs, self.Runs)
         print(f"user {self.username} initialized!")
 
+    def __str__(self):
+        string = f'{self.username}\n'
+        for tableau in self.__dict__:
+            if callable(self.__dict__[tableau]):
+                string += f'{len(self.__dict__[tableau])} {tableau}\n'
+        return string
+
     def __call__(self):
-        print("allo")
+        print(self)
+        command = input("Which table do you want to open? ")
+        [tableau for tableau in self.__dict__.values() if callable(tableau)][int(command)]()
 
 if __name__ == "__main__":
-    # test = User("rudestjade")  # Has 1 game ran only.
-    # test = User("libre")  # Has not a lot of runs.
+    # test = User("rudestjade")  # Has ran 1 game only.
+    test = User("libre")  # Has not a lot of runs.
     # test = User("niamek")
-
-    # test()
+    print(test.Games)
+    #test()

@@ -27,12 +27,12 @@ class table:
 
         stringed = "\n".join([str(x) for x in self.data])
 
-        foot = self.data[0]
-        for entry in self.data[1:]:
-            foot += entry
+        line = "\n" + "-" * len(str(self.data[0])) + "\n"
+        if str(self.data[0]).find("\n") != -1:
+            line = "\n" + "-" * str(self.data[0]).find("\n") + "\n"
 
-        return ("\n" + "-" * len(str(self.data[0])) + "\n").join([header, stringed,f'{foot}\n{foot/len(self)}'])
-
+        foot = sum(self.data)
+        return (line).join([header, stringed,f'{foot}\n{foot/len(self)}'])
 
     # Basic stuffs for making the stuff an iterable and all.
     def __getitem__(self, argument):
@@ -173,71 +173,21 @@ class Entry:
 
         return " | ".join(stringed)
 
-
     def __lt__(self, other):
         assert type(self) == type(other), "Can only sort things of same type."
         return self.__dict__[self.sorter] <= other.__dict__[other.sorter]
 
-    def __add__(self, other):
-        assert isinstance(other, self.__class__), "Can only add two entries of the same class."
-        tempo = deepcopy(self)
-        for attribute in self.__dict__:
-            try:
-                if isinstance(tempo.__dict__[attribute], (int, float)) :
-                    tempo.__dict__[attribute] += other.__dict__[attribute]
-                elif tempo.__dict__[attribute] == other.__dict__[attribute]:
-                    pass
-                else:
-                    if not isinstance(tempo.__dict__[attribute], set):
-                            tempo.__dict__[attribute] = {tempo.__dict__[attribute]}
-                    if isinstance(other.__dict__[attribute], set):
-                        tempo.__dict__[attribute] |= other.__dict__[attribute]
-                    else:
-                        tempo.__dict__[attribute].add(other.__dict__[attribute])
-            except TypeError:
-                del tempo.__dict__[attribute]
-        return tempo
-
-    def __truediv__(self, other):
-        tempo = deepcopy(self)
-        assert isinstance(other, int), "Can only divide by and int"
-        for attribute in tempo.__dict__:
-            if isinstance(tempo.__dict__[attribute], (int, float)) :
-                tempo.__dict__[attribute] /= other
-            elif isinstance(tempo.__dict__[attribute], set):
-                tempo.__dict__[attribute] = f'{round(len(tempo.__dict__[attribute])/other, 1)} {attribute}' # set([x for x in range(len(self.__dict__[attribute])//other)])
-            else:
-                tempo.__dict__[attribute] = ""
-        return tempo
-
 
 class Filtered_Entry(Entry):
     def __init__(self, filter, data):
-        def sommation(données):
-            somme = données[0]
-            for run in données[1:]:
-                somme += run
-            return somme
-
         self.filter = data[0][0].__dict__[filter]
-
 
         for id, sorte in enumerate(data):
             try:
-                self.__dict__[type(sorte[0]).__name__] = sommation(sorte)
+                self.__dict__[type(sorte[0]).__name__] = sum(sorte)
                 self.__dict__[f'{type(sorte[0]).__name__} #'] = len(sorte)
             except IndexError:
                 self.__dict__[["Run", "PB"][id]] = ""
-    def __str__(self):
-        total =  " | ".join([str(self.__dict__["Run #"]), str(self.Run)[65:], str(self.__dict__["PB #"]), str(self.PB)[65:]])
-        moyenne =  " | ".join([ "  ",
-                                str(self.Run / self.__dict__["Run #"])[65:],
-                                " ",
-                                str(self.PB / self.__dict__["PB #"])[65:]])
-        return f'{self.filter[:30]:30}| {total}\n{" " * 30}| {moyenne}'
-            
-    
-
 
 if __name__ == "__main__":
     entry_data = {  'place': 14 ,
