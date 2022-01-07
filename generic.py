@@ -31,7 +31,6 @@ class table:
         for entry in self.data[1:]:
             foot += entry
 
-
         return ("\n" + "-" * len(str(self.data[0])) + "\n").join([header, stringed,f'{foot}\n{foot/len(self)}'])
 
 
@@ -65,7 +64,7 @@ class filtered_table(table):
                     run_type[clé] = []
 
         for clé in clés:
-            self.data.append(Filtered_Entry([données_filtrées[x][clé] for x in range(len(données_filtrées))]))
+            self.data.append(Filtered_Entry(filter, [données_filtrées[x][clé] for x in range(len(données_filtrées))]))
 
 
 class Entry:
@@ -159,13 +158,12 @@ class Entry:
     def __str__(self):
         time_str = lambda x : f'{int(x)//3600:>3}:{int(x) % 3600 // 60:02}:{int(x) % 3600 % 60 % 60:02}'
         stringed = []
-
         for attribu in self.str_order:
             try:
                 if isinstance(self.__dict__[attribu], set):
                     stringed.append(f"{f'{len(self.__dict__[attribu])} {attribu}'[:spacing[attribu]]:{spacing[attribu]}}")
                 elif "%" in attribu:
-                    stringed.append(f'{self.__dict__[attribu]:^.2%}')
+                    stringed.append(f'{self.__dict__[attribu]:>7.2%}')
                 elif "time" not in attribu:
                     stringed.append(f'{str(self.__dict__[attribu])[:spacing[attribu]]:{spacing[attribu]}}')
                 else:
@@ -202,7 +200,7 @@ class Entry:
 
     def __truediv__(self, other):
         tempo = deepcopy(self)
-        assert isinstance(other, int), "Can only add two entries of the same class."
+        assert isinstance(other, int), "Can only divide by and int"
         for attribute in tempo.__dict__:
             if isinstance(tempo.__dict__[attribute], (int, float)) :
                 tempo.__dict__[attribute] /= other
@@ -214,20 +212,32 @@ class Entry:
 
 
 class Filtered_Entry(Entry):
-    def __init__(self, data):
+    def __init__(self, filter, data):
         def sommation(données):
             somme = données[0]
             for run in données[1:]:
                 somme += run
             return somme
 
+        self.filter = data[0][0].__dict__[filter]
+
+
         for id, sorte in enumerate(data):
             try:
                 self.__dict__[type(sorte[0]).__name__] = sommation(sorte)
+                self.__dict__[f'{type(sorte[0]).__name__} #'] = len(sorte)
             except IndexError:
                 self.__dict__[["Run", "PB"][id]] = ""
     def __str__(self):
-        return str(self.PB)
+        total =  " | ".join([str(self.__dict__["Run #"]), str(self.Run)[65:], str(self.__dict__["PB #"]), str(self.PB)[65:]])
+        moyenne =  " | ".join([ "  ",
+                                str(self.Run / self.__dict__["Run #"])[65:],
+                                " ",
+                                str(self.PB / self.__dict__["PB #"])[65:]])
+        return f'{self.filter[:30]:30}| {total}\n{" " * 30}| {moyenne}'
+            
+    
+
 
 if __name__ == "__main__":
     entry_data = {  'place': 14 ,

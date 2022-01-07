@@ -71,6 +71,7 @@ class PB(Ranking):
         tempo = super().__truediv__(other)
         tempo.__dict__["LB"] = int(tempo.__dict__["LB"])
         tempo.__dict__["% LB"] = (tempo.LB - tempo.place) / tempo.LB
+        self.__dict__["% WR"] = self.time / self.__dict__["WR time"]
         return tempo
 
     def __add__(self, other):

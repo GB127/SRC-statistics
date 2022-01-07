@@ -2,7 +2,7 @@ from api import URL, SRC_request
 from generic import table, filtered_table
 from entries import Run, PB, Saves
 
-class user:
+class User:
     def __init__(self, username):
         """ Class of a Speedrun.com user. The class contains informations such as username, runs, etc.
                 username (str) : Username on speedrun.com"""
@@ -40,6 +40,12 @@ class user:
         self.Saves = Saves(self.PBs, self.Runs)
         print(f"user {self.username} initialized!")
 
+    def __call__(self):
+        print("allo")
+
 if __name__ == "__main__":
-    test = user("niamek")
-    print(test.Saves)
+    # test = User("rudestjade")  # Has 1 game ran only.
+    # test = User("libre")  # Has not a lot of runs.
+    # test = User("niamek")
+
+    # test()
