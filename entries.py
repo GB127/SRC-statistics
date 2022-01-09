@@ -1,4 +1,4 @@
-from generic import Entry, Filtered_Entry, table
+from generic import Entry, table
 from api import SRC_request, URL
 from math import ceil
 
@@ -22,9 +22,9 @@ class Leaderboard(table):
 
         super().__init__(Ranking, data["runs"], level)
         for rank in self.data:
-            rank.__dict__["WR time"] = self.data[0].time
-            rank.__dict__["delta time"] = rank.time - rank.__dict__["WR time"]
-            rank.__dict__["%"] = rank.time / rank.__dict__["WR time"]
+            rank["WR time"] = self.data[0].time
+            rank["delta time"] = rank.time - rank["WR time"]
+            rank["%"] = rank.time / rank["WR time"]
 
 class Run(Entry):
     str_order = ["system", "game", "category", "time"]
