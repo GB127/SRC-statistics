@@ -14,10 +14,10 @@ class table:
         def médiane():
             médi = deepcopy(self.data[0])
             for attribute in self.data[0].__dict__:
-                try: all_data = sorted([x.__dict__[attribute] for x in self.data])
+                try: all_data = sorted([x[attribute] for x in self.data])
                 except TypeError: continue
-                médi.__dict__[attribute] = all_data[len(all_data) // 2]
-                if isinstance(médi.__dict__[attribute], str): médi.__dict__[attribute] = ""
+                médi[attribute] = all_data[len(all_data) // 2]
+                if isinstance(médi[attribute], str): médi[attribute] = ""
             return médi
 
 
@@ -64,8 +64,8 @@ class filtered_table(table):
             filtré = {}
             # TODO: See if I can add an empty list here instead of a loop outside of the filter.
             for run in data:
-                filtré[run.__dict__[filter]] = filtré.get(run.__dict__[filter], []) + [run]
-                clés.add(run.__dict__[filter])
+                filtré[run[filter]] = filtré.get(run[filter], []) + [run]
+                clés.add(run[filter])
             return filtré
 
 
@@ -116,13 +116,13 @@ class Entry:
                     [get_game,      get_category,       get_system]
                     ):
                 if not data[attribute]:
-                    self.__dict__[attribute] = "???"
+                    self[attribute] = "???"
                     continue
                 try:
-                    self.__dict__[attribute] = repertoire[data[attribute]]
+                    self[attribute] = repertoire[data[attribute]]
                 except KeyError:
                     repertoire[data[attribute]] = funct_req(data[attribute])
-                    self.__dict__[attribute] = repertoire[data[attribute]]
+                    self[attribute] = repertoire[data[attribute]]
 
         def subcateg():
             def get_variable(variID):
@@ -159,7 +159,7 @@ class Entry:
                 self.category += f' ({", ".join(sub)})'
             del self.values
         self.__dict__ = data
-        self.__dict__["system"] = data["system"]["platform"]
+        self["system"] = data["system"]["platform"]
 
         if not level:
             del self.level
@@ -173,31 +173,36 @@ class Entry:
         stringed = []
         for attribu in self.str_order:
             try:
-                if isinstance(self.__dict__[attribu], set):
-                    stringed.append(f"{f'{len(self.__dict__[attribu])} {attribu}'[:spacing[attribu]]:{spacing[attribu]}}")
+                if isinstance(self[attribu], set):
+                    stringed.append(f"{f'{len(self[attribu])} {attribu}'[:spacing[attribu]]:{spacing[attribu]}}")
                 elif "%" in attribu:
-                    stringed.append(f'{self.__dict__[attribu]:>7.2%}')
+                    stringed.append(f'{self[attribu]:>7.2%}')
                 elif "time" not in attribu:
-                    stringed.append(f'{str(self.__dict__[attribu])[:spacing[attribu]]:{spacing[attribu]}}')
+                    stringed.append(f'{str(self[attribu])[:spacing[attribu]]:{spacing[attribu]}}')
                 else:
-                    stringed.append(f'{time_str(self.__dict__[attribu]):{spacing["time"]}}')
+                    stringed.append(f'{time_str(self[attribu]):{spacing["time"]}}')
             except KeyError:
-                stringed.append(f'{str(self.__dict__[attribu])[:10]:10}')
+                stringed.append(f'{str(self[attribu])[:10]:10}')
 
         return " | ".join(stringed)
 
     def __lt__(self, other):
         assert type(self) == type(other), "Can only sort things of same type."
-        return self.__dict__[self.sorter] <= other.__dict__[other.sorter]
+        return self[self.sorter] <= other[other.sorter]
 
+    def __getitem__(self, key):
+        return self.__dict__[key]
+
+    def __setitem__(self, key, value):
+        self.__dict__[key] = value
 
     def __truediv__(self, other):
         copie = deepcopy(self)
         for attribute in self.__dict__:
-            if isinstance(self.__dict__[attribute], (int, float)):
-                copie.__dict__[attribute] /= other
-            elif isinstance(self.__dict__[attribute], set):
-                copie.__dict__[attribute] = len(copie.__dict__[attribute]) / other
+            if isinstance(self[attribute], (int, float)):
+                copie[attribute] /= other
+            elif isinstance(self[attribute], set):
+                copie[attribute] = len(copie[attribute]) / other
         else:pass
         return copie
 
@@ -208,15 +213,15 @@ class Entry:
             return copie
         else:
             for attribute in self.__dict__:
-                if isinstance(copie.__dict__[attribute], (int, float)):
-                    copie.__dict__[attribute] += other.__dict__[attribute]
-                elif isinstance(copie.__dict__[attribute], str) and copie.__dict__[attribute] != other.__dict__[attribute]:
-                    copie.__dict__[attribute] = {copie.__dict__[attribute]}
-                if isinstance(copie.__dict__[attribute], set):
-                    if isinstance(other.__dict__[attribute], set):
-                        copie.__dict__[attribute] |= other.__dict__[attribute]
+                if isinstance(copie[attribute], (int, float)):
+                    copie[attribute] += other[attribute]
+                elif isinstance(copie[attribute], str) and copie[attribute] != other[attribute]:
+                    copie[attribute] = {copie[attribute]}
+                if isinstance(copie[attribute], set):
+                    if isinstance(other[attribute], set):
+                        copie[attribute] |= other[attribute]
                     else:
-                        copie.__dict__[attribute] |= {other.__dict__[attribute]}
+                        copie[attribute] |= {other[attribute]}
             return copie
 
     def __radd__(self,other):
@@ -227,24 +232,24 @@ class Filtered_Entry(Entry):
     sorter = "filter"
     def __init__(self, filter, data):
         self.label = filter
-        self.filter = deepcopy(data[0][0].__dict__[filter])
+        self.filter = deepcopy(data[0][0][filter])
         for id, sorte in enumerate(data):
             try:
-                self.__dict__[type(sorte[0]).__name__] = sum(deepcopy(sorte))
-                self.__dict__[f'{type(sorte[0]).__name__} #'] = len(deepcopy(sorte))
+                self[type(sorte[0]).__name__] = sum(deepcopy(sorte))
+                self[f'{type(sorte[0]).__name__} #'] = len(deepcopy(sorte))
             except IndexError:
-                self.__dict__[["Run", "PB"][id]] = "" 
+                self[["Run", "PB"][id]] = "" 
 
 
     def __str__(self):
-        total =  " | ".join([f'{self.__dict__["Run #"]:3}', 
+        total =  " | ".join([f'{self["Run #"]:3}', 
                                 str(self.Run)[63:], 
-                                f'{self.__dict__["PB #"]:3}', 
+                                f'{self["PB #"]:3}', 
                                 str(self.PB)[63:]])
         moyenne =  " | ".join([ "  ",
-                                str(self.Run / self.__dict__["Run #"])[63:],
+                                str(self.Run / self["Run #"])[63:],
                                 "   ",
-                                str(self.PB / self.__dict__["PB #"])[63:]])
+                                str(self.PB / self["PB #"])[63:]])
 
         filtre = self.filter
         if isinstance(self.filter, set):
@@ -258,17 +263,17 @@ class Filtered_Entry(Entry):
         copie = deepcopy(self)
         for clé in self.__dict__:
             if clé in ["label", "str_order"]: continue
-            try:copie.__dict__[clé] += other.__dict__[clé]
-            except TypeError: copie.__dict__[clé] |= {other.__dict__[clé]}
-        copie.filter = copie.__dict__["Run"].__dict__[self.label]
+            try:copie[clé] += other[clé]
+            except TypeError: copie[clé] |= {other[clé]}
+        copie.filter = copie["Run"][self.label]
         return copie
 
     def __truediv__(self, other):
         copie = deepcopy(self)
         for clé in self.__dict__:
             if clé in ["label", "str_order"]: continue
-            try: copie.__dict__[clé] /= other
-            except TypeError: copie.__dict__[clé] = f'{len(copie.__dict__[clé]) / other} {clé}'
+            try: copie[clé] /= other
+            except TypeError: copie[clé] = f'{len(copie[clé]) / other} {clé}'
 
         return copie
 
@@ -282,3 +287,5 @@ if __name__ == "__main__":
                     'system': {'platform': 'nzelreqp', 'emulated': False, 'region': 'pr184lqn'}, 
                     'values': {}}
     test_class = Entry(entry_data)
+
+    print(test_class["game"])

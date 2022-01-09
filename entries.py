@@ -30,7 +30,7 @@ class Run(Entry):
     str_order = ["system", "game", "category", "time"]
     def __init__(self, data):
         super().__init__(data)
-        self.__dict__["time"] = data["times"]["primary_t"]
+        self["time"] = data["times"]["primary_t"]
         for unwanted in ["weblink", "videos", "comment","times", "links", "splits", "submitted", "players", "id", "status"]:
             try:
                 del self.__dict__[unwanted]
@@ -46,12 +46,12 @@ class Ranking(Run):
 
     def __add__(self, other):
         tempo = super().__add__(other)
-        tempo.__dict__["% WR"] = tempo.time / tempo.__dict__["WR time"]
+        tempo["% WR"] = tempo.time / tempo["WR time"]
         return tempo
 
     def __truediv__(self, other):
         tempo = super().__truediv__(other)
-        tempo.__dict__["%"] = tempo.time / tempo.__dict__["WR time"]
+        tempo["%"] = tempo.time / tempo["WR time"]
         tempo.place = int(tempo.place)
 
         return tempo
@@ -62,23 +62,23 @@ class PB(Ranking):
         tempo = [data["run"]["game"], data["run"]["category"]]
         super().__init__(data)
         self.leaderboard = Leaderboard(tempo + [self.sub_IDs])
-        self.__dict__["WR time"] = self.leaderboard[0].time
-        self.__dict__["delta time"] = self.time - self.__dict__["WR time"]
-        self.__dict__["% WR"] = self.time / self.__dict__["WR time"]
-        self.__dict__["LB"] = len(self.leaderboard)
-        self.__dict__["% LB"] = (len(self.leaderboard) - self.place) / len(self.leaderboard)
+        self["WR time"] = self.leaderboard[0].time
+        self["delta time"] = self.time - self.__dict__["WR time"]
+        self["% WR"] = self.time / self.__dict__["WR time"]
+        self["LB"] = len(self.leaderboard)
+        self["% LB"] = (len(self.leaderboard) - self.place) / len(self.leaderboard)
 
     def __truediv__(self, other):
         tempo = super().__truediv__(other)
-        tempo.__dict__["LB"] = ceil(tempo.__dict__["LB"])
-        tempo.__dict__["% LB"] = (tempo.LB - tempo.place) / tempo.LB
-        tempo.__dict__["% WR"] = tempo.time / tempo.__dict__["WR time"]
+        tempo["LB"] = ceil(tempo["LB"])
+        tempo["% LB"] = (tempo.LB - tempo.place) / tempo.LB
+        tempo["% WR"] = tempo.time / tempo["WR time"]
         return tempo
 
     def __add__(self, other):
         tempo = super().__add__(other)
-        tempo.__dict__["% LB"] = (tempo.LB - tempo.place) / tempo.LB
-        tempo.__dict__["% WR"] = tempo.time / tempo.__dict__["WR time"]
+        tempo["% LB"] = (tempo.LB - tempo.place) / tempo.LB
+        tempo["% WR"] = tempo.time / tempo["WR time"]
         return tempo
 
 class Saves(table):
@@ -93,26 +93,27 @@ class Saves(table):
                 self.data.append(Save(pb, same_categ))
 
 class Save(Entry):
-    str_order = ["game", "category","#", "1st time", "PB time", "Saved time", "%"]
+    str_order = ["game", "category", "#", "1st time", "PB time", "Saved time", "%"]
     sorter = "game"
     def __init__(self, PB, Runs):
         self.game = PB.game
         self.category = PB.category
         self.PB = PB
         self.Runs = Runs
-        self.__dict__["PB time"] = PB.time
-        self.__dict__["1st time"] = max([x.time for x in self.Runs])
-        self.__dict__["Saved time"] = self.__dict__["1st time"] - self.__dict__["PB time"]
-        self.__dict__["%"] = (self.__dict__["1st time"] - self.__dict__["PB time"])/self.__dict__["1st time"]
-        self.__dict__["#"] = len(self.Runs)
+        self["PB time"] = PB.time
+        self["1st time"] = max([x.time for x in self.Runs])
+        self["Saved time"] = self["1st time"] - self["PB time"]
+        self["%"] = (self["1st time"] - self["PB time"])/self["1st time"]
+        self["#"] = len(self.Runs)
 
     def __add__(self, other):
         tempo = super().__add__(other)
-        tempo.__dict__["%"] = (tempo.__dict__["1st time"] - tempo.__dict__["PB time"])/tempo.__dict__["1st time"]
+        tempo["%"] = (tempo["1st time"] - tempo["PB time"])/tempo["1st time"]
         return tempo
+    
     def __truediv__(self, other):
         tempo = super().__truediv__(other)
-        tempo.__dict__["%"] = (tempo.__dict__["1st time"] - tempo.__dict__["PB time"])/tempo.__dict__["1st time"]
+        tempo["%"] = (tempo["1st time"] - tempo["PB time"])/tempo["1st time"]
         return tempo
 
 
