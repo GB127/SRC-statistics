@@ -2,6 +2,7 @@ from generic import Entry, table
 from api import SRC_request, URL
 from math import ceil
 import matplotlib.pyplot as plot
+from datetime import date
 
 class Leaderboard(table):
     def __init__(self, IDs, level=False):
@@ -18,6 +19,7 @@ class Leaderboard(table):
             rep = SRC_request(f"{URL}/leaderboards/{IDs[0]}/{category}{subcategories}")
             print(f"                Got a leaderboard...")
             return rep["data"]
+        self.IDs = IDs
         data = get_leaderboard(IDs)
 
         super().__init__(Ranking, data["runs"], level)
@@ -31,7 +33,31 @@ class Leaderboard(table):
         plot.plot(rev_times())
         plot.show()
 
-        
+    def plot_evolution(self):
+        def get_evolution_lb_times(IDs):
+            def subcats():
+                subcategories = ""
+                if len(IDs) == 3:
+                    subcategories = "?" + "&var".join([f'var-{variable}={selection}' for variable, selection in IDs[2]])
+                return subcategories
+            
+            def get_release_date():  # FIXME : Change to year only?
+                return SRC_request(f"{URL}/games/{IDs[0]}")['data']["release-date"]
+
+            now = str(date.today())
+
+            rankings = {}
+            for year in range(int(now[:4]), int(get_release_date()[:4]), -1):
+                print(f"Getting year {year} leaderboard")
+                rep = SRC_request(f'{URL}/leaderboards/{IDs[0]}/category/{IDs[1]}{subcats()}&date={f"{year}-{now[5:7]}-{now[8:10]}"}')["data"]["runs"]
+                if len(rep) == 0:
+                    break
+                rankings[year] = [x["run"]["times"]["primary_t"] for x in rep]
+            return rankings
+        for year, times in get_evolution_lb_times(self.IDs).items():
+            plot.plot(times)
+        plot.gca().invert_xaxis()
+        plot.show()
 
 class Run(Entry):
     str_order = ["system", "game", "category", "time"]
@@ -136,5 +162,9 @@ if __name__ == "__main__":
                 'values': {'5ly1mjl4': '4lxzde41'}, 
                 'links': [{'rel': 'self', 'uri': 'https://www.speedrun.com/api/v1/runs/y659ro0z'}, {'rel': 'game', 'uri': 'https://www.speedrun.com/api/v1/games/y65lq71e'}, {'rel': 'category', 'uri': 'https://www.speedrun.com/api/v1/categories/7dgv34d4'}, {'rel': 'platform', 'uri': 'https://www.speedrun.com/api/v1/platforms/83exk6l5'}, {'rel': 'region', 'uri': 'https://www.speedrun.com/api/v1/regions/pr184lqn'}, {'rel': 'examiner', 'uri': 'https://www.speedrun.com/api/v1/users/18vnevjl'}]}}
 
+
+# https://www.speedrun.com/api/v1/leaderboards/y65lq71e?var-5ly1mjl4=4lxzde41?date=2022-01-09
+
+
     test2 = PB(test)
-    test2.leaderboard.plot_leaderboard()
+    test2.leaderboard.plot_evolution()
