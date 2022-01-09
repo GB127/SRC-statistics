@@ -94,6 +94,7 @@ class Saves(table):
 
 class Save(Entry):
     str_order = ["game", "category","#", "1st time", "PB time", "Saved time", "%"]
+    sorter = "game"
     def __init__(self, PB, Runs):
         self.game = PB.game
         self.category = PB.category

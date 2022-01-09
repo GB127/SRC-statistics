@@ -20,6 +20,7 @@ class table:
                 if isinstance(médi.__dict__[attribute], str): médi.__dict__[attribute] = ""
             return médi
 
+
         header = []
         for attribu in self.data[0].str_order:
             if "time" in attribu:
@@ -36,7 +37,7 @@ class table:
 
         stringed = "\n".join([str(x) for x in self.data])
 
-        line = "\n" + "-" * len(str(self.data[0])) + "\n"
+        line = "\n" + "-" * len(str(self.data[0])) + "\n"  # FIXME : Try with or
         if str(self.data[0]).find("\n") != -1:
             line = "\n" + "-" * str(self.data[0]).find("\n") + "\n"
 
@@ -52,6 +53,8 @@ class table:
     def __len__(self):
         return len(self.data)
 
+    def sort(self):
+        self.data.sort()  #FIXME : Consider trying with key
 
 class filtered_table(table):
     def __init__(self, filter, *datas):
@@ -221,11 +224,10 @@ class Entry:
 
 class Filtered_Entry(Entry):
     str_order = ["filter", "Run", "Run #", "PB", "PB #"]
-
+    sorter = "filter"
     def __init__(self, filter, data):
         self.label = filter
         self.filter = deepcopy(data[0][0].__dict__[filter])
-
         for id, sorte in enumerate(data):
             try:
                 self.__dict__[type(sorte[0]).__name__] = sum(deepcopy(sorte))
@@ -265,7 +267,8 @@ class Filtered_Entry(Entry):
         copie = deepcopy(self)
         for clé in self.__dict__:
             if clé in ["label", "str_order"]: continue
-            copie.__dict__[clé] /= other
+            try: copie.__dict__[clé] /= other
+            except TypeError: copie.__dict__[clé] = f'{len(copie.__dict__[clé]) / other} {clé}'
 
         return copie
 

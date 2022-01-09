@@ -57,5 +57,7 @@ if __name__ == "__main__":
     test = User("niamek")
     # print(test.PBs)
     #print(test.Games)
-    print(test.Games)
+    test.Runs.sort()
+    print(test.Saves)
+    #print(test.PBs)
     #test()
