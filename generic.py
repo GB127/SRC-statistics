@@ -32,7 +32,7 @@ class table:
             line = "\n" + "-" * str(self.data[0]).find("\n") + "\n"
 
         foot = sum(self.data)
-        return (line).join([header, stringed,f'{foot}\n{foot/len(self)}'])
+        return (line).join([header, stringed,f'{foot}'])
 
     # Basic stuffs for making the stuff an iterable and all.
     def __getitem__(self, argument):
@@ -178,16 +178,86 @@ class Entry:
         return self.__dict__[self.sorter] <= other.__dict__[other.sorter]
 
 
+    def __truediv__(self, other):
+        copie = deepcopy(self)
+        for attribute in self.__dict__:
+            if isinstance(self.__dict__[attribute], (int, float)):
+                copie.__dict__[attribute] /= other
+            elif isinstance(self.__dict__[attribute], set):
+                copie.__dict__[attribute] = len(copie.__dict__[attribute]) / other
+        else:pass
+        return copie
+
+
+    def __add__(self, other):
+        copie = deepcopy(self)
+        if other == 0:
+            return copie
+        else:
+            for attribute in self.__dict__:
+                if isinstance(copie.__dict__[attribute], (int, float)):
+                    copie.__dict__[attribute] += other.__dict__[attribute]
+                elif isinstance(copie.__dict__[attribute], str) and copie.__dict__[attribute] != other.__dict__[attribute]:
+                    copie.__dict__[attribute] = {copie.__dict__[attribute]}
+                if isinstance(copie.__dict__[attribute], set):
+                    if isinstance(other.__dict__[attribute], set):
+                        copie.__dict__[attribute] |= other.__dict__[attribute]
+                    else:
+                        copie.__dict__[attribute] |= {other.__dict__[attribute]}
+            return copie
+
+    def __radd__(self,other):
+        return self.__add__(other)
+
 class Filtered_Entry(Entry):
+    str_order = ["filter", "Run", "Run #", "PB", "PB #"]
+
     def __init__(self, filter, data):
-        self.filter = data[0][0].__dict__[filter]
+        self.label = filter
+        self.filter = deepcopy(data[0][0].__dict__[filter])
 
         for id, sorte in enumerate(data):
             try:
-                self.__dict__[type(sorte[0]).__name__] = sum(sorte)
-                self.__dict__[f'{type(sorte[0]).__name__} #'] = len(sorte)
+                self.__dict__[type(sorte[0]).__name__] = sum(deepcopy(sorte))
+                self.__dict__[f'{type(sorte[0]).__name__} #'] = len(deepcopy(sorte))
             except IndexError:
-                self.__dict__[["Run", "PB"][id]] = ""
+                self.__dict__[["Run", "PB"][id]] = "" 
+
+
+    def __str__(self):
+        total =  " | ".join([f'{self.__dict__["Run #"]:3}', 
+                                str(self.Run)[63:], 
+                                f'{self.__dict__["PB #"]:3}', 
+                                str(self.PB)[63:]])
+        moyenne =  " | ".join([ "  ",
+                                str(self.Run / self.__dict__["Run #"])[63:],
+                                "   ",
+                                str(self.PB / self.__dict__["PB #"])[63:]])
+
+        filtre = self.filter
+        if isinstance(self.filter, set):
+            filtre = f'{len(self.filter)} {self.label}'
+
+        return f'{filtre[:30]:30}| {total}\n{" " * 30}|  {moyenne}'
+
+    def __add__(self, other):
+        if other == 0:
+            return deepcopy(self)
+        copie = deepcopy(self)
+        for clé in self.__dict__:
+            if clé in ["label", "str_order"]: continue
+            try:copie.__dict__[clé] += other.__dict__[clé]
+            except TypeError: copie.__dict__[clé] |= {other.__dict__[clé]}
+        copie.filter = copie.__dict__["Run"].__dict__[self.label]
+        return copie
+
+    def __truediv__(self, other):
+        copie = deepcopy(self)
+        for clé in self.__dict__:
+            if clé in ["label", "str_order"]: continue
+            copie.__dict__[clé] /= other
+
+        return copie
 
 if __name__ == "__main__":
     entry_data = {  'place': 14 ,

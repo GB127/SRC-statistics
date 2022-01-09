@@ -1,5 +1,6 @@
 from generic import Entry, Filtered_Entry, table
 from api import SRC_request, URL
+from math import ceil
 
 class Leaderboard(table):
     def __init__(self, IDs, level=False):
@@ -69,14 +70,15 @@ class PB(Ranking):
 
     def __truediv__(self, other):
         tempo = super().__truediv__(other)
-        tempo.__dict__["LB"] = int(tempo.__dict__["LB"])
+        tempo.__dict__["LB"] = ceil(tempo.__dict__["LB"])
         tempo.__dict__["% LB"] = (tempo.LB - tempo.place) / tempo.LB
-        self.__dict__["% WR"] = self.time / self.__dict__["WR time"]
+        tempo.__dict__["% WR"] = tempo.time / tempo.__dict__["WR time"]
         return tempo
 
     def __add__(self, other):
         tempo = super().__add__(other)
         tempo.__dict__["% LB"] = (tempo.LB - tempo.place) / tempo.LB
+        tempo.__dict__["% WR"] = tempo.time / tempo.__dict__["WR time"]
         return tempo
 
 class Saves(table):
