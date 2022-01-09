@@ -11,6 +11,15 @@ class table:
             self.data.append(classe(one))
 
     def __str__(self):
+        def médiane():
+            médi = deepcopy(self.data[0])
+            for attribute in self.data[0].__dict__:
+                try: all_data = sorted([x.__dict__[attribute] for x in self.data])
+                except TypeError: continue
+                médi.__dict__[attribute] = all_data[len(all_data) // 2]
+                if isinstance(médi.__dict__[attribute], str): médi.__dict__[attribute] = ""
+            return médi
+
         header = []
         for attribu in self.data[0].str_order:
             if "time" in attribu:
@@ -31,8 +40,9 @@ class table:
         if str(self.data[0]).find("\n") != -1:
             line = "\n" + "-" * str(self.data[0]).find("\n") + "\n"
 
-        foot = sum(self.data)
-        return (line).join([header, stringed,f'{foot}'])
+        total = sum(self.data)
+        moyenne = total / len(self.data)
+        return (line).join([header, stringed,f'{total}', f'{moyenne}', f'{médiane()}'])
 
     # Basic stuffs for making the stuff an iterable and all.
     def __getitem__(self, argument):
