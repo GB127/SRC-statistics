@@ -1,12 +1,12 @@
 from generic import Entry, table
 from api import SRC_request, URL
 from math import ceil
+import matplotlib.pyplot as plot
 
 class Leaderboard(table):
     def __init__(self, IDs, level=False):
         def get_leaderboard(IDs):
             """Fetch the leaderboard data from SRC.
-
                 Args:
                     IDs (list) : List of IDs (str).
                         format : [Gameid, level_id/category_ID, subcategories_ID]
@@ -25,6 +25,13 @@ class Leaderboard(table):
             rank["WR time"] = self.data[0].time
             rank["delta time"] = rank.time - rank["WR time"]
             rank["%"] = rank.time / rank["WR time"]
+
+    def plot_leaderboard(self):
+        rev_times = lambda: list(reversed([x["time"] for x in self.data]))
+        plot.plot(rev_times())
+        plot.show()
+
+        
 
 class Run(Entry):
     str_order = ["system", "game", "category", "time"]
@@ -130,4 +137,4 @@ if __name__ == "__main__":
                 'links': [{'rel': 'self', 'uri': 'https://www.speedrun.com/api/v1/runs/y659ro0z'}, {'rel': 'game', 'uri': 'https://www.speedrun.com/api/v1/games/y65lq71e'}, {'rel': 'category', 'uri': 'https://www.speedrun.com/api/v1/categories/7dgv34d4'}, {'rel': 'platform', 'uri': 'https://www.speedrun.com/api/v1/platforms/83exk6l5'}, {'rel': 'region', 'uri': 'https://www.speedrun.com/api/v1/regions/pr184lqn'}, {'rel': 'examiner', 'uri': 'https://www.speedrun.com/api/v1/users/18vnevjl'}]}}
 
     test2 = PB(test)
-    print(test2)
+    test2.leaderboard.plot_leaderboard()
