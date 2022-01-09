@@ -43,7 +43,7 @@ class table:
 
         total = sum(self.data)
         moyenne = total / len(self.data)
-        return (line).join([header, stringed,f'{total}', f'{moyenne}', f'{médiane()}'])
+        return (line).join([header, stringed,f'{total}\n{moyenne}\n{médiane()}'])
 
     # Basic stuffs for making the stuff an iterable and all.
     def __getitem__(self, argument):
