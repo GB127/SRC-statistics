@@ -27,6 +27,8 @@ class Leaderboard(table):
             rank["WR time"] = self.data[0].time
             rank["delta time"] = rank.time - rank["WR time"]
             rank["%"] = rank.time / rank["WR time"]
+            rank["% WR"] = rank.time / rank["WR time"]
+
 
     def plot_leaderboard(self):
         rev_times = lambda: list(reversed([x["time"] for x in self.data]))
@@ -84,7 +86,7 @@ class Ranking(Run):
 
     def __truediv__(self, other):
         tempo = super().__truediv__(other)
-        tempo["%"] = tempo.time / tempo["WR time"]
+        tempo["% WR"] = tempo.time / tempo["WR time"]
         tempo.place = int(tempo.place)
 
         return tempo
@@ -167,4 +169,5 @@ if __name__ == "__main__":
 
 
     test2 = PB(test)
-    test2.leaderboard.plot_evolution()
+    print(test2.leaderboard)
+    #test2.leaderboard.plot_evolution()

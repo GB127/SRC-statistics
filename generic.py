@@ -20,22 +20,25 @@ class table:
                 if isinstance(médi[attribute], str): médi[attribute] = ""
             return médi
 
+        def header():
+            string = []
+            for attribu in self.data[0].str_order:
+                if "time" in attribu:
+                    string.append(f'{attribu[:spacing["time"]]:^{spacing["time"]}}')
+                    continue
+                elif "%" in attribu:
+                    string.append(f'{attribu[:spacing["%"]]:^{spacing["%"]}}')
+                    continue
+                try:
+                    string.append(f'{attribu[:spacing[attribu]]:^{spacing[attribu]}}')
+                except KeyError:
+                    string.append(f'{attribu[:10]:^10}')
+            string = " | ".join(string)
+            return string
 
-        header = []
-        for attribu in self.data[0].str_order:
-            if "time" in attribu:
-                header.append(f'{attribu[:spacing["time"]]:^{spacing["time"]}}')
-                continue
-            elif "%" in attribu:
-                header.append(f'{attribu[:spacing["%"]]:^{spacing["%"]}}')
-                continue
-            try:
-                header.append(f'{attribu[:spacing[attribu]]:^{spacing[attribu]}}')
-            except KeyError:
-                header.append(f'{attribu[:10]:^10}')
-        header = " | ".join(header)
-
-        stringed = "\n".join([str(x) for x in self.data])
+        def body():
+            stringed = "\n".join([str(x) for x in self.data])
+            return stringed
 
         line = "\n" + "-" * len(str(self.data[0])) + "\n"  # FIXME : Try with or
         if str(self.data[0]).find("\n") != -1:
@@ -43,7 +46,7 @@ class table:
 
         total = sum(self.data)
         moyenne = total / len(self.data)
-        return (line).join([header, stringed,f'{total}\n{moyenne}\n{médiane()}'])
+        return (line).join([header(), body(),f'{total}\n{moyenne}\n{médiane()}'])
 
     # Basic stuffs for making the stuff an iterable and all.
     def __getitem__(self, argument):
@@ -55,6 +58,18 @@ class table:
 
     def sort(self):
         self.data.sort()  #FIXME : Consider trying with key
+
+    def __call__(self):
+        def methods_fetcher():
+            toreturn = []
+            method_list = [func for func in dir(self) if callable(getattr(self, func))]
+            for method in method_list:
+                if "__" not in method:
+                    toreturn.append(method)
+            return toreturn + ["end"]
+        print(methods_fetcher())
+
+
 
 class filtered_table(table):
     def __init__(self, filter, *datas):
