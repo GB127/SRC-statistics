@@ -1,4 +1,4 @@
-import requests, datetime
+import requests
 from copy import deepcopy
 from time import sleep
 
@@ -22,7 +22,7 @@ def SRC_request(link, initial=[]):
             print(response.json()["message"])  # FIXME
             sleep(60)
         elif response.status_code == 404:
-            raise BaseException(f"Error {response.status_code} : Incorrect info, please check again\nlink: {URL}{link}")
+            raise BaseException(f"Error {response.status_code} : Incorrect info, please check again\nlink:{link}")
         else:
             raise BaseException(f"Please report the following informations on github => https://github.com/GB127/SRC-statistics/issues\nLink: {URL}{link}\nResponse code: {response.status_code}\nResponse message: {response.json()['message']}")
 
@@ -42,44 +42,6 @@ def SRC_request(link, initial=[]):
     except KeyError:
         return rep
     return toupdate
-
-
-
-
-def get_leaderboards(IDs):
-    varistr = ""
-    if IDs[3] != {}:
-        tempo = []
-        for key in IDs[3]:
-            tempo.append(f"var-{key}={IDs[3][key]}")
-        varistr = "&".join(tempo)
-        if varistr != "": varistr = "?" + varistr
-
-
-    game_date = requester(f"/games/{IDs[0]}")['data']["release-date"]
-    now = str(datetime.date.today())
-
-
-
-
-    rankings = {}
-    for year in range(int(now[:4]), int(game_date[:4]), -1):
-        base_URL = f'/leaderboards/{IDs[0]}/'
-        base_date = f"?date={f'{year}-{now[5:7]}-{now[8:10]}'}"
-        if IDs[2]:
-            full_level = f"level/{IDs[2]}/{IDs[1]}"
-        else:
-            full_level = f'category/{IDs[1]}'
-
-        print(f"Getting year {year} leaderboard")
-        tempo = []
-        rep = requester(f"{base_URL}{full_level}{base_date}{varistr}")
-        for run in rep["data"]["runs"]:
-            tempo.append((run_time(run["run"]["times"]["primary_t"])))
-        if len(tempo) == 0: break
-        else: 
-            rankings[year] = tempo
-    return rankings
 
 
 def get_level(ID):

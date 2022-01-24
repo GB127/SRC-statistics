@@ -53,11 +53,9 @@ class User:
 
 if __name__ == "__main__":
     # test = User("rudestjade")  # Has ran 1 game only.
-    # test = User("libre")  # Has not a lot of runs.
+    #test = User("libre")  # Has not a lot of runs.
     test = User("niamek")
-    # print(test.PBs)
-    #print(test.Games)
-    test.Runs.sort()
     print(test.Saves)
+    #print(test.Games)
     #print(test.PBs)
     #test()
