@@ -1,9 +1,6 @@
 .vscode/settings.json
 __pycache__/
-example.py
-test.py
-testing.py
-debug.py
-poker.py
-debug.py
-debug.py
+setup.cfg
+.coverage
+.gitignore
+tests/

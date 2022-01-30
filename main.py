@@ -1,5 +1,5 @@
-from user import User
+from code_SRC.run_entry import Run
+from tests.test_datas import run_base
 
-if __name__ == "__main__":
-    src_user = User(input("Enter the username of a runner on SRC: "))
-    src_user()
+test = Run(run_base)
+print(test)
