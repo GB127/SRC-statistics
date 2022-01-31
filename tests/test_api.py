@@ -1,15 +1,18 @@
-from tests.test_datas import game_data, category_data,level_data, user_data, system_mock
+from tests.test_datas import VC_mock, game_data, category_data,level_data, user_data, system_mock, game_category_extension
 from requests_mock.mocker import Mocker
 from code_SRC.api import api
 
 def clear_db(original_function):
-     # make a new function
     def new_function(requests_mock):
         for database in ["game_db", "category_db", "level_db", "system_db"]:
             setattr(api, database, {})
         original_function(requests_mock)
     return new_function
 
+@clear_db
+def test_game_remove_cat_ext(requests_mock:Mocker):
+    requests_mock.get('https://www.speedrun.com/api/v1/games/o1ymwk1q', json=game_category_extension)
+    assert 'Super Mario 64' == api.game('o1ymwk1q')
 
 @clear_db
 def test_game(requests_mock: Mocker):
@@ -53,14 +56,23 @@ def test_system(requests_mock: Mocker):
     requests_mock.get("https://www.speedrun.com/api/v1/platforms/mx6pow93", json=system_mock)
     assert 'Acorn Archimedes' == api.system('mx6pow93')
 
+@clear_db
 def test_system_update_db(requests_mock: Mocker):
     requests_mock.get("https://www.speedrun.com/api/v1/platforms/mx6pow93", json=system_mock)
     api.system("mx6pow93")
     assert api.system_db["mx6pow93"] == "Acorn Archimedes"
 
+@clear_db
 def test_system_norequest(requests_mock: Mocker):
+    api.system_db["mx6pow93"] = "Acorn Archimedes"
     requests_mock.get("https://www.speedrun.com/api/v1/platforms/mx6pow93", exc=NotImplementedError("Requested instead of using saved data"))
     assert api.system("mx6pow93") == "Acorn Archimedes"
+
+@clear_db
+def test_system_acro_vc(requests_mock:Mocker):
+    requests_mock.get("https://www.speedrun.com/api/v1/platforms/mx6pow93", json=VC_mock)
+    assert api.system("mx6pow93") == "Wii VC"
+
 
 
 def test_user_id(requests_mock:Mocker):

@@ -1,17 +1,19 @@
 from code_SRC.run_entry import Run
-from tests.test_datas import run_base, run_subcat
+from tests.test_datas import run_base, run_subcat, run_base2, run_level
 from copy import copy
 
 
 class Test_Run:
     test_base = Run(copy(run_base))
     test_subcat = Run(copy(run_subcat))
+    test_base2 = Run(copy(run_base2))
+    test_level = Run(copy(run_level))
 
     def test_Run_attributes(self):
         for attribute in ["game", "system", "category", "date", "time", "emu", "region"]:
             assert hasattr(Test_Run.test_base, attribute), f'{attribute} not created'
 
-    def test_Run_del_unwanted_attri(self):
+    def test_Run_del_unwanted_attributes(self):
         for attribute in ["id", "weblink", "videos","ruleset", "comment", "status", "submitted", "times", "splits", "links"]:
             assert not hasattr(Test_Run.test_base, attribute), f'{attribute} is still created'
 
@@ -37,18 +39,16 @@ class Test_Run:
         assert Test_Run.test_base["region"] == "US"
 
     def test_Run_str(self):
-        wanted_str = " | ".join(["WiiVC", "Bomberman Hero", "Any %", "3:07:40"])
+        wanted_str = " | ".join(["Wii VC", "Bomberman Hero", "US Any%", "3:07:40"])
         assert str(Test_Run.test_base) == wanted_str
 
 
-    def test_Run_add_time_from0(self):
+    def test_Run_add_time_from_0(self):
         assert (Test_Run.test_base + 0) == Test_Run.test_base
-
-
 
     def test_Run_add_time(self):
         somme = Test_Run.test_base + Test_Run.test_base
-        assert (Run(run_base)["time"] * 2) == somme["time"]
+        assert (Run(copy(run_base))["time"] * 2) == somme["time"]
 
     def test_Run_add_game_same(self):
         somme = Test_Run.test_base + Test_Run.test_base
@@ -56,17 +56,24 @@ class Test_Run:
 
     def test_Run_add_game_diff(self):
         somme = Test_Run.test_base + Test_Run.test_subcat
-        assert somme["game"] == {Test_Run["game"], Test_Run.test_subcat["game"]}
+        assert somme["game"] == {Test_Run.test_base["game"], Test_Run.test_subcat["game"]}
 
     def test_Run_add_game_group_present(self):
         somme = Test_Run.test_base + Test_Run.test_subcat
         somme += Test_Run.test_base
-        assert somme["game"] == {Test_Run["game"], Test_Run.test_subcat["game"]}
+        assert somme["game"] == {Test_Run.test_base["game"], Test_Run.test_subcat["game"]}
 
     def test_Run_add_game_group_absent(self):
-        raise NotImplementedError
+        somme = Test_Run.test_base + Test_Run.test_subcat
+        somme += Test_Run.test_base2
+        assert somme["game"] == {Test_Run.test_base["game"], Test_Run.test_subcat["game"], Test_Run.test_base2["game"]}
 
 
     def test_Run_div_time(self):
         divide = Test_Run.test_base / 2
-        assert Run(copy(run_base))["time"] / 2 == divide["time"]
+        assert 14560 / 2 == divide["time"]
+
+
+    def test_Run_div_sets(self):
+        divide = (Test_Run.test_base2 + Test_Run.test_base) / 2
+        assert divide["game"] == "1.0 game"
