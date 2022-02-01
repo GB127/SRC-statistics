@@ -5,11 +5,11 @@ from code_SRC.run_entry import Run
 
 
 class Test_table_Runs:
-    classe_nolvl = Table_Runs([copy(run_level), copy(run_base), copy(run_base2)], level=False)
+    classe_nolvl = Table_Runs([copy(run_level), copy(run_base), copy(run_base2), copy(run_subcat)], level=False)
     classe_lvl = Table_Runs([copy(run_level), copy(run_base), copy(run_base2), copy(run_subcat)], level=True)
 
     def test_table_run_init_nolvl(self):
-        assert Test_table_Runs.classe_nolvl.liste == [Run(copy(run_base)), Run(copy(run_base2)), Run(copy(run_subcat))]
+        assert Test_table_Runs.classe_nolvl.liste == [Run(copy(run_base)), Run(copy(run_base2)), Run(copy(run_subcat))], f"{type(Test_table_Runs.classe_nolvl.liste[0])} - {type(Run(copy(run_base)))}"
 
     def test_table_run_init_lvl(self):
         assert Test_table_Runs.classe_lvl.liste == [Run(copy(run_level))]
@@ -21,4 +21,4 @@ class Test_table_Runs:
         raise NotImplementedError("Testing case not written")
 
     def test_table_run_len(self):
-        assert len(Test_table_Runs.classe_nolvl) == 2
+        assert len(Test_table_Runs.classe_nolvl) == 3

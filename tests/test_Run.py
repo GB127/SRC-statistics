@@ -2,16 +2,23 @@ from code_SRC.run_entry import Run
 from tests.test_datas import run_base, run_subcat, run_base2, run_level
 from copy import copy
 
-
 class Test_Run:
     test_base = Run(copy(run_base))
     test_subcat = Run(copy(run_subcat))
     test_base2 = Run(copy(run_base2))
     test_level = Run(copy(run_level))
 
-    def test_Run_attributes(self):
+    def test_Run_attributes_nolevel(self):
         for attribute in ["game", "system", "category", "date", "time", "emu", "region"]:
             assert hasattr(Test_Run.test_base, attribute), f'{attribute} not created'
+
+    def test_Run_eq(self):
+        assert Test_Run.test_base == Run(copy(run_base))
+
+    def test_Run_attributes_level(self):
+        for attribute in ["game", "system", "level", "date", "time", "emu", "region"]:
+            assert hasattr(Test_Run.test_level, attribute), f'{attribute} not created'
+
 
     def test_Run_del_unwanted_attributes(self):
         for attribute in ["id", "weblink", "videos","ruleset", "comment", "status", "submitted", "times", "splits", "links"]:
@@ -39,7 +46,7 @@ class Test_Run:
         assert Test_Run.test_base["region"] == "US"
 
     def test_Run_str(self):
-        wanted_str = " | ".join(["Wii VC", "Bomberman Hero", "US Any%", "3:07:40"])
+        wanted_str = "Wii VC   Bomberman Hero   US Any%   3:07:40"
         assert str(Test_Run.test_base) == wanted_str
 
 

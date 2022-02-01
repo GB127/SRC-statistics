@@ -13,7 +13,7 @@ class api:
             return api.game_db[id]
         except KeyError:
             req = get(f'{api.URL}games/{id}').json()
-            api.game_db[id] = req["data"]["names"]["international"]
+            api.game_db[id] = req["data"]["names"]["international"].replace("Category Extensions", "").rstrip()
         return api.game_db[id]
 
     @staticmethod
@@ -22,7 +22,7 @@ class api:
             return api.system_db[id]
         except KeyError:
             req = get(f'{api.URL}platforms/{id}').json()
-            api.system_db[id] = req["data"]["name"]
+            api.system_db[id] = req["data"]["name"].replace("Virtual Console", "VC")
         return api.system_db[id]
 
 
