@@ -1,0 +1,14 @@
+{"data":{
+  "id": "pr184lqn",
+  "name": "USA / NTSC",
+  "links": [{
+    "rel": "self",
+    "uri": "https://www.speedrun.com/api/v1/regions/pr184lqn"
+  }, {
+    "rel": "games",
+    "uri": "https://www.speedrun.com/api/v1/games?region=pr184lqn"
+  }, {
+    "rel": "runs",
+    "uri": "https://www.speedrun.com/api/v1/runs?region=pr184lqn"
+  }]
+}}

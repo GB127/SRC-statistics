@@ -1,0 +1,22 @@
+{"data":{
+  "id": "ha71kldd",
+  "name": "Slip Slide Icecapades",
+  "weblink": "https://www.speedrun.com/twinsanity/Slip_Slide_Icecapades",
+  "rules": "Yada Yada Yada",
+  "links": [{
+    "rel": "self",
+    "uri": "https://www.speedrun.com/api/v1/levels/ha71kldd"
+  }, {
+    "rel": "game",
+    "uri": "https://www.speedrun.com/api/v1/games/sjkdzets"
+  }, {
+    "rel": "categories",
+    "uri": "https://www.speedrun.com/api/v1/levels/ha71kldd/categories"
+  }, {
+    "rel": "variables",
+    "uri": "https://www.speedrun.com/api/v1/levels/ha71kldd/variables"
+  }, {
+    "rel": "runs",
+    "uri": "https://www.speedrun.com/api/v1/runs?level=ha71kldd"
+  }]
+}}

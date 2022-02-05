@@ -1,0 +1,25 @@
+{"data":{
+  "id": "jkh473tf",
+  "name": "Any%",
+  "weblink": "https://www.speedrun.com/tww#Anypc",
+  "type": "per-game",
+  "rules": "Yada Yada Yada",
+  "players": {
+    "type": "exactly",
+    "value": 2
+  },
+  "miscellaneous": False,
+  "links": [{
+    "rel": "self",
+    "uri": "https://www.speedrun.com/api/v1/categories/jkh473tf"
+  }, {
+    "rel": "game",
+    "uri": "https://www.speedrun.com/api/v1/games/i2grf78a"
+  }, {
+    "rel": "variables",
+    "uri": "https://www.speedrun.com/api/v1/games/i2grf78a/variables"
+  }, {
+    "rel": "runs",
+    "uri": "https://www.speedrun.com/api/v1/runs?category=jkh473tf"
+  }]
+}}
