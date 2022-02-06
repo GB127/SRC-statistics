@@ -6,6 +6,7 @@ class api:
     system_db = {}
     category_db = {}
     level_db = {}
+    region_db = {}
 
     @staticmethod
     def game(id:str) -> str:
@@ -25,6 +26,14 @@ class api:
             api.system_db[id] = req["data"]["name"].replace("Virtual Console", "VC")
         return api.system_db[id]
 
+    @staticmethod
+    def region(id:str) -> str:
+        try:
+            return api.region_db[id]
+        except KeyError:
+            req = get(f'{api.URL}regions/{id}').json()
+            api.region_db[id] = req["data"]["name"]
+        return api.region_db[id]
 
     @staticmethod
     def category(id:str) -> str:
@@ -57,9 +66,3 @@ class api:
     @staticmethod
     def user_pbs(user_id) -> list:
         pass
-
-
-if __name__ == "__main__":
-    api.game("v1pxjz68")
-    print(api.game("v1pxjz68"))
-    print(api.game_db)

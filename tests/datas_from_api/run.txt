@@ -30,7 +30,7 @@
   "submitted": None,
   "times": {
     "primary": "PT31M22S",
-    "primary_t": 1882,
+    "primary_t": 50907,
     "realtime": "PT31M22S",
     "realtime_t": 1882,
     "realtime_noloads": "PT41M26S",

@@ -1,6 +1,4 @@
-from .api import api
-
-# from api import api
+from code_SRC.api import api
 from copy import copy
 
 
@@ -18,8 +16,15 @@ class Run:
             del self.__dict__[unwanted]
 
     def __str__(self):
-        string = " ! ".join([str(self[x]) for x in ["system", "game","category", "time"]])
-        return string
+        time_str = lambda x : f'{int(x)//3600:>3}:{int(x) % 3600 // 60:02}:{int(x) % 3600 % 60 % 60:02}'
+
+        liste = []
+        for attribute in ["system", "game","category", "time"]:
+            if isinstance(self[attribute], int) and "time" in attribute:
+                liste.append(time_str(self[attribute]))
+            else:
+                liste.append(self[attribute])
+        return "   ".join(liste)
 
     def __getitem__(self, key):
         return self.__dict__[key]
