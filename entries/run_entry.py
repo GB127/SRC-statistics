@@ -29,9 +29,12 @@ class Run:
     def __setitem__(self, key, value):
         self.__dict__[key] = value
 
+    def __radd__(self, other):
+        return self + other
+
     def __add__(self, other):
         copie = copy(self)
-        if isinstance(other, int) and other == 0:
+        if isinstance(other, int):
             return copie
         for attribute in self.__dict__:
             if isinstance(copie[attribute] , bool):
@@ -46,6 +49,9 @@ class Run:
                 copie[attribute].add(other[attribute])
 
         return copie
+
+    def mean(self):
+        return sum(self) / len(self)
 
     def __truediv__(self, denom):
         copie = copy(self)

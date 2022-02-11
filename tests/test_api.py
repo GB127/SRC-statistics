@@ -36,7 +36,6 @@ class Test_game:
         assert api.game(id_m("game")) == "Super Mario Sunshine"
 
 class Test_category:
-
     @clear_db
     def test_category(self, requests_mock: Mocker):
         requests_mock.get(link_m("category"), json=dicto_m("category"))
@@ -101,7 +100,6 @@ class Test_level:
         requests_mock.get(link_m("level"), exc=NotImplementedError("Requested instead of using saved data"))
         api.level_db[id_m('level')] = 'Slip Slide Icecapades'
         assert api.level(id_m("level")) == 'Slip Slide Icecapades'
-
 
 class Test_region:
     @clear_db

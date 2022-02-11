@@ -15,3 +15,8 @@ def fill_db(original_function):
         original_function(self)
     return new_function
 
+def liste_dicto(filename):
+        liste = []
+        for _ in range(3):
+            liste.append(dicto_m(filename)["data"])
+        return liste
