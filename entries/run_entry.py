@@ -14,13 +14,19 @@ class Run:
 
     def __str__(self):
         time_str = lambda x : f'{int(x)//3600:>3}:{int(x) % 3600 // 60:02}:{int(x) % 3600 % 60 % 60:02}'
+        p = [4, 20, 10, 9]
 
         liste = []
-        for attribute in ["system", "game","category", "time"]:
-            if isinstance(self[attribute], int) and "time" in attribute:
-                liste.append(time_str(self[attribute]))
+        for no, attribute in enumerate(["system", "game","category", "time"]):
+            if isinstance(self[attribute], (float,int)):
+                if "time" in attribute:
+                    liste.append(f'{time_str(self[attribute])[:p[no]]:>{p[no]}}')
+                else:
+                    liste.append(f'{str(self[attribute])[:p[no]]:{p[no]}}')
+            elif isinstance(self[attribute], set):
+                liste.append(f'{str(len(self[attribute]))[:p[no]]:{p[no]}}')
             else:
-                liste.append(self[attribute])
+                liste.append(f'{self[attribute][:p[no]]:{p[no]}}')
         return "   ".join(liste)
 
     def __getitem__(self, key):
@@ -50,9 +56,6 @@ class Run:
 
         return copie
 
-    def mean(self):
-        return sum(self) / len(self)
-
     def __truediv__(self, denom):
         copie = copy(self)
         for attribute in self.__dict__:
@@ -61,7 +64,7 @@ class Run:
             elif isinstance(copie[attribute], int):
                 copie[attribute] /= denom
             elif isinstance(copie[attribute], set):
-                copie[attribute] = f'{len(copie[attribute]) / denom} {attribute}'
+                copie[attribute] = len(copie[attribute]) / denom
         return copie
 
     def __eq__(self, other):

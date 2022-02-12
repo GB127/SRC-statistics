@@ -12,9 +12,19 @@ class Table_run:
     def __len__(self):
         return len(self.data)
 
-    def sort(self, key=None):
-        self.data.sort(key=key)
+    def sort(self, sorting_key=None):
+        self.data.sort(key= lambda x: x[sorting_key])
+
+    def __eq__(self, other):
+        return self.__dict__ == other.__dict__
 
     def mean(self):
         return sum(self) / len(self)
 
+    def __str__(self):
+        body = "\n".join([f'{no:3} {x}' for no,x in enumerate(self.data, start=1)])
+        return "\n".join([body, f'  ∑ {sum(self)}', f'MOY {self.mean()}'])
+
+    def median(self, filter):
+        self.sort(filter)
+        return self[len(self) // 2]

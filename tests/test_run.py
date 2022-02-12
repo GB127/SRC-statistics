@@ -11,11 +11,22 @@ class Test_init:
         for unwanted in ["id", "weblink", "videos", "values", "submitted", "splits", "links", "comment", "times", "players", "status"]:
             assert not hasattr(Run(dicto_m("run")["data"]), unwanted)
 
-class Test_others:
+class Test_str:
     @fill_db
     def test_str(self):
-        string = "Gamecube   Super Mario Sunshine   Any%    14:08:27"
+        p = [4, 20, 10,9]
+        string = f"{'Gamecube'[:p[0]]:{p[0]}}   {'Super Mario Sunshine'[:p[1]]:{p[1]}}   {'Any%'[:p[2]]:{p[2]}}   {'11:11:11'[:p[3]]:>{p[3]}}"
         assert str(Run(dicto_m("run")["data"])) == string
+
+    @fill_db
+    def test_str_sets(self):
+        setted = Run(dicto_m("run")["data"])
+        for x in ["game", "category", "system"]:
+            setted[x] = {setted[x], "setted[x]"}
+        p = [4, 20, 10,9]
+        string = f"{'2'[:p[0]]:{p[0]}}   {'2'[:p[1]]:{p[1]}}   {'2'[:p[2]]:{p[2]}}   {'11:11:11'[:p[3]]:>{p[3]}}"
+        assert str(setted) == string
+
 
 class Test_add:
     def test_time(self):
