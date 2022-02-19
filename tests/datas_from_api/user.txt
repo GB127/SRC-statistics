@@ -1,10 +1,10 @@
 {"data":{
   "id": "kjpdr4jq",
   "names": {
-    "international": "chewdiggy",
+    "international": "Test",
     "japanese": None
   },
-  "weblink": "https://www.speedrun.com/user/chewdiggy",
+  "weblink": "https://www.speedrun.com/user/test",
   "name-style": {
     "style": "solid",
     "color": {

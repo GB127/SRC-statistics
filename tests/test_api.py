@@ -2,6 +2,9 @@ from requests_mock.mocker import Mocker
 from code_SRC.api import api
 from tests.datas_fx import link_m, dicto_m, id_m
 
+
+
+
 def clear_db(original_function):
     def new_function(self, requests_mock):
         for database in ["game_db", "category_db", "level_db", "system_db", "region_db", "system_db"]:
@@ -117,3 +120,9 @@ class Test_region:
         requests_mock.get(link_m("region"), exc=NotImplementedError("Requested instead of using saved data"))
         api.region_db[id_m("region")] = "US"
         assert api.region(id_m("region")) == "US"
+
+class Test_lb:
+    @clear_db
+    def test_level(self, requests_mock: Mocker):
+        requests_mock.get(link_m("level"), json=dicto_m("level"))
+        assert 'Slip Slide Icecapades' == api.level(id_m('level'))

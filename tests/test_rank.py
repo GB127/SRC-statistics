@@ -17,10 +17,6 @@ class Test_init:
     def test_init_WR_perc(self):
         assert Rank(dicto_m("rank")["data"], 80542 / 2).WR_perc == 2
 
-    @fill_db
-    def test_eq(self):
-        assert Rank(dicto_m("rank")["data"],50000)  == Rank(dicto_m("Rank")["data"], 50000)
-
 
 class Test_misc:
     @fill_db

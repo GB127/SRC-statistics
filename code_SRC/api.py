@@ -24,6 +24,7 @@ class api:
         except KeyError:
             req = get(f'{api.URL}platforms/{id}').json()
             api.system_db[id] = req["data"]["name"].replace("Virtual Console", "VC")
+
         return api.system_db[id]
 
     @staticmethod

@@ -6,7 +6,7 @@ class Rank(Run):
         self.place = data["place"]
         self.WR = WR_time
         self.WR_perc = self.time / WR_time
-    
+
     def __str__(self):
         time_str = lambda x : f'{int(x)//3600:>3}:{int(x) % 3600 // 60:02}:{int(x) % 3600 % 60 % 60:02}'
 
