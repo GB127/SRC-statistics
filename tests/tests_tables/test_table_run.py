@@ -19,11 +19,3 @@ class Test_init:
 
     def test_all_included(self):
         assert len(Test_init.model.data) == len(liste_runs())
-
-class Test_operations:
-    def test_join(self):
-        join_test = Table_run(liste_runs())
-        for no, x in enumerate(["game", "system", "category"]):
-            join_test.data[no][x] += "1"
-        for attribute in ["game", "system", "category"]:
-            assert len(join_test.join(attribute)) == 4

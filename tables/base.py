@@ -1,3 +1,5 @@
+from copy import copy
+
 class Base_Table:
 
     def __len__(self):
@@ -31,3 +33,12 @@ class Base_Table:
     def median(self, filter):
         self.sort(filter)
         return self[len(self) // 2]
+
+    def join(self, key):
+        new = copy(self)
+        sommes = {}
+        for object in self.data:
+            sommes[object[key]] = sommes.get(object[key], 0) + object
+        new.data = list(sommes.values())
+
+        return new

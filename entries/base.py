@@ -36,11 +36,11 @@ class Base_Entry:
             elif isinstance(copie[attribute], int):
                 copie[attribute] /= denom
             elif isinstance(copie[attribute], set):
-                copie[attribute] = len(copie[attribute]) / denom
+                copie[attribute] = f'{len(copie[attribute]) / denom} {attribute}'
+            elif isinstance(copie[attribute], str):
+                copie[attribute] = f'{1 / denom} {attribute}'
         return copie
 
     def __eq__(self, other):
         return self.__dict__ == other.__dict__
 
-    def __lt__(self, other):
-        return self.time < other.time

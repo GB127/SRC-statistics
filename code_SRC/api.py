@@ -62,8 +62,10 @@ class api:
 
     @staticmethod
     def user_runs(user_id) -> list:
-        pass
+        req = get(f'{api.URL}runs?user={user_id}').json()
+        return req["data"]
 
     @staticmethod
     def user_pbs(user_id) -> list:
-        pass
+        req = get(f'{api.URL}users/{user_id}/personal-bests').json()
+        return req["data"]

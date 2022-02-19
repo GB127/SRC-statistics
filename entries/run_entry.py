@@ -1,5 +1,4 @@
 from code_SRC.api import api
-from copy import copy
 from entries.base import Base_Entry
 
 

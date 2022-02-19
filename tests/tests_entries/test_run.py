@@ -17,3 +17,4 @@ class Test_str:
         p = [4, 20, 10,9]
         string = f"{'Gamecube'[:p[0]]:{p[0]}}   {'Super Mario Sunshine'[:p[1]]:{p[1]}}   {'Any%'[:p[2]]:{p[2]}}   {'11:11:11'[:p[3]]:>{p[3]}}"
         assert str(Run(dicto_m("run")["data"])) == string
+
