@@ -19,6 +19,8 @@ class api:
 
     @staticmethod
     def system(id:str) -> str:
+        if not id:
+            return "???"
         try:
             return api.system_db[id]
         except KeyError:
@@ -60,12 +62,24 @@ class api:
         req = get(f'{api.URL}users/{username}').json()
         return req["data"]["id"]
 
+
+
     @staticmethod
     def user_runs(user_id) -> list:
-        req = get(f'{api.URL}runs?user={user_id}').json()
+        liste = []
+        req = get(f'{api.URL}runs?user={user_id}&max=200').json()
+        liste += req["data"]
+        while(req["pagination"]["links"]) and (req["pagination"]["size"] == req["pagination"]["max"] ):
+            req = get(req["pagination"]["links"][0]["uri"]).json()
+            liste += req["data"]
         return req["data"]
 
     @staticmethod
     def user_pbs(user_id) -> list:
         req = get(f'{api.URL}users/{user_id}/personal-bests').json()
         return req["data"]
+
+    @staticmethod
+    def leaderboard(game_id, category_id, subcat_id=None):
+        req = get(f'{api.URL}leaderboards/{game_id}/category/{category_id}').json()
+        return req["data"]["runs"]

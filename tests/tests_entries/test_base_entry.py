@@ -57,7 +57,7 @@ def test_div_str_mul():
     testing = Base_Entry()
     testing.__dict__ = {"str":{"2", "1"}}
     quotient = testing / 2
-    assert quotient.str == "1.0 str"
+    assert quotient.str == "1.0"
 
 
 

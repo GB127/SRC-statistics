@@ -15,16 +15,19 @@ class Base_Entry:
         if isinstance(other, int):
             return copie
         for attribute in self.__dict__:
+            if copie[attribute] is None:
+                continue
             if isinstance(copie[attribute] , bool):
                 continue
-            elif isinstance(copie[attribute] , int):
-                copie[attribute] += other[attribute]
-            elif copie[attribute] == other[attribute]:
-                continue
-            elif not isinstance(copie[attribute], set):
-                copie[attribute] = {copie[attribute], other[attribute]}
+            elif isinstance(copie[attribute] , (set,str)):
+                if copie[attribute] == other[attribute]:
+                    continue
+                if not isinstance(copie[attribute], set):
+                    copie[attribute] = {copie[attribute], other[attribute]}
+                else:
+                    copie[attribute].add(other[attribute])
             else:
-                copie[attribute].add(other[attribute])
+                copie[attribute] += other[attribute]
 
         return copie
 
@@ -36,7 +39,7 @@ class Base_Entry:
             elif isinstance(copie[attribute], int):
                 copie[attribute] /= denom
             elif isinstance(copie[attribute], set):
-                copie[attribute] = f'{len(copie[attribute]) / denom} {attribute}'
+                copie[attribute] = f'{len(copie[attribute]) / denom:.2}'
             elif isinstance(copie[attribute], str):
                 copie[attribute] = f'{1 / denom} {attribute}'
         return copie

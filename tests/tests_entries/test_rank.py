@@ -22,5 +22,5 @@ class Test_misc:
     @fill_db
     def test_str(self):
 
-        string = "50    22:22:22   -11:11:11   200.00%"
+        string = " 22:22:22   -11:11:11   200.00%"
         assert str(Rank(dicto_m("rank")["data"],80542 / 2)) == string

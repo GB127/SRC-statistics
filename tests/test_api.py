@@ -121,8 +121,19 @@ class Test_region:
         api.region_db[id_m("region")] = "US"
         assert api.region(id_m("region")) == "US"
 
-class Test_lb:
+class Test_tables:
     @clear_db
-    def test_level(self, requests_mock: Mocker):
-        requests_mock.get(link_m("level"), json=dicto_m("level"))
-        assert 'Slip Slide Icecapades' == api.level(id_m('level'))
+    def test_lb(self, requests_mock: Mocker):
+        requests_mock.get("https://www.speedrun.com/api/v1/leaderboards/xldev513/category/rklg3rdn", json=dicto_m("lb"))
+        tempo = api.leaderboard("xldev513", "rklg3rdn")
+        assert len(tempo) == 3
+        assert all([isinstance(x, dict) for x in tempo])
+        for clé in ["place", "run"]:
+            assert clé in tempo[0].keys()
+
+    @clear_db
+    def test_runs(self, requests_mock: Mocker):
+        raise NotImplementedError
+    @clear_db
+    def test_pbs(self, requests_mock: Mocker):
+        raise NotImplementedError
