@@ -19,4 +19,3 @@ class Test_others:
     def test_str(self):
         string = "Test | 1 game | 1 system\n3 Runs (  33:33:33)\n3 PBs  (  33:33:33)"
         assert str(Test_others.model) == string
-        raise NotImplementedError("Saved to implement")

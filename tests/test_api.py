@@ -121,6 +121,9 @@ class Test_region:
         api.region_db[id_m("region")] = "US"
         assert api.region(id_m("region")) == "US"
 
+    def test_api_rest(self, requests_mock:Mocker):
+        raise NotImplementedError
+
 class Test_tables:
     @clear_db
     def test_lb(self, requests_mock: Mocker):

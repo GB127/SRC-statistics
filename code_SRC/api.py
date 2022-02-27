@@ -81,5 +81,9 @@ class api:
 
     @staticmethod
     def leaderboard(game_id, category_id, subcat_id=None):
-        req = get(f'{api.URL}leaderboards/{game_id}/category/{category_id}').json()
+        variables = ""
+        if subcat_id:
+            variables = "&var-".join([f"{x}={y}" for x,y in subcat_id.items()])
+            #input(f'{api.URL}leaderboards/{game_id}/category/{category_id}?var-{variables or ""}')
+        req = get(f'{api.URL}leaderboards/{game_id}/category/{category_id}?var-{variables}').json()
         return req["data"]["runs"]
