@@ -41,7 +41,7 @@ class Base_Entry:
             elif isinstance(copie[attribute], set):
                 copie[attribute] = f'{len(copie[attribute]) / denom:.2}'
             elif isinstance(copie[attribute], str):
-                copie[attribute] = f'{1 / denom} {attribute}'
+                copie[attribute] = f'{1 / denom :.2} {attribute}'
         return copie
 
     def __eq__(self, other):

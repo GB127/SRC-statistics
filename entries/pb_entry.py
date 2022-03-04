@@ -12,6 +12,7 @@ class PB(Rank):
 
     def __str__(self):
         time_str = lambda x : f'{int(x)//3600:>3}:{int(x) % 3600 // 60:02}:{int(x) % 3600 % 60 % 60:02}'
+        inted_lb = self.leaderboard if isinstance(self.leaderboard, (float, int)) else len(self.leaderboard)
         p = [4, 20,10, 10, 9, 8]
         liste = []
         for no, attribute in enumerate(["system", "game","category","WR time", "time"]):
@@ -26,7 +27,8 @@ class PB(Rank):
                 liste.append(f'{self[attribute][:p[no]]:{p[no]}}')
         string =  "   ".join(liste)
         string += f' ({self.WR_perc:.2%})'
-        string += f'    {self.place}/{len(self.leaderboard)}'
-        string += f'    ({(len(self.leaderboard) - self.place)/len(self.leaderboard):.2%})'
+        rank = f'{int(self.place):>4}/{int(inted_lb):<4}'
+        string += f'    {rank:^9}'
+        string += f'    ({int(inted_lb - self.place)/int(inted_lb):.2%})'
         return string
 

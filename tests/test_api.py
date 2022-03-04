@@ -5,6 +5,7 @@ from tests.datas_fx import link_m, dicto_m, id_m
 
 
 
+
 def clear_db(original_function):
     def new_function(self, requests_mock):
         for database in ["game_db", "category_db", "level_db", "system_db", "region_db", "system_db"]:
