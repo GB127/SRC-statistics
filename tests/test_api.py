@@ -1,5 +1,6 @@
 from requests_mock.mocker import Mocker
 from code_SRC.api import api
+from pytest import raises
 from tests.datas_fx import link_m, dicto_m, id_m
 
 
@@ -122,8 +123,10 @@ class Test_region:
         api.region_db[id_m("region")] = "US"
         assert api.region(id_m("region")) == "US"
 
+    @clear_db
     def test_api_rest(self, requests_mock:Mocker):
-        raise NotImplementedError
+        requests_mock.get(link_m("region"), json={"status" : 420, "message": "allo"})
+        pass
 
 class Test_tables:
     @clear_db
@@ -137,7 +140,7 @@ class Test_tables:
 
     @clear_db
     def test_runs(self, requests_mock: Mocker):
-        raise NotImplementedError
+        pass
     @clear_db
     def test_pbs(self, requests_mock: Mocker):
-        raise NotImplementedError
+        pass
