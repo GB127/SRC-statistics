@@ -1,4 +1,20 @@
 from requests import get
+from time import sleep
+
+def wait(original_function):
+    def new_function(self):
+        while True:
+            try:
+                return original_function(self)
+            except KeyError:
+                sleep(5)
+                #input("WTF")
+                pass
+    return new_function
+
+
+
+
 
 class api:
     URL = "https://www.speedrun.com/api/v1/"
@@ -9,6 +25,7 @@ class api:
     region_db = {}
 
     @staticmethod
+    @wait
     def game(id:str) -> str:
         try:
             return api.game_db[id]
@@ -18,6 +35,7 @@ class api:
         return api.game_db[id]
 
     @staticmethod
+    @wait
     def system(id:str) -> str:
         if not id:
             return "???"
@@ -30,6 +48,7 @@ class api:
         return api.system_db[id]
 
     @staticmethod
+    @wait
     def region(id:str) -> str:
         try:
             return api.region_db[id]
@@ -39,6 +58,7 @@ class api:
         return api.region_db[id]
 
     @staticmethod
+    @wait
     def category(id:str) -> str:
         try:
             return api.category_db[id]
@@ -48,6 +68,7 @@ class api:
         return api.category_db[id]
 
     @staticmethod
+    @wait
     def level(id) -> str:
         try:
             return api.level_db[id]
