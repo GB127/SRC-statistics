@@ -36,7 +36,7 @@ class Base_Entry:
         for attribute in self.__dict__:
             if isinstance(copie[attribute], bool):
                 continue
-            elif isinstance(copie[attribute], int):
+            elif isinstance(copie[attribute], (int, float)):
                 copie[attribute] /= denom
             elif isinstance(copie[attribute], set):
                 copie[attribute] = f'{len(copie[attribute]) / denom:.2}'
