@@ -1,8 +1,12 @@
 from requests_mock.mocker import Mocker
 from code_SRC.api import api
-from pytest import raises
 from tests.datas_fx import link_m, dicto_m, id_m
 
+@clear_db
+def test_category_no_requests(self, requests_mock:Mocker):
+    api.category_db["nxd1rk8q"] = "Any% (No SSU)"
+    requests_mock.get("https://www.speedrun.com/api/v1/categories/nxd1rk8q", exc=NotImplementedError("Requested instead of using saved data"))
+    assert api.category_db["nxd1rk8q"] == "Any% (No SSU)"
 
 
 
@@ -27,37 +31,14 @@ class Test_game:
     def test_game(self, requests_mock: Mocker):
         requests_mock.get(link_m("game"), json=dicto_m("game"))
         assert 'Super Mario Sunshine' == api.game(id_m("game"))
-
-    @clear_db
-    def test_game_update_db(self, requests_mock:Mocker):
-        requests_mock.get(link_m("game"), json=dicto_m("game"))
-        api.game(id_m("game"))
         assert  api.game_db[id_m("game")] == "Super Mario Sunshine", "Game database not updated"
 
-    @clear_db
-    def test_game_no_request(self, requests_mock:Mocker):
-        requests_mock.get(link_m("game"), exc=NotImplementedError("Requested instead of using saved data"))
-        api.game_db[id_m("game")] = "Super Mario Sunshine"
-        assert api.game(id_m("game")) == "Super Mario Sunshine"
+@clear_db
+def test_category(requests_mock: Mocker):
+    requests_mock.get(link_m("category"), json=dicto_m("category"))
+    assert 'Any%' == api.category(id_m("category"))
+    assert 'Any%' == api.category_db[id_m("category")]
 
-class Test_category:
-    @clear_db
-    def test_category(self, requests_mock: Mocker):
-        requests_mock.get(link_m("category"), json=dicto_m("category"))
-        assert 'Any%' == api.category(id_m("category"))
-
-    @clear_db
-    def test_category_update_db(self, requests_mock:Mocker):
-        requests_mock.get(link_m("category"), json=dicto_m("category"))
-        api.category(id_m("category"))
-        assert 'Any%' == api.category_db[id_m("category")]
-
-
-    @clear_db
-    def test_category_no_requests(self, requests_mock:Mocker):
-        api.category_db["nxd1rk8q"] = "Any% (No SSU)"
-        requests_mock.get("https://www.speedrun.com/api/v1/categories/nxd1rk8q", exc=NotImplementedError("Requested instead of using saved data"))
-        assert api.category_db["nxd1rk8q"] == "Any% (No SSU)"
 
 class Test_system:
 
@@ -65,18 +46,7 @@ class Test_system:
     def test_system(self, requests_mock: Mocker):
         requests_mock.get(link_m("system"), json=dicto_m("system"))
         assert 'Nintendo Entertainment System' == api.system(id_m("system"))
-
-    @clear_db
-    def test_system_update_db(self, requests_mock: Mocker):
-        requests_mock.get(link_m("system"), json=dicto_m("system"))
-        api.system(id_m("system"))
         assert api.system_db[id_m("system")] == "Nintendo Entertainment System"
-
-    @clear_db
-    def test_system_norequest(self, requests_mock: Mocker):
-        api.system_db[id_m("system")] = "Nintendo Entertainment System"
-        requests_mock.get(link_m("system"), exc=NotImplementedError("Requested instead of using saved data"))
-        assert api.system(id_m("system")) == "Nintendo Entertainment System"
 
     @clear_db
     def test_system_acro_vc(self, requests_mock:Mocker):

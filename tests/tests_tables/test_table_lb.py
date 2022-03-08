@@ -8,7 +8,6 @@ class Test_init:
         assert tempo.WR == 40271
 
     def test_add(self):
-        assert NotImplementedError
-    
+        pass    
     def test_add_int(self):
-        assert NotImplementedError
+        pass

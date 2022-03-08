@@ -1,7 +1,11 @@
 from copy import copy
+from random import randint
+import os
+from code_SRC.plot import window_handler
+
+clear = lambda: os.system('cls')
 
 class Base_Table:
-
     def __len__(self):
         return len(self.data)
 
@@ -42,3 +46,13 @@ class Base_Table:
         new.data = list(sommes.values())
 
         return new
+
+
+
+    def histo(self):
+        window_handler(self.data)
+
+if __name__ == "__main__":
+    test = Base_Table()
+    test.data = [{f'allo':str(randint(6, 10))} for x in range(1,41)]
+    test.histo()
