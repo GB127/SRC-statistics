@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import QGridLayout,QPushButton, QApplication,QComboBox, QWidget, QHBoxLayout, QVBoxLayout, QListWidget
+from PyQt5.QtWidgets import QListWidgetItem,QGridLayout,QPushButton, QApplication,QComboBox, QWidget, QHBoxLayout, QVBoxLayout, QListWidget
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import matplotlib.pyplot as plt
 import matplotlib
@@ -10,10 +10,15 @@ class Histo_app(QWidget):
     def __init__(self, data_list):
         def create_list_widget():
             self.listwidget = QListWidget()
-            self.listwidget.setFixedWidth(300)
-            for index, entry in enumerate(data_list):
-                self.listwidget.insertItem(index, str(entry))
-
+            self.listwidget.setFixedWidth(450)
+            self.listwidget.alternatingRowColors()
+            for entry in data_list:
+                one_line = QListWidgetItem(str(entry))
+                #one_line.setFont(QFont("Courier New", 10))
+                one_line.setFont(QFont("Lucida Sans Typewriter", 10))
+                # Lucida Sans Typewriter
+                self.listwidget.addItem(one_line)
+            testing = self.listwidget
             self.listwidget.clicked.connect(self.clicked)
             layout.addWidget(self.listwidget, 0, 0, 0,1)
 
@@ -44,7 +49,7 @@ class Histo_app(QWidget):
         fetch_valid_keys()
         self.data = data_list
         self.setWindowTitle('Histogram!')
-        self.window_width, self.window_height = 1200, 800
+        self.window_width, self.window_height = 1400, 800
         self.setMinimumSize(self.window_width, self.window_height)
 
         layout = QGridLayout()
@@ -59,11 +64,13 @@ class Histo_app(QWidget):
 
 
     def update_chart(self, y):
+        def update_x():
+            self.ax.set_xlabel(y)
         self.canvas.figure.clf()
         self.ax = self.canvas.figure.subplots()
         self.ax.hist([x[y] for x in self.data])
         self.ax.set_title(y)
-        #self.ax.set_xlabel(y)
+        update_x()
         self.ax.set_ylabel("Frequency")
         self.canvas.draw()
 
@@ -91,6 +98,17 @@ def window_handler(data):
 
 
 
+
+class Mockery:
+    def __init__(self):
+        self.a = random.randint(122,333)
+        self.b = random.randint(63,500)
+        self.time = random.randint(3000,5000)
+        self.d = random.randint(0,10)
+        self.e = random.randint(0,10)
+    def __getitem__(self, key):
+        return self.__dict__[key]
+
 if __name__ == "__main__":
-    data = [{"patate":3, "macaroni":"lll", "name":x, "allo": str(random.randint(0,10))} for x in range(30)]
+    data = [Mockery() for _ in range(40)]
     window_handler(data)
