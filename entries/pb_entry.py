@@ -26,7 +26,7 @@ class PB(Rank):
             else:
                 liste.append(f'{self[attribute][:p[no]]:{p[no]}}')
         string =  "   ".join(liste)
-        string += f' ({self.WR_perc:.2%})'
+        string += f' ({self["WR %"]:.2%})'
         rank = f'{int(self.place):>4}/{int(inted_lb):<4}'
         string += f'    {rank:^9}'
         string += f'    ({int(inted_lb - self.place)/int(inted_lb):.2%})'

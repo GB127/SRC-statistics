@@ -24,6 +24,8 @@ class Base_Entry:
                     continue
                 if not isinstance(copie[attribute], set):
                     copie[attribute] = {copie[attribute], other[attribute]}
+                elif isinstance(other[attribute], set):
+                    copie[attribute] |= other[attribute]
                 else:
                     copie[attribute].add(other[attribute])
             else:

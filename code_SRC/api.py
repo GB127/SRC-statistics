@@ -5,8 +5,9 @@ def requester(link):
     while True:
         try:
             data = get(link).json()
+            assert "data" in data
             return data
-        except KeyError:
+        except AssertionError:
             print(data)
             print("Waiting...")
             sleep(20)
