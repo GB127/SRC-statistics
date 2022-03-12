@@ -5,7 +5,6 @@ def test_setitem():
     testing["allo"] = 1
     assert testing.__dict__["allo"] == 1
 
-
 def test_getitem():
     testing = Base_Entry()
     testing.__dict__ = {"allo2":1}
@@ -57,7 +56,7 @@ def test_div_str_mul():
     testing = Base_Entry()
     testing.__dict__ = {"str":{"2", "1"}}
     quotient = testing / 2
-    assert quotient.str == "1.0"
+    assert quotient.str == "1.0 str"
 
 
 
