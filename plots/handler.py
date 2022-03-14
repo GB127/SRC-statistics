@@ -32,11 +32,10 @@ def window_handler(data, application, debug=False):
     myApp = application(data)
     myApp.show()
 
-    if not debug:
     # Need to keep this so it doesn't close the window
-        try:
-            sys.exit(app.exec_())
-        except SystemExit:
-            print('Closing Window...')
+    try:
+        sys.exit(app.exec_())
+    except SystemExit:
+        print('Closing Window...')
 
 

@@ -15,6 +15,15 @@ def fill_db(original_function):
         original_function(self)
     return new_function
 
+def clear_db(original_function):
+    def new_function(self, requests_mock):
+        api.game_db = {}
+        api.category_db = {}
+        api.system_db = {}
+        original_function(self, requests_mock)
+    return new_function
+
+
 def liste_dicto(filename):
         liste = []
         for _ in range(3):

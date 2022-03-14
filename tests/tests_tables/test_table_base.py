@@ -52,19 +52,6 @@ class Test_op:
         assert testing.median("allo") == {"allo":12}
 
 
-    def test_join(self):
-        testing = Base_Table()
-        testing.data = [Base_Entry() for _ in range(6)]
-        for index, dicto in enumerate([{"joined":lettre, "addition":chiffre} for lettre,chiffre in [("A", 1),("A", 2),("A", 3),("B", 4),("C", 5),("B", 6)]]):
-            testing.data[index].__dict__ = dicto
-
-
-        desired = Base_Table()
-        desired.data = [Base_Entry() for _ in range(3)]
-        for index, dicto in enumerate([{"joined":lettre, "addition":chiffre} for lettre,chiffre in [("A", 6),("B", 10),("C", 5),]]):
-            desired.data[index].__dict__ = dicto
-        for one in testing.join("joined"):
-            assert any([one==x for x in desired]), f'{one.__dict__} | {[x.__dict__ for x in desired]}'
 
 
 class Test_misc:

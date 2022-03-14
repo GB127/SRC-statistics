@@ -34,15 +34,12 @@ class Pie_app(QWidget):
             matplotlib.rc('font', **font)
             self.update_chart(random_key(self.keys))
 
-
-
         def fetch_valid_keys():
             self.keys = []
             for x, value in data_list[0].__dict__.items():
                 if x == "leaderboard":continue
                 elif not isinstance(value, (int, float)):
                     self.keys.append(x)
-
 
         super().__init__()
         fetch_valid_keys()
@@ -79,12 +76,12 @@ class Pie_app(QWidget):
         légende_couleurs = {}
         for texte, couleur in zip(tempo[1], tempo[0]):
             légende_couleurs[texte.get_text()] = matplotlib.colors.to_hex(couleur.get_facecolor())
-        print(légende_couleurs)
 
         for index, data in enumerate(self.data):
             test = self.listwidget.item(index)
             if data[y] in légende_couleurs:
                 test.setBackground(QColor(légende_couleurs[data[y]]))
+            elif not data[y]: continue
             else:
                 test.setBackground(QColor(légende_couleurs["autres"]))
 

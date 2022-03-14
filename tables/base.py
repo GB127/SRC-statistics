@@ -1,4 +1,3 @@
-from copy import copy
 from random import randint
 import os
 

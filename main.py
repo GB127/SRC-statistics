@@ -1,7 +1,7 @@
 from code_SRC.user import User
 
 
-test = User("libre")
-# print(test.pbs)
-
-test()
+if __name__ == "__main__":
+    # test = User(input("Analyse who? "))
+    test = User("libre")
+    test()
