@@ -6,10 +6,11 @@ from plots.pie import Pie_app
 
 
 class Table_run(Base_Table):
-    def __init__(self, list_runs:list):
+    def __init__(self, list_runs:list, include_lvl:bool):
         self.data = []
         for data in list_runs:
-            self.data.append(Run(data))
+            if include_lvl == bool(data["level"]):
+                self.data.append(Run(data))
 
     def __call__(self):
         super().__call__(self.histo, self.pie, self.sort)

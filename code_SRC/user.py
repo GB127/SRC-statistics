@@ -10,21 +10,23 @@ class User:
     def __init__(self, username):  # pragma: no cover
         self.username = username  # pragma: no cover
         self.id = api.user_id(username)  # pragma: no cover
-        self.runs = Table_run(api.user_runs(self.id))  # pragma: no cover
-        self.pbs = Table_pb(api.user_pbs(self.id))  # pragma: no cover
+        self.runs = Table_run(api.user_runs(self.id), False)  # pragma: no cover
+        self.pbs = Table_pb(api.user_pbs(self.id), False)  # pragma: no cover
+        self.runs_lvl = Table_run(api.user_runs(self.id), True)  # pragma: no cover
+        self.pbs_lvl = Table_pb(api.user_pbs(self.id), True)  # pragma: no cover
 
     def __call__(self):
         while True:
             clear()
             print(self)
-            for index, fx in enumerate(["pbs", "runs"]):
+            for index, fx in enumerate(["pbs", "runs", "pbs_lvl", "runs_lvl"]):
                 print(index, fx)
             command = input(f"Select option: [0-{2 -1}] | Type end to exit\nInput : ")
             if command == "end":
                 break
-            self.__dict__[["pbs", "runs"][int(command)]]()
+            self.__dict__[["pbs", "runs","pbs_lvl", "runs_lvl"][int(command)]]()
 
 
     def __str__(self):
         time_str = lambda x : f'{int(x)//3600:>3}:{int(x) % 3600 // 60:02}:{int(x) % 3600 % 60 % 60:02}'
-        return f"{self.username} | {len(self.runs)} Runs ({time_str(self.runs.sum().time):>10})| {len(self.pbs)} PBs  ({time_str(self.pbs.sum().time):>10})"
+        return "Tempo"

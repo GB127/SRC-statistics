@@ -5,10 +5,11 @@ from plots.histo import Histo_app
 from plots.pie import Pie_app
 
 class Table_pb(Base_Table):
-    def __init__(self, list_runs:list):
+    def __init__(self, list_runs:list, include_lvl:bool):
         self.data = []
         for data in list_runs:
-            self.data.append(PB(data))
+            if include_lvl == bool(data["run"]["level"]):
+                self.data.append(PB(data))
 
     def __call__(self):
         super().__call__(self.histo, self.pie, self.sort)

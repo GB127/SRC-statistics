@@ -2,7 +2,6 @@ from requests import get
 from time import sleep
 
 def requester(link):
-    print(link)
     while True:
         try:
             data = get(link).json()
