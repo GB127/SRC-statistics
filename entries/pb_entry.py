@@ -7,7 +7,9 @@ class PB(Rank):
         category_id = data["run"]["category"]
         game_id = data["run"]["game"]
         sub_cat_ids = data["run"]["values"]
-        self.leaderboard = LB(api.leaderboard(game_id, category_id, sub_cat_ids))
+        level_id = None
+        if data["run"]["level"]: level_id = data["run"]["level"]
+        self.leaderboard = LB(api.leaderboard(game_id, category_id, sub_cat_ids, level_id))
         super().__init__(data, self.leaderboard.WR)
 
     def __str__(self):

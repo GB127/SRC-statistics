@@ -12,6 +12,9 @@ class Run(Base_Entry):
         self.system = api.system(data["system"]["platform"])
         self.time = data["times"]["primary_t"]
 
+        if data["level"]:
+            self.level = data["level"]
+
     def __str__(self):
         time_str = lambda x : f'{int(x)//3600:>3}:{int(x) % 3600 // 60:02}:{int(x) % 3600 % 60 % 60:02}'
         p = [4, 20, 10, 9]

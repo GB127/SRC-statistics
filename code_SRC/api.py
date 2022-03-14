@@ -2,6 +2,7 @@ from requests import get
 from time import sleep
 
 def requester(link):
+    print(link)
     while True:
         try:
             data = get(link).json()
@@ -92,10 +93,14 @@ class api:
         return req["data"]
 
     @staticmethod
-    def leaderboard(game_id, category_id, subcat_id=None):
+    def leaderboard(game_id, category_id, subcat_id=None, level_id=None):
         variables = ""
         if subcat_id:
             variables = "&var-".join([f"{x}={y}" for x,y in subcat_id.items()])
-            #input(f'{api.URL}leaderboards/{game_id}/category/{category_id}?var-{variables or ""}')
-        req = requester(f'{api.URL}leaderboards/{game_id}/category/{category_id}?var-{variables}')
+
+
+        if not level_id:
+            req = requester(f'{api.URL}leaderboards/{game_id}/category/{category_id}?var-{variables}')
+        else:
+            req = requester(f'{api.URL}leaderboards/{game_id}/level/{level_id}/{category_id}?var-{variables}')
         return req["data"]["runs"]
