@@ -2,29 +2,31 @@ from PyQt5.QtWidgets import QListWidgetItem,QGridLayout,QPushButton, QWidget, QL
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import matplotlib.pyplot as plt
 import matplotlib
-import matplotlib.colors
-from random import randint as random_key
-from copy import copy
-from PyQt5.QtGui import QFont, QColor
+from random import choice as random_key
+from PyQt5.QtGui import QFont
 from plots.handler import Mockery
 
-class Pie_app(QWidget):
+
+class Histo_app(QWidget):
     def __init__(self, data_list):
-        def insert_list_widget():
+        def create_list_widget():
             self.listwidget = QListWidget()
             self.listwidget.setFixedWidth(450)
+            self.listwidget.alternatingRowColors()
             for entry in data_list:
                 one_line = QListWidgetItem(str(entry))
+                #one_line.setFont(QFont("Courier New", 10))
                 one_line.setFont(QFont("Lucida Sans Typewriter", 10))
                 self.listwidget.addItem(one_line)
             self.listwidget.clicked.connect(self.clicked)
             layout.addWidget(self.listwidget, 0, 0, 0,1)
 
-        def insert_buttons_widget():
+        def insert_buttons():
             for numéro, x in enumerate(self.keys):
                 dropbox = QPushButton(x)
                 dropbox.clicked.connect(lambda checked, a=x : self.update_chart(a))
                 layout.addWidget(dropbox, 1,1+numéro)
+
 
         def insert_plot():
             self.canvas = FigureCanvas(plt.Figure(tight_layout=True))
@@ -35,13 +37,10 @@ class Pie_app(QWidget):
             self.update_chart(random_key(self.keys))
 
 
-
         def fetch_valid_keys():
             self.keys = []
             for x, value in data_list[0].__dict__.items():
-                if x == "leaderboard":continue
-                elif not isinstance(value, (int, float)):
-                    self.keys.append(x)
+                if isinstance(value, (int, float)): self.keys.append(x)
 
 
         super().__init__()
@@ -53,9 +52,9 @@ class Pie_app(QWidget):
 
         layout = QGridLayout()
         self.setLayout(layout)
-        insert_list_widget()
+        create_list_widget()
         insert_plot()
-        insert_buttons_widget()
+        insert_buttons()
 
     def clicked(self):
         item = self.listwidget.currentItem()
@@ -63,38 +62,23 @@ class Pie_app(QWidget):
 
 
     def update_chart(self, y):
-        def count_data():
-            count = {}
-            for x in self.data:
-                count[x[y]] = count.get(x[y], 0) + 1
-            for x in copy(count):
-                if count[x] / sum(count.values()) < 0.05:
-                    count["autres"] = count.get("autres", 0) + count[x]
-                    del count[x]
-            return count
+        def update_x():
+            if "time" in y:
+                time_str = lambda x : f'{x//3600:>3}:{int(x) % 3600 // 60:02}:{int(x) % 3600 % 60 % 60:02}'
+                self.ax.set_xticklabels([time_str(int(x.get_text().replace("−", "-"))) for x in self.ax.get_xticklabels()])
+                self.canvas.draw()
+            elif "%" in y:
+                self.ax.set_xticklabels([f'{float(x.get_text().replace("−", "-")):.2%}' for x in self.ax.get_xticklabels()])
+                self.canvas.draw()
+
         self.canvas.figure.clf()
         self.ax = self.canvas.figure.subplots()
-        tempo = self.ax.pie(count_data().values(),labels=count_data().keys(), startangle=90, autopct='%1.1f%%')
-
-        légende_couleurs = {}
-        for texte, couleur in zip(tempo[1], tempo[0]):
-            légende_couleurs[texte.get_text()] = matplotlib.colors.to_hex(couleur.get_facecolor())
-        print(légende_couleurs)
-
-        for index, data in enumerate(self.data):
-            test = self.listwidget.item(index)
-            if data[y] in légende_couleurs:
-                test.setBackground(QColor(légende_couleurs[data[y]]))
-            else:
-                test.setBackground(QColor(légende_couleurs["autres"]))
-
-        self.ax.set_title(f"{self.data[0].__class__.__name__}s - {y}")
+        self.ax.hist([x[y] for x in self.data])
         self.canvas.draw()
-
-
+        self.ax.set_title(y)
+        self.ax.set_ylabel("Frequency")
+        update_x()
 
 
 if __name__ == "__main__":
-    data = [Mockery() for _ in range(100)]
-    for x in range(3):
-        data[x]["Game"] = "toto"
+    data = [Mockery() for _ in range(40)]
