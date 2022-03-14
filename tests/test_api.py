@@ -2,7 +2,6 @@ from requests_mock.mocker import Mocker
 from code_SRC.api import api
 from tests.datas_fx import link_m, dicto_m, id_m
 
-#@clear_db
 #def test_category_no_requests(self, requests_mock:Mocker):
 #    api.category_db["nxd1rk8q"] = "Any% (No SSU)"
 #    requests_mock.get("https://www.speedrun.com/api/v1/categories/nxd1rk8q", exc=NotImplementedError("Requested instead of using saved data"))
@@ -15,6 +14,8 @@ def test_game(requests_mock: Mocker):
     assert 'Super Mario Sunshine' == api.game(id_m("game"))
     assert  api.game_db[id_m("game")] == "Super Mario Sunshine", "Game database not updated"
 
+
+@clear_db
 def test_category(requests_mock: Mocker):
     requests_mock.get(link_m("category"), json=dicto_m("category"))
     assert 'Any%' == api.category(id_m("category"))
