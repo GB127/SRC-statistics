@@ -3,7 +3,7 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import matplotlib.pyplot as plt
 import matplotlib
 import matplotlib.colors
-from random import randint as random_key
+from random import choice as random_key
 from copy import copy
 from PyQt5.QtGui import QFont, QColor
 from plots.handler import Mockery
