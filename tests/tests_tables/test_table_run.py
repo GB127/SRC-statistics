@@ -11,7 +11,7 @@ def liste_runs():
 class Test_init:
     @fill_db
     def test_attributes(self):
-        Test_init.model = Table_run(liste_runs())
+        Test_init.model = Table_run(liste_runs(), include_lvl=False)
         hasattr(Test_init.model, "data")
 
     def test_apply_Run(self):

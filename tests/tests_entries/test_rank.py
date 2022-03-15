@@ -1,25 +1,23 @@
 from entries.rank_entry import Rank
 from tests.datas_fx import fill_db, dicto_m
+from tests.tests_entries.mocks import Rank_mock
 
 class Test_init:
     @fill_db
-    def test_init_create_attri(self):
+    def test_init(self):
+        testing = Rank(dicto_m("rank")["data"], 50000)
         for attribute in ["place", "game", "time", "system","category","WR %", "region", "emu", "WR time"]:
-            assert hasattr(Rank(dicto_m("rank")["data"], 50000), attribute), f"{attribute} not created"
-    @fill_db
-    def test_init_del_attri(self):
+            assert hasattr(testing, attribute), f"{attribute} not created"
+
         for unwanted in ["id", "weblink", "videos", "values", "submitted", "splits", "links", "comment", "times", "players", "status"]:
-            assert not hasattr(Rank(dicto_m("rank")["data"], 50000), unwanted)
+            assert not hasattr(testing, unwanted)
 
-    def test_init_WR(self):
-        assert Rank(dicto_m("rank")["data"], 50000)["WR time"] == 50000
-
-    def test_init_WR_perc(self):
-        assert Rank(dicto_m("rank")["data"], 80542 / 2)["WR %"] == 2
+        assert testing["WR time"] == 50000
+        assert testing["WR %"] == 1
 
 
 class Test_misc:
     @fill_db
     def test_str(self):
-        string = " 22:22:22   -11:11:11   200.00%"
-        assert str(Rank(dicto_m("rank")["data"],80542 / 2)) == string
+        testing_1 = Rank_mock()
+        assert str(testing_1) == "string"

@@ -27,6 +27,7 @@ class Test_apis:
         requests_mock.get(link_m("system"), json=dicto_VC)
         assert 'Nintendo Entertainment System VC' == api.system(id_m("system")), api.system(id_m("system"))
         assert "Nintendo Entertainment System VC" == api.system_db[id_m("system")]
+        assert "???" == api.system(None)
 
     def test_user_id(self, requests_mock:Mocker):
         requests_mock.get(link_m("user"), json=dicto_m("user"))
@@ -42,18 +43,22 @@ class Test_apis:
         assert 'USA / NTSC' == api.region(id_m('region'))
         assert api.region_db[id_m("region")] == "USA / NTSC"
 
+    def test_lb(self, requests_mock: Mocker):
+        requests_mock.get("https://www.speedrun.com/api/v1/leaderboards/xldev513/category/rklg3rdn", json=dicto_m("lb"))
+        tempo = api.leaderboard("xldev513", "rklg3rdn")
+        assert len(tempo) == 3
+        assert all([isinstance(x, dict) for x in tempo])
+        for clé in ["place", "run"]:
+            assert clé in tempo[0].keys()
+
+
+
+
 
 def test_api_rest(requests_mock:Mocker):
     requests_mock.get(link_m("region"), json={"status" : 420, "message": "allo"})
     pass
 
-def test_lb(requests_mock: Mocker):
-    requests_mock.get("https://www.speedrun.com/api/v1/leaderboards/xldev513/category/rklg3rdn", json=dicto_m("lb"))
-    tempo = api.leaderboard("xldev513", "rklg3rdn")
-    assert len(tempo) == 3
-    assert all([isinstance(x, dict) for x in tempo])
-    for clé in ["place", "run"]:
-        assert clé in tempo[0].keys()
 
 def test_runs(requests_mock: Mocker):
     pass
