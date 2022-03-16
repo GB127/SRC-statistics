@@ -15,13 +15,16 @@ class PB(Rank):
     def __str__(self):
         time_str = lambda x : f'{int(x)//3600:>3}:{int(x) % 3600 // 60:02}:{int(x) % 3600 % 60 % 60:02}'
         inted_lb = self.leaderboard if isinstance(self.leaderboard, (float, int)) else len(self.leaderboard)
-        p = [4, 20,10, 10, 9, 8]
+        p = [4, 20,20, 10, 10, 9, 8]
         liste = []
-        for no, attribute in enumerate(["system", "game","category","WR time", "time"]):
+        for no, attribute in enumerate(["system", "game","level", "category","WR time", "time"]):
             if isinstance(self[attribute], (float,int)):
                 liste.append(f'{time_str(self[attribute])[:p[no]]:>{p[no]}}')
             elif isinstance(self[attribute], set):
                 liste.append(f'{str(len(self[attribute]))} {attribute}'[:p[no]])
+            elif attribute == "level" and not self[attribute]: 
+                continue
+
             else:
                 liste.append(f'{self[attribute][:p[no]]:{p[no]}}')
         string =  "   ".join(liste)

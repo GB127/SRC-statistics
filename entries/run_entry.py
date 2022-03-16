@@ -18,14 +18,16 @@ class Run(Base_Entry):
 
     def __str__(self):
         time_str = lambda x : f'{int(x)//3600:>3}:{int(x) % 3600 // 60:02}:{int(x) % 3600 % 60 % 60:02}'
-        p = [4, 20, 10, 9]
+        p = [4, 20, 20, 10, 9]
 
         liste = []
-        for no, attribute in enumerate(["system", "game","category", "time"]):
+        for no, attribute in enumerate(["system", "game","level", "category", "time"]):
             if isinstance(self[attribute], (float,int)):
                 liste.append(f'{time_str(self[attribute])[:p[no]]:>{p[no]}}')
             elif isinstance(self[attribute], set):
                 liste.append(f'{str(len(self[attribute]))} {attribute}'[:p[no]])
+            elif attribute == "level" and not self[attribute]: 
+                continue
             else:
                 liste.append(f'{self[attribute][:p[no]]:{p[no]}}')
         return "   ".join(liste)

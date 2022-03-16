@@ -11,8 +11,8 @@ class Table_pb(Base_Table):
             if include_lvl == bool(data["run"]["level"]):
                 self.data.append(PB(data))
 
-    def __call__(self):  # pragma: no cover
-        super().__call__(self.histo, self.pie, self.sort)  # pragma: no cover
+    def __call__(self):
+        super().__call__(self.histo, self.pie, self.sort)
 
 
     def histo(self): # pragma: no cover

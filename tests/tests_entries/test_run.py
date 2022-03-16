@@ -24,4 +24,5 @@ class Test_str:
         assert "syst   game                   Category       0:00:01" == str(testing_1)
         testing_1.category = {"Category1", "Category2"}
         assert str(testing_1) == "syst   game                   2 category     0:00:01"
-        raise NotImplementedError("Add level test")
+        testing_2 = Run_mock(include_level=True)
+        assert str(testing_2) == "syst   game                   level                  Category       0:00:01"

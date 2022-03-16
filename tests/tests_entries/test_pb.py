@@ -22,3 +22,5 @@ class Test_others:
         assert str(testing_1) == 'syst   game                   Category        0:00:01     0:00:02 (200.00%)       2/4       (50.00%)'
         testing_1.category = {"Category1", "Category2"}
         assert str(testing_1) == 'syst   game                   2 category      0:00:01     0:00:02 (200.00%)       2/4       (50.00%)'
+        testing_2 = PB_mock(include_level=True)
+        assert str(testing_2) == 'syst   game                   level                  Category        0:00:01     0:00:02 (200.00%)       2/4       (50.00%)'

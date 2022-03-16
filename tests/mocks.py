@@ -5,10 +5,11 @@ from tables.pbs import Table_pb
 from tables.runs import Table_run
 
 class Run_mock(Run):
-    def __init__(self):
+    def __init__(self, include_level=False):
         self.level = False
         self.game = "game"
         self.system = "system"
+        self.level = None if not include_level else "level"
         self.time = 1
         self.category = "Category"
 
@@ -25,7 +26,7 @@ class Rank_mock(Rank):
 
 
 class PB_mock(PB):
-    def __init__(self):
+    def __init__(self, include_level=False):
         self.level = False
         self.game = "game"
         self.system = "system"
@@ -35,6 +36,7 @@ class PB_mock(PB):
         self["WR %"] = 2
         self.category = "Category"
         self.leaderboard = [0,0,0,0]
+        self.level = None if not include_level else "level"
 
 
 class Table_pb_mock(Table_pb):
