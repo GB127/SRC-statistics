@@ -64,4 +64,4 @@ class Test_misc:
     def test_hist(self):
         testing = Base_Table()
         testing.data = [{"a":x} for x in range(6)]
-        
+        raise NotImplementedError

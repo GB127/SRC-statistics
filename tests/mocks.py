@@ -15,8 +15,10 @@ class Rank_mock(Rank):
         self.level = False
         self.game = "game"
         self.system = "system"
-        self.time = 1
+        self.time = 2
         self.category = "Category"
+        self["WR time"] = 1
+        self["WR %"] = 2
 
 
 class PB_mock(PB):
@@ -24,5 +26,9 @@ class PB_mock(PB):
         self.level = False
         self.game = "game"
         self.system = "system"
-        self.time = 1
+        self.place = 2
+        self.time = 2
+        self["WR time"] = 1
+        self["WR %"] = 2
         self.category = "Category"
+        self.leaderboard = [0,0,0,0]
