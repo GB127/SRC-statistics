@@ -7,10 +7,10 @@ def requester(link):
             data = get(link).json()
             assert "data" in data
             return data
-        except AssertionError:
-            print(data)
-            print("Waiting...")
-            sleep(20)
+        except AssertionError:  # pragma: no cover
+            print(data)  # pragma: no cover
+            print("Waiting...")  # pragma: no cover
+            sleep(20)  # pragma: no cover
 
 class api:
     URL = "https://www.speedrun.com/api/v1/"

@@ -51,7 +51,7 @@ class Base_Table:
         return self[len(self) // 2]
 
 
-if __name__ == "__main__":
-    test = Base_Table()
-    test.data = [{f'allo':str(randint(6, 10))} for x in range(1,41)]
-    test.sort()
+if __name__ == "__main__":  # pragma: no cover
+    test = Base_Table()  # pragma: no cover
+    test.data = [{f'allo':str(randint(6, 10))} for x in range(1,41)]  # pragma: no cover
+    test.sort()  # pragma: no cover

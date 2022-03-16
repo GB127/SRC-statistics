@@ -48,7 +48,7 @@ class Test_op:
 
     def test_median(self):
         testing = Base_Table()
-        testing.data = [{"allo":1},{"allo":10000}, {"allo":12}]
+        testing.data = [{"allo":1}, {"allo":10000}, {"allo":12}]
         assert testing.median("allo") == {"allo":12}
 
 
@@ -60,8 +60,3 @@ class Test_misc:
         testing.data = [1,2,3]
         stringed = "  1   1\n  2   2\n  3   3\n-------\n  ∑   6\n  X̅   2.0"
         assert str(testing) == stringed
-
-    def test_hist(self):
-        testing = Base_Table()
-        testing.data = [{"a":x} for x in range(6)]
-        raise NotImplementedError

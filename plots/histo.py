@@ -4,8 +4,6 @@ import matplotlib.pyplot as plt
 import matplotlib
 from random import choice as random_key
 from PyQt5.QtGui import QFont
-from plots.handler import Mockery
-
 
 class Histo_app(QWidget):
     def __init__(self, data_list):
@@ -78,7 +76,3 @@ class Histo_app(QWidget):
         self.ax.set_title(y)
         self.ax.set_ylabel("Frequency")
         update_x()
-
-
-if __name__ == "__main__":
-    data = [Mockery() for _ in range(40)]

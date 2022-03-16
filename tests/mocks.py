@@ -1,6 +1,8 @@
 from entries.pb_entry import PB
 from entries.rank_entry import Rank
 from entries.run_entry import Run
+from tables.pbs import Table_pb
+from tables.runs import Table_run
 
 class Run_mock(Run):
     def __init__(self):
@@ -9,6 +11,7 @@ class Run_mock(Run):
         self.system = "system"
         self.time = 1
         self.category = "Category"
+
 
 class Rank_mock(Rank):
     def __init__(self):
@@ -32,3 +35,12 @@ class PB_mock(PB):
         self["WR %"] = 2
         self.category = "Category"
         self.leaderboard = [0,0,0,0]
+
+
+class Table_pb_mock(Table_pb):
+    def __init__(self):
+        self.data = [PB_mock() for x in range(5)]
+
+class Table_run_mock(Table_run):
+    def __init__(self):
+        self.data = [Run_mock() for x in range(5)]

@@ -6,7 +6,6 @@ import matplotlib.colors
 from random import choice as random_key
 from copy import copy
 from PyQt5.QtGui import QFont, QColor
-from plots.handler import Mockery
 
 class Pie_app(QWidget):
     def __init__(self, data_list):
@@ -87,11 +86,3 @@ class Pie_app(QWidget):
 
         self.ax.set_title(f"{self.data[0].__class__.__name__}s - {y}")
         self.canvas.draw()
-
-
-
-
-if __name__ == "__main__":
-    data = [Mockery() for _ in range(100)]
-    for x in range(3):
-        data[x]["Game"] = "toto"
