@@ -19,12 +19,9 @@ class PB(Rank):
         liste = []
         for no, attribute in enumerate(["system", "game","category","WR time", "time"]):
             if isinstance(self[attribute], (float,int)):
-                if "time" in attribute:
-                    liste.append(f'{time_str(self[attribute])[:p[no]]:>{p[no]}}')
-                else:
-                    liste.append(f'{str(self[attribute])[:p[no]]:{p[no]}}')
+                liste.append(f'{time_str(self[attribute])[:p[no]]:>{p[no]}}')
             elif isinstance(self[attribute], set):
-                liste.append(f'{str(len(self[attribute]))[:p[no]]:{p[no]}}')
+                liste.append(f'{str(len(self[attribute]))} {attribute}'[:p[no]])
             else:
                 liste.append(f'{self[attribute][:p[no]]:{p[no]}}')
         string =  "   ".join(liste)
@@ -33,4 +30,3 @@ class PB(Rank):
         string += f'    {rank:^9}'
         string += f'    ({int(inted_lb - self.place)/int(inted_lb):.2%})'
         return string
-

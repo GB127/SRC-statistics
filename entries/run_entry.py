@@ -11,6 +11,7 @@ class Run(Base_Entry):
         self.region = data["system"]["region"]
         self.system = api.system(data["system"]["platform"])
         self.time = data["times"]["primary_t"]
+        self.level = None
 
         if data["level"]:
             self.level = data["level"]
@@ -22,12 +23,9 @@ class Run(Base_Entry):
         liste = []
         for no, attribute in enumerate(["system", "game","category", "time"]):
             if isinstance(self[attribute], (float,int)):
-                if "time" in attribute:
-                    liste.append(f'{time_str(self[attribute])[:p[no]]:>{p[no]}}')
-                else:
-                    liste.append(f'{str(self[attribute])[:p[no]]:{p[no]}}')
+                liste.append(f'{time_str(self[attribute])[:p[no]]:>{p[no]}}')
             elif isinstance(self[attribute], set):
-                liste.append(f'{str(len(self[attribute]))[:p[no]]:{p[no]}}')
+                liste.append(f'{str(len(self[attribute]))} {attribute}'[:p[no]])
             else:
                 liste.append(f'{self[attribute][:p[no]]:{p[no]}}')
         return "   ".join(liste)
