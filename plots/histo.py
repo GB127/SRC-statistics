@@ -20,9 +20,11 @@ class Histo_app(QWidget):
             layout.addWidget(self.listwidget, 0, 0, 0,1)
 
         def insert_buttons():
+            self.buttons = []
             for numéro, x in enumerate(self.keys):
                 dropbox = QPushButton(x)
                 dropbox.clicked.connect(lambda checked, a=x : self.update_chart(a))
+                self.buttons.append(dropbox)
                 layout.addWidget(dropbox, 1,1+numéro)
 
 
@@ -63,7 +65,7 @@ class Histo_app(QWidget):
         def update_x():
             if "time" in y:
                 time_str = lambda x : f'{x//3600:>3}:{int(x) % 3600 // 60:02}:{int(x) % 3600 % 60 % 60:02}'
-                self.ax.set_xticklabels([time_str(int(x.get_text().replace("−", "-"))) for x in self.ax.get_xticklabels()])
+                self.ax.set_xticklabels([time_str(float(x.get_text().replace("−", "-"))) for x in self.ax.get_xticklabels()])
                 self.canvas.draw()
             elif "%" in y:
                 self.ax.set_xticklabels([f'{float(x.get_text().replace("−", "-")):.2%}' for x in self.ax.get_xticklabels()])
@@ -75,4 +77,5 @@ class Histo_app(QWidget):
         self.canvas.draw()
         self.ax.set_title(y)
         self.ax.set_ylabel("Frequency")
+        self.ax.set_xlabel(y)
         update_x()
