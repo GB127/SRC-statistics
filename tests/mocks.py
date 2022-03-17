@@ -42,7 +42,16 @@ class PB_mock(PB):
 class Table_pb_mock(Table_pb):
     def __init__(self):
         self.data = [PB_mock() for x in range(5)]
+        for x in range(5):
+            self.data[x].time = 50 * x
+            self.data[x].game += str(x)
+            self.data[x]["WR %"] = 100 + (20 * x)
+            self.data[x].place = x
+
 
 class Table_run_mock(Table_run):
     def __init__(self):
         self.data = [Run_mock() for x in range(5)]
+        for x in range(5):
+            self.data[x].time = 50 * x
+            self.data[x].game += str(x)
