@@ -61,21 +61,48 @@ class Histo_app(QWidget):
         print(item.text())
 
 
-    def update_chart(self, y):
-        def update_x():
-            if "time" in y:
-                time_str = lambda x : f'{x//3600:>3}:{int(x) % 3600 // 60:02}:{int(x) % 3600 % 60 % 60:02}'
-                self.ax.set_xticklabels([time_str(float(x.get_text().replace("−", "-"))) for x in self.ax.get_xticklabels()])
-                self.canvas.draw()
-            elif "%" in y:
-                self.ax.set_xticklabels([f'{float(x.get_text().replace("−", "-")):.2%}' for x in self.ax.get_xticklabels()])
-                self.canvas.draw()
+    def update_chart(self, filter):
+        to_plot = [x[filter] for x in self.data]
+        def generic():
+            self.canvas.figure.clf()
+            self.ax = self.canvas.figure.subplots()
+            self.ax.set_title(f'{self.data[0].__class__.__name__} - {filter}')
+            self.ax.set_xlabel(filter)
+            self.ax.set_ylabel("Frequency")
 
-        self.canvas.figure.clf()
-        self.ax = self.canvas.figure.subplots()
-        self.ax.hist([x[y] for x in self.data])
-        self.canvas.draw()
-        self.ax.set_title(y)
-        self.ax.set_ylabel("Frequency")
-        self.ax.set_xlabel(y)
-        update_x()
+
+        def filter_time():
+            time_str = lambda x : f'{x//3600:>3}:{int(x) % 3600 // 60:02}:{int(x) % 3600 % 60 % 60:02}'
+
+            self.ax.hist(to_plot, range=(min(to_plot), max(to_plot)))
+            self.canvas.draw()
+            self.ax.set_xticks(self.ax.get_xticks())  # Noise code to remove a warning from matplotlib
+
+            self.ax.set_xlim([min(to_plot), max(to_plot)])
+            #self.ax.set_xticklabels([time_str(float(x.get_text().replace("−", "-"))) for x in self.ax.get_xticklabels()])
+            self.ax.set_xticklabels([float(x.get_text().replace("−", "-")) for x in self.ax.get_xticklabels()])
+            self.canvas.draw()
+
+        def filter_place():
+            self.ax.hist(to_plot, range=(min(to_plot), max(to_plot)))
+            self.ax.set_xticks(self.ax.get_xticks())  # Noise code to remove a warning from matplotlib
+
+            self.canvas.draw()
+
+            self.ax.set_xlim([min(to_plot), max(to_plot)])
+            self.ax.set_xticklabels([int(float((x.get_text().replace("−", "-")))) for x in self.ax.get_xticklabels()])
+            self.canvas.draw()
+
+        def filter_perc():
+            self.ax.hist(to_plot, range=(max(min(to_plot), 1), max(to_plot)))
+            self.ax.set_xticks(self.ax.get_xticks())  # Noise code to remove a warning from matplotlib
+
+            self.canvas.draw()
+            self.ax.set_xlim([max(min(to_plot), 1), max(to_plot)])
+            self.ax.set_xticklabels([f'{float(x.get_text().replace("−", "-")):.1%}' for x in self.ax.get_xticklabels()])
+            self.canvas.draw()
+
+        filtering = {"time":filter_time, "place":filter_place, "WR %" : filter_perc, "WR time":filter_time}
+
+        generic()
+        filtering[filter]()

@@ -64,9 +64,9 @@ class Pie_app(QWidget):
             for x in self.data:
                 count[x[y]] = count.get(x[y], 0) + 1
             for x in copy(count):
-                if count[x] / sum(count.values()) < 0.05:
-                    count["autres"] = count.get("autres", 0) + count[x]
-                    del count[x]
+                if count[x] / sum(count.values()) < 0.05:  # pragma: no cover
+                    count["autres"] = count.get("autres", 0) + count[x]# pragma: no cover
+                    del count[x]# pragma: no cover
             return count
         self.canvas.figure.clf()
         self.ax = self.canvas.figure.subplots()
@@ -80,9 +80,9 @@ class Pie_app(QWidget):
             test = self.listwidget.item(index)
             if data[y] in légende_couleurs:
                 test.setBackground(QColor(légende_couleurs[data[y]]))
-            elif not data[y]: continue
-            else:
-                test.setBackground(QColor(légende_couleurs["autres"]))
+            elif not data[y]: continue# pragma: no cover
+            else:# pragma: no cover
+                test.setBackground(QColor(légende_couleurs["autres"])) # pragma: no cover
 
         self.ax.set_title(f"{self.data[0].__class__.__name__}s - {y}")
         self.canvas.draw()
