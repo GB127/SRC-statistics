@@ -8,7 +8,7 @@ class Test_entry_list:
         for histo in [Histo_app, Pie_app]:
             widget = histo(Table_pb_mock().data)
             qtbot.addWidget(widget)
-            assert len(widget.listwidget) == 5
+            assert len(widget.listwidget) == 20
 
 class Test_filters:
     def test_quantity(self, qtbot):
@@ -29,19 +29,20 @@ class Test_histo:
     def test_xticks(self, qtbot):
         def place():
             qtbot.mouseClick(widget.buttons[0], QtCore.Qt.LeftButton)
+            liste = list(widget.ax.get_xticklabels())
+
             assert widget.ax.get_xlabel() == "place"
-            assert min(list(widget.ax.get_xticks())) > 0
+            assert all([liste.count(x) == 1 for x in liste])
+        
         def times():
             for clé in [1,2]:
                 qtbot.mouseClick(widget.buttons[clé], QtCore.Qt.LeftButton)
-                assert widget.ax.get_xlabel() == "time"
-                assert min(list(widget.ax.get_xticks())) > 0
-                # assert False, widget.ax.get_xticklabels()
-                raise NotImplemented("Time string format check : TODO : Use regex to check format")
+                assert "time" in widget.ax.get_xlabel()
+                raise NotImplementedError("Time string format check : TODO : Use regex to check format")
+        
         def percentage():
             qtbot.mouseClick(widget.buttons[3], QtCore.LeftButton)
             assert widget.ax.get_xlabel() == "WR %"
-            assert min(list(widget.ax.get_xticks())) >= 100
 
         widget = Histo_app(Table_pb_mock().data)
         qtbot.addWidget(widget)
@@ -53,12 +54,15 @@ class Test_histo:
         widget = Histo_app(Table_pb_mock().data)
         assert widget.ax.get_ylabel() == "Frequency"
         assert min(widget.ax.get_yticks()) == 0
-        assert all([isinstance(x, int) for x in widget.ax.get_yticks()])
+        assert all([isinstance(x, int) for x in widget.ax.get_yticks()]), "Not all y ticks are integer : some are floats"
 
 
     #def test_bins(self, qtbot):
     #    widget = Histo_app(Table_pb_mock().data)
     #    assert False, widget.ax.containers[0][0]
+
+
+
 
     # click in the Greet button and make sure it updates the appropriate label
     #qtbot.mouseClick(widget.button_greet, QtCore.Qt.LeftButton)

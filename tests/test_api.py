@@ -12,6 +12,7 @@ class Test_apis:
     def test_game(self, requests_mock: Mocker):
         dicto_CE = dicto_m("game")
         dicto_CE["data"]["names"]["international"] += " Category Extensions"
+        dicto_CE["data"]["names"]["international"] = "The Legend of " + dicto_CE["data"]["names"]["international"]
         requests_mock.get(link_m("game"), json=dicto_CE)
         assert 'Super Mario Sunshine' == api.game(id_m("game"))
         assert  api.game_db[id_m("game")] == "Super Mario Sunshine", "Game database not updated"
