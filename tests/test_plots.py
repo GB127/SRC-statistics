@@ -1,14 +1,16 @@
 from plots.histo import Histo_app
 from plots.pie import Pie_app
+from plots.plot import Plot_app
 from tests.mocks import Table_pb_mock, Table_run_mock
 from PyQt5 import QtCore
 
 class Test_entry_list:
     def test_quantity(self, qtbot):
-        for histo in [Histo_app, Pie_app]:
+        for histo in [Histo_app, Pie_app, Plot_app]:
             widget = histo(Table_pb_mock().data)
-            qtbot.addWidget(widget)
+            qtbot.addWidget(widget)  # Need to keep this so the tests doesn't stop.
             assert len(widget.listwidget) == 20
+
 
 class Test_filters:
     def test_quantity(self, qtbot):

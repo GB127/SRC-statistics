@@ -2,6 +2,7 @@ from random import shuffle
 from tables.base import Base_Table
 from entries.base import Base_Entry
 
+from tests.mocks import Table_pb_mock
 
 class Test_op:
     def test_len(self):
@@ -34,7 +35,7 @@ class Test_op:
         assert testing1 == testing2
 
 
-    def test_sort(self):
+    def test_sort(self, monkeypatch):
         testing = Base_Table()
         testing.data = [{"allo":-x, "patate":x} for x in range(5)]
         shuffle(testing.data)
@@ -43,8 +44,10 @@ class Test_op:
         shuffle(testing.data)
         testing.sort("patate")
         assert testing.data == [{"allo":-x, "patate":x} for x in range(5)]
-
-
+        shuffle(testing.data)
+        monkeypatch.setattr('builtins.input', lambda _: "1")
+        testing.sort()
+        assert testing.data == [{"allo":-x, "patate":x} for x in range(5)]
 
     def test_median(self):
         testing = Base_Table()
@@ -52,6 +55,14 @@ class Test_op:
         assert testing.median("allo") == {"allo":12}
 
 
+class Test_call:
+    def test_end(self, monkeypatch):
+        test = Table_pb_mock()
+        monkeypatch.setattr('builtins.input', lambda _: "end")
+        try:
+            test()
+        except Exception as err:
+            assert False, err
 
 
 class Test_misc:

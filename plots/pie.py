@@ -16,7 +16,6 @@ class Pie_app(QWidget):
                 one_line = QListWidgetItem(str(entry))
                 one_line.setFont(QFont("Lucida Sans Typewriter", 10))
                 self.listwidget.addItem(one_line)
-            self.listwidget.clicked.connect(self.clicked)
             layout.addWidget(self.listwidget, 0, 0, 0,1)
 
         def insert_buttons_widget():
@@ -52,11 +51,6 @@ class Pie_app(QWidget):
         insert_list_widget()
         insert_plot()
         insert_buttons_widget()
-
-    def clicked(self):
-        item = self.listwidget.currentItem()
-        print(item.text())
-
 
     def update_chart(self, y):
         def count_data():

@@ -13,7 +13,7 @@ class Base_Table:
             command = input(f"Select option: [0-{len(methods) -1}] | Type end to exit\nInput : ")
             if command == "end":
                 break
-            methods[int(command)]()
+            methods[int(command)]()  # pragma: no cover
 
     def __len__(self):
         return len(self.data)

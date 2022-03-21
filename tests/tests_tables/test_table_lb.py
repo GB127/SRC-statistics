@@ -8,6 +8,10 @@ class Test_init:
         assert tempo.WR == 40271
 
     def test_add(self):
-        pass    
+        tempo = LB(dicto_m("lb")["data"]["runs"])
+        assert 6 == tempo + tempo
+
     def test_add_int(self):
-        pass
+        tempo = LB(dicto_m("lb")["data"]["runs"])
+        assert 3 == tempo + 0
+        assert 3 == 0 + tempo

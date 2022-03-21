@@ -13,7 +13,7 @@ class Table_run(Base_Table):
                 self.data.append(Run(data))
 
     def __call__(self):
-        super().__call__(self.histo, self.pie, self.sort)
+        super().__call__(self.histo, self.pie, self.sort)  # pragma: no cover
 
 
     def histo(self):  # pragma: no cover

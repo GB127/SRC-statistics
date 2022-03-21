@@ -4,12 +4,12 @@ from random import random, randint
 
 
 class Mockery:  # for tests
-    def __init__(self):
+    def __init__(self, x):
         self["A %"] = random()
-        self.time = randint(3,5)
-
+        self.time = 2 * x**2
+        self.place = x
         self["Game"] = str(randint(1,4)) + "APPPP"
-
+        self.leaderboard = [{"place" : x, "time": x * 30} for x in range(20)]
 
 
     def __getitem__(self, key):

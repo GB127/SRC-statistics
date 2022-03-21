@@ -26,7 +26,7 @@ class api:
             return api.game_db[id]
         except KeyError:
             req = requester(f'{api.URL}games/{id}')
-            api.game_db[id] = req["data"]["names"]["international"].replace("Category Extensions", "").rstrip()
+            api.game_db[id] = req["data"]["names"]["international"].replace("Category Extensions", "").rstrip().replace("The Legend of", "").lstrip()
         return api.game_db[id]
 
     @staticmethod
@@ -81,7 +81,7 @@ class api:
         liste = []
         req = requester(f'{api.URL}runs?user={user_id}&max=200')
         liste += req["data"]
-        while(req["pagination"]["links"]) and (req["pagination"]["size"] == req["pagination"]["max"] ):
+        while(req["pagination"]["links"]) and (req["pagination"]["size"] == req["pagination"]["max"]):
             req = get(req["pagination"]["links"][0]["uri"]).json()
             liste += req["data"]
         return req["data"]

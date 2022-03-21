@@ -62,7 +62,6 @@ def test_api_rest(requests_mock:Mocker):
 
 
 def test_runs(requests_mock: Mocker):
-    pass
-
+    raise NotImplementedError
 def test_pbs(requests_mock: Mocker):
-    pass
+    raise NotImplementedError

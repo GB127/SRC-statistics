@@ -35,14 +35,15 @@ class PB_mock(PB):
         self["WR time"] = 1
         self["WR %"] = 2
         self.category = "Category"
-        self.leaderboard = [0,0,0,0]
+        self.leaderboard = [{"place": x, "time": x + 1} for x in range(20)]
+
         self.level = None if not include_level else "level"
 
 
 class Table_pb_mock(Table_pb):
     def __init__(self):
         self.data = [PB_mock() for _ in range(20)]
-        for x in range(5):
+        for x in range(1,6):
             self.data[x].time = 50 * x
             self.data[x].game += str(x)
             self.data[x]["WR %"] = 1 + (0.2 * x)
