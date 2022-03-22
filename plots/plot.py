@@ -38,7 +38,7 @@ class Plot_app(QWidget):
         insert_list_widget()
 
         self.threshold = QLineEdit()
-        self.threshold.setText("200")
+        self.threshold.setText("300")
         layout.addWidget(self.threshold,1,1)
         self.button = QPushButton("Update")
         self.button.clicked.connect(self.update_chart)
@@ -54,14 +54,18 @@ class Plot_app(QWidget):
         self.ax = self.canvas.figure.subplots()
 
         data = [x["time"] for x in self.data[self.selected_id]["leaderboard"]]
-        adjusted = [x for x in data if 100*x/min(data)<= float(self.threshold.text())]
+        adjusted = [x for x in data if 100*x/min(data) <= float(self.threshold.text())]
 
         self.ax.plot(adjusted)
         self.ax.invert_xaxis()
-        self.ax.axhline(sum(adjusted) / len(adjusted),linestyle="--", color="red")
-
-        self.ax.plot(len(adjusted)//2,adjusted[len(adjusted)//2],"o", color="green")
-
+        self.ax.axhline(sum(adjusted) / len(adjusted),linestyle="--", color="darkblue", label="Mean")
+        self.ax.axhline(min(adjusted),linestyle="--",label="WR", color="gold")
+        self.ax.plot(0, min(adjusted),"o", color="gold")
+        self.ax.axvline(len(adjusted)//2,linestyle="--", color="green", label="Median")
+        if self.data[self.selected_id]["WR %"] * 100 <= float(self.threshold.text()):
+            self.ax.plot(self.data[self.selected_id]["place"] -1, self.data[self.selected_id]["time"], "o", color="red", label="PB")
+        self.ax.legend()
+        self.ax.set_title(f'{self.data[self.selected_id]["game"]} - {self.data[self.selected_id]["category"]}')
         self.canvas.draw()
 
 

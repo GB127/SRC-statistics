@@ -9,7 +9,7 @@ class Mockery:  # for tests
         self.time = 2 * x**2
         self.place = x
         self["Game"] = str(randint(1,4)) + "APPPP"
-        self.leaderboard = [{"place" : x, "time": x * 30} for x in range(20)]
+        self.leaderboard = [{"place" : x, "time": x * 30} for x in range(1,21)]
 
 
     def __getitem__(self, key):
@@ -30,6 +30,8 @@ def window_handler(data, application, debug=False):
     ''')
     
     myApp = application(data)
+    if debug: return
+
     myApp.show()
 
     # Need to keep this so it doesn't close the window
