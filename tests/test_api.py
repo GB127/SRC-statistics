@@ -62,6 +62,9 @@ def test_api_rest(requests_mock:Mocker):
 
 
 def test_runs(requests_mock: Mocker):
-    raise NotImplementedError
+    requests_mock.get("https://www.speedrun.com/api/v1/runs?user=qxkq4o2x", json=dicto_m("user_runs"))
+    assert api.user_runs("qxkq4o2x") == dicto_m("user_runs")["data"]
+
 def test_pbs(requests_mock: Mocker):
-    raise NotImplementedError
+    requests_mock.get("https://www.speedrun.com/api/v1/users/qxkgl2j0/personal-bests", json=dicto_m("user_pb"))
+    assert api.user_pbs("qxkgl2j0") == dicto_m("user_pb")["data"]
