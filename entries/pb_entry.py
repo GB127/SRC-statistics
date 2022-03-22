@@ -21,7 +21,8 @@ class PB(Rank):
             if isinstance(self[attribute], (float,int)):
                 liste.append(f'{time_str(self[attribute])[:p[no]]:>{p[no]}}')
             elif isinstance(self[attribute], set):
-                liste.append(f'{str(len(self[attribute]))} {attribute}'[:p[no]])
+                tempo = f'{str(len(self[attribute]))} {attribute}'[:p[no]]
+                liste.append(f'{tempo:{p[no]}}')
             elif attribute == "level" and not self[attribute]: 
                 continue
 
