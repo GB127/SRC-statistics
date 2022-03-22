@@ -81,9 +81,9 @@ class api:
         liste = []
         req = requester(f'{api.URL}runs?user={user_id}&max=200')
         liste += req["data"]
-        while(req["pagination"]["links"]) and (req["pagination"]["size"] == req["pagination"]["max"]):
-            req = get(req["pagination"]["links"][0]["uri"]).json()
-            liste += req["data"]
+        while(req["pagination"]["links"]) and (req["pagination"]["size"] == req["pagination"]["max"]):  # pragma: no cover
+            req = get(req["pagination"]["links"][0]["uri"]).json()# pragma: no cover
+            liste += req["data"]# pragma: no cover
         return req["data"]
 
     @staticmethod
