@@ -2,6 +2,10 @@ import sys
 from PyQt5.QtWidgets import QApplication
 from random import random, randint
 
+global app
+app = QApplication(sys.argv)
+
+
 
 class Mockery:  # for tests
     def __init__(self, x):
@@ -22,7 +26,6 @@ class Mockery:  # for tests
 
 def window_handler(data, application, debug=False):
     # Need to have this before the app.
-    app = QApplication(sys.argv)
     app.setStyleSheet('''
         QWidget {
             font-size: 30px;
@@ -33,11 +36,4 @@ def window_handler(data, application, debug=False):
     if debug: return
 
     myApp.show()
-
-    # Need to keep this so it doesn't close the window
-    try:
-        sys.exit(app.exec_())
-    except SystemExit:
-        print('Closing Window...')
-
-
+    # sys.exit(app.exec_())
