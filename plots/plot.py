@@ -66,6 +66,7 @@ class Plot_app(QWidget):
             self.ax.plot(self.data[self.selected_id]["place"] -1, self.data[self.selected_id]["time"], "o", color="red", label="PB")
         self.ax.legend()
         self.ax.set_title(f'{self.data[self.selected_id]["game"]} - {self.data[self.selected_id]["category"]}')
+
         self.canvas.draw()
 
 

@@ -12,9 +12,9 @@ class Mockery:  # for tests
         self["A %"] = random()
         self.time = 2 * x**2
         self.place = x
-        self["Game"] = str(randint(1,4)) + "APPPP"
+        self["game"] = str(randint(1,4)) + "APPPP"
         self.leaderboard = [{"place" : x, "time": x * 30} for x in range(1,21)]
-
+        self.category = "Please"
 
     def __getitem__(self, key):
         return self.__dict__[key]
@@ -36,4 +36,6 @@ def window_handler(data, application, debug=False):
     if debug: return
 
     myApp.show()
-    # sys.exit(app.exec_())
+    app.exec_()
+    
+    

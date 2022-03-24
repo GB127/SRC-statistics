@@ -11,6 +11,15 @@ class Run(Base_Entry):
         self.region = data["system"]["region"]
         self.system = api.system(data["system"]["platform"])
         self.time = data["times"]["primary_t"]
+        self.subcat = ""
+        subcat_tempo = []
+        for field, selection in data["values"].items():
+            if field in api.subcat_db:
+                subcat_tempo.append(api.subcat_db[field][selection])
+        if subcat_tempo:
+            self.subcat = f'({" - ".join(subcat_tempo)})'
+
+
         self.level = None
 
         if data["level"]:
@@ -18,10 +27,10 @@ class Run(Base_Entry):
 
     def __str__(self):
         time_str = lambda x : f'{int(x)//3600:>3}:{int(x) % 3600 // 60:02}:{int(x) % 3600 % 60 % 60:02}'
-        p = [4, 20, 20, 10, 9]
+        p = [4, 20, 20,10, 10, 9]
 
         liste = []
-        for no, attribute in enumerate(["system", "game","level", "category", "time"]):
+        for no, attribute in enumerate(["system", "game","level", "category","subcat", "time"]):
             if isinstance(self[attribute], (float,int)):
                 liste.append(f'{time_str(self[attribute])[:p[no]]:>{p[no]}}')
             elif isinstance(self[attribute], set):

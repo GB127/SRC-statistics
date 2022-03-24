@@ -13,7 +13,7 @@ class Table_pb(Base_Table):
                 self.data.append(PB(data))
 
     def __call__(self):
-        super().__call__(self.histo, self.pie, self.sort)  # pragma: no cover
+        super().__call__(self.histo, self.pie, self.plots, self.sort)  # pragma: no cover
 
 
     def histo(self): # pragma: no cover
@@ -21,6 +21,6 @@ class Table_pb(Base_Table):
 
     def pie(self):# pragma: no cover
         window_handler(self.data, Pie_app)# pragma: no cover
-
-    def plots(self):# pragma: no cover
-        window_handler(self.data, Plot_app)# pragma: no cover
+        
+    def plots(self):
+        window_handler(self.data, Plot_app)

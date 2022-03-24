@@ -57,16 +57,3 @@ class Test_histo:
         assert widget.ax.get_ylabel() == "Frequency"
         assert min(widget.ax.get_yticks()) == 0
         assert all([isinstance(x, int) for x in widget.ax.get_yticks()]), "Not all y ticks are integer : some are floats"
-
-
-    #def test_bins(self, qtbot):
-    #    widget = Histo_app(Table_pb_mock().data)
-    #    assert False, widget.ax.containers[0][0]
-
-
-
-
-    # click in the Greet button and make sure it updates the appropriate label
-    #qtbot.mouseClick(widget.button_greet, QtCore.Qt.LeftButton)
-
-    #assert widget.greet_label.text() == "Hello!"

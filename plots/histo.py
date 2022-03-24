@@ -79,8 +79,8 @@ class Histo_app(QWidget):
             self.ax.set_xticks(self.ax.get_xticks())  # Noise code to remove a warning from matplotlib
 
             self.ax.set_xlim([min(to_plot), max(to_plot)])
-            #self.ax.set_xticklabels([time_str(float(x.get_text().replace("−", "-"))) for x in self.ax.get_xticklabels()])
-            self.ax.set_xticklabels([float(x.get_text().replace("−", "-")) for x in self.ax.get_xticklabels()])
+            self.ax.set_xticklabels([time_str(float(x.get_text().replace("−", "-"))) for x in self.ax.get_xticklabels()])
+            # self.ax.set_xticklabels([float(x.get_text().replace("−", "-")) for x in self.ax.get_xticklabels()])
             self.canvas.draw()
 
         def filter_place():
