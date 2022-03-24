@@ -7,8 +7,8 @@ clear = lambda: os.system('cls')
 
 
 class User:
-    def __init__(self, username):  # pragma: no cover
-        self.username = username  # pragma: no cover
+    def __init__(self, username:str):  # pragma: no cover
+        self.username = username.capitalize()  # pragma: no cover
         self.id = api.user_id(username)  # pragma: no cover
         self.runs = Table_run(api.user_runs(self.id), False)  # pragma: no cover
         self.pbs = Table_pb(api.user_pbs(self.id), False)  # pragma: no cover
@@ -29,4 +29,8 @@ class User:
 
     def __str__(self):
         time_str = lambda x : f'{int(x)//3600:>3}:{int(x) % 3600 // 60:02}:{int(x) % 3600 % 60 % 60:02}'
-        return "Tempo"
+        string = "\n".join([f'{self.username}',
+                            f'------------------------------------',
+                            f'Runs : {time_str(sum(self.runs).time):11} | {time_str(self.runs.mean().time):11} | {time_str(self.runs.median("time").time):11}',
+                            f'PBs  : {time_str(sum(self.pbs).time):11} | {time_str(self.pbs.mean().time):11} | {time_str(self.pbs.median("time").time):11}'])
+        return string
