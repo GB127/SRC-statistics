@@ -6,7 +6,10 @@ class PB(Rank):
     def __init__(self, data):
         category_id = data["run"]["category"]
         game_id = data["run"]["game"]
-        sub_cat_ids = data["run"]["values"]
+        sub_cat_ids = {}
+        for field, selection in data["run"]["values"].items():
+            if field in api.subcat_db:
+                sub_cat_ids[field] = selection
         level_id = None
         if data["run"]["level"]: level_id = data["run"]["level"]
         self.leaderboard = LB(api.leaderboard(game_id, category_id, sub_cat_ids, level_id))

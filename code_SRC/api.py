@@ -64,8 +64,10 @@ class api:
             return api.game_db[id]
         except KeyError:
             api.update_db(id)
-            print(api.game_db)
             return api.game_db[id]
+
+    def sub_cat(id_1, id_2):
+        return api.subcat_db[id_1][id_2]
 
     @staticmethod
     def system(id:str) -> str:
