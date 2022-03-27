@@ -13,6 +13,7 @@ class Mockery:  # for tests
         self.time = 2 * x**2
         self.place = x
         self["game"] = str(randint(1,4)) + "APPPP"
+        self["WR %"] = 1 + x
         self.leaderboard = [{"place" : x, "time": x * 30} for x in range(1,21)]
         self.category = "Please"
 

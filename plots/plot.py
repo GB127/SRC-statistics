@@ -5,6 +5,7 @@ import matplotlib
 import matplotlib.colors
 from random import choice as random_data
 from PyQt5.QtGui import QFont
+import os
 
 class Plot_app(QWidget):
     def __init__(self, data_list):
@@ -47,9 +48,13 @@ class Plot_app(QWidget):
 
     def clicked(self):
         self.selected_id = self.listwidget.currentRow()
+        os.system('cls')
+        print(self.data[self.selected_id].leaderboard)
         self.update_chart()
 
     def update_chart(self):
+        time_str = lambda x : f'{int(x)//3600:>3}:{int(x) % 3600 // 60:02}:{x % 3600 % 60 % 60:02}'
+
         self.canvas.figure.clf()
         self.ax = self.canvas.figure.subplots()
 
@@ -62,13 +67,17 @@ class Plot_app(QWidget):
         self.ax.axhline(min(adjusted),linestyle="--",label="WR", color="gold")
         self.ax.plot(0, min(adjusted),"o", color="gold")
         self.ax.axvline(len(adjusted)//2,linestyle="--", color="green", label="Median")
+
         if self.data[self.selected_id]["WR %"] * 100 <= float(self.threshold.text()):
             self.ax.plot(self.data[self.selected_id]["place"] -1, self.data[self.selected_id]["time"], "o", color="red", label="PB")
         self.ax.legend()
-        self.ax.set_title(f'{self.data[self.selected_id]["game"]} - {self.data[self.selected_id]["category"]}')
-
+        self.ax.set_title(f'{self.data[self.selected_id]["game"]}\n{self.data[self.selected_id]["category"]}')
         self.canvas.draw()
+        self.ax.set_yticks(self.ax.get_yticks())  # Noise code to remove a warning from matplotlib
+        self.ax.set_yticklabels([time_str(float(x.get_text().replace("−", "-"))) for x in self.ax.get_yticklabels()])
 
+        self.ax.set_ybound(lower=0.9 * min(adjusted), upper=1.02 * max(adjusted))
+        self.canvas.draw()
 
 if __name__ == "__main__":
     from handler import window_handler, Mockery

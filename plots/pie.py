@@ -35,7 +35,7 @@ class Pie_app(QWidget):
         def fetch_valid_keys():
             self.keys = []
             for x, value in data_list[0].__dict__.items():
-                if x == "leaderboard":continue
+                if x in ["category", "subcat", "leaderboard"]: continue
                 elif not isinstance(value, (int, float)):
                     self.keys.append(x)
 
