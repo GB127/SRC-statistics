@@ -28,18 +28,22 @@ class api:
             """
         def update_systems(liste):
             for one in liste:
-                api.system_db[one["id"]] = one["name"]
-        
+                if one["id"] in api.system_db: continue
+                api.system_db[one["id"]] = one["name"].replace("Virtual Console", "VC")
+
         def update_categories(liste):
             for one in liste:
+                if one["id"] in api.category_db: continue
                 api.category_db[one["id"]] = one["name"]
         
         def update_regions(liste):
             for one in liste:
+                if one["id"] in api.region_db: continue
                 api.region_db[one["id"]] = one["name"]
 
         def update_subcategories(liste):
             for one in liste:
+                if one["id"] in api.subcat_db: continue
                 if one["is-subcategory"]:
                     api.subcat_db[one["id"]] = {}
                     for subcat_id, subcat_name in one["values"]["values"].items():
@@ -47,10 +51,18 @@ class api:
 
         def update_levels(liste):
             for one in liste:
+                if one["id"] in api.level_db: continue
                 api.level_db[one["id"]] = one["name"]
 
+        def update_game(name):
+            nom_a_modif = name
+            for unwanted in [" Category Extensions", "The Legend of "]:
+                nom_a_modif = nom_a_modif.replace(unwanted, "")
+            api.game_db[game_id] = nom_a_modif
+
         req = requester(f'{api.URL}games/{game_id}?embed=categories,levels,variables,platforms,regions')["data"]
-        api.game_db[game_id] = req["names"]["international"]
+
+        update_game(req["names"]["international"])
 
         update_systems(req["platforms"]["data"])
         update_categories(req["categories"]["data"])
@@ -66,6 +78,7 @@ class api:
             api.update_db(id)
             return api.game_db[id]
 
+    @staticmethod
     def sub_cat(id_1, id_2):
         return api.subcat_db[id_1][id_2]
 
