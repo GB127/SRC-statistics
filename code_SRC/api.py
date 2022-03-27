@@ -15,7 +15,7 @@ def requester(link):
 class api:
     URL = "https://www.speedrun.com/api/v1/"
     game_db = {}
-    system_db = {}
+    system_db = {'jm95z9ol': 'NES', '83exk6l5': 'SNES', '3167d6q2': 'GBA', 'mr6k409z': 'FDS', '4p9z06rn': 'GC', 'n5e17e27': 'PS2', 'mx6pwe3g': 'PS3','8gej2n93': 'PC', '8gejn93d': 'Wii U', 'w89rwelk': 'N64', 'n5683oev': 'GB', '3167jd6q': 'SGB', '7m6yvw6p': 'GB Player', 'n5e147e2': 'SGB2', '5negk9y7': 'PSP', 'p36nd598': 'iQue', 'vm9v3ne3': 'GB Interface', 'gde3g9k1': 'GBC', '7g6m8erk': 'NDS'}
     category_db = {}
     level_db = {}
     region_db = {}
