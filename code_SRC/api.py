@@ -90,7 +90,8 @@ class api:
 
     @staticmethod
     def region(id:str) -> str:
-        return api.region_db[id]
+        if id:
+            return api.region_db[id]
 
     @staticmethod
     def category(id:str) -> str:

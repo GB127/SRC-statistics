@@ -8,7 +8,7 @@ class Run(Base_Entry):
         self.game = api.game(data["game"])
         self.category = api.category(data["category"])
         self.emu = str(data["system"]["emulated"])
-        self.region = data["system"]["region"]
+        self.region = api.region(data["system"]["region"])
         self.system = api.system(data["system"]["platform"])
         self.time = data["times"]["primary_t"]
         self.subcat = ""
