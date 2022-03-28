@@ -1,11 +1,8 @@
-from PyQt5.QtWidgets import QListWidgetItem,QGridLayout,QPushButton, QWidget, QListWidget
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
-import matplotlib.pyplot as plt
+from PyQt5.QtWidgets import QPushButton
 import matplotlib
 import matplotlib.colors
-from random import choice as random_key
 from copy import copy
-from PyQt5.QtGui import QFont, QColor
+from PyQt5.QtGui import QColor
 from plots.base import Base_app
 
 class Pie_app(Base_app):

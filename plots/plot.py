@@ -1,9 +1,4 @@
-from PyQt5.QtWidgets import QLineEdit, QListWidgetItem,QGridLayout,QPushButton, QWidget, QListWidget
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
-import matplotlib
-import matplotlib.colors
-from PyQt5.QtGui import QFont
-import os
+from PyQt5.QtWidgets import QLineEdit, QPushButton
 from plots.base import Base_app
 
 class Plot_app(Base_app):

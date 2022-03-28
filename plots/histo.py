@@ -1,9 +1,4 @@
-from PyQt5.QtWidgets import QListWidgetItem,QGridLayout,QPushButton, QWidget, QListWidget
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
-import matplotlib.pyplot as plt
-import matplotlib
-from random import choice as random_key
-from PyQt5.QtGui import QFont
+from PyQt5.QtWidgets import QPushButton
 from plots.base import Base_app
 
 
@@ -13,7 +8,7 @@ class Histo_app(Base_app):
             self.buttons = []
             for numéro, x in enumerate(self.keys):
                 dropbox = QPushButton(x)
-                dropbox.clicked.connect(lambda checked, a=x : self.update_chart(a))
+                dropbox.clicked.connect(lambda checked, a=x : self.update_plot(a))
                 self.buttons.append(dropbox)
                 self.layout.addWidget(dropbox, 1,1+numéro)
         def fetch_valid_keys():
