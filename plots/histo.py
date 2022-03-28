@@ -3,22 +3,18 @@ from plots.base import Base_app
 
 
 class Histo_app(Base_app):
-    def __init__(self, data_list):
-        def insert_buttons():
-            self.buttons = []
-            for numéro, x in enumerate(self.keys):
-                dropbox = QPushButton(x)
-                dropbox.clicked.connect(lambda checked, a=x : self.update_plot(a))
-                self.buttons.append(dropbox)
-                self.layout.addWidget(dropbox, 1,1+numéro)
-        def fetch_valid_keys():
-            self.keys = []
-            for x, value in data_list[0].__dict__.items():
-                if isinstance(value, (int, float)): self.keys.append(x)
+    def plot_inter_widgets(self):
+        self.keys = []  # Look if I need self
+        for x, value in self.data[0].__dict__.items():
+            if isinstance(value, (int, float)): 
+                self.keys.append(x)
 
-        super().__init__(data_list)
-        fetch_valid_keys()
-        insert_buttons()
+        buttons = []
+        for x in self.keys:
+            dropbox = QPushButton(x)
+            dropbox.clicked.connect(lambda checked, a=x : self.update_plot(number=a))
+            buttons.append(dropbox)
+        return buttons
 
     def update_plot(self, **kargs):
         filter = kargs["number"]

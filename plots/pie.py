@@ -6,22 +6,19 @@ from PyQt5.QtGui import QColor
 from plots.base import Base_app
 
 class Pie_app(Base_app):
-    def __init__(self, data_list):
-        def insert_buttons_widget():
-            for numéro, x in enumerate(self.keys):
-                dropbox = QPushButton(x)
-                dropbox.clicked.connect(lambda checked, a=x : self.update_plot(filter=a))
-                self.layout.addWidget(dropbox, 1,1+numéro)
+    def plot_inter_widgets(self):
+        self.keys = []  # Look if I need self
+        for x, value in self.data[0].__dict__.items():
+            if x in ["category", "subcat", "leaderboard"]: continue
+            elif not isinstance(value, (int, float)):
+                self.keys.append(x)
 
-        def fetch_valid_keys():
-            self.keys = []
-            for x, value in data_list[0].__dict__.items():
-                if x in ["category", "subcat", "leaderboard"]: continue
-                elif not isinstance(value, (int, float)):
-                    self.keys.append(x)
-        super().__init__(data_list)
-        fetch_valid_keys()
-        insert_buttons_widget()
+        buttons = []
+        for x in self.keys:
+            dropbox = QPushButton(x)
+            dropbox.clicked.connect(lambda checked, a=x : self.update_plot(filter=a))
+            buttons.append(dropbox)
+        return buttons
 
     def update_plot(self, **kargs):
         filter = kargs["filter"]

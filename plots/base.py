@@ -22,6 +22,9 @@ class Base_app(QWidget):
         self.selected_id = self.listwidget.currentRow()
         print(self.data[self.selected_id])
     
+    def plot_inter_widgets(self):
+        raise NotImplementedError("Must be defined in child")
+
     def __init__(self, data_list):
         super().__init__()
         self.data = data_list
@@ -29,8 +32,11 @@ class Base_app(QWidget):
 
         self.layout = QGridLayout()
         self.setLayout(self.layout)
+        for numéro, wid in enumerate(self.plot_inter_widgets(), start=1):
+            self.layout.addWidget(wid, 1, numéro)
         self.layout.addWidget(self.list_widget(), 0,0,0,1)
-        self.layout.addWidget(self.plot_widget(), 0, 1, 1, 2)  # TODO
+        self.layout.addWidget(self.plot_widget(), 0, 1, 1, len(self.plot_inter_widgets()))  # TODO
+
 
     def plot_widget(self):
         self.canvas = FigureCanvas(plt.Figure(tight_layout=True))

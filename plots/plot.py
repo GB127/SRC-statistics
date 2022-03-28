@@ -2,15 +2,13 @@ from PyQt5.QtWidgets import QLineEdit, QPushButton
 from plots.base import Base_app
 
 class Plot_app(Base_app):
-    def __init__(self, data_list):
+    def plot_inter_widgets(self):
         self.threshold = QLineEdit()
         self.threshold.setText("300")
-        super().__init__(data_list)
-
-        self.layout.addWidget(self.threshold,1,1)
-        self.button = QPushButton("Update")
+        self.button = QPushButton("Update")  # see if I can remove self
         self.button.clicked.connect(self.update_plot)
-        self.layout.addWidget(self.button, 1,2)
+
+        return self.threshold, self.button
 
     def list_clicked(self):
         self.update_plot(list=self.listwidget.currentRow())
