@@ -6,31 +6,15 @@ import matplotlib.colors
 from random import choice as random_key
 from copy import copy
 from PyQt5.QtGui import QFont, QColor
+from plots.base import Base_app
 
-class Pie_app(QWidget):
+class Pie_app(Base_app):
     def __init__(self, data_list):
-        def insert_list_widget():
-            self.listwidget = QListWidget()
-            self.listwidget.setFixedWidth(450)
-            for entry in data_list:
-                one_line = QListWidgetItem(str(entry))
-                one_line.setFont(QFont("Lucida Sans Typewriter", 10))
-                self.listwidget.addItem(one_line)
-            layout.addWidget(self.listwidget, 0, 0, 0,1)
-
         def insert_buttons_widget():
             for numéro, x in enumerate(self.keys):
                 dropbox = QPushButton(x)
-                dropbox.clicked.connect(lambda checked, a=x : self.update_chart(a))
-                layout.addWidget(dropbox, 1,1+numéro)
-
-        def insert_plot():
-            self.canvas = FigureCanvas(plt.Figure(tight_layout=True))
-            layout.addWidget(self.canvas, 0, 1, 1, len(self.keys))
-            font = {'weight': 'normal',
-                    'size': 16}
-            matplotlib.rc('font', **font)
-            self.update_chart(random_key(self.keys))
+                dropbox.clicked.connect(lambda checked, a=x : self.update_plot(filter=a))
+                self.layout.addWidget(dropbox, 1,1+numéro)
 
         def fetch_valid_keys():
             self.keys = []
@@ -38,25 +22,16 @@ class Pie_app(QWidget):
                 if x in ["category", "subcat", "leaderboard"]: continue
                 elif not isinstance(value, (int, float)):
                     self.keys.append(x)
-
-        super().__init__()
+        super().__init__(data_list)
         fetch_valid_keys()
-        self.data = data_list
-        self.setWindowTitle('Histogram!')
-        self.window_width, self.window_height = 1400, 800
-        self.setMinimumSize(self.window_width, self.window_height)
-
-        layout = QGridLayout()
-        self.setLayout(layout)
-        insert_list_widget()
-        insert_plot()
         insert_buttons_widget()
 
-    def update_chart(self, y):
+    def update_plot(self, **kargs):
+        filter = kargs["filter"]
         def count_data():
             count = {}
             for x in self.data:
-                count[x[y]] = count.get(x[y], 0) + 1
+                count[x[filter]] = count.get(x[filter], 0) + 1
             for x in copy(count):
                 if count[x] / sum(count.values()) < 0.05:  # pragma: no cover
                     count["autres"] = count.get("autres", 0) + count[x]# pragma: no cover
@@ -72,11 +47,11 @@ class Pie_app(QWidget):
 
         for index, data in enumerate(self.data):
             test = self.listwidget.item(index)
-            if data[y] in légende_couleurs:
-                test.setBackground(QColor(légende_couleurs[data[y]]))
-            elif not data[y]: continue# pragma: no cover
-            else:# pragma: no cover
+            if data[filter] in légende_couleurs:
+                test.setBackground(QColor(légende_couleurs[data[filter]]))
+            elif not data[filter]: continue
+            else:
                 test.setBackground(QColor(légende_couleurs["autres"])) # pragma: no cover
 
-        self.ax.set_title(f"{self.data[0].__class__.__name__}s - {y}")
+        self.ax.set_title(f"{self.data[0].__class__.__name__}s - {filter}")
         self.canvas.draw()

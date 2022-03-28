@@ -4,64 +4,29 @@ import matplotlib.pyplot as plt
 import matplotlib
 from random import choice as random_key
 from PyQt5.QtGui import QFont
+from plots.base import Base_app
 
-class Histo_app(QWidget):
+
+class Histo_app(Base_app):
     def __init__(self, data_list):
-        def create_list_widget():
-            self.listwidget = QListWidget()
-            self.listwidget.setFixedWidth(450)
-            self.listwidget.alternatingRowColors()
-            for entry in data_list:
-                one_line = QListWidgetItem(str(entry))
-                #one_line.setFont(QFont("Courier New", 10))
-                one_line.setFont(QFont("Lucida Sans Typewriter", 10))
-                self.listwidget.addItem(one_line)
-            self.listwidget.clicked.connect(self.clicked)
-            layout.addWidget(self.listwidget, 0, 0, 0,1)
-
         def insert_buttons():
             self.buttons = []
             for numéro, x in enumerate(self.keys):
                 dropbox = QPushButton(x)
                 dropbox.clicked.connect(lambda checked, a=x : self.update_chart(a))
                 self.buttons.append(dropbox)
-                layout.addWidget(dropbox, 1,1+numéro)
-
-
-        def insert_plot():
-            self.canvas = FigureCanvas(plt.Figure(tight_layout=True))
-            layout.addWidget(self.canvas, 0, 1, 1, len(self.keys))
-            font = {'weight': 'normal',
-                    'size': 16}
-            matplotlib.rc('font', **font)
-            self.update_chart(random_key(self.keys))
-
-
+                self.layout.addWidget(dropbox, 1,1+numéro)
         def fetch_valid_keys():
             self.keys = []
             for x, value in data_list[0].__dict__.items():
                 if isinstance(value, (int, float)): self.keys.append(x)
 
-
-        super().__init__()
+        super().__init__(data_list)
         fetch_valid_keys()
-        self.data = data_list
-        self.setWindowTitle('Histogram!')
-        self.window_width, self.window_height = 1400, 800
-        self.setMinimumSize(self.window_width, self.window_height)
-
-        layout = QGridLayout()
-        self.setLayout(layout)
-        create_list_widget()
-        insert_plot()
         insert_buttons()
 
-    def clicked(self):
-        item = self.listwidget.currentItem()
-        print(item.text())
-
-
-    def update_chart(self, filter):
+    def update_plot(self, **kargs):
+        filter = kargs["number"]
         to_plot = [x[filter] for x in self.data]
         def generic():
             self.canvas.figure.clf()
