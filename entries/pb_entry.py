@@ -18,22 +18,10 @@ class PB(Rank):
     def __str__(self):
         time_str = lambda x : f'{int(x)//3600:>3}:{int(x) % 3600 // 60:02}:{int(x) % 3600 % 60 % 60:02}'
         inted_lb = self.leaderboard if isinstance(self.leaderboard, (float, int)) else len(self.leaderboard)
-        p = [4, 20,20, 30 ,10, 9, 8]
-        liste = []
-        for no, attribute in enumerate(["system", "game","level", "category","WR time", "time"]):
-            if isinstance(self[attribute], (float,int)):
-                liste.append(f'{time_str(self[attribute])[:p[no]]:>{p[no]}}')
-            elif isinstance(self[attribute], set):
-                tempo = f'{str(len(self[attribute]))} {attribute}'[:p[no]]
-                liste.append(f'{tempo:{p[no]}}')
-            elif attribute == "level" and not self[attribute]: 
-                continue
-
-            else:
-                liste.append(f'{self[attribute][:p[no]]:{p[no]}}')
-        string =  "   ".join(liste)
-        string += f' ({self["WR %"]:.2%})'
+        system = f'{self.system[:4]:4}'
+        game= f'{self.game[:20]:20}'
+        category = f'{self.category[:20]:20}'
+        WR_time = f'{time_str(self["WR time"]):10} +{time_str(self["delta WR"])}'
+        time = f'{time_str(self.time):10} ({self["WR %"]:.2%})'
         rank = f'{int(self.place):>4}/{int(inted_lb):<4}'
-        string += f'    {rank:^9}'
-        string += f'    ({int(inted_lb - self.place)/int(inted_lb):.2%})'
-        return string
+        return "   ".join([system, game, category,WR_time,  time, rank])
