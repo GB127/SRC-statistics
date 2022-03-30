@@ -3,6 +3,7 @@ from code_SRC.api import api
 from tests.datas_fx import link_m, dicto_m, id_m, clear_db
 
 class Test_apis:
+    @clear_db
     def test_update(self, requests_mock:Mocker):
         raise NotImplementedError
 

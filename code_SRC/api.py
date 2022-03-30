@@ -84,9 +84,9 @@ class api:
 
     @staticmethod
     def system(id:str) -> str:
-        if not id:
-            return "???"
-        return api.system_db[id]
+        if id:
+            return api.system_db[id]
+        return ""
 
     @staticmethod
     def region(id:str) -> str:

@@ -28,7 +28,7 @@ class Histo_app(Base_app):
 
 
         def filter_time():
-            time_str = lambda x : f'{x//3600:>3}:{int(x) % 3600 // 60:02}:{int(x) % 3600 % 60 % 60:02}'
+            time_str = lambda x : f'{int(x//3600):>3}:{int(x) % 3600 // 60:02}:{int(x) % 3600 % 60 % 60:02}'
 
             self.ax.hist(to_plot, range=(min(to_plot), max(to_plot)))
             self.canvas.draw()
@@ -58,7 +58,7 @@ class Histo_app(Base_app):
             self.ax.set_xticklabels([f'{float(x.get_text().replace("−", "-")):.1%}' for x in self.ax.get_xticklabels()])
             self.canvas.draw()
 
-        filtering = {"time":filter_time, "place":filter_place, "WR %" : filter_perc, "WR time":filter_time}
+        filtering = {"time":filter_time, "place":filter_place, "WR %" : filter_perc, "WR time":filter_time, "delta WR":filter_time}
 
         generic()
         filtering[filter]()

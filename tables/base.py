@@ -1,6 +1,6 @@
 from random import randint
 import os
-from statistics import mean, harmonic_mean, geometric_mean, stdev, median, mode
+from statistics import mean, geometric_mean, stdev
 
 from copy import copy
 

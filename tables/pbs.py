@@ -3,7 +3,7 @@ from tables.base import Base_Table
 from plots.handler import window_handler
 from plots.histo import Histo_app
 from plots.pie import Pie_app
-from statistics import mean, geometric_mean, stdev, median
+from statistics import mean, geometric_mean, stdev
 
 
 class Table_pb(Base_Table):
