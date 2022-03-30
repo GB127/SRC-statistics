@@ -33,10 +33,10 @@ class Base_Table:
         string += f'{"M":>3}   {self.median()}\n'
         string += "------" + "-" * len(str(object)) + "\n"
         string += f'{"X̅":>4}   {self.mean()}\n'
-        string += f'{"gX̅":>4}   {self.geomean()}\n'
-        string += f'{"hX̅":>4}   {self.harmean()}\n'
+        string += f'{"±":>3}   {self.stand_dev()}\n'
         string += "------" + "-" * len(str(object)) + "\n"
-        string += f'{"±":>3}   {self.stand_dev()}'
+        string += f'{"gX̅":>4}   {self.geomean()}\n'
+        string += f'{"±":>3}   {self.stand_dev_geo()}'
 
         return string
 
@@ -70,21 +70,11 @@ class Base_Table:
             
         return for_mean
 
-    def harmean(self):
-        for_mean = copy(self.data[0])
-        for clé in self.data[0].__dict__:
-            if isinstance(self.data[0][clé], (int,float)):
-                for_mean[clé] = harmonic_mean([x[clé] for x in self.data if x[clé] > 0])
-            elif isinstance(self.data[0][clé], str):
-                for_mean[clé] = ""
-            
-        return for_mean
 
     def geomean(self):
         for_mean = copy(self.data[0])
         for clé in self.data[0].__dict__:
             if isinstance(self.data[0][clé], (int,float)):
-
                 for_mean[clé] = geometric_mean([x[clé] for x in self.data if x[clé] > 0])
             elif isinstance(self.data[0][clé], str):
                 for_mean[clé] = ""
@@ -95,11 +85,24 @@ class Base_Table:
         for_stdev = copy(self.data[0])
         for clé in self.data[0].__dict__:
             if isinstance(self.data[0][clé], (int,float)):
-                for_stdev[clé] = stdev([x[clé] for x in self.data])            
+                for_stdev[clé] = stdev([x[clé] for x in self.data])
             elif isinstance(self.data[0][clé], str):
                 for_stdev[clé] = ""
 
         return for_stdev
+
+    def stand_dev_geo(self):
+        for_stdev = copy(self.data[0])
+        for clé in self.data[0].__dict__:
+            if isinstance(self.data[0][clé], (int,float)):
+                for_stdev[clé] = stdev([x[clé] for x in self.data if x[clé] > 0], geometric_mean([x[clé] for x in self.data if x[clé] > 0]))
+            elif isinstance(self.data[0][clé], str):
+                for_stdev[clé] = ""
+
+        return for_stdev
+
+
+
 
     def median(self):
         for_median = copy(self.data[0])
