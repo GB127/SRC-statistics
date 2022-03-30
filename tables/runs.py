@@ -21,3 +21,10 @@ class Table_run(Base_Table):
 
     def pie(self):  # pragma: no cover
         window_handler(self.data, Pie_app)  # pragma: no cover
+
+
+    def stats(self):
+        time_str = lambda x : f'{int(x)//3600:>3}:{int(x) % 3600 // 60:02}:{int(x) % 3600 % 60 % 60:02}'
+
+        datas = super().stats()
+        print("  ".join(map(time_str, datas["time"])))

@@ -1,5 +1,8 @@
 from random import randint
 import os
+from statistics import mean, harmonic_mean, geometric_mean, stdev, median, mode
+
+from copy import copy
 
 clear = lambda: os.system('cls')
 
@@ -22,12 +25,19 @@ class Base_Table:
         return self.data[id]
 
     def __str__(self):
-        string = ""
+        string = "------" + "-" * len(str(self.data[0])) + "\n"
         for index, object in enumerate(self.data, start=1):
             string += f'{index:>3}   {str(object)}\n'
         string += "------" + "-" * len(str(object)) + "\n"
-        string += f'{"∑":>3}   {sum(self)}\n'
-        string += f'{"X̅":>4}   {self.mean()}'
+        string += f'{"∑":>3}   {self.sum()}\n'
+        string += f'{"M":>3}   {self.median()}\n'
+        string += "------" + "-" * len(str(object)) + "\n"
+        string += f'{"X̅":>4}   {self.mean()}\n'
+        string += f'{"gX̅":>4}   {self.geomean()}\n'
+        string += f'{"hX̅":>4}   {self.harmean()}\n'
+        string += "------" + "-" * len(str(object)) + "\n"
+        string += f'{"±":>3}   {self.stand_dev()}'
+
         return string
 
     def sort(self, sorting_key=None):
@@ -40,18 +50,68 @@ class Base_Table:
     def __eq__(self, other):
         return self.__dict__ == other.__dict__
 
-    def mean(self):
-        return sum(self) / len(self)
-
     def sum(self):
-        return sum(self)
+        for_sommation = copy(self.data[0])
+        for clé in self.data[0].__dict__:
+            if isinstance(self.data[0][clé], (int,float)):
+                for_sommation[clé] = sum([x[clé] for x in self.data])
+            elif isinstance(self.data[0][clé], str):
+                for_sommation[clé] = str((len(set([x[clé] for x in self.data]))))  # TODO: Get rid of str here
 
-    def median(self, filter):
-        self.sort(filter)
-        return self[len(self) // 2]
+        return for_sommation
 
+    def mean(self):
+        for_mean = copy(self.data[0])
+        for clé in self.data[0].__dict__:
+            if isinstance(self.data[0][clé], (int,float)):
+                for_mean[clé] = mean([x[clé] for x in self.data])
+            elif isinstance(self.data[0][clé], str):
+                for_mean[clé] = str(round(len(self.data)/len(set([x[clé] for x in self.data])),2))  # TODO: Get rid of str here
+            
+        return for_mean
+
+    def harmean(self):
+        for_mean = copy(self.data[0])
+        for clé in self.data[0].__dict__:
+            if isinstance(self.data[0][clé], (int,float)):
+                for_mean[clé] = harmonic_mean([x[clé] for x in self.data if x[clé] > 0])
+            elif isinstance(self.data[0][clé], str):
+                for_mean[clé] = ""
+            
+        return for_mean
+
+    def geomean(self):
+        for_mean = copy(self.data[0])
+        for clé in self.data[0].__dict__:
+            if isinstance(self.data[0][clé], (int,float)):
+
+                for_mean[clé] = geometric_mean([x[clé] for x in self.data if x[clé] > 0])
+            elif isinstance(self.data[0][clé], str):
+                for_mean[clé] = ""
+            
+        return for_mean
+
+    def stand_dev(self):
+        for_stdev = copy(self.data[0])
+        for clé in self.data[0].__dict__:
+            if isinstance(self.data[0][clé], (int,float)):
+                for_stdev[clé] = stdev([x[clé] for x in self.data])            
+            elif isinstance(self.data[0][clé], str):
+                for_stdev[clé] = ""
+
+        return for_stdev
+
+    def median(self):
+        for_median = copy(self.data[0])
+        for clé in self.data[0].__dict__:
+            if isinstance(self.data[0][clé], (int,float)):
+                for_median[clé] = median([x[clé] for x in self.data if x[clé] > 0])
+            elif isinstance(self.data[0][clé], str) and clé != "category":
+                for_median[clé] = mode([x[clé] for x in self.data])
+            
+        return for_median
 
 if __name__ == "__main__":  # pragma: no cover
     test = Base_Table()  # pragma: no cover
-    test.data = [{f'allo':str(randint(6, 10))} for x in range(1,41)]  # pragma: no cover
-    test.sort()  # pragma: no cover
+    test.data = [{f'int2':randint(6, 10), f'int':randint(6, 10), "string":"allo"} for x in range(1,41)]  # pragma: no cover
+    test.stats()
