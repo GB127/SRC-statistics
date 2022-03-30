@@ -5,9 +5,11 @@ class Rank(Run):
         super().__init__(data["run"])
         self.place = data["place"]
         self["WR time"] = WR_time
-        self["WR %"] = self.time / WR_time
-        self["delta WR"] = self.time - WR_time
+        self.update_data()
 
+    def update_data(self):
+        self["WR %"] = self.time / self["WR time"]
+        self["delta WR"] = self.time - self["WR time"]
 
     def __add__(self, other):
         tempo = super().__add__(other)

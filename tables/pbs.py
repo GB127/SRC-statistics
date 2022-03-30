@@ -3,6 +3,8 @@ from tables.base import Base_Table
 from plots.handler import window_handler
 from plots.histo import Histo_app
 from plots.pie import Pie_app
+from statistics import mean, geometric_mean, stdev, median
+
 
 class Table_pb(Base_Table):
     def __init__(self, list_runs:list, include_lvl:bool):
@@ -20,5 +22,31 @@ class Table_pb(Base_Table):
 
     def pie(self):# pragma: no cover
         window_handler(self.data, Pie_app)# pragma: no cover
-    def stats(self):
-        op_names, datas = super().stats()
+
+    def sum(self):
+        tempo = super().sum()
+        tempo.leaderboard = sum([len(x.leaderboard) for x in self.data])
+        tempo.update_data()
+        return tempo
+
+    def mean(self):
+        tempo = super().mean()
+        tempo.leaderboard = mean([len(x.leaderboard) for x in self.data])
+        tempo.update_data()
+        return tempo
+
+    def stand_dev(self):
+        tempo = super().stand_dev()
+        tempo.leaderboard = stdev([len(x.leaderboard) for x in self.data])
+        return tempo
+
+    def geomean(self):
+        tempo = super().geomean()
+        tempo.leaderboard = geometric_mean([len(x.leaderboard) for x in self.data])
+        tempo.update_data()
+        return tempo
+
+    def stand_dev_geo(self):
+        tempo = super().stand_dev_geo()
+        tempo.leaderboard = stdev([len(x.leaderboard) for x in self.data], geometric_mean([len(x.leaderboard) for x in self.data]))
+        return tempo
