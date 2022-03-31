@@ -6,11 +6,11 @@ def requester(link):
         try:
             data = get(link).json()
             assert "data" in data
-            return data  # TODO: remove this
-        except AssertionError:  # pragma: no cover
-            print(data)  # pragma: no cover
-            print("Waiting...")  # pragma: no cover
-            sleep(20)  # pragma: no cover
+            return data
+        except AssertionError:
+            print(data)
+            print("Waiting...")
+            sleep(20)
 
 class api:
     URL = "https://www.speedrun.com/api/v1/"
@@ -24,8 +24,6 @@ class api:
 
     @staticmethod
     def update_db(game_id):
-        """Use src's embedding to reduce request count.
-            """
         def update_systems(liste):
             for one in liste:
                 if one["id"] in api.system_db: continue
@@ -60,8 +58,7 @@ class api:
                 nom_a_modif = nom_a_modif.replace(unwanted, "")
             api.game_db[game_id] = nom_a_modif
 
-        req = requester(f'{api.URL}games/{game_id}?embed=categories,levels,variables,platforms,regions')["data"]
-
+        req = requester(f'{api.URL}games/{game_id}?embed=categories.variables,levels.variables,regions,platforms')["data"]
         update_game(req["names"]["international"])
 
         update_systems(req["platforms"]["data"])
@@ -74,9 +71,9 @@ class api:
     def game(id:str) -> str:
         try:
             return api.game_db[id]
-        except KeyError:
-            api.update_db(id)
-            return api.game_db[id]
+        except KeyError:  # pragma: no cover
+            api.update_db(id)  # pragma: no cover
+            return api.game_db[id]  # pragma: no cover
 
     @staticmethod
     def sub_cat(id_1, id_2):
@@ -86,7 +83,7 @@ class api:
     def system(id:str) -> str:
         if id:
             return api.system_db[id]
-        return ""
+        return ""  # pragma: no cover
 
     @staticmethod
     def region(id:str) -> str:
@@ -113,9 +110,9 @@ class api:
         liste = []
         req = requester(f'{api.URL}runs?user={user_id}&max=200')
         liste += req["data"]
-        while(req["pagination"]["links"]) and (req["pagination"]["size"] == req["pagination"]["max"]):  # pragma: no cover
-            req = get(req["pagination"]["links"][0]["uri"]).json()# pragma: no cover
-            liste += req["data"]# pragma: no cover
+        while(req["pagination"]["links"]) and (req["pagination"]["size"] == req["pagination"]["max"]):
+            req = get(req["pagination"]["links"][0]["uri"]).json()
+            liste += req["data"]
         return req["data"]
 
     @staticmethod
@@ -128,7 +125,6 @@ class api:
         variables = ""
         if subcat_id:
             variables = "&var-".join([f"{x}={y}" for x,y in subcat_id.items()])
-
 
         if not level_id:
             req = requester(f'{api.URL}leaderboards/{game_id}/category/{category_id}?var-{variables}')
