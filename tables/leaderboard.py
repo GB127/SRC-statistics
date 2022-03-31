@@ -1,4 +1,4 @@
-from entries.rank_entry import Rank
+from entries.lb_entry import Rank
 from tables.base import Base_Table
 
 class LB(Base_Table):

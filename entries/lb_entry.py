@@ -1,4 +1,4 @@
-from entries.run_entry import Run
+from entries.one_run import Run
 
 class Rank(Run):
     def __init__(self, data:dict, WR_time:int):

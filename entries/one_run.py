@@ -1,5 +1,5 @@
 from code_SRC.api import api
-from entries.base import Base_Entry
+from entries.base_entry import Base_Entry
 
 
 class Run(Base_Entry):

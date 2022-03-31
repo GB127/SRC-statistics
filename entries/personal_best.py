@@ -1,4 +1,4 @@
-from entries.rank_entry import Rank
+from entries.lb_entry import Rank
 from tables.leaderboard import LB
 from code_SRC.api import api
 

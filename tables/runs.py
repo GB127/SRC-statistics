@@ -1,4 +1,4 @@
-from entries.run_entry import Run
+from entries.one_run import Run
 from tables.base import Base_Table
 from plots.handler import window_handler
 from plots.histo import Histo_app
