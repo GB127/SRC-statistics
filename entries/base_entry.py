@@ -1,5 +1,3 @@
-from copy import copy
-
 class Base_Entry:
     def __getitem__(self, key):
         return self.__dict__[key]
