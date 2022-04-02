@@ -9,11 +9,10 @@ def test_update_dbs(requests_mock: Mocker):
         "api.category_db",
         "api.level_db",
         "api.region_db",
-        "api.sub_cat",
-        "api.sublevel_db",
+        "api.sub_cat"
     ]
     api.system_db = {}
-    link = "https://www.speedrun.com/api/v1/games/4d709l17?embed=categories.variables,levels.variables,regions,platforms"
+    link = "https://www.speedrun.com/api/v1/games/4d709l17?embed=categories,levels,variables,regions,platforms"
     returned_data = {
         "data": {
             "id": "4d709l17",
@@ -109,8 +108,7 @@ def test_update_dbs(requests_mock: Mocker):
             api.category_db,
             api.level_db,
             api.region_db,
-            api.subcat_db,
-            api.sublevel_db,
+            api.subcat_db
         ]
     ):
         assert db != {}, f"{dbs[no]} didn't get updated\n"
@@ -210,8 +208,8 @@ def test_user_pbs(requests_mock: Mocker):
                         "region": "o316x197",
                     },
                     "values": {"p854r2vl": "5q85yy6q"},
-                },
-            },
+                }
+            }
         ]
     }
 
@@ -239,8 +237,8 @@ def test_user_runs(requests_mock: Mocker):
                     "emulated": False,
                     "region": "o316x197",
                 },
-                "values": {"0nw200nq": "gq79nvlp"},
-            },
+                "values": {"0nw200nq": "gq79nvlp"}
+            }
         ],
         "pagination": {"offset": 0, "max": 20, "size": 3, "links": []},
     }
