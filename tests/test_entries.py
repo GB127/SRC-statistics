@@ -1,7 +1,6 @@
 from entries.base_entry import Base_Entry
 from entries.one_run import Run
 from entries.lb_entry import Rank
-from code_SRC.api import api
 # from mock_examples.main import slow_dataset
 
 class Test_run:
@@ -23,14 +22,12 @@ class Test_run:
 
     def test_init(self):
         Test_run.classe = Run(Test_run.testing_case)
-        assert set(Test_run.classe.keys()) == {"game", "category", "time", "subcat", "system", "emu", "level", "region"}
+        assert set(Test_run.classe.keys()) == {"game", "category", "time", "system", "emu", "level", "region"}
 
     def test_str(self):
         assert str(Test_run.classe) == "Game   Zelda: The Wind Wake   Dragon Roost Cavern    Any% (Tuner)                       4:24:15"
         Test_run.classe["level"] = None
         assert str(Test_run.classe) == "Game   Zelda: The Wind Wake   Any% (Tuner)                       4:24:15"
-
-
 
 class Test_lb_entry:
     testing_case = {
@@ -51,13 +48,10 @@ class Test_lb_entry:
             }
     def test_init(self):
         Test_lb_entry.classe = Rank(Test_lb_entry.testing_case, 1401 * 0.5)
-        assert set(Test_lb_entry.classe.keys()) == {"place","WR time", "WR %", "delta WR","game", "category", "time", "subcat", "system", "emu", "level", "region", "min/rk"}
+        assert set(Test_lb_entry.classe.keys()) == {"place","WR time", "WR %", "delta WR","game", "category", "time", "system", "emu", "level", "region", "min/rk"}
 
     def test_str(self):
         assert str(Test_lb_entry.classe) == "  0:23:21   +0:11:40   (200.00%)   0:11:40"
-        Test_lb_entry.classe.place = 1
-        Test_lb_entry.classe.update_data()
-        assert str(Test_lb_entry.classe) == "  0:23:21   +0:11:40   (200.00%)   0:00:00"
 
 # def test_mocking_class_method(mocker):
 #     expected = 'xyz'

@@ -13,18 +13,11 @@ class Table_run(Base_Table):
                 self.data.append(Run(data))
 
     def __call__(self):
-        super().__call__(self.histo, self.pie, self.sort)  # pragma: no cover
+        super().__call__(self.histo, self.pie, self.sort)
 
 
-    def histo(self):  # pragma: no cover
-        window_handler(self.data, Histo_app)  # pragma: no cover
+    def histo(self):
+        window_handler(self.data, Histo_app)
 
-    def pie(self):  # pragma: no cover
-        window_handler(self.data, Pie_app)  # pragma: no cover
-
-
-    def stats(self):
-        time_str = lambda x : f'{int(x)//3600:>3}:{int(x) % 3600 // 60:02}:{int(x) % 3600 % 60 % 60:02}'
-
-        datas = super().stats()
-        print("  ".join(map(time_str, datas["time"])))
+    def pie(self):
+        window_handler(self.data, Pie_app)

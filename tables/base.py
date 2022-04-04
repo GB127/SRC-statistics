@@ -16,7 +16,7 @@ class Base_Table:
             command = input(f"Select option: [0-{len(methods) -1}] | Type end to exit\nInput : ")
             if command == "end":
                 break
-            methods[int(command)]()  # pragma: no cover
+            methods[int(command)]()
 
     def __len__(self):
         return len(self.data)
@@ -25,15 +25,15 @@ class Base_Table:
         return self.data[id]
 
     def __str__(self):
-        string = "------" + "-" * len(str(self.data[0])) + "\n"
+        string = "-------" + "-" * len(str(self.data[0])) + "\n"
         for index, object in enumerate(self.data, start=1):
-            string += f'{index:>3}   {str(object)}\n'
-        string += "------" + "-" * len(str(object)) + "\n"
-        string += f'{"∑":>3}   {self.sum()}\n'
-        string += "------" + "-" * len(str(object)) + "\n"
-        string += f'{"X̅":>4}   {self.mean()}\n'
-        string += f'{"gX̅":>4}   {self.geomean()}\n'
-        string += "------" + "-" * len(str(object)) + "\n"
+            string += f'{index:>4}   {str(object)}\n'
+        string += "-------" + "-" * len(str(object)) + "\n"
+        string += f'{"∑":>4}   {self.sum()}\n'
+        string += "-------" + "-" * len(str(object)) + "\n"
+        string += f'{"X̅":>5}   {self.mean()}\n'
+        string += f'{"gX̅":>5}   {self.geomean()}\n'
+        string += "-------" + "-" * len(str(object)) + "\n"
 
         return string
 
@@ -43,9 +43,6 @@ class Base_Table:
                 print(index, attribute)
             sorting_key = list(self.data[0].keys())[int(input("Which sorting key? "))]
         self.data.sort(key=lambda x: x[sorting_key])
-
-    def __eq__(self, other):
-        return self.__dict__ == other.__dict__
 
     def sum(self):
         for_sommation = copy(self.data[0])
@@ -101,4 +98,4 @@ class Base_Table:
 if __name__ == "__main__":  # pragma: no cover
     test = Base_Table()  # pragma: no cover
     test.data = [{f'int2':randint(6, 10), f'int':randint(6, 10), "string":"allo"} for x in range(1,41)]  # pragma: no cover
-    test.stats()
+    test.stats() # pragma: no cover

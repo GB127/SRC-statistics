@@ -10,9 +10,7 @@ class LB(Base_Table):
         for data in list_Ranks:
             self.data.append(Rank(data, self.WR))
 
-    def __add__(self, other):
-        if isinstance(other, LB):
-            return len(self) + len(other)
-        return len(self) + other
-    def __radd__(self, other):
-        return self + other
+    def sum(self):
+        tempo = super().sum()
+        tempo["WR %"] = tempo.time / tempo["WR time"]
+        return tempo

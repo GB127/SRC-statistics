@@ -14,7 +14,7 @@ class Table_pb(Base_Table):
                 self.data.append(PB(data))
 
     def __call__(self):
-        super().__call__(self.histo, self.pie, self.plots, self.sort)  # pragma: no cover
+        super().__call__(self.histo, self.pie, self.sort)  # pragma: no cover
 
 
     def histo(self): # pragma: no cover

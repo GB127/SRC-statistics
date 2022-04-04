@@ -120,52 +120,9 @@ def test_user_id(requests_mock: Mocker):
         "data": {
             "id": "x7qz6qq8",
             "names": {"international": "Niamek", "japanese": None},
-            "pronouns": "",
-            "weblink": "https://www.speedrun.com/user/Niamek",
-            "name-style": {
-                "style": "gradient",
-                "color-from": {"light": "#EF8239", "dark": "#EF8241"},
-                "color-to": {"light": "#EF8239", "dark": "#EF8241"},
-            },
-            "role": "user",
-            "signup": "2020-05-10T23:26:30Z",
-            "location": {
-                "country": {
-                    "code": "ca",
-                    "names": {"international": "Canada", "japanese": None},
-                }
-            },
-            "twitch": {"uri": "https://www.twitch.tv/niamek"},
-            "hitbox": None,
-            "youtube": None,
-            "twitter": {"uri": "https://www.twitter.com/niamek21"},
-            "speedrunslive": {"uri": "http://www.speedrunslive.com/profile/Niamek"},
-            "assets": {
-                "icon": {"uri": None},
-                "image": {
-                    "uri": "https://www.speedrun.com/userasset/x7qz6qq8/image?v=ce0237b"
-                },
-            },
-            "links": [
-                {
-                    "rel": "self",
-                    "uri": "https://www.speedrun.com/api/v1/users/x7qz6qq8",
-                },
-                {
-                    "rel": "runs",
-                    "uri": "https://www.speedrun.com/api/v1/runs?user=x7qz6qq8",
-                },
-                {
-                    "rel": "games",
-                    "uri": "https://www.speedrun.com/api/v1/games?moderator=x7qz6qq8",
-                },
-                {
-                    "rel": "personal-bests",
-                    "uri": "https://www.speedrun.com/api/v1/users/x7qz6qq8/personal-bests",
-                },
-            ],
+            }
         }
-    }
+    
     requests_mock.get(link, json=returned_data)
     assert api.user_id("niamek") == "x7qz6qq8"
 
