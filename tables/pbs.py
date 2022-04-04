@@ -26,13 +26,11 @@ class Table_pb(Base_Table):
     def sum(self):
         tempo = super().sum()
         tempo.leaderboard = sum([len(x.leaderboard) for x in self.data])
-        tempo.update_data()
         return tempo
 
     def mean(self):
         tempo = super().mean()
         tempo.leaderboard = mean([len(x.leaderboard) for x in self.data])
-        tempo.update_data()
         return tempo
 
     def stand_dev(self):
@@ -43,7 +41,6 @@ class Table_pb(Base_Table):
     def geomean(self):
         tempo = super().geomean()
         tempo.leaderboard = geometric_mean([len(x.leaderboard) for x in self.data])
-        tempo.update_data()
         return tempo
 
     def stand_dev_geo(self):

@@ -15,8 +15,6 @@ class PB(Rank):
         self.leaderboard = LB(api.leaderboard(game_id, category_id, sub_cat_ids, level_id))
         super().__init__(data, self.leaderboard.WR)
 
-    def update_data(self):
-        super().update_data()
         if isinstance(self.leaderboard, LB):
             self["LB %"] = (len(self.leaderboard) - self.place)/len(self.leaderboard)
         elif isinstance(self.leaderboard, (int, float)):
