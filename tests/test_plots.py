@@ -7,7 +7,7 @@ from PyQt5.QtWidgets import (   QListWidgetItem,    QGridLayout,
 
 
 class Test_pie:
-    data = [{"time":x*60, "str":str(x), "place":x*2, "game": str(x**2)} for x in range(3)]
+    data = [{"time":x*60, "str":str(x), "place":x*2, "game": "a" * (x+1)} for x in range(3)]
 
     def test_widgets(self, qtbot):
         widget = Pie_app(Test_pie.data)
@@ -24,15 +24,15 @@ class Test_pie:
         buttons = [widget.layout.itemAt(x).widget() for x in range(widget.layout.count()) if isinstance(widget.layout.itemAt(x).widget(), QPushButton)]
         assert {x.text() for x in buttons} == {"game", "str"}
 
-    def wip_fig(self, qtbot):
+    def test_fig(self, qtbot):
         widget = Pie_app(Test_pie.data)
         qtbot.addWidget(widget)
         for widget_id in range(widget.layout.count()):
             plot_widget = widget.layout.itemAt(widget_id).widget()
             if isinstance(plot_widget, FigureCanvasQTAgg):
                 break
-        tempo = widget.canvas
-        raise NotImplementedError("This doesn't work the way I expected it to work.")
+        tempo = widget.canvas.figure
+        tempo.savefig("tests/figures/pie")
 
 
 
@@ -54,7 +54,7 @@ class Test_hist:
         buttons = [widget.layout.itemAt(x).widget() for x in range(widget.layout.count()) if isinstance(widget.layout.itemAt(x).widget(), QPushButton)]
         assert {x.text() for x in buttons} == {"time", "place"}
 
-    def WIP_histo(self, qtbot):
+    def test_histo(self, qtbot):
         widget = Histo_app(Test_hist.data)
         qtbot.addWidget(widget)
         for widget_id in range(widget.layout.count()):
@@ -62,6 +62,6 @@ class Test_hist:
             if isinstance(plot_widget, FigureCanvasQTAgg):
                 break
 
-        tempo = widget.canvas.figure.subplots().get_figure()
-        # tempo.savefig("tests/fake_image")
-        raise NotImplementedError("This doesn't work the way I expected it to work.")
+        tempo = widget.canvas.figure
+        tempo.savefig("tests/figures/histo")
+        raise BaseException("The figure needs to be imprived")

@@ -1,9 +1,12 @@
 from entries.lb_entry import Rank
 from entries.one_run import Run
+from requests_mock.mocker import Mocker
 from tables.base import Base_Table
 from entries.base_entry import Base_Entry
 from tables.runs import Table_run
 from tables.leaderboard import LB
+from entries.personal_best import PB
+from tables.pbs import Table_pb
 
 
 class Test_base:
@@ -102,3 +105,59 @@ class Test_lb:
                     "-------------------------------------------------\n")
         assert str(Test_lb.classe) == attendu, str(Test_lb.classe)
 
+
+
+
+class Test_pbs:
+    pb_dict = {"place": 2,
+                    "run": {
+                        "id": "7z037xoz",
+                        "game": "4d709l17",
+                        "level": None,
+                        "category": "9d8x94w2",
+                        "times": {"primary_t": 1401 + 2},
+                        "system": {
+                            "platform": "4p9z06rn",
+                            "emulated": False,
+                            "region": "pr184lqn",
+                        },
+                        "values": {"p854r2vl": "5q85yy6q"}}}
+    def test_init(self, requests_mock:Mocker):
+        lb_data = {"data":{"runs":[{
+                    "place": x + 1,
+                    "run": {
+                        "id": "7z037xoz",
+                        "game": "4d709l17",
+                        "level": None,
+                        "category": "9d8x94w2",
+                        "times": {"primary_t": 1401 + x},
+                        "system": {
+                            "platform": "4p9z06rn",
+                            "emulated": False,
+                            "region": "pr184lqn",
+                        },
+                        "values": {"p854r2vl": "5q85yy6q"},
+                    }} for x in range(3)]}}
+        link = "https://www.speedrun.com/api/v1/leaderboards/4d709l17/category/9d8x94w2?var-"
+        requests_mock.get(link, json=lb_data)
+        Test_pbs.classe = Table_pb([Test_pbs.pb_dict for _ in range(3)], include_lvl=False)
+        assert hasattr(Test_pbs.classe, "data")
+        assert isinstance(Test_pbs.classe[0], PB)
+
+    def test_str(self):
+        attendu = (
+            "-------------------------------------------------------------------------------------------------------------------------\n"
+            "   1   Game   Zelda: The Wind Wake   Any%                     0:23:21    0:23:23 +0:00:02   (100.14%)      2/3     33.33%\n"
+            "   2   Game   Zelda: The Wind Wake   Any%                     0:23:21    0:23:23 +0:00:02   (100.14%)      2/3     33.33%\n"
+            "   3   Game   Zelda: The Wind Wake   Any%                     0:23:21    0:23:23 +0:00:02   (100.14%)      2/3     33.33%\n"
+            "-------------------------------------------------------------------------------------------------------------------------\n"
+            "   ∑   1      1                      1                        1:10:03    1:10:09 +0:00:06   (100.14%)      6/9     33.33%\n"
+            "-------------------------------------------------------------------------------------------------------------------------\n"
+            "   X̅   3.0    3.0                    3.0                      0:23:21    0:23:23 +0:00:02   (100.14%)      2/3     33.33%\n"
+            "  gX̅                                                          0:23:20    0:23:23 +0:00:02   (100.14%)      2/3     33.33%\n"
+            "-------------------------------------------------------------------------------------------------------------------------\n"
+
+
+
+        )
+        assert str(Test_pbs.classe) == attendu, "\n" + str(Test_pbs.classe)

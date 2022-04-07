@@ -134,7 +134,7 @@ def test_correct_data():
         api.category,
         api.level,
         api.region,
-    ]
+        ]
     ids = ["4d709l17", "4p9z06rn", "9d8x94w2", "ywep57dl", "pr184lqn"]
     attendus = [
         "Zelda: The Wind Waker",
@@ -142,7 +142,7 @@ def test_correct_data():
         "Any%",
         "Dragon Roost Cavern",
         "USA / NTSC",
-    ]
+        ]
     for function, id, attendu in zip(api_callers, ids, attendus):
         assert function(id) == attendu
     api.sub_cat("0nw200nq", "gq79nvlp") == "Tuner"

@@ -94,7 +94,7 @@ class api:
         Returns:
             str: Game's name linked to the id
         """
-        try:
+        try:  #TODO : You can avoid a try clause here.
             return api.game_db[id]
         except KeyError:
             api.update_db(id)
@@ -186,7 +186,7 @@ class api:
             user_id (str): User's ID
 
         Returns:
-            list of dict: [dict1, dict2, dict3, ...] where dict is the data of a run.
+            list of dict: [dict1, dict2, dict3, ...] where dict is the data of a run. See entries.one_run for format.
         """
         liste = []
         req = requester(f'{api.URL}runs?user={user_id}&max=200')
