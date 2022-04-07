@@ -7,13 +7,13 @@ clear = lambda: os.system('cls')
 
 
 class User:
-    def __init__(self, username:str):  # pragma: no cover
-        self.username = username.capitalize()  # pragma: no cover
-        self.id = api.user_id(username)  # pragma: no cover
-        self.runs = Table_run(api.user_runs(self.id), False)  # pragma: no cover
-        self.pbs = Table_pb(api.user_pbs(self.id), False)  # pragma: no cover
-        self.runs_lvl = Table_run(api.user_runs(self.id), True)  # pragma: no cover
-        self.pbs_lvl = Table_pb(api.user_pbs(self.id), True)  # pragma: no cover
+    def __init__(self, username:str):
+        self.username = username.capitalize()
+        self.id = api.user_id(username)
+        self.runs = Table_run(api.user_runs(self.id), False)
+        self.pbs = Table_pb(api.user_pbs(self.id), False)
+        self.runs_lvl = Table_run(api.user_runs(self.id), True)
+        self.pbs_lvl = Table_pb(api.user_pbs(self.id), True)
 
     def __call__(self):
         while True:

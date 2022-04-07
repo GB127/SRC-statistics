@@ -23,10 +23,8 @@ class PB(Rank):
     def __str__(self):
         time_str = lambda x : f'{int(x)//3600:>3}:{int(x) % 3600 // 60:02}:{int(x) % 3600 % 60 % 60:02}'
         inted_lb = self.leaderboard if isinstance(self.leaderboard, (float, int)) else len(self.leaderboard)
-        system = f'{self.system[:4]:4}'
-        game= f'{self.game[:20]:20}'
-        category = f'{self.category[:20]:20}'
-        WR_time = f'{time_str(self["WR time"]):10} +{time_str(self["delta WR"])}'
-        time = f'{time_str(self.time):10} ({self["WR %"]:.2%})'
+
+        prelim_infos = f'{self.system[:4]:4}   {self.game[:20]:20}   {self.category[:20]:20}'
+        time_infos = f'{time_str(self["WR time"]):10} {time_str(self.time):10}+{time_str(self["delta WR"]).lstrip():9} ({self["WR %"]:.2%})'
         rank = f'{int(self.place):>4}/{int(inted_lb):<4}  {self["LB %"]:.2%}'
-        return "   ".join([system, game, category,WR_time,  time, rank])
+        return "   ".join([prelim_infos, time_infos, rank])

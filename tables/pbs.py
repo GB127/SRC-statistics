@@ -14,14 +14,14 @@ class Table_pb(Base_Table):
                 self.data.append(PB(data))
 
     def __call__(self):
-        super().__call__(self.histo, self.pie, self.sort)  # pragma: no cover
+        super().__call__(self.histo, self.pie, self.sort)
 
 
-    def histo(self): # pragma: no cover
+    def histo(self):
         window_handler(self.data, Histo_app)
 
-    def pie(self):# pragma: no cover
-        window_handler(self.data, Pie_app)# pragma: no cover
+    def pie(self):
+        window_handler(self.data, Pie_app)
 
     def sum(self):
         tempo = super().sum()

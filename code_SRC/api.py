@@ -124,7 +124,7 @@ class api:
         """
         if id:
             return api.system_db[id]
-        return ""
+        return ""  # pragma: no cover
 
     @staticmethod
     def region(id:str) -> str:

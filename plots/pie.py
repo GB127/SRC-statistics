@@ -8,7 +8,7 @@ from plots.base import Base_app
 class Pie_app(Base_app):
     def plot_inter_widgets(self):
         self.keys = []  # Look if I need self
-        for x, value in self.data[0].__dict__.items():
+        for x, value in self.data[0].items():
             if x in ["category", "subcat", "leaderboard"]: continue
             elif not isinstance(value, (int, float)):
                 self.keys.append(x)

@@ -23,7 +23,7 @@ class Base_app(QWidget):
         print(self.data[self.selected_id])
     
     def plot_inter_widgets(self):
-        raise NotImplementedError("Must be defined in child")
+        raise NotImplementedError("Must be defined in child")  # pragma: no cover
 
     def __init__(self, data_list):
         super().__init__()
@@ -32,20 +32,20 @@ class Base_app(QWidget):
 
         self.layout = QGridLayout()
         self.setLayout(self.layout)
-        for numéro, wid in enumerate(self.plot_inter_widgets(), start=1):
-            self.layout.addWidget(wid, 1, numéro)
         self.layout.addWidget(self.list_widget(), 0,0,0,1)
         self.layout.addWidget(self.plot_widget(), 0, 1, 1, len(self.plot_inter_widgets()))  # TODO
+        for numéro, wid in enumerate(self.plot_inter_widgets(), start=1):
+            self.layout.addWidget(wid, 1, numéro)
 
 
     def plot_widget(self):
         self.canvas = FigureCanvas(plt.Figure(tight_layout=True))
         matplotlib.rc('font', **{'weight': 'normal',
                                     'size': 16})
-        self.update_plot(list=0,
+        self.update_plot(
                         filter="game",
                         number="time")
         return self.canvas
 
     def update_plot(self, **kargs):
-        raise NotImplementedError("This function is defined in childs only")
+        raise NotImplementedError("This function is defined in childs only")  # pragma: no cover

@@ -202,3 +202,26 @@ def test_user_runs(requests_mock: Mocker):
     link = "https://www.speedrun.com/api/v1/runs?user=dx3r2qxl"
     requests_mock.get(link, json=returned_data)
     assert isinstance(api.user_runs("dx3r2qxl"), list)
+
+
+def test_lb(requests_mock:Mocker):
+    lb_data = {"data":{"runs":[{
+                "place": x + 1,
+                "run": {
+                    "id": "7z037xoz",
+                    "game": "4d709l17",
+                    "level": None,
+                    "category": "9d8x94w2",
+                    "times": {"primary_t": 1401 + x},
+                    "system": {
+                        "platform": "4p9z06rn",
+                        "emulated": False,
+                        "region": "pr184lqn",
+                    },
+                    "values": {"p854r2vl": "5q85yy6q"},
+                }} for x in range(3)]}}
+    link = "https://www.speedrun.com/api/v1/leaderboards/4d709l17/category/9d8x94w2?var-0nw200nq=gq79nvlp"
+    requests_mock.get(link, json=lb_data)
+    assert isinstance(api.leaderboard("4d709l17","9d8x94w2", {"0nw200nq": "gq79nvlp"}), list)
+    for run in api.leaderboard("4d709l17","9d8x94w2", {"0nw200nq": "gq79nvlp"}):
+        assert {"place", "run"} == set(run.keys())

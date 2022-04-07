@@ -29,10 +29,8 @@ class Rank(Run):
         super().__init__(data["run"])
         self.place = data["place"]
         self["WR time"] = WR_time
-
         self["WR %"] = self.time / self["WR time"]
         self["delta WR"] = self.time - self["WR time"]
-
         self["min/rk"] = 0
         if self.place > 1:
             self["min/rk"] = self["delta WR"] / (self.place - 1)

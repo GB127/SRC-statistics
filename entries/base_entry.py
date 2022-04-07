@@ -14,6 +14,9 @@ class Base_Entry:
     def keys(self):
         return self.__dict__.keys()
 
+    def items(self):
+        return self.__dict__.items()
+
     def __setitem__(self, key, value):
         self.__dict__[key] = value
 
