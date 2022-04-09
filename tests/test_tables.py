@@ -1,3 +1,4 @@
+from PyQt5 import QtCore
 from entries.lb_entry import Rank
 from entries.one_run import Run
 from requests_mock.mocker import Mocker
@@ -7,6 +8,10 @@ from tables.runs import Table_run
 from tables.leaderboard import LB
 from entries.personal_best import PB
 from tables.pbs import Table_pb
+from plots.histo import Histo_app
+from PyQt5.QtWidgets import (   QListWidgetItem,    QGridLayout, 
+                                QWidget,            QListWidget, QPushButton)
+
 
 
 class Test_base:
@@ -70,6 +75,21 @@ class Test_runs:
         Test_runs.classe = Table_run([Test_runs.dicto for _ in range(3)], False)
         assert isinstance(self.classe.data, list) and isinstance(self.classe.data[0], Run)
         assert all([not bool(x.level) for x in Test_runs.classe.data])
+
+
+    def test_hist(self, qtbot):
+        for x in range(3):
+            Test_runs.classe[x]["time"] += x
+
+        widget = Histo_app(Test_runs.classe.data)
+        qtbot.addWidget(widget)
+        buttons = [widget.layout.itemAt(x).widget() for x in range(widget.layout.count()) if isinstance(widget.layout.itemAt(x).widget(), QPushButton)]
+        
+        for button in buttons:
+            qtbot.mouseClick(button, QtCore.Qt.LeftButton)
+
+
+
 
 class Test_lb:
     dicto = [{
@@ -141,9 +161,10 @@ class Test_pbs:
         link = "https://www.speedrun.com/api/v1/leaderboards/4d709l17/category/9d8x94w2?var-"
         requests_mock.get(link, json=lb_data)
         Test_pbs.classe = Table_pb([Test_pbs.pb_dict for _ in range(3)], include_lvl=False)
+
+
         assert hasattr(Test_pbs.classe, "data")
         assert isinstance(Test_pbs.classe[0], PB)
-
     def test_str(self):
         attendu = (
             "-------------------------------------------------------------------------------------------------------------------------\n"
@@ -161,3 +182,23 @@ class Test_pbs:
 
         )
         assert str(Test_pbs.classe) == attendu, "\n" + str(Test_pbs.classe)
+
+
+    def test_hist(self, qtbot):
+        for x in range(3):
+            Test_pbs.classe[x]["time"] += x
+            Test_pbs.classe[x]["place"] += x
+            Test_pbs.classe[x]["LB %"] += x
+            Test_pbs.classe[x]["WR %"] += x
+            Test_pbs.classe[x]["WR time"] += x
+            Test_pbs.classe[x]["delta WR"] += x
+
+        widget = Histo_app(Test_pbs.classe.data)
+        qtbot.addWidget(widget)
+        buttons = [widget.layout.itemAt(x).widget() for x in range(widget.layout.count()) if isinstance(widget.layout.itemAt(x).widget(), QPushButton)]
+        
+        for button in buttons:
+            qtbot.mouseClick(button, QtCore.Qt.LeftButton)
+
+
+

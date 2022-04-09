@@ -30,24 +30,32 @@ class Histo_app(Base_app):
             self.ax.set_ylabel("Frequency")
 
         def set_xticks():
+            assert len(set(to_plot)) > 1, f'{kargs["number"]} produces {to_plot}'
+
             self.ax.set_xticks(arange(
-                                    min(to_plot),
-                                    max(to_plot),
-                                    (max(to_plot)-min(to_plot))/5
-                                    )[1:])
+                                        min(to_plot),
+                                        max(to_plot),
+                                        (max(to_plot)-min(to_plot))/5
+                                        )[1:])
             self.ax.set_xlim([min(to_plot), max(to_plot)])
 
-            if kargs["number"] in ["time"]:
+            if kargs["number"] in ["time", "delta WR", "WR time"]:
                 time_str = lambda x : f'{int(x//3600):>3}:{int(x) % 3600 // 60:02}:{int(x) % 3600 % 60 % 60:02}'
                 self.ax.set_xticklabels([time_str(float(x)) for x in self.ax.get_xticks()], horizontalalignment="center")
 
-            elif kargs["number"] in ["WR %"]:
+            elif kargs["number"] in ["WR %", "LB %"]:
                 perc_str = lambda x : f'{x:.1%}'
                 self.ax.set_xticklabels([perc_str(float(x)) for x in self.ax.get_xticks()], horizontalalignment="center")
+            elif kargs["number"] in ["place"]:
+                self.ax.set_xticklabels([x for x in self.ax.get_xticks()], horizontalalignment="center")
+            else:
+                raise KeyError(f'{kargs["number"]} is not assigned.')  # pragma: no cover
             self.canvas.draw()
 
+        def set_yticks():
+            self.ax.set_yticks([x for x in range(0, int(max(self.ax.get_yticks()) + 1), int(max(self.ax.get_yticks()) + 1) // 14 + 1)][1:])
+            self.canvas.draw()
+            
         labels()
         set_xticks()
-
-        self.ax.set_yticks([x for x in range(0, int(max(self.ax.get_yticks()) + 1), int(max(self.ax.get_yticks()) + 1) // 14)][1:])
-        self.canvas.draw()
+        set_yticks()

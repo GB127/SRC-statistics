@@ -103,7 +103,7 @@ class Test_pb:
         link = "https://www.speedrun.com/api/v1/leaderboards/4d709l17/category/9d8x94w2?var-0nw200nq=gq79nvlp"
         requests_mock.get(link, json=lb_data)
         Test_pb.classe = PB(Test_pb.pb_dict)
-        assert set(Test_pb.classe.keys()) == {"place","WR time", "WR %", "delta WR","game", "category", "time", "system", "emu", "level", "region", "leaderboard", "min/rk", "LB %"}
+        assert set(Test_pb.classe.keys()) == {"place","WR time", "WR %", "delta WR","game", "category", "time", "system", "emu", "level", "region", "leaderboard", "LB %"}
 
 
     def test_str(self):

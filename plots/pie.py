@@ -43,7 +43,7 @@ class Pie_app(Base_app):
             test = self.listwidget.item(index)
             if data[filter] in légende_couleurs:
                 test.setBackground(QColor(légende_couleurs[data[filter]]))
-            elif not data[filter]: continue
+            elif not data[filter]: continue  # pragma: no cover
             else:
                 test.setBackground(QColor(légende_couleurs["autres"])) # pragma: no cover
 

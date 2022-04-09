@@ -55,8 +55,8 @@ class PB(Rank):
         if data["run"]["level"]: level_id = data["run"]["level"]
         self.leaderboard = LB(api.leaderboard(game_id, category_id, sub_cat_ids, level_id))
         super().__init__(data, self.leaderboard.WR)
-
         self["LB %"] = (len(self.leaderboard) - self.place)/len(self.leaderboard)
+        del self.__dict__["min/rk"]
     def __str__(self):
         time_str = lambda x : f'{int(x)//3600:>3}:{int(x) % 3600 // 60:02}:{int(x) % 3600 % 60 % 60:02}'
         inted_lb = self.leaderboard if isinstance(self.leaderboard, (float, int)) else len(self.leaderboard)

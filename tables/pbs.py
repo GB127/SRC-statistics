@@ -18,7 +18,7 @@ class Table_pb(Base_Table):
 
 
     def histo(self):
-        window_handler(self.data, Histo_app)
+        window_handler(self.data, Histo_app)  # pragma : no cover
 
     def pie(self):
         window_handler(self.data, Pie_app)
