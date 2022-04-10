@@ -37,8 +37,6 @@ class Test_hist:
         qtbot.addWidget(widget)
 
 
-
-
     def test_widgets(self, qtbot):
         widget = Histo_app(Test_hist.data)
         qtbot.addWidget(widget)

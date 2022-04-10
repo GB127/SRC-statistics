@@ -1,5 +1,6 @@
 from statistics import quantiles
 from PyQt5.QtWidgets import QPushButton
+from matplotlib.pyplot import axes
 from plots.base import Base_app
 from numpy import arange
 from PyQt5.QtGui import QColor
@@ -43,7 +44,6 @@ class Histo_app(Base_app):
 
     def update_plot(self, **kargs):
         def trim_data(to_trim):
-            # IQR vs. Geometric???
             quantilles = quantiles(to_trim)
             IQ1 = quantilles[0]
             IQ3 = quantilles[2]
@@ -55,7 +55,7 @@ class Histo_app(Base_app):
 
 
         def labels():
-            self.ax.set_title(f'{self.data[0].__class__.__name__} - {"time"}')
+            self.ax.set_title(f'{self.data[0].__class__.__name__} - {kargs["number"]}')
             self.ax.set_xlabel(kargs["number"])
             self.ax.set_ylabel("Frequency")
 
@@ -106,6 +106,7 @@ class Histo_app(Base_app):
 
 
         self.ax.hist(to_plot, range=(min(to_plot), max(to_plot)))
+        self.ax.grid(visible=True, axis="x")
         labels()
         set_xticks()
         set_yticks()
