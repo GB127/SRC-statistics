@@ -18,10 +18,10 @@ class Table_pb(Base_Table):
 
 
     def histo(self):
-        window_handler(self.data, Histo_app)  # pragma : no cover
+        window_handler(self.data, Histo_app)  # pragma: no cover
 
     def pie(self):
-        window_handler(self.data, Pie_app)
+        window_handler(self.data, Pie_app)  # pragma: no cover
 
     def sum(self):
         tempo = super().sum()
@@ -38,20 +38,10 @@ class Table_pb(Base_Table):
 
         return tempo
 
-    def stand_dev(self):
-        tempo = super().stand_dev()
-        tempo.leaderboard = stdev([len(x.leaderboard) for x in self.data])
-        return tempo
-
     def geomean(self):
         tempo = super().geomean()
         tempo.leaderboard = geometric_mean([len(x.leaderboard) for x in self.data])
         tempo["LB %"] = (tempo.leaderboard - tempo.place)/tempo.leaderboard
         tempo["WR %"] = tempo.time / tempo["WR time"]
 
-        return tempo
-
-    def stand_dev_geo(self):
-        tempo = super().stand_dev_geo()
-        tempo.leaderboard = stdev([len(x.leaderboard) for x in self.data], geometric_mean([len(x.leaderboard) for x in self.data]))
         return tempo

@@ -31,10 +31,12 @@ class Test_hist:
     data = [{"time":x*60, "str":str(x), "place":x*2, "str2": str(x**2), "WR %":1 + 1/x} for x in range(1, 4)]*13
 
     def test_unique_data(self, qtbot):
-        raise NotImplementedError("Need to figure out a way to take account of data with identical values if someone somehow has that")
+        single_data = [{"time":1, "str":str(1), "place":1, "str2": str(1), "WR %":1} for x in range(1, 4)]
 
-    def test_with_outsiders_data(self, qtbot):
-        raise NotImplementedError("TODO")
+        widget = Histo_app(single_data)
+        qtbot.addWidget(widget)
+
+
 
 
     def test_widgets(self, qtbot):
@@ -72,3 +74,9 @@ class Test_hist:
         widget.canvas.figure.savefig("tests/histo_perc")
         assert list(widget.canvas.figure.gca().get_xticks()) == [x for x in arange(4/3,2,2/15 )][1:-1]
 
+
+    def test_with_outsiders_data(self, qtbot):
+        Test_hist.data.append({"time":600000, "str":str(2), "place":44444444, "str2": str(2), "WR %":333333})
+        widget = Histo_app(Test_hist.data)
+        qtbot.addWidget(widget)
+        assert sum([x.get_height() for x in widget.canvas.figure.gca().patches]) == 39.0

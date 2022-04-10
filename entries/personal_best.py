@@ -38,12 +38,10 @@ class PB(Rank):
 
     """
     def __init__(self, data):
-        """
-
-        Args:
+        """Args:
             data (dict): Informations received from SRC's api.
                 keys:
-        """
+            """
 
         category_id = data["run"]["category"]
         game_id = data["run"]["game"]

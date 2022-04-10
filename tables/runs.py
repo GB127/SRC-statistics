@@ -20,4 +20,4 @@ class Table_run(Base_Table):
         window_handler(self.data, Histo_app)  # pragma: no cover
 
     def pie(self):
-        window_handler(self.data, Pie_app)
+        window_handler(self.data, Pie_app)  # pragma: no cover

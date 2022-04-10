@@ -1,6 +1,6 @@
 from random import randint
 import os
-from statistics import mean, geometric_mean, stdev
+from statistics import mean, geometric_mean
 
 from copy import copy
 
@@ -8,15 +8,12 @@ clear = lambda: os.system('cls')
 
 class Base_Table:
     def __call__(self, *methods):
-        while True:
-            clear()
-            print(self)
-            for index, fx in enumerate(methods):
-                print(index, fx.__name__)
-            command = input(f"Select option: [0-{len(methods) -1}] | Type end to exit\nInput : ")
-            if command == "end":
-                break
-            methods[int(command)]()
+        for index, fx in enumerate(methods):
+            print(index, fx.__name__)
+        command = input(f"Select option: [0-{len(methods) -1}] | Type end to exit\nInput : ")
+        if command == "end":
+            return
+        methods[int(command)]()
 
     def __len__(self):
         return len(self.data)
@@ -74,26 +71,6 @@ class Base_Table:
                 for_mean[clé] = ""
             
         return for_mean
-
-    def stand_dev(self):
-        for_stdev = copy(self.data[0])
-        for clé in self.data[0].__dict__:
-            if isinstance(self.data[0][clé], (int,float)):
-                for_stdev[clé] = stdev([x[clé] for x in self.data])
-            elif isinstance(self.data[0][clé], str):
-                for_stdev[clé] = ""
-
-        return for_stdev
-
-    def stand_dev_geo(self):
-        for_stdev = copy(self.data[0])
-        for clé in self.data[0].__dict__:
-            if isinstance(self.data[0][clé], (int,float)):
-                for_stdev[clé] = stdev([x[clé] for x in self.data if x[clé] > 0], geometric_mean([x[clé] for x in self.data if x[clé] > 0]))
-            elif isinstance(self.data[0][clé], str):
-                for_stdev[clé] = ""
-
-        return for_stdev
 
 if __name__ == "__main__":  # pragma: no cover
     test = Base_Table()  # pragma: no cover
