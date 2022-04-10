@@ -1,12 +1,14 @@
-from statistics import geometric_mean, mean, quantiles, stdev
+from statistics import quantiles
 from PyQt5.QtWidgets import QPushButton
 from plots.base import Base_app
 from numpy import arange
+from PyQt5.QtGui import QColor
+
 
 
 class Histo_app(Base_app):
-    """Pie app that shows a pie chart of all the datas provided.
-        The datas on the pie is for datas that aren't numbers.
+    """Histo app that shows a Histo chart of all the datas provided.
+        The datas on the histo is for datas that are numbers.
 
         #####################################################
         #           #                                       #
@@ -20,9 +22,9 @@ class Histo_app(Base_app):
         #           #                                       #
         #           #                                       #
         #           #                                       #
-        #           #########################################
-        #           #               FILTERS          #Gran +#
-        #           #               BUTTONS          #Gran -#
+        #####################################################
+        #  +     -  #               FILTERS                 #
+        #           #               BUTTONS                 #
         #####################################################
         """
     def plot_inter_widgets(self):
@@ -92,6 +94,16 @@ class Histo_app(Base_app):
         to_plot = [x[kargs["number"]] for x in self.data]
         if len(set(to_plot)) > 1:
             to_plot = trim_data([x[kargs["number"]] for x in self.data])
+
+
+        for index, data in enumerate(self.data):
+            test = self.listwidget.item(index)
+            test.setBackground(QColor(142, 250, 171))
+            if data[kargs["number"]] not in to_plot:
+                test.setBackground(QColor(252, 154, 149))
+
+
+
 
         self.ax.hist(to_plot, range=(min(to_plot), max(to_plot)))
         labels()
