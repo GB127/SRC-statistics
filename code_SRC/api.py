@@ -13,6 +13,8 @@ def requester(link):
             sleep(20)
 
 class api:
+    """api class to manage all requests. Stores data in a database.
+        """
     URL = "https://www.speedrun.com/api/v1/"
     game_db = {}
     system_db = {'jm95z9ol': 'NES', '83exk6l5': 'SNES', '3167d6q2': 'GBA', 'mr6k409z': 'FDS', '4p9z06rn': 'GC', 'n5e17e27': 'PS2', 'mx6pwe3g': 'PS3','8gej2n93': 'PC', '8gejn93d': 'Wii U', 'w89rwelk': 'N64', 'n5683oev': 'GB', '3167jd6q': 'SGB', '7m6yvw6p': 'GB Player', 'n5e147e2': 'SGB2', '5negk9y7': 'PSP', 'p36nd598': 'iQue', 'vm9v3ne3': 'GB Interface', 'gde3g9k1': 'GBC', '7g6m8erk': 'NDS'}
@@ -165,12 +167,9 @@ class api:
 
     @staticmethod
     def user_id(username:str) -> str:
-        # TODO : Adress scenarios where username is invalid
         """Makes a request to the SRC API to retrieve the ID of the given username.
-
         Args:
             username (str): Username
-
         Returns:
             str: ID of the username
         """
@@ -200,17 +199,28 @@ class api:
     def user_pbs(user_id:str) -> list:
         """Make a request to SRC's api to retrieve all PBs from a user with the given user's ID.
             Use api.user_id before in order to retrieve the id.
-        Args:
-            user_id (str): User's id
+            Args:
+                user_id (str): User's id
 
-        Returns:
-            list of dict: [dict1, dict2, dict3, ...] where dict is the data of a run.
-        """
+            Returns:
+                list of dict: [dict1, dict2, dict3, ...] where dict is the data of a run.
+            """
         req = requester(f'{api.URL}users/{user_id}/personal-bests')
         return req["data"]
 
     @staticmethod
-    def leaderboard(game_id, category_id, subcat_id=None, level_id=None):
+    def leaderboard(game_id:str, category_id:str, subcat_id=None, level_id=None)->list:
+        """Fetches the leaderboard of a category.
+
+            Args:
+                game_id (str)
+                category_id (str)
+                subcat_id (str, optional) Defaults to None.
+                level_id (str, optional): Defaults to None.
+
+            Returns:
+                list: list of runs
+            """
         variables = ""
         if subcat_id:
             variables = "&var-".join([f"{x}={y}" for x,y in subcat_id.items()])

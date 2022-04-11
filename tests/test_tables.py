@@ -67,12 +67,10 @@ class Test_base:
             raise NotImplementedError
         def test2():
             raise NotImplementedError
-        with pytest.raises(BaseException):
-            monkeypatch.setattr("builtins.input", lambda _: "end")
-            Test_base.case(test, test2)
-        with pytest.raises(ValueError):
-            monkeypatch.setattr("builtins.input", lambda _: "not a number")
-            Test_base.case(test, test2)
+        monkeypatch.setattr("builtins.input", lambda _: "end")
+        Test_base.case(test, test2)
+        monkeypatch.setattr("builtins.input", lambda _: "not a number")
+        Test_base.case(test, test2)
 
 
 

@@ -7,9 +7,18 @@ clear = lambda: os.system('cls')
 
 
 class User:
+    """User class regrouping user's runs and PBs from SRC.
+        username (str): username of the user.
+        if (str): id of the user
+        runs (list) : list of runs objects
+        pbs (list): list of pbs objects
+        runs_level (list) : list of runs objects. Level runs only.
+        pbs_level (list): list of pbs objects. Level pbs only.
+        """
     def __init__(self, username:str):
         self.username = username.capitalize()
         self.id = api.user_id(username)
+        
         runs_list  = api.user_runs(self.id)
         pbs_list = api.user_pbs(self.id)
         if any([not bool(x["level"]) for x in runs_list]):
@@ -23,7 +32,7 @@ class User:
         while True:
             clear()
             print(self)
-            for index, fx in enumerate(["pbs", "runs", "pbs_lvl", "runs_lvl"]):
+            for index, fx in enumerate([x for x in ["pbs", "runs", "pbs_lvl", "runs_lvl"] if hasattr(self, x)]):
                 print(index, fx)
             command = input(f"Select option: [0-{2 -1}] | Type end to exit\nInput : ")
             if command == "end":
