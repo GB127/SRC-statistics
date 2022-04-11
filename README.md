@@ -12,11 +12,9 @@ Before using the script, you need to have python 3.10 installed on the computer.
 
 After installing python 3, you'll need to install some modules on the computer.
 Here are the three modules the script needs in order to work correctly:
--pyqt5
--matplotlib
--requests
+- pyqt5
+- matplotlib
+- requests
 
-Here is the command you need to type in the terminal to install all of them at once:
-`pip install requests pyqt5 matplotlib`
-If you ar eon mac, you'll need to type this:
-`pip3 install requests pyqt5 matplotlib`
+Here is the command you need to type in the terminal to install all of them at once: `pip install requests pyqt5 matplotlib`.
+If you are on MAC, you'll need to type this: `pip3 install requests pyqt5 matplotlib`.
