@@ -32,6 +32,7 @@ class User:
         while True:
             clear()
             print(self)
+            print("\n")
             for index, fx in enumerate([x for x in ["pbs", "runs", "pbs_lvl", "runs_lvl"] if hasattr(self, x)]):
                 print(index, fx)
             command = input(f"Select option: [0-{2 -1}] | Type end to exit\nInput : ")

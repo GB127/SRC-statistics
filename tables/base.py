@@ -8,9 +8,11 @@ clear = lambda: os.system('cls')
 
 class Base_Table:
     def __call__(self, *methods):
-        print(self)
-        print()
         while True:
+            clear()
+            print(self)
+            print("\n")
+
             for index, fx in enumerate(methods):
                 print(index, fx.__name__)
             command = input(f"Select option: [0-{len(methods) -1}] | Type end to exit\nInput : ")

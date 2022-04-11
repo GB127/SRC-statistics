@@ -56,8 +56,8 @@ class Pie_app(Base_app):
                 count[x[filter]] = count.get(x[filter], 0) + 1
             for x in copy(count):
                 if count[x] / sum(count.values()) < 0.05:  # pragma: no cover
-                    count["autres"] = (
-                        count.get("autres", 0) + count[x]
+                    count["others"] = (
+                        count.get("others", 0) + count[x]
                     )  # pragma: no cover
                     del count[x]  # pragma: no cover
             return count
@@ -85,7 +85,7 @@ class Pie_app(Base_app):
                 continue  # pragma: no cover
             else:
                 test.setBackground(
-                    QColor(légende_couleurs["autres"])
+                    QColor(légende_couleurs["others"])
                 )  # pragma: no cover
 
         self.ax.set_title(f"{self.data[0].__class__.__name__}s - {filter}")
