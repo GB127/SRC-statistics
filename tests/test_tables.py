@@ -51,21 +51,28 @@ class Test_base:
                 x.__dict__ == [{"tempo": x, "tempo2": "str"} for x in range(1, 4)][no]
             )
 
-    def test_call(self, monkeypatch):
+    def test_call_number(self, monkeypatch):
         def test():
             raise BaseException
         def test2():
             raise BaseException
 
-
         with pytest.raises(BaseException):
             for x in ["1", "2"]:
                     monkeypatch.setattr("builtins.input", lambda _: x)
                     Test_base.case(test, test2)
-        monkeypatch.setattr("builtins.input", lambda _: "end")
-        Test_base.case(test, test2)
-        monkeypatch.setattr("builtins.input", lambda _: "not a number")
-        Test_base.case(test, test2)
+
+    def test_call_others(self, monkeypatch):
+        def test():
+            raise NotImplementedError
+        def test2():
+            raise NotImplementedError
+        with pytest.raises(BaseException):
+            monkeypatch.setattr("builtins.input", lambda _: "end")
+            Test_base.case(test, test2)
+        with pytest.raises(ValueError):
+            monkeypatch.setattr("builtins.input", lambda _: "not a number")
+            Test_base.case(test, test2)
 
 
 
@@ -83,8 +90,7 @@ class Test_runs:
             "emulated": False,
             "region": "pr184lqn",
         },
-        "values": {"0nw200nq": "gq79nvlp"},
-    }
+        "values": {"0nw200nq": "gq79nvlp"}}
 
     def test_init(self):
         Test_runs.classe = Table_run([Test_runs.dicto for _ in range(3)], True)

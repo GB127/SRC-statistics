@@ -10,10 +10,14 @@ class User:
     def __init__(self, username:str):
         self.username = username.capitalize()
         self.id = api.user_id(username)
-        self.runs = Table_run(api.user_runs(self.id), False)
-        self.pbs = Table_pb(api.user_pbs(self.id), False)
-        self.runs_lvl = Table_run(api.user_runs(self.id), True)
-        self.pbs_lvl = Table_pb(api.user_pbs(self.id), True)
+        runs_list  = api.user_runs(self.id)
+        pbs_list = api.user_pbs(self.id)
+        if any([not bool(x["level"]) for x in runs_list]):
+            self.runs = Table_run(runs_list, False)
+            self.pbs = Table_pb(pbs_list, False)
+        if any([x["level"] for x in runs_list]):
+            self.runs_lvl = Table_run(runs_list, True)
+            self.pbs_lvl = Table_pb(pbs_list, True)
 
     def __call__(self):
         while True:
@@ -29,8 +33,13 @@ class User:
 
     def __str__(self):
         time_str = lambda x : f'{int(x)//3600:>3}:{int(x) % 3600 // 60:02}:{int(x) % 3600 % 60 % 60:02}'
-        string = "\n".join([f'{self.username}',
-                            f'------------------------------------',
-                            f'Runs : {time_str(sum(self.runs).time):11} | {time_str(self.runs.mean().time):11} | {time_str(self.runs.median("time").time):11}',
-                            f'PBs  : {time_str(sum(self.pbs).time):11} | {time_str(self.pbs.mean().time):11} | {time_str(self.pbs.median("time").time):11}'])
+        list_str = [f'{self.username}']
+        if hasattr(self, "runs"):
+            list_str += ["Full runs:",
+                            f'{len(self.runs)} Runs     ({time_str(self.runs.sum().time).lstrip()})  :   ' + f'{len(self.pbs)} PBs    ({time_str(self.pbs.sum().time).lstrip()})']
+        if hasattr(self, "runs_lvl"):
+            list_str += ["Individual level runs:",
+                            f'{len(self.runs_lvl)} Runs     ({time_str(self.runs_lvl.sum().time).lstrip()})  :   ' + f'{len(self.pbs_lvl)} PBs    ({time_str(self.pbs_lvl.sum().time).lstrip()})']
+        string = "\n".join(list_str)
+
         return string

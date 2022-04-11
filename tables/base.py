@@ -12,7 +12,7 @@ class Base_Table:
             print(index, fx.__name__)
         command = input(f"Select option: [0-{len(methods) -1}] | Type end to exit\nInput : ")
         if command == "end":
-            return
+            raise BaseException
         methods[int(command)]()
 
     def __len__(self):

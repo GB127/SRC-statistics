@@ -19,8 +19,9 @@ class Base_app(QWidget):
         return self.listwidget
 
     def list_clicked(self):
-        self.selected_id = self.listwidget.currentRow()
-        print(self.data[self.selected_id])
+        pass
+        #self.selected_id = self.listwidget.currentRow()
+        #print(self.data[self.selected_id])
     
     def plot_inter_widgets(self):
         raise NotImplementedError("Must be defined in child")  # pragma: no cover

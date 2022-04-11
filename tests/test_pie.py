@@ -17,6 +17,7 @@ class Test_pie:
         if not any([isinstance(widget.layout.itemAt(x).widget(), QListWidget) for x in range(widget.layout.count())]):
             raise AssertionError("A list of entry is not created.")
         assert [isinstance(widget.layout.itemAt(x).widget(), QPushButton) for x in range(widget.layout.count())].count(True) == 2
+        widget.canvas.figure.savefig("tests/pie")
 
     def test_push_buttons_names(self, qtbot):
         widget = Pie_app(Test_pie.data)
