@@ -1,7 +1,6 @@
 from requests_mock.mocker import Mocker
 from entries.base_entry import Base_Entry
 from entries.one_run import Run
-from entries.lb_entry import Rank
 from entries.personal_best import PB
 # from mock_examples.main import slow_dataset
 
@@ -30,31 +29,6 @@ class Test_run:
         assert str(Test_run.classe) == "Game   Zelda: The Wind Wake   Dragon Roost Cavern    Any% (Tuner)                       4:24:15"
         Test_run.classe["level"] = None
         assert str(Test_run.classe) == "Game   Zelda: The Wind Wake   Any% (Tuner)                       4:24:15"
-
-class Test_lb_entry:
-    testing_case = {
-                "place": 2,
-                "run": {
-                    "id": "7z037xoz",
-                    "game": "4d709l17",
-                    "level": None,
-                    "category": "9d8x94w2",
-                    "times": {"primary_t": 1401},
-                    "system": {
-                        "platform": "4p9z06rn",
-                        "emulated": False,
-                        "region": "pr184lqn",
-                    },
-                    "values": {"p854r2vl": "5q85yy6q"},
-                },
-            }
-    def test_init(self):
-        Test_lb_entry.classe = Rank(Test_lb_entry.testing_case, 1401 * 0.5)
-        assert set(Test_lb_entry.classe.keys()) == {"place", "WR %", "delta WR", "time", "system", "emu", "region", "min/rk", "category", "game", "level", "WR time"}
-
-    def test_str(self):
-        assert str(Test_lb_entry.classe) == "  0:23:21   +0:11:40   (200.00%)   0:11:40"
-
 # def test_mocking_class_method(mocker):
 #     expected = 'xyz'
 

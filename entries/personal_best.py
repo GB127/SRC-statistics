@@ -1,8 +1,8 @@
-from entries.lb_entry import Rank
+from entries.one_run import Run
 from tables.leaderboard import LB
 from code_SRC.api import api
 
-class PB(Rank):
+class PB(Run):
     """Class related to one PB on SRC.
         Attributes:
             game (str): Game of the speedrun
@@ -42,6 +42,7 @@ class PB(Rank):
             data (dict): Informations received from SRC's api.
                 keys:
             """
+        self.place = data["place"]
 
         category_id = data["run"]["category"]
         game_id = data["run"]["game"]
@@ -51,13 +52,18 @@ class PB(Rank):
                 sub_cat_ids[field] = selection
         level_id = None
         if data["run"]["level"]: level_id = data["run"]["level"]
-        self.leaderboard = LB(api.leaderboard(game_id, category_id, sub_cat_ids, level_id))
-        super().__init__(data, self.leaderboard.WR)
-        self["LB %"] = (len(self.leaderboard) - self.place)/len(self.leaderboard)
-        del self.__dict__["min/rk"]
+
+        leaderboard = api.leaderboard(game_id, category_id, sub_cat_ids, level_id)
+        self.leaderboard = len(leaderboard)
+        self["WR time"] = leaderboard[0]["run"]["times"]["primary_t"]
+        super().__init__(data["run"])
+        self["delta WR"] = self.time - self["WR time"]
+        self["WR %"] = self.time / self["WR time"]
+        self["LB %"] = (self.leaderboard - self.place)/self.leaderboard
+
     def __str__(self):
         time_str = lambda x : f'{int(x)//3600:>3}:{int(x) % 3600 // 60:02}:{int(x) % 3600 % 60 % 60:02}'
-        inted_lb = self.leaderboard if isinstance(self.leaderboard, (float, int)) else len(self.leaderboard)
+        inted_lb = self.leaderboard
 
         prelim_infos = f'{self.system[:4]:4}   {self.game[:20]:20}   {self.category[:20]:20}'
         time_infos = f'{time_str(self["WR time"]):10} {time_str(self.time):10}+{time_str(self["delta WR"]).lstrip():9} ({self["WR %"]:.2%})'

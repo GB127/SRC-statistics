@@ -25,14 +25,14 @@ class Table_pb(Base_Table):
 
     def sum(self):
         tempo = super().sum()
-        tempo.leaderboard = sum([len(x.leaderboard) for x in self.data])
+        tempo.leaderboard = sum([x.leaderboard for x in self.data])
         tempo["LB %"] = (tempo.leaderboard - tempo.place)/tempo.leaderboard
         tempo["WR %"] = tempo.time / tempo["WR time"]
         return tempo
 
     def mean(self):
         tempo = super().mean()
-        tempo.leaderboard = mean([len(x.leaderboard) for x in self.data])
+        tempo.leaderboard = mean([x.leaderboard for x in self.data])
         tempo["LB %"] = (tempo.leaderboard - tempo.place)/tempo.leaderboard
         tempo["WR %"] = tempo.time / tempo["WR time"]
 
@@ -40,7 +40,7 @@ class Table_pb(Base_Table):
 
     def geomean(self):
         tempo = super().geomean()
-        tempo.leaderboard = geometric_mean([len(x.leaderboard) for x in self.data])
+        tempo.leaderboard = geometric_mean([x.leaderboard for x in self.data])
         tempo["LB %"] = (tempo.leaderboard - tempo.place)/tempo.leaderboard
         tempo["WR %"] = tempo.time / tempo["WR time"]
 
