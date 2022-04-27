@@ -41,8 +41,8 @@ class Test_hist:
     def test_x_axes_time(self, qtbot):
         widget = Histo_app(Test_hist.data)
         qtbot.addWidget(widget)
-        assert list(widget.canvas.figure.gca().get_xticks()) == [x for x in arange(60,60 * 3, 120 / 5)][1:]
         widget.canvas.figure.savefig("tests/histo_time")
+        assert list(widget.canvas.figure.gca().get_xticks()) == [x for x in arange(60,60 * 3, 120 / 5)]
 
     def test_x_axes_perc(self, qtbot):
         widget = Histo_app(Test_hist.data)
@@ -50,7 +50,7 @@ class Test_hist:
         widget.current_parameter = "WR %"
         widget.update_plot()
         widget.canvas.figure.savefig("tests/histo_perc")
-        assert list(widget.canvas.figure.gca().get_xticks()) == [x for x in arange(4/3,2,2/15 )][1:-1]
+        assert list(widget.canvas.figure.gca().get_xticks()) == [x for x in arange(4/3,2,2/15 )][:-1]
 
 
     def test_with_outsiders_data(self, qtbot):

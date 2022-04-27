@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import (   QListWidgetItem,    QGridLayout, 
-                                QWidget,            QListWidget, QPushButton)
+                                QWidget,QComboBox,            QListWidget, QPushButton)
 from PyQt5.QtGui import QFont, QColor
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import matplotlib
@@ -76,6 +76,22 @@ class Pie_app(QWidget):
             return buttons
 
 
+        def pie_sommation():
+            def filters():
+                clés = []
+                for x, value in self.data[0].items():
+                    if "%" in x:
+                        continue
+                    elif x in ["leaderboard", "place"]:
+                        continue
+                    elif isinstance(value, (int, float)):
+                        clés.append(x)
+                return clés
+
+            self.options = QComboBox()
+            self.options.addItems(["count"] + filters())
+            self.options.currentTextChanged.connect(self.update_plot)
+            return self.options
 
 
         super().__init__()
@@ -85,6 +101,7 @@ class Pie_app(QWidget):
         self.layout = QGridLayout()
         self.setLayout(self.layout)
         self.layout.addWidget(list_widget(), 0,0,0,1)
+        self.layout.addWidget(pie_sommation(), 1, 0)
         self.layout.addWidget(plot_widget(), 0, 1, 1, len(plot_filters()))  # TODO
 
         for numéro, wid in enumerate(plot_filters(), start=1):
@@ -98,7 +115,7 @@ class Pie_app(QWidget):
             def initial_count():
                 count = {}
                 for x in self.data:
-                    count[x[filter]] = count.get(x[filter], 0) + 1
+                    count[x[filter]] = count.get(x[filter], 0) + (1 if str(self.options.currentText()) == "count" else x[str(self.options.currentText())])
                 return count
             def remove_small(count):
                 for x in copy(count):
