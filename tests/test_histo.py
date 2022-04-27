@@ -47,7 +47,8 @@ class Test_hist:
     def test_x_axes_perc(self, qtbot):
         widget = Histo_app(Test_hist.data)
         qtbot.addWidget(widget)
-        widget.update_plot(number="WR %")
+        widget.current_parameter = "WR %"
+        widget.update_plot()
         widget.canvas.figure.savefig("tests/histo_perc")
         assert list(widget.canvas.figure.gca().get_xticks()) == [x for x in arange(4/3,2,2/15 )][1:-1]
 
