@@ -4,6 +4,7 @@ from PyQt5.QtGui import QColor ,QFont
 from PyQt5.QtWidgets import (
     QListWidgetItem,
     QComboBox,
+    QDoubleSpinBox,
     QGridLayout,
     QWidget,
     QSpinBox,
@@ -69,6 +70,15 @@ class Histo_app(QWidget):
             self.options.currentTextChanged.connect(self.update_plot)
             return self.options
 
+        def trim_power_widget():
+            self.trim_power = QDoubleSpinBox()
+            self.trim_power.setMinimum(0.1)
+            self.trim_power.setValue(1.0)
+            self.trim_power.setSingleStep(0.1)
+
+            self.trim_power.valueChanged.connect(self.update_plot)
+            return self.trim_power
+
         def granularity_widget():
             self.granularity = QSpinBox()
             self.granularity.setMinimum(2)
@@ -85,8 +95,9 @@ class Histo_app(QWidget):
         self.layout.addWidget(list_widget(), 0, 0, 0, 1)
         self.layout.addWidget(plot_x_selection(), 1, 1)
         self.layout.addWidget(granularity_widget(), 1, 2)
+        self.layout.addWidget(trim_power_widget(), 1, 3)
 
-        self.layout.addWidget(plot_widget(), 0, 1, 1, 2)
+        self.layout.addWidget(plot_widget(), 0, 1, 1, 3)
 
     def update_plot(self):
         def trim_data(to_trim):
@@ -94,7 +105,7 @@ class Histo_app(QWidget):
             if len(set(to_trim)) == 1:
                 return to_trim
             IQ1, IQ2, IQ3 = quantiles(to_trim)
-            IQR = IQ3 - IQ1
+            IQR = (IQ3 - IQ1) * self.trim_power.value()
             trimmed = [x for x in to_trim if (IQ1 - IQR) < x < (IQ3 + IQR)]
 
             if len(trimmed) != len(to_trim):
