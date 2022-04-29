@@ -1,5 +1,4 @@
 from entries.one_run import Run
-from tables.leaderboard import LB
 from code_SRC.api import api
 
 class PB(Run):

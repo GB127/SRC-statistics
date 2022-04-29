@@ -23,13 +23,6 @@ class Test_hist:
             raise AssertionError("A plot is not created.")
         if not any([isinstance(widget.layout.itemAt(x).widget(), QListWidget) for x in range(widget.layout.count())]):
             raise AssertionError("A list of entry is not created.")
-        assert [isinstance(widget.layout.itemAt(x).widget(), QPushButton) for x in range(widget.layout.count())].count(True) == 3
-
-    def test_push_buttons_names(self, qtbot):
-        widget = Histo_app(Test_hist.data)
-        qtbot.addWidget(widget)
-        buttons = [widget.layout.itemAt(x).widget() for x in range(widget.layout.count()) if isinstance(widget.layout.itemAt(x).widget(), QPushButton)]
-        assert {x.text() for x in buttons} == {"time", "place", "WR %"}
 
     def test_y_axis(self, qtbot):
         widget = Histo_app(Test_hist.data)
