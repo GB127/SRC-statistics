@@ -10,7 +10,7 @@ def requester(link):
             return data
         except AssertionError:
             print(data)
-            print("Waiting...")
+            print("Waiting... If you see this very often, please report")
             sleep(20)
 
 class api:
