@@ -1,5 +1,6 @@
 from requests import get
 from time import sleep
+import json
 
 def requester(link):
     while True:
@@ -21,7 +22,6 @@ class api:
     category_db = {}
     level_db = {}
     region_db = {}
-    sublevel_db = {}
     subcat_db = {}
 
     @staticmethod
@@ -39,7 +39,6 @@ class api:
                     category_db
                     level_db
                     region_db
-                    sublevel_db
                     subcat_db
             """
         def update_systems(liste):
@@ -230,3 +229,27 @@ class api:
         else:
             req = requester(f'{api.URL}leaderboards/{game_id}/level/{level_id}/{category_id}?var-{variables}')
         return req["data"]["runs"]
+
+    @staticmethod
+    def get_cache_api():
+        with open("api_cache.txt", "r") as file:
+            datas = file.readlines()
+            api.category_db = json.loads(datas[0][:-1])
+            api.game_db = json.loads(datas[1][:-1])
+            api.subcat_db= json.loads(datas[2][:-1])
+            api.system_db= json.loads(datas[3][:-1])
+            api.level_db= json.loads(datas[4][:-1])
+            api.region_db= json.loads(datas[5][:-1])
+            api.subcat_db= json.loads(datas[6][:-1])
+
+    @staticmethod
+    def cache_api():
+        with open("api_cache.txt", "w") as file:
+            for db in [api.category_db, 
+                        api.game_db, 
+                        api.subcat_db, 
+                        api.system_db,
+                        api.level_db,
+                        api.region_db,
+                        api.subcat_db]:
+                file.write(json.dumps(db) + "\n")
