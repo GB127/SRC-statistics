@@ -232,15 +232,18 @@ class api:
 
     @staticmethod
     def get_cache_api():
-        with open("api_cache.txt", "r") as file:
-            datas = file.readlines()
-            api.category_db = json.loads(datas[0][:-1])
-            api.game_db = json.loads(datas[1][:-1])
-            api.subcat_db= json.loads(datas[2][:-1])
-            api.system_db= json.loads(datas[3][:-1])
-            api.level_db= json.loads(datas[4][:-1])
-            api.region_db= json.loads(datas[5][:-1])
-            api.subcat_db= json.loads(datas[6][:-1])
+        try:
+            with open("api_cache.txt", "r") as file:
+                datas = file.readlines()
+                api.category_db = json.loads(datas[0][:-1])
+                api.game_db = json.loads(datas[1][:-1])
+                api.subcat_db= json.loads(datas[2][:-1])
+                api.system_db= json.loads(datas[3][:-1])
+                api.level_db= json.loads(datas[4][:-1])
+                api.region_db= json.loads(datas[5][:-1])
+                api.subcat_db= json.loads(datas[6][:-1])
+        except FileNotFoundError:
+            pass
 
     @staticmethod
     def cache_api():
