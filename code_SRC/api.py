@@ -69,14 +69,14 @@ class api:
                 if one["id"] in api.level_db: continue
                 api.level_db[one["id"]] = one["name"]
 
-        def update_game(name):
+        def update_game(name, year):
             nom_a_modif = name
             for unwanted in [" Category Extensions", "The Legend of "]:
                 nom_a_modif = nom_a_modif.replace(unwanted, "")
-            api.game_db[game_id] = nom_a_modif
+            api.game_db[game_id] = (nom_a_modif, year)
 
         req = requester(f'{api.URL}games/{game_id}?embed=categories,levels,variables,regions,platforms')["data"]
-        update_game(req["names"]["international"])
+        update_game(req["names"]["international"], req["released"])
         update_systems(req["platforms"]["data"])
         update_categories(req["categories"]["data"])
         update_regions(req["regions"]["data"])
@@ -96,10 +96,10 @@ class api:
             str: Game's name linked to the id
         """
         try:  #TODO : You can avoid a try clause here.
-            return api.game_db[id]
+            return api.game_db[id][0]
         except KeyError:
             api.update_db(id)
-            return api.game_db[id]
+            return api.game_db[id][0]
 
     @staticmethod
     def sub_cat(id_1:str, id_2:str)->str:
@@ -192,6 +192,7 @@ class api:
         while(req["pagination"]["links"]) and (req["pagination"]["size"] == req["pagination"]["max"]):
             req = get(req["pagination"]["links"][0]["uri"]).json()
             liste += req["data"]
+            print(f'{len(liste)} runs fetched!')
         return req["data"]
 
     @staticmethod

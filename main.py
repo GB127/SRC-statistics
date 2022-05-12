@@ -14,4 +14,5 @@ Et c'est quasi clef en main
 if __name__ == "__main__":
     api.get_cache_api()
     test = User(input("Analyse who? "))
+    test()
     api.cache_api()

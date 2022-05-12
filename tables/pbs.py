@@ -9,9 +9,11 @@ from statistics import mean, geometric_mean, stdev
 class Table_pb(Base_Table):
     def __init__(self, list_runs:list, include_lvl:bool):
         self.data = []
-        for data in list_runs:
+        for no, data in enumerate(list_runs, start=1):
             if include_lvl == bool(data["run"]["level"]):
                 self.data.append(PB(data))
+            print(f'{no} / {len(list_runs)} PBs processed')
+
 
     def __call__(self):
         super().__call__(self.histo, self.pie, self.sort)  # pragma: no cover
