@@ -26,3 +26,29 @@ class Category:
     def __str__(self):
         strings = [f'{self.category}']
         return "   ".join(strings)
+
+
+class Time:
+    def __init__(self, seconds:int):
+        self.seconds = seconds
+
+    def __str__(self):
+        return f"{int(self.seconds)//3600:>3}:{int(self.seconds) % 3600 // 60:02}:{int(self.seconds) % 3600 % 60 % 60:02}"
+
+    def __eq__(self, other):
+        return self.seconds == other.seconds
+
+    def __add__(self, other):
+        return Time(self.seconds + other.seconds)
+
+    def __sub__(self, other):
+        return Time(self.seconds - other.seconds)
+
+    def __le__(self, other):
+        return self.seconds <= other.seconds
+
+    def __truediv__(self, other):
+        if isinstance(other, int):
+            return Time(self.seconds / other)
+        elif isinstance(other, Time):
+            return Time(self.seconds / other.seconds)
