@@ -21,6 +21,10 @@ class api:
         req = requester(api.URL + f'categories/{id}')
         return req["data"]["name"]
 
+    def subcategory(id:dict):
+        req = requester(api.URL + f'variables/{id[0]}')
+        if req["data"]["is-subcategory"]:
+            return req["data"]["values"]["values"][id[1]]["label"]
 
     @staticmethod
     def game(id):  #TODO : Embed thing with series so we avoid to duplicate requests

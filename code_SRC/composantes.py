@@ -20,12 +20,23 @@ class Game:
 class Category:
     """Class that englobes categories and subcategory/variable
     """
-    def __init__(self, category_id:str):
+    def __init__(self, category_id:str, subcat_ids:dict[str:str]):
+        def subcategories():
+            self.subcategory = []
+            ids = []
+            for option in subcat_ids.items():
+                tempo = api.subcategory(option)
+                if tempo:
+                    ids.append(option)
+                    self.subcategory += [tempo]
+            return ids
+
+
         self.category = api.category(category_id)
-        self.ids = (category_id)
+        self.ids = (category_id, subcategories())
     def __str__(self):
-        strings = [f'{self.category}']
-        return "   ".join(strings)
+        strings = f'{self.category} ({",".join(self.subcategory)})'
+        return strings
 
     def __eq__(self, other):
         return str(self) == str(other)

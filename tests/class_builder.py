@@ -10,23 +10,28 @@ def req_mocker(requests_mock: Mocker):
     series_data = {"data": {"id": "serie_id","names": {"international": "Super Mario"},"abbreviation": "mario"}}
     level_data = {"data": {"id": "level_id","name": "Shrub Forest"}}
     category_data = {"data": {"id": "category_id","name": "Any% (No SSU)"}}
+    subcat_data_t = {"data":{"id":"subcat_id_t","name":"cc","values":{"values":{"selected_subcat":{"label":"150cc"}}},"is-subcategory":True}}
+    subcat_data_f = {"data":{"id":"subcat_id_f","name":"cc","values":{"values":{"selected_subcat":{"label":"150cc"}}},"is-subcategory":False}}
 
     requests_mock.get("https://www.speedrun.com/api/v1/platforms/system_id", json=system_data)
     requests_mock.get("https://www.speedrun.com/api/v1/series/serie_id", json=series_data)
     requests_mock.get("https://www.speedrun.com/api/v1/games/game_id", json=game_data)
     requests_mock.get("https://www.speedrun.com/api/v1/levels/level_id", json=level_data)
     requests_mock.get("https://www.speedrun.com/api/v1/categories/category_id", json=category_data)
+    
+    requests_mock.get("https://www.speedrun.com/api/v1/variables/subcat_id_t", json=subcat_data_t)
+    requests_mock.get("https://www.speedrun.com/api/v1/variables/subcat_id_f", json=subcat_data_f)
 
 
 def build_run(requests_mock: Mocker):
     req_mocker(requests_mock)
-    run_data = {"id": "run_id", "game": "game_id", "level": "level_id", "category": "category_id","status": {"status": "verified"},"date": "2014-02-25", "times": {"primary_t": 5421},"system": {"platform": "system_id", "emulated": False, "region": None},"values": {"subcat_id":"selected_subcat"}}
+    run_data = {"id": "run_id", "game": "game_id", "level": "level_id", "category": "category_id","status": {"status": "verified"},"date": "2014-02-25", "times": {"primary_t": 5421},"system": {"platform": "system_id", "emulated": False, "region": None},"values": {"subcat_id_t":"selected_subcat", "subcat_id_f":"selected_subcat"}}
     return Run(run_data)
 
 
 def build_pb(requests_mock: Mocker):
     req_mocker(requests_mock)
-    pb_data = {"place": 1, "run": {"id": "run_id", "game": "game_id", "level": "level_id", "category": "category_id","status": {"status": "verified"},"date": "2014-02-25", "times": {"primary_t": 5421},"system": {"platform": "system_id", "emulated": False, "region": None},"values": {"subcat_id":"selected_subcat"}}}
+    pb_data = {"place": 1, "run": {"id": "run_id", "game": "game_id", "level": "level_id", "category": "category_id","status": {"status": "verified"},"date": "2014-02-25", "times": {"primary_t": 5421},"system": {"platform": "system_id", "emulated": False, "region": None},"values": {"subcat_id_t":"selected_subcat", "subcat_id_f":"selected_subcat"}}}
     return PB(pb_data)
 
 
@@ -42,9 +47,9 @@ def build_game(requests_mock: Mocker):
 
 def build_category(requests_mock: Mocker):
     req_mocker(requests_mock)
-    return Category("category_id")
+    return Category("category_id", {"subcat_id_t":"selected_subcat", "subcat_id_f":"selected_subcat"})
 
 
 def build_gamecat(requests_mock: Mocker):
     req_mocker(requests_mock)
-    return GameCate(Game("game_id", "level_id"), Category("category_id"))
+    return GameCate(build_game(requests_mock), build_category(requests_mock))

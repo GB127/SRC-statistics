@@ -23,13 +23,11 @@ class Test_game:
 class Test_category:
     def test_init(self, requests_mock: Mocker):
         category = build_category(requests_mock)
-        assert category.__dict__ == {"category" :"Any% (No SSU)", "ids":('category_id')}
-        raise NotImplementedError("Subcategories")
+        assert category.__dict__ == {"category" :"Any% (No SSU)", 'ids': ('category_id', [('subcat_id_t', 'selected_subcat')]), "subcategory":["150cc"]}
 
     def test_str(self, requests_mock: Mocker):
         category = build_category(requests_mock)
-        assert str(category) == "Any% (No SSU)"
-        raise NotImplementedError("Subcategories")
+        assert str(category) == "Any% (No SSU) (150cc)"
 
 class Test_gamecat:
     def test_init(self, requests_mock:Mocker):
@@ -38,7 +36,7 @@ class Test_gamecat:
 
     def test_str(self, requests_mock:Mocker):
         test = build_gamecat(requests_mock)
-        assert str(test) == "Super Mario Sunshine: Shrub Forest       Any% (No SSU)"
+        assert str(test) == "Super Mario Sunshine: Shrub Forest       Any% (No SSU) (150cc)"
 
 class Test_system:
     def test_init(self, requests_mock:Mocker):
