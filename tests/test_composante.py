@@ -5,7 +5,7 @@ from tests.class_builder import build_category, build_game, build_gamecat, build
 class Test_game:
     def test_init(self, requests_mock: Mocker):
         game = build_game(requests_mock)
-        assert game.__dict__ == {'ids': ('v1pxjz68', '495ggmwp'),'level': 'Shrub Forest', "game":"Super Mario Sunshine", "release": 2002, "series":{"Super Mario"}}
+        assert game.__dict__ == {'ids': ('game_id', 'level_id'),'level': 'Shrub Forest', "game":"Super Mario Sunshine", "release": 2002, "series":{"Super Mario"}}
 
     def test_str(self, requests_mock: Mocker):
         game = build_game(requests_mock)
@@ -23,7 +23,7 @@ class Test_game:
 class Test_category:
     def test_init(self, requests_mock: Mocker):
         category = build_category(requests_mock)
-        assert category.__dict__ == {"category" :"Any% (No SSU)", "ids":('nxd1rk8q')}
+        assert category.__dict__ == {"category" :"Any% (No SSU)", "ids":('category_id')}
         raise NotImplementedError("Subcategories")
 
     def test_str(self, requests_mock: Mocker):
