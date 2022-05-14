@@ -27,6 +27,16 @@ class Category:
         strings = [f'{self.category}']
         return "   ".join(strings)
 
+    def __eq__(self, other):
+        return str(self) == str(other)
+
+class GameCate:
+    def __init__(self,game:Game, category:Category):
+        self.game = game
+        self.category = category
+
+    def __str__(self):
+        return f'{self.game} {self.category}'
 
 class Time:
     def __init__(self, seconds:int):
@@ -52,3 +62,10 @@ class Time:
             return Time(self.seconds / other)
         elif isinstance(other, Time):
             return Time(self.seconds / other.seconds)
+
+class System:
+    def __init__(self, system_id):
+        self.name:str = api.system(system_id)
+    
+    def __str__(self):
+        return "".join([x for x in self.name if x.isupper()])

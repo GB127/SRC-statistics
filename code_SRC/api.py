@@ -1,5 +1,4 @@
 from requests import get
-from time import sleep
 
 def requester(link):
     data = get(link).json()
@@ -10,7 +9,9 @@ class api:
         """
     URL = "https://www.speedrun.com/api/v1/"
 
-
+    def system(id):
+        req = requester(api.URL + f'platforms/{id}')
+        return req["data"]["name"]
 
     def level(id):
         req = requester(api.URL + f'levels/{id}')

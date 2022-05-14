@@ -1,6 +1,6 @@
 from code_SRC.composantes import Time
 from requests_mock.mocker import Mocker
-from tests.class_builder import build_category, build_game
+from tests.class_builder import build_category, build_game, build_gamecat, build_system
 
 class Test_game:
     def test_init(self, requests_mock: Mocker):
@@ -20,7 +20,6 @@ class Test_game:
         assert game1 != game2
         assert game1 <= game2
 
-
 class Test_category:
     def test_init(self, requests_mock: Mocker):
         category = build_category(requests_mock)
@@ -31,6 +30,24 @@ class Test_category:
         category = build_category(requests_mock)
         assert str(category) == "Any% (No SSU)"
         raise NotImplementedError("Subcategories")
+
+class Test_gamecat:
+    def test_init(self, requests_mock:Mocker):
+        test = build_gamecat(requests_mock)
+        assert test.__dict__ == {"game":build_game(requests_mock), "category": build_category(requests_mock)}
+
+    def test_str(self, requests_mock:Mocker):
+        test = build_gamecat(requests_mock)
+        assert str(test) == "Super Mario Sunshine: Shrub Forest       Any% (No SSU)"
+
+class Test_system:
+    def test_init(self, requests_mock:Mocker):
+        test = build_system(requests_mock)
+        assert test.__dict__ == {"name" : "Nintendo Entertainment System"}
+
+    def test_str(self, requests_mock:Mocker):
+        test = build_system(requests_mock)
+        assert str(test) == "NES"
 
 
 class Test_time:
