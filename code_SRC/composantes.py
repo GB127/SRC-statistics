@@ -6,7 +6,7 @@ class Game:
     def __init__(self, game_id:str, level_id:str):
         self.ids = (game_id, level_id)
         self.game, self.release, self.series = api.game(game_id)
-        self.level = api.level(level_id)
+        self.level = api.level(level_id) if level_id else ""
 
     def __str__(self):
         return f'{": ".join((self.game, self.level)):<40}'
