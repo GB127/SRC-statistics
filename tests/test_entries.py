@@ -1,11 +1,14 @@
 from requests_mock import Mocker
-from tests.class_builder import build_run_l, build_pb_l, build_gamecat, build_system
-from code_SRC.composantes import Time
+from tests.class_builder import build_run_l, build_pb_l, build_gamecat, build_system, build_lb_l
+from code_SRC.composantes import GameCate, System, Time
 
 class Test_Run:
     def test_init(self, requests_mock:Mocker):
         test = build_run_l(requests_mock)
-        assert set(test.__dict__) == {"time", "system", "game"}
+        assert set(test.__dict__) == {"time", "system", "gamecat"}
+        assert isinstance(test.gamecat, GameCate)
+        assert isinstance(test.time, Time)
+        assert isinstance(test.system, System)
 
     def test_str(self, requests_mock:Mocker):
         test = build_run_l(requests_mock)
@@ -17,4 +20,8 @@ class Test_PB:
     def test_init(self, requests_mock:Mocker):
         test = build_pb_l(requests_mock)
         assert ("place", 1) in test.__dict__.items()
-        raise NotImplementedError("Leaderboard")
+        assert ("leaderboard") in test.__dict__.keys()
+    
+    def test_str(self, requests_mock:Mocker):
+        test = build_pb_l(requests_mock)
+        assert "   1/10   (90.00%)" in str(test)

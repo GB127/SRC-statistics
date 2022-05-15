@@ -1,3 +1,4 @@
+from warnings import warn
 from code_SRC.api import api
 
 class Game:
@@ -14,12 +15,28 @@ class Game:
     def __eq__(self, other):
         return f'{self.game + self.level:<40}' == f'{other.game + other.level:<40}'
 
+    def keys(self):
+        tempo = list(self.__dict__.keys())
+        warn("Maybe this will break everything if I don't use copy")
+        tempo.remove("ids")
+        return tempo
+
     def __le__(self, other):
         return f'{self.game + self.level:<40}' <= f'{other.game + other.level:<40}'
+
+    def __getitem__(self, key):
+        return self.__dict__[key]
 
 class Category:
     """Class that englobes categories and subcategory/variable
     """
+
+    def keys(self):
+        tempo = list(self.__dict__.keys())
+        warn("Maybe this will break everything if I don't use copy")
+        tempo.remove("ids")
+        return tempo
+
     def __init__(self, category_id:str, subcat_ids:dict[str:str]):
         def subcategories():
             self.subcategory = []
@@ -41,13 +58,30 @@ class Category:
     def __eq__(self, other):
         return str(self) == str(other)
 
+    def __getitem__(self, key):
+        return self.__dict__[key]
+
 class GameCate:
+    def keys(self):
+        return self.game.keys() + self.category.keys()
+
+
+    def __getitem__(self, clé):
+        for attribute in [self.game, self.category]:
+            try:
+                return attribute[clé]
+            except KeyError:
+                continue
+
     def __init__(self,game:Game, category:Category):
         self.game = game
         self.category = category
 
     def __str__(self):
         return f'{self.game} {self.category}'
+
+    def ids(self):
+        return self.game.ids + self.category.ids
 
 class Time:
     def __init__(self, seconds:int):
@@ -75,8 +109,14 @@ class Time:
             return Time(self.seconds / other.seconds)
 
 class System:
+    def keys(self):
+        return self.__dict__.keys()
+
     def __init__(self, system_id):
-        self.name:str = api.system(system_id)
+        self.system:str = api.system(system_id)
     
     def __str__(self):
-        return "".join([x for x in self.name if x.isupper()])
+        return "".join([x for x in self.system if x.isupper()])
+
+    def __getitem__(self, key):
+        return self.__dict__[key]

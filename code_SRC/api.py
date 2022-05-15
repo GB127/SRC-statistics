@@ -1,4 +1,5 @@
 from requests import get
+import warnings
 
 def requester(link):
     data = get(link).json()
@@ -25,6 +26,17 @@ class api:
         req = requester(api.URL + f'variables/{id[0]}')
         if req["data"]["is-subcategory"]:
             return req["data"]["values"]["values"][id[1]]["label"]
+
+    def leaderboard(game_id, category_id, subcat_ids):
+        req = requester(api.URL + f'leaderboards/{game_id}/category/{category_id}')
+        warnings.warn("Warning : Subcategories aren't handled yet")
+
+        return [x["run"]["times"]["primary_t"] for x in req["data"]["runs"]]
+
+    def leaderboard_l(game_id, level_id, category_id, subcat_ids):
+        req = requester(api.URL + f'leaderboards/{game_id}/level/{level_id}/{category_id}')
+        warnings.warn("Warning : Subcategories aren't handled yet")
+        return [x["run"]["times"]["primary_t"] for x in req["data"]["runs"]]
 
     @staticmethod
     def game(id):  #TODO : Embed thing with series so we avoid to duplicate requests
