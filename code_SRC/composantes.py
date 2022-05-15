@@ -10,7 +10,10 @@ class Game:
         self.level = api.level(level_id) if level_id else ""
 
     def __str__(self):
-        return f'{": ".join((self.game, self.level)):<40}'
+        string = self.game
+        if self.level:
+            string += f': {self.level}'
+        return string
 
     def __eq__(self, other):
         return f'{self.game + self.level:<40}' == f'{other.game + other.level:<40}'
@@ -52,7 +55,9 @@ class Category:
         self.category = api.category(category_id)
         self.ids = (category_id, subcategories())
     def __str__(self):
-        strings = f'{self.category} ({",".join(self.subcategory)})'
+        strings = f'{self.category}'
+        if self.subcategory:
+            strings += f' ({",".join(self.subcategory)})'
         return strings
 
     def __eq__(self, other):
@@ -78,7 +83,7 @@ class GameCate:
         self.category = category
 
     def __str__(self):
-        return f'{self.game} {self.category}'
+        return f'{str(self.game)[:30]:<30}   {str(self.category)[:20]:<20}'
 
     def ids(self):
         return self.game.ids + self.category.ids
@@ -116,7 +121,7 @@ class System:
         self.system:str = api.system(system_id)
     
     def __str__(self):
-        return "".join([x for x in self.system if x.isupper()])
+        return f'{"".join([x for x in self.system if x.isupper()]):^3}'
 
     def __getitem__(self, key):
         return self.__dict__[key]

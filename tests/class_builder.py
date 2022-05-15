@@ -2,6 +2,8 @@ from code_SRC.composantes import Category, Game, GameCate, System
 from requests_mock.mocker import Mocker
 from entries.run import Run, PB
 from tables.leaderboard import LB
+from code_SRC.user import User
+
 
 
 def req_mocker(requests_mock: Mocker):
@@ -25,7 +27,33 @@ def req_mocker(requests_mock: Mocker):
     requests_mock.get("https://www.speedrun.com/api/v1/variables/subcat_id_f", json=subcat_data_f)
     requests_mock.get("https://www.speedrun.com/api/v1/leaderboards/game_id/level/level_id/category_id",json=lb_data)
     requests_mock.get("https://www.speedrun.com/api/v1/leaderboards/game_id/category/category_id",json=lb_data)
+    user_data = {"data":{"id":"user_id","names":{"international":"Niamek","japanese":None}}}
+    requests_mock.get("https://www.speedrun.com/api/v1/users/username", json=user_data)
+    user_pbs_data = {"data":
+                            [
+                                {"place": 1,"run": {"id": "run_id","game": "game_id","category": "category_id","status": {"status": "verified"}, "date": "2014-02-25", "times": {"primary_t": 5421}, "system": {"platform": "system_id", "emulated": False, "region": None}, "values": {"subcat_id_t": "selected_subcat", "subcat_id_f": "selected_subcat"},
+                                            "level": None}},
+                                {"place": 1,"run": {"id": "run_id","game": "game_id","category": "category_id","status": {"status": "verified"}, "date": "2014-02-25", "times": {"primary_t": 5421}, "system": {"platform": "system_id", "emulated": False, "region": None}, "values": {"subcat_id_t": "selected_subcat", "subcat_id_f": "selected_subcat"},
+                                            "level": "level_id"}}
+                            ]
+                    }
+    user_runs_data = {"data":
+                            [
+                                {"id": "run_id","game": "game_id","category": "category_id","status": {"status": "verified"}, "date": "2014-02-25", "times": {"primary_t": 5421}, "system": {"platform": "system_id", "emulated": False, "region": None}, "values": {"subcat_id_t": "selected_subcat", "subcat_id_f": "selected_subcat"},
+                                            "level": None},
+                                {"id": "run_id","game": "game_id","category": "category_id","status": {"status": "verified"}, "date": "2014-02-25", "times": {"primary_t": 5421}, "system": {"platform": "system_id", "emulated": False, "region": None}, "values": {"subcat_id_t": "selected_subcat", "subcat_id_f": "selected_subcat"},
+                                            "level": "level_id"}
+                            ]
+                    }
 
+    requests_mock.get("https://www.speedrun.com/api/v1/users/user_id/personal-bests", json=user_pbs_data)
+    requests_mock.get("https://www.speedrun.com/api/v1/runs?user=user_id&max=200", json=user_runs_data)
+
+
+
+def build_user(requests_mock:Mocker):
+    req_mocker(requests_mock)
+    return User("username")
 
 def build_run(requests_mock: Mocker):
     req_mocker(requests_mock)

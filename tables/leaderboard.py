@@ -12,4 +12,4 @@ class LB:
         return len(self.ranking)
 
     def __str__(self):
-        return f'{self.place:>4}/{len(self):<4} ({(len(self) - self.place)/len(self):.2%})'
+        return f'{self.place:>4}/{len(self):<4} ({(len(self) - self.place)/len(self):6.2%})'

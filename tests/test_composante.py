@@ -17,7 +17,7 @@ class Test_game:
 
     def test_str(self, requests_mock: Mocker):
         game = build_game(requests_mock)
-        assert str(game) == f'{"Super Mario Sunshine: Shrub Forest":<40}'
+        assert str(game) == f'{"Super Mario Sunshine: Shrub Forest"}'
 
     def test_operators(self, requests_mock: Mocker):
         game1 = build_game(requests_mock)
@@ -58,7 +58,7 @@ class Test_gamecat:
 
     def test_str(self, requests_mock:Mocker):
         test = build_gamecat(requests_mock)
-        assert str(test) == "Super Mario Sunshine: Shrub Forest       Any% (No SSU) (150cc)"
+        assert str(test) == "Super Mario Sunshine: Shrub Fo   Any% (No SSU) (150cc"
 
     def test_ids(self, requests_mock:Mocker):
         test = build_gamecat(requests_mock)
