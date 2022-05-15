@@ -1,5 +1,4 @@
 from requests import get
-import warnings
 
 def requester(link):
     data = get(link).json()

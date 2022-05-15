@@ -33,7 +33,8 @@ class Test_table_runs:
         assert str(test).count(one_entry) == 3
         assert one_line in str(test)
         assert str(test).count(one_line) == 2
-        raise NotImplementedError(str(test))
+        for strings in [test.str_sum(), test.str_geomean(), test.str_sum()]:
+            assert strings in str(test)
 
     def test_count(self, requests_mock:Mocker):
         test = build_table_run(requests_mock)
