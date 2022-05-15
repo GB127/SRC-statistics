@@ -19,7 +19,6 @@ class Test_Run:
 class Test_PB:
     def test_init(self, requests_mock:Mocker):
         test = build_pb_l(requests_mock)
-        assert ("place", 1) in test.__dict__.items()
         assert ("leaderboard") in test.__dict__.keys()
     
     def test_str(self, requests_mock:Mocker):
