@@ -10,6 +10,20 @@ class Test_Run:
         assert isinstance(test.time, Time)
         assert isinstance(test.system, System)
 
+    def test_keys(self, requests_mock:Mocker):
+        test = build_run_l(requests_mock)
+        assert set(test.keys()) == {"game","series", "level", "release", "system", "time", "category"}
+        for clé, valeur in [
+            ("game", "Super Mario Sunshine"),
+            ("series", {"Super Mario"}),
+            ("level", "Shrub Forest"),
+            ("release", "2002"),
+            ("system", "Nintendo Entertainment System"),
+            ("category", "Super Mario Sunshine: Shrub Forest Any% (No SSU) (150cc)")
+            
+            ]:
+            assert test[clé] == valeur
+
     def test_str(self, requests_mock:Mocker):
         test = build_run_l(requests_mock)
         for composante in [build_gamecat, build_system]:

@@ -5,7 +5,7 @@ from tests.class_builder import build_category, build_game, build_gamecat, build
 class Test_game:
     def test_init(self, requests_mock: Mocker):
         game = build_game(requests_mock)
-        assert game.__dict__ == {'ids': ('game_id', 'level_id'),'level': 'Shrub Forest', "game":"Super Mario Sunshine", "release": 2002, "series":{"Super Mario"}}
+        assert game.__dict__ == {'ids': ('game_id', 'level_id'),'level': 'Shrub Forest', "game":"Super Mario Sunshine", "release": "2002", "series":{"Super Mario"}}
 
     def test_keys(self, requests_mock:Mocker):
         test = build_game(requests_mock)
@@ -37,11 +37,6 @@ class Test_category:
         category = build_category(requests_mock)
         assert category["subcategory"] == ["150cc"]
 
-    def test_keys(self, requests_mock:Mocker):
-        test = build_category(requests_mock)
-        assert set(test.keys()) == {"category", "subcategory"}
-
-
     def test_str(self, requests_mock: Mocker):
         category = build_category(requests_mock)
         assert str(category) == "Any% (No SSU) (150cc)"
@@ -53,7 +48,7 @@ class Test_gamecat:
 
     def test_keys(self, requests_mock:Mocker):
         test = build_gamecat(requests_mock)
-        assert set(test.keys()) == {"level", "game","category", "subcategory", "release", "series"}
+        assert set(test.keys()) == {"level", "game","category", "release", "series"}
 
 
     def test_str(self, requests_mock:Mocker):
@@ -66,9 +61,8 @@ class Test_gamecat:
 
     def test_getitem(self, requests_mock:Mocker):
         test = build_gamecat(requests_mock)
-        assert test["subcategory"] == ["150cc"]
-        assert test["level"] == "Shrub Forest"
-
+        assert test["game"] == "Super Mario Sunshine"
+        assert test["category"] == "Super Mario Sunshine: Shrub Forest Any% (No SSU) (150cc)"
 
 class Test_system:
     def test_init(self, requests_mock:Mocker):

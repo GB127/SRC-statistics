@@ -1,4 +1,3 @@
-from warnings import warn
 from code_SRC.api import api
 
 class Game:
@@ -8,6 +7,7 @@ class Game:
         self.ids = (game_id, level_id)
         self.game, self.release, self.series = api.game(game_id)
         self.level = api.level(level_id) if level_id else ""
+        self.release = str(self.release)
 
     def __str__(self):
         string = self.game
@@ -20,7 +20,6 @@ class Game:
 
     def keys(self):
         tempo = list(self.__dict__.keys())
-        warn("Maybe this will break everything if I don't use copy")
         tempo.remove("ids")
         return tempo
 
@@ -33,13 +32,6 @@ class Game:
 class Category:
     """Class that englobes categories and subcategory/variable
     """
-
-    def keys(self):
-        tempo = list(self.__dict__.keys())
-        warn("Maybe this will break everything if I don't use copy")
-        tempo.remove("ids")
-        return tempo
-
     def __init__(self, category_id:str, subcat_ids:dict[str:str]):
         def subcategories():
             self.subcategory = []
@@ -68,15 +60,15 @@ class Category:
 
 class GameCate:
     def keys(self):
-        return self.game.keys() + self.category.keys()
+        return list(self.game.keys()) + ["category"]
 
 
     def __getitem__(self, clé):
+        if clé == "category":
+            return f'{self.game} {self.category}'
         for attribute in [self.game, self.category]:
-            try:
+            if clé in attribute.__dict__:
                 return attribute[clé]
-            except KeyError:
-                continue
 
     def __init__(self,game:Game, category:Category):
         self.game = game
@@ -98,7 +90,12 @@ class Time:
     def __eq__(self, other):
         return self.seconds == other.seconds
 
+
+    def __radd__(self, other):
+        return self.__add__(other)
     def __add__(self, other):
+        if isinstance(other, int):
+            return Time(self.seconds + other)
         return Time(self.seconds + other.seconds)
 
     def __sub__(self, other):

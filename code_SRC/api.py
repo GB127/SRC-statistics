@@ -45,7 +45,6 @@ class api:
         if subcat_ids:
             variables = "&var-".join([f"{x}={y}" for x,y in subcat_ids])
         req = requester(api.URL + f'leaderboards/{game_id}/level/{level_id}/{category_id}?var-{variables}')
-        warnings.warn("Warning : Subcategories aren't handled yet")
         return [x["run"]["times"]["primary_t"] for x in req["data"]["runs"]]
 
     def user_id(username:str) -> str:

@@ -3,6 +3,7 @@ from requests_mock.mocker import Mocker
 from entries.run import Run, PB
 from tables.leaderboard import LB
 from code_SRC.user import User
+from tables.solo_runs import Table_run
 
 
 
@@ -50,6 +51,11 @@ def req_mocker(requests_mock: Mocker):
     requests_mock.get("https://www.speedrun.com/api/v1/runs?user=user_id&max=200", json=user_runs_data)
 
 
+def build_table_run(requests_mock:Mocker):
+    req_mocker(requests_mock)
+    tempo = Table_run([], True)
+    tempo.data = [build_run(requests_mock) for _ in range(3)]
+    return tempo
 
 def build_user(requests_mock:Mocker):
     req_mocker(requests_mock)

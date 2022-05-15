@@ -7,6 +7,14 @@ class Run:
         self.time:Time = Time(dicto["times"]["primary_t"])
         self.system:System = System(dicto["system"]["platform"])
 
+    def __getitem__(self,clé):
+        for attribute in [self.gamecat, self.system]:
+                if clé in attribute.keys():
+                    return attribute[clé]
+        return self.__dict__[clé]
+
+    def keys(self):  # TODO : Int only...?
+        return list(self.gamecat.keys()) + list(self.system.keys()) + ["time"]
 
     def __str__(self):
         return f'{self.system}   {self.gamecat}   {self.time}'

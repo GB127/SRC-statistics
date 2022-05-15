@@ -7,4 +7,6 @@ from PySide6.QtWidgets
 Et c'est quasi clef en main
 """
 
-test = User("niamek")
+test = User("libre")
+
+print(test.pbs)
