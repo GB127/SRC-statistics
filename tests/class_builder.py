@@ -6,96 +6,25 @@ from tables.leaderboard import LB
 
 def req_mocker(requests_mock: Mocker):
     """Function that will handle all mocks of the get"""
-    system_data = {
-        "data": {
-            "id": "system_id",
-            "name": "Nintendo Entertainment System",
-            "released": 1983,
-        }
-    }
-    game_data = {
-        "data": {
-            "id": "game_id",
-            "names": {"international": "Super Mario Sunshine"},
-            "abbreviation": "sms",
-            "released": 2002,
-            "release-date": "2002-07-19",
-            "gametypes": [],
-            "platforms": ["4p9z06rn", "v06dk3e4", "7m6ylw9p"],
-            "regions": ["pr184lqn", "e6lxy1dz", "o316x197", "p2g50lnk"],
-            "genres": ["qdnqkn8k", "jp23ox26"],
-            "developers": ["xv6dvx62"],
-            "publishers": ["m0rvylrx"],
-            "links": [
-                {
-                    "rel": "series",
-                    "uri": "https://www.speedrun.com/api/v1/series/serie_id",
-                }
-            ],
-        }
-    }
-    series_data = {
-        "data": {
-            "id": "serie_id",
-            "names": {"international": "Super Mario"},
-            "abbreviation": "mario",
-        }
-    }
+    system_data = {"data": {"id": "system_id","name": "Nintendo Entertainment System","released": 1983}}
+    game_data = {"data": {"id": "game_id","names": {"international": "Super Mario Sunshine"},"abbreviation": "sms","released": 2002,"release-date": "2002-07-19","gametypes": [],"platforms": ["4p9z06rn", "v06dk3e4", "7m6ylw9p"],"regions": ["pr184lqn", "e6lxy1dz", "o316x197", "p2g50lnk"],"genres": ["qdnqkn8k", "jp23ox26"],"developers": ["xv6dvx62"],"publishers": ["m0rvylrx"],"links": [{"rel": "series","uri": "https://www.speedrun.com/api/v1/series/serie_id"}]}}
+    series_data = {"data": {"id": "serie_id","names": {"international": "Super Mario"},"abbreviation": "mario"}}
     level_data = {"data": {"id": "level_id", "name": "Shrub Forest"}}
     category_data = {"data": {"id": "category_id", "name": "Any% (No SSU)"}}
-    subcat_data_t = {
-        "data": {
-            "id": "subcat_id_t",
-            "name": "cc",
-            "values": {"values": {"selected_subcat": {"label": "150cc"}}},
-            "is-subcategory": True,
-        }
-    }
-    subcat_data_f = {
-        "data": {
-            "id": "subcat_id_f",
-            "name": "cc",
-            "values": {"values": {"selected_subcat": {"label": "150cc"}}},
-            "is-subcategory": False,
-        }
-    }
-    requests_mock.get(
-        "https://www.speedrun.com/api/v1/platforms/system_id", json=system_data
-    )
-    requests_mock.get(
-        "https://www.speedrun.com/api/v1/series/serie_id", json=series_data
-    )
-    requests_mock.get("https://www.speedrun.com/api/v1/games/game_id", json=game_data)
-    requests_mock.get(
-        "https://www.speedrun.com/api/v1/levels/level_id", json=level_data
-    )
-    requests_mock.get(
-        "https://www.speedrun.com/api/v1/categories/category_id", json=category_data
-    )
-    requests_mock.get(
-        "https://www.speedrun.com/api/v1/variables/subcat_id_t", json=subcat_data_t
-    )
-    requests_mock.get(
-        "https://www.speedrun.com/api/v1/variables/subcat_id_f", json=subcat_data_f
-    )
-    lb_data = {
-        "data": {
-            "game": "game_id",
-            "category": "category_id",
-            "level": "level_id",
-            "runs": [
-                {"place": x, "run": {"times": {"primary_t": 5421 + x}}} for x in range(1, 11)
-            ],
-        }
-    }
+    subcat_data_t = {"data": {"id": "subcat_id_t","name": "cc","values": {"values": {"selected_subcat": {"label": "150cc"}}},"is-subcategory": True}}
+    subcat_data_f = {"data": {"id": "subcat_id_f","name": "cc","values": {"values": {"selected_subcat": {"label": "150cc"}}},"is-subcategory": False}}
+    lb_data = {"data": {"game": "game_id","category": "category_id","level": "level_id",
+                "runs": [{"place": x, "run": {"times": {"primary_t": 5421 + x}}} for x in range(1, 11)]}}
 
-    requests_mock.get(
-        "https://www.speedrun.com/api/v1/leaderboards/game_id/level/level_id/category_id",
-        json=lb_data,
-    )
-    requests_mock.get(
-        "https://www.speedrun.com/api/v1/leaderboards/game_id/category/category_id",
-        json=lb_data)
+    requests_mock.get("https://www.speedrun.com/api/v1/platforms/system_id", json=system_data)
+    requests_mock.get("https://www.speedrun.com/api/v1/series/serie_id", json=series_data)
+    requests_mock.get("https://www.speedrun.com/api/v1/games/game_id", json=game_data)
+    requests_mock.get("https://www.speedrun.com/api/v1/levels/level_id", json=level_data)
+    requests_mock.get("https://www.speedrun.com/api/v1/categories/category_id", json=category_data)
+    requests_mock.get("https://www.speedrun.com/api/v1/variables/subcat_id_t", json=subcat_data_t)
+    requests_mock.get("https://www.speedrun.com/api/v1/variables/subcat_id_f", json=subcat_data_f)
+    requests_mock.get("https://www.speedrun.com/api/v1/leaderboards/game_id/level/level_id/category_id",json=lb_data)
+    requests_mock.get("https://www.speedrun.com/api/v1/leaderboards/game_id/category/category_id",json=lb_data)
 
 
 def build_run(requests_mock: Mocker):
