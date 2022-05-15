@@ -1,9 +1,9 @@
 from code_SRC.api import api
 
 class Game:
-    """Game name & Level names are stored here.
-    """
     def __init__(self, game_id:str, level_id:str):
+        """Class that handle the game, level and the release year of a game.
+        """
         self.ids = (game_id, level_id)
         self.game, self.release, self.series = api.game(game_id)
         self.level = api.level(level_id) if level_id else ""
@@ -18,21 +18,26 @@ class Game:
     def __eq__(self, other):
         return f'{self.game + self.level:<40}' == f'{other.game + other.level:<40}'
 
-    def keys(self):
-        tempo = list(self.__dict__.keys())
-        tempo.remove("ids")
-        return tempo
-
     def __le__(self, other):
         return f'{self.game + self.level:<40}' <= f'{other.game + other.level:<40}'
 
     def __getitem__(self, key):
         return self.__dict__[key]
 
+    def keys(self) -> list:
+        """Return all the keys that can be used to retrieve game infos. Uses dict.keys() to eases adding functionnalities. Docstring needs to be updated manually.
+            Returns: ["game", "release", "level"]
+        """
+        tempo = list(self.__dict__.keys())
+        tempo.remove("ids")
+        return tempo
+
 class Category:
-    """Class that englobes categories and subcategory/variable
+    """Class that englobes categories and subcategory/variable.
     """
     def __init__(self, category_id:str, subcat_ids:dict[str:str]):
+        """Class that handles the category & the subcategory.
+            """
         def subcategories():
             self.subcategory = []
             ids = []
@@ -46,6 +51,7 @@ class Category:
 
         self.category = api.category(category_id)
         self.ids = (category_id, subcategories())
+   
     def __str__(self):
         strings = f'{self.category}'
         if self.subcategory:
@@ -59,7 +65,27 @@ class Category:
         return self.__dict__[key]
 
 class GameCate:
+    def __init__(self,game:Game, category:Category):
+        """Handles the Game and the Category. Because of the fact that a category can share the same name across different games, this classes handles this part.
+            """
+        self.game = game
+        self.category = category
+
+    def __str__(self):
+        return f'{str(self.game)[:30]:<30}   {str(self.category)[:20]:<20}'
+
+    def ids(self)->list:
+        """Returns all the ids necessary for leaderboard requests.
+            Returns: ["game_id", "level_id", "category_id", "subcategory_ids"]
+                NOTE: "subcategory_id is a dictionnary {"field":"subcategory selected"}
+        """
+        return self.game.ids + self.category.ids
+
+
     def keys(self):
+        """Return all the keys that can be used to retrieve game or/and category infos. Uses dict.keys() to eases adding functionnalities. Docstring needs to be updated manually.
+            Returns: ["game", "release", "level", "category]
+        """
         return list(self.game.keys()) + ["category"]
 
 
@@ -70,19 +96,14 @@ class GameCate:
             if clé in attribute.__dict__:
                 return attribute[clé]
 
-    def __init__(self,game:Game, category:Category):
-        self.game = game
-        self.category = category
 
-    def __str__(self):
-        return f'{str(self.game)[:30]:<30}   {str(self.category)[:20]:<20}'
 
-    def ids(self):
-        return self.game.ids + self.category.ids
 
 class Time:
-    def __init__(self, seconds:int):
-        self.seconds = seconds
+    def __init__(self, total_seconds:int):
+        """Class created mainly to handle the stringing of the times. Stores the total seconds internally.
+        """
+        self.seconds = total_seconds
 
     def __str__(self):
         return f"{int(self.seconds)//3600:>3}:{int(self.seconds) % 3600 // 60:02}:{int(self.seconds) % 3600 % 60 % 60:02}"
@@ -111,14 +132,17 @@ class Time:
             return Time(self.seconds / other.seconds)
 
 class System:
-    def keys(self):
-        return self.__dict__.keys()
-
     def __init__(self, system_id):
         self.system:str = api.system(system_id)
-    
+
     def __str__(self):
         return f'{"".join([x for x in self.system if x.isupper()]):^3}'
+
+    def keys(self)->list[str]:
+        """Returns retrievable informations about system.
+            Returns: ["system"]
+        """
+        return self.__dict__.keys()
 
     def __getitem__(self, key):
         return self.__dict__[key]
