@@ -48,11 +48,25 @@ class Test_table_runs:
                 assert test.count(x) == 1
 
     def test_str_sum(self, requests_mock:Mocker):
-        raise NotImplementedError
+        test = build_table_run(requests_mock)
+        assert str(Time(5422*3)) in test.str_sum()
+        for counts in ["1 games", "1 categories", "1 s"]:
+            assert counts in test.str_sum()
+
+    def test_str_mean(self, requests_mock:Mocker):
+        test = build_table_run(requests_mock)
+        assert str(Time(5422)) in test.str_mean()
+        for counts in ["3.0 games", "3.0 categories", "3.0"]:
+            assert counts in test.str_mean(), test.str_mean()
+
 
 class Test_table_pbs:
+    def test_str(self, requests_mock:Mocker):
+        test = build_table_pb(requests_mock)
+        str(test)
+
+
     def test_getitem(self, requests_mock:Mocker):
         test = build_table_pb(requests_mock)
-        assert f' +{str(Time(0)).lstrip()}' in test.str_sum()
+        assert f' +{str(Time(3)).lstrip()}' in test.str_sum()
         assert f"   3/30   ({27/30:.2%})" in test.str_sum()
-        raise BaseException(test)

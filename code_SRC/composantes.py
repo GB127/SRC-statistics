@@ -4,10 +4,18 @@ from code_SRC.api import api
 class Game:
     def __init__(self, game_id: str, level_id: str):
         """Class that handle the game, level and the release year of a game."""
+        def game_name_cleanup():
+            """Removes unwanted elements from the names.
+                """
+            for unwanted in [" Category Extensions", "The Legend of Zelda: "]:
+                self.game = self.game.replace(unwanted, "")
+
+
         self.ids = (game_id, level_id)
         self.game, self.release, self.series = api.game(game_id)
         self.level = api.level(level_id) if level_id else ""
         self.release = str(self.release)
+        game_name_cleanup()
 
     def __str__(self):
         string = self.game
