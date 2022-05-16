@@ -129,10 +129,10 @@ class Time:
         return self.seconds <= other.seconds
 
     def __truediv__(self, other):
-        if isinstance(other, int):
+        if isinstance(other, (int, float)):
             return Time(self.seconds / other)
         elif isinstance(other, Time):
-            return Time(self.seconds / other.seconds)
+            return self.seconds / other.seconds
 
 
 class System:

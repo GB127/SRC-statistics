@@ -3,7 +3,7 @@ from requests_mock.mocker import Mocker
 from entries.run import Run, PB
 from tables.leaderboard import LB
 from code_SRC.user import User
-from tables.solo_runs import Table_run
+from tables.solo_runs import Table_pb, Table_run
 
 
 
@@ -32,17 +32,17 @@ def req_mocker(requests_mock: Mocker):
     requests_mock.get("https://www.speedrun.com/api/v1/users/username", json=user_data)
     user_pbs_data = {"data":
                             [
-                                {"place": 1,"run": {"id": "run_id","game": "game_id","category": "category_id","status": {"status": "verified"}, "date": "2014-02-25", "times": {"primary_t": 5421}, "system": {"platform": "system_id", "emulated": False, "region": None}, "values": {"subcat_id_t": "selected_subcat", "subcat_id_f": "selected_subcat"},
+                                {"place": 1,"run": {"id": "run_id","game": "game_id","category": "category_id","status": {"status": "verified"}, "date": "2014-02-25", "times": {"primary_t": 5422}, "system": {"platform": "system_id", "emulated": False, "region": None}, "values": {"subcat_id_t": "selected_subcat", "subcat_id_f": "selected_subcat"},
                                             "level": None}},
-                                {"place": 1,"run": {"id": "run_id","game": "game_id","category": "category_id","status": {"status": "verified"}, "date": "2014-02-25", "times": {"primary_t": 5421}, "system": {"platform": "system_id", "emulated": False, "region": None}, "values": {"subcat_id_t": "selected_subcat", "subcat_id_f": "selected_subcat"},
+                                {"place": 1,"run": {"id": "run_id","game": "game_id","category": "category_id","status": {"status": "verified"}, "date": "2014-02-25", "times": {"primary_t": 5422}, "system": {"platform": "system_id", "emulated": False, "region": None}, "values": {"subcat_id_t": "selected_subcat", "subcat_id_f": "selected_subcat"},
                                             "level": "level_id"}}
                             ]
                     }
     user_runs_data = {"data":
                             [
-                                {"id": "run_id","game": "game_id","category": "category_id","status": {"status": "verified"}, "date": "2014-02-25", "times": {"primary_t": 5421}, "system": {"platform": "system_id", "emulated": False, "region": None}, "values": {"subcat_id_t": "selected_subcat", "subcat_id_f": "selected_subcat"},
+                                {"id": "run_id","game": "game_id","category": "category_id","status": {"status": "verified"}, "date": "2014-02-25", "times": {"primary_t": 5422}, "system": {"platform": "system_id", "emulated": False, "region": None}, "values": {"subcat_id_t": "selected_subcat", "subcat_id_f": "selected_subcat"},
                                             "level": None},
-                                {"id": "run_id","game": "game_id","category": "category_id","status": {"status": "verified"}, "date": "2014-02-25", "times": {"primary_t": 5421}, "system": {"platform": "system_id", "emulated": False, "region": None}, "values": {"subcat_id_t": "selected_subcat", "subcat_id_f": "selected_subcat"},
+                                {"id": "run_id","game": "game_id","category": "category_id","status": {"status": "verified"}, "date": "2014-02-25", "times": {"primary_t": 5422}, "system": {"platform": "system_id", "emulated": False, "region": None}, "values": {"subcat_id_t": "selected_subcat", "subcat_id_f": "selected_subcat"},
                                             "level": "level_id"}
                             ]
                     }
@@ -57,6 +57,13 @@ def build_table_run(requests_mock:Mocker):
     tempo.data = [build_run(requests_mock) for _ in range(3)]
     return tempo
 
+def build_table_pb(requests_mock:Mocker):
+    req_mocker(requests_mock)
+    tempo = Table_pb([], True)
+    tempo.data = [build_pb(requests_mock) for _ in range(3)]
+    return tempo
+
+
 def build_user(requests_mock:Mocker):
     req_mocker(requests_mock)
     return User("username")
@@ -70,7 +77,7 @@ def build_run(requests_mock: Mocker):
         "category": "category_id",
         "status": {"status": "verified"},
         "date": "2014-02-25",
-        "times": {"primary_t": 5421},
+        "times": {"primary_t": 5422},
         "system": {"platform": "system_id", "emulated": False, "region": None},
         "values": {"subcat_id_t": "selected_subcat", "subcat_id_f": "selected_subcat"},
     }
@@ -86,7 +93,7 @@ def build_run_l(requests_mock: Mocker):
         "category": "category_id",
         "status": {"status": "verified"},
         "date": "2014-02-25",
-        "times": {"primary_t": 5421},
+        "times": {"primary_t": 5422},
         "system": {"platform": "system_id", "emulated": False, "region": None},
         "values": {"subcat_id_t": "selected_subcat", "subcat_id_f": "selected_subcat"},
     }
@@ -104,7 +111,7 @@ def build_pb(requests_mock: Mocker):
             "category": "category_id",
             "status": {"status": "verified"},
             "date": "2014-02-25",
-            "times": {"primary_t": 5421},
+            "times": {"primary_t": 5422},
             "system": {"platform": "system_id", "emulated": False, "region": None},
             "values": {
                 "subcat_id_t": "selected_subcat",
@@ -126,7 +133,7 @@ def build_pb_l(requests_mock: Mocker):
             "category": "category_id",
             "status": {"status": "verified"},
             "date": "2014-02-25",
-            "times": {"primary_t": 5421},
+            "times": {"primary_t": 5422},
             "system": {"platform": "system_id", "emulated": False, "region": None},
             "values": {
                 "subcat_id_t": "selected_subcat",

@@ -13,7 +13,7 @@ class Run:
                     return attribute[clé]
         return self.__dict__[clé]
 
-    def keys(self):  # TODO : Int only...?
+    def keys(self):
         return list(self.gamecat.keys()) + list(self.system.keys()) + ["time"]
 
     def __str__(self):
@@ -23,6 +23,12 @@ class PB(Run):
     def __init__(self, dicto:dict):
         super().__init__(dicto["run"])
         self.leaderboard = LB(dicto["place"], *self.gamecat.ids())
+        self.delta = self.time - self.leaderboard["WR"]  #FIXME : self["WR"] instead
+        self.perc = self.time / self.leaderboard["WR"]
 
+    def __getitem__(self, clé):
+        if clé == "WR":
+            return self.leaderboard[0]
+        return super().__getitem__(clé)
     def __str__(self):
-        return super().__str__() + f' {str(self.leaderboard)}'
+        return f'{super().__str__()} +{str(self.delta).lstrip()} ({self.perc:.2%})  {str(self.leaderboard)}'

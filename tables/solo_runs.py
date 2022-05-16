@@ -88,9 +88,9 @@ class Table_run:
         def max_len(tostr):
             return len(str(tostr))
 
-        system = f'{len(self) / self.count("system")} systems'
-        game = f'{len(self) / self.count("game")} games'
-        categories = f'{len(self) / self.count("category")} categories'
+        system = f'{round(len(self) / self.count("system"), 2)} systems'
+        game = f'{round(len(self) / self.count("game"),2)} games'
+        categories = f'{round(len(self) / self.count("category"),2)} categories'
         times = f"{Time(mean([x.time.seconds for x in self.data]))}"
 
         string = f"{system[:max_len(self[0].system)]:{max_len(self[0].system)}}"
@@ -126,3 +126,27 @@ class Table_pb(Table_run):
             if include_lvl == bool(data["run"]["level"]):
                 self.data.append(PB(data))
             print(f"{no}/{len(list_runs)} PBs processed!")
+
+    def str_sum(self):
+        sum_delta = str(Time(sum([x.delta.seconds for x in self.data])))
+        sum_place = sum([x.leaderboard.place for x in self.data])
+        sum_lb = sum([len(x.leaderboard) for x in self.data])
+        sum_perc = sum([x.time.seconds for x in self.data])/sum([x["WR"].seconds for x in self.data])
+        sum_lb_perc = (sum_lb - sum_place)/sum_lb
+        return super().str_sum() + f' +{str(sum_delta).lstrip()} ({sum_perc:.2%})  {sum_place:>4}/{sum_lb:<4} ({sum_lb_perc:.2%})'
+
+    def str_mean(self):
+        sum_delta = str(Time(mean([x.delta.seconds for x in self.data])))
+        sum_place = int(mean([x.leaderboard.place for x in self.data]))
+        sum_lb = int(mean([len(x.leaderboard) for x in self.data]))
+        sum_perc = mean([x.time.seconds for x in self.data])/mean([x["WR"].seconds for x in self.data])
+        sum_lb_perc = (sum_lb - sum_place)/sum_lb
+        return super().str_mean() + f' +{str(sum_delta).lstrip()} ({sum_perc:.2%})  {sum_place:>4}/{sum_lb:<4} ({sum_lb_perc:.2%})'
+
+    def str_geomean(self):
+        sum_delta = str(Time(geomean([x.delta.seconds for x in self.data if x.delta.seconds != 0])))
+        sum_place = int(geomean([x.leaderboard.place for x in self.data]))
+        sum_lb = int(geomean([len(x.leaderboard) for x in self.data]))
+        sum_perc = geomean([x.time.seconds for x in self.data])/geomean([x["WR"].seconds for x in self.data])
+        sum_lb_perc = (sum_lb - sum_place)/sum_lb
+        return super().str_geomean() + f' +{str(sum_delta).lstrip()} ({sum_perc:.2%})  {sum_place:>4}/{sum_lb:<4} ({sum_lb_perc:.2%})'

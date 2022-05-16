@@ -9,4 +9,4 @@ Et c'est quasi clef en main
 
 test = User("niamek")
 
-print(test.pbs)
+print(test.runs)
