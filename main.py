@@ -7,6 +7,6 @@ from PySide6.QtWidgets
 Et c'est quasi clef en main
 """
 
-#test = User(input("Which user?"))
-test = User("niamek")
-test.pbs.histo()
+test = User(input("Which user?"))
+# test = User("niamek")
+print(test.pbs)
