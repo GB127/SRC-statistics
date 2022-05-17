@@ -44,7 +44,9 @@ def req_mocker(requests_mock: Mocker):
                                             "level": None},
                                 {"id": "run_id","game": "game_id","category": "category_id","status": {"status": "verified"}, "date": "2014-02-25", "times": {"primary_t": 5422}, "system": {"platform": "system_id", "emulated": False, "region": None}, "values": {"subcat_id_t": "selected_subcat", "subcat_id_f": "selected_subcat"},
                                             "level": "level_id"}
-                            ]
+                            ],
+                    "pagination":{"offset":0, "max":200, "size" : 2,
+                        "links":[]}
                     }
 
     requests_mock.get("https://www.speedrun.com/api/v1/users/user_id/personal-bests", json=user_pbs_data)

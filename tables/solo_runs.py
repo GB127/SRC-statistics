@@ -1,12 +1,84 @@
 from entries.run import PB, Run
 from code_SRC.composantes import Time
-from statistics import mean, geometric_mean as geomean
+from statistics import fmean, geometric_mean as geomean
 from plots.handler import window_handler
 from plots.histo import Histo_app
 from plots.pie import Pie_app
+from math import fsum
+from collections import Counter
+from itertools import chain
+from copy import deepcopy
+
+class Base_table:
+    def __init__(self):
+        raise BaseException("This table can't be created : need to go by the childs")
 
 
-class Table_run:
+    def group_attr(self)->dict:
+        dicto_sets = {}
+        for clé in self.keys():
+            if isinstance(self[0][clé], set):
+                dicto_sets[clé] = Counter(chain(*[x[clé] for x in self.data]))
+            elif isinstance(self[0][clé], (Time, int, float)):
+                dicto_sets[clé] = list(x[clé] for x in self.data)
+            else:
+                dicto_sets[clé] = Counter(x[clé] for x in self.data)
+        assert list(dicto_sets.keys()) == self.keys(), f'{dicto_sets.keys()} == {self.keys()}'
+        return dicto_sets
+
+    def sum(self)->dict:
+        dicto_groups = self.group_attr()
+        dicto_sum = {}
+        for clé in self.keys():
+            if isinstance(self[0][clé], (int, float, Time)):
+                dicto_sum[clé] = fsum(dicto_groups[clé])
+            else:
+                dicto_sum[clé] = len(dicto_groups[clé])
+        return dicto_sum
+
+    def mean(self)->dict:
+        dicto_groups = self.group_attr()
+        dicto_mean = {}
+        for clé in self.keys():
+            if isinstance(self[0][clé], (int, float, Time)):
+                dicto_mean[clé] = fmean(dicto_groups[clé])
+            else:
+                dicto_mean[clé] = len(dicto_groups[clé]) / len(self)
+        return dicto_mean
+            
+    def geomean(self)->dict:
+        dicto_groups = self.group_attr()
+        dicto_mean = {}
+        for clé in self.keys():
+            if isinstance(self[0][clé], (int, float, Time)):
+                dicto_mean[clé] = geomean([float(x) for x in dicto_groups[clé] if float(x) > 0])
+            else:
+                dicto_mean[clé] = len(self) / len(dicto_groups[clé])
+        return dicto_mean
+
+    def __str__(self):
+        line  = "-------" + "-" * len(str(self.data[0])) + "\n"
+        string = line
+        for index, object in enumerate(self.data, start=1):
+            string += f"{index:>4}   {str(object)}\n"
+        string += line
+        string += f'       {self.create_grouped(self.sum())}\n'
+        string += f'       {self.create_grouped(self.mean())}\n'
+        string += f'       {self.create_grouped(self.geomean())}'
+        return string
+
+    def __len__(self):
+        return len(self.data)
+
+
+    def __getitem__(self, index: int):
+        return self.data[index]
+
+    def keys(self):
+        """Retrieves keys that can be used for sorting."""
+        return self[0].keys()
+
+class Table_run(Base_table):
     def __init__(self, list_runs: list, include_lvl: bool):
         """Class listing full OR level runs.
             Args:
@@ -20,113 +92,21 @@ class Table_run:
             if include_lvl == bool(data["level"]):
                 self.data.append(Run(data))
             print(f"{no}/{len(list_runs)} runs processed!")
-
-    def __str__(self):
-        """Uses self.str_sum, selt.str_mean and self.str_geomean.
-            Had to create methods for these three option so that
-            PB can inherit from this class easily.
-            """
-        string = "-------" + "-" * len(str(self.data[0])) + "\n"
-        for index, object in enumerate(self.data, start=1):
-            string += f"{index:>4}   {str(object)}\n"
-        string += "-------" + "-" * len(str(object)) + "\n"
-        string += f"  ∑    {self.str_sum()}\n"
-        string += f"Mea    {self.str_mean()}\n"
-        string += f"geo    {self.str_geomean()}\n"
-        return string
-
-    def __len__(self):
-        return len(self.data)
-
-    def keys(self):
-        """Retrieves keys that can be used for sorting."""
-        return self[0].keys()
-
-    def __getitem__(self, index: int):
-        return self.data[index]
-
-    def count(self, clé: str) -> int:
-        """Calculate the total of the given field.
-            If the field is a set (namely the series),
-            or a string (game, level, system, category...),
-            all values are grouped in a set to exclude duplicates.
-            Then the length of the set is returned.
-            If the field is a Time or a int, the sum is calculated.
-            """
-        if isinstance(self[0][clé], str) or clé == "release":
-            return len(set(x[clé] for x in self.data))
-        elif isinstance(self[0][clé], set):
-            return len(set().union(*[x[clé] for x in self.data]))
-        elif isinstance(self[0][clé], (int, float, Time)):
-            return sum(x[clé] for x in self.data)
-
-    def str_sum(self) -> str:
-        """returns a string representing the summation of the table.
-            Uses the count method."""
-
-        def max_len(tostr):
-            return len(str(tostr))
-
-        system = f'{self.count("system")} systems'
-        game = f'{self.count("game")} games'
-        categories = f'{self.count("category")} categories'
-        times = f'{self.count("time")}'
-
-        string = f"{system[:max_len(self[0].system)]:{max_len(self[0].system)}}"
-        string += f"   {game:<30}"
-        string += f"   {categories:<20}"
-        string += f"   {times}"
-
-        return string
-
-    def str_mean(self) -> str:
-        """returns a string representing the arithmetic mean of the table.
-            -> For values that were strings in the mean, the total
-                number is divided by this value. to represent the
-                mean of game per run.
-                    formula : (# of runs)/ value
-            -> For values that were Time, int or float, the mean is calculated as usual.
-            Uses the count method."""
-
-        def max_len(tostr):
-            return len(str(tostr))
-
-        system = f'{round(len(self) / self.count("system"), 2)} systems'
-        game = f'{round(len(self) / self.count("game"),2)} games'
-        categories = f'{round(len(self) / self.count("category"),2)} categories'
-        times = f"{Time(mean([x.time.seconds for x in self.data]))}"
-
-        string = f"{system[:max_len(self[0].system)]:{max_len(self[0].system)}}"
-        string += f"   {game:<30}"
-        string += f"   {categories:<20}"
-        string += f"   {times}"
-
-        return string
-
-    def str_geomean(self) -> str:
-        """returns a string representing the geometric mean of the table. A geometric mean,
-            according to my uninformed research, is less sensitive to extreme values and could be a good
-            mean if a runner has some outliners. Only the int, float or Time values
-            are calculated.
-
-            Uses the count method."""
-
-        def max_len(tostr):
-            return len(str(tostr))
-
-        times = f"{Time(geomean([x.time.seconds for x in self.data]))}"
-
-        string = f'{"":{max_len(self[0].system) + 56}}'
-        string += f"   {times}"
-
-        return string
-
-
+    
     def pie(self):
             window_handler(self.data, Pie_app)
 
     def histo(self):
             window_handler(self.data, Histo_app)
+
+    def create_grouped(self, infos):
+        sum_class = deepcopy(self[0])
+        sum_class.gamecat.game.game = f''
+        sum_class.gamecat.category = f''
+        sum_class.gamecat.subcategory = ""
+        sum_class.time = f'{Time(infos["time"])}'
+        sum_class.system.system = f''
+        return sum_class
 
 
 class Table_pb(Table_run):
@@ -137,26 +117,10 @@ class Table_pb(Table_run):
                 self.data.append(PB(data))
             print(f"{no}/{len(list_runs)} PBs processed!")
 
-    def str_sum(self):
-        sum_delta = str(Time(sum([x.delta.seconds for x in self.data])))
-        sum_place = sum([x.leaderboard.place for x in self.data])
-        sum_lb = sum([len(x.leaderboard) for x in self.data])
-        sum_perc = sum([x.time.seconds for x in self.data])/sum([x["WR"].seconds for x in self.data])
-        sum_lb_perc = (sum_lb - sum_place)/sum_lb
-        return super().str_sum() + f' +{str(sum_delta).lstrip()} ({sum_perc:.2%})  {sum_place:>4}/{sum_lb:<4} ({sum_lb_perc:.2%})'
 
-    def str_mean(self):
-        sum_delta = str(Time(mean([x.delta.seconds for x in self.data])))
-        sum_place = int(mean([x.leaderboard.place for x in self.data]))
-        sum_lb = int(mean([len(x.leaderboard) for x in self.data]))
-        sum_perc = mean([x.time.seconds for x in self.data])/mean([x["WR"].seconds for x in self.data])
-        sum_lb_perc = (sum_lb - sum_place)/sum_lb
-        return super().str_mean() + f' +{str(sum_delta).lstrip()} ({sum_perc:.2%})  {sum_place:>4}/{sum_lb:<4} ({sum_lb_perc:.2%})'
+    def create_grouped(self, infos):
+        sum_class = super().create_grouped(infos)
+        sum_class.delta = Time(infos["delta"])
+        sum_class.perc = 9
 
-    def str_geomean(self):
-        sum_delta = str(Time(geomean([x.delta.seconds for x in self.data if x.delta.seconds != 0])))
-        sum_place = int(geomean([x.leaderboard.place for x in self.data]))
-        sum_lb = int(geomean([len(x.leaderboard) for x in self.data]))
-        sum_perc = geomean([x.time.seconds for x in self.data])/geomean([x["WR"].seconds for x in self.data])
-        sum_lb_perc = (sum_lb - sum_place)/sum_lb
-        return super().str_geomean() + f' +{str(sum_delta).lstrip()} ({sum_perc:.2%})  {sum_place:>4}/{sum_lb:<4} ({sum_lb_perc:.2%})'
+        return sum_class

@@ -114,7 +114,10 @@ class Time:
     def __init__(self, total_seconds: int):
         """Class created mainly to handle the stringing of the times. 
             Stores the total seconds internally as int."""
-        self.seconds:int = total_seconds
+        self.seconds:[int,float] = total_seconds
+
+    def __float__(self):
+        return float(self.seconds)
 
     def __str__(self):
         return f"{int(self.seconds)//3600:>3}:{int(self.seconds) % 3600 // 60:02}:{int(self.seconds) % 3600 % 60 % 60:02}"
@@ -148,7 +151,9 @@ class System:
         self.system: str = api.system(system_id)
 
     def __str__(self):
-        return f'{"".join([x for x in self.system if x.isupper()]):^3}'
+        if any([x.isupper() for x in self.system]):
+            return f'{"".join([x for x in self.system if x.isupper()])[:3]:^3}'
+        return f'{self.system[:3]:^3}'
 
     def keys(self) -> list[str]:
         """Returns retrievable informations about system.
