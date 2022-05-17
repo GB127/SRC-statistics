@@ -12,6 +12,7 @@ from PyQt5.QtWidgets import (
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import matplotlib
 import matplotlib.pyplot as plt
+from code_SRC.composantes import Time
 
 
 class Histo_app(QWidget):
@@ -60,9 +61,10 @@ class Histo_app(QWidget):
             """
             def filters():
                 clés = []
-                for x, value in self.data[0].items():
-                    if isinstance(value, (int, float)):
+                for x in self.data[0].keys():
+                    if isinstance(self.data[0][x], (int, float, Time)):
                         clés.append(x)
+
                 return clés
 
             self.options = QComboBox()
@@ -101,7 +103,8 @@ class Histo_app(QWidget):
 
     def update_plot(self):
         def trim_data(to_trim):
-
+            if isinstance(to_trim[0], Time):
+                to_trim = [x.seconds for x in to_trim]
             if len(set(to_trim)) == 1:
                 return to_trim
             IQ1, IQ2, IQ3 = quantiles(to_trim)
@@ -124,14 +127,14 @@ class Histo_app(QWidget):
             self.ax.set_xticks(
                 arange(min(to_plot), max(to_plot), (max(to_plot) - min(to_plot)) / 5))
 
-            if str(self.options.currentText()) in ["time", "delta WR", "WR time"]:
+            if str(self.options.currentText()) in ["time", "delta"]:
                 time_str = (lambda x: f"{int(x//3600):>3}:{int(x) % 3600 // 60:02}:{int(x) % 3600 % 60 % 60:02}")
                 self.ax.set_xticklabels(
                                         [time_str(float(x)) for x in self.ax.get_xticks()],
                     horizontalalignment="center",
                 )
 
-            elif str(self.options.currentText()) in ["WR %", "LB %"]:
+            elif str(self.options.currentText()) in ["perc", "perc_lb"]:
                 perc_str = lambda x: f"{x:.1%}"
                 self.ax.set_xticklabels(
                     [perc_str(float(x)) for x in self.ax.get_xticks()],
@@ -166,7 +169,10 @@ class Histo_app(QWidget):
             for index, data in enumerate(self.data):
                 test = self.listwidget.item(index)
                 test.setBackground(QColor(142, 250, 171))
-                if data[str(self.options.currentText())] not in to_plot:
+                if str(self.options.currentText()) in ["time", "delta"]:
+                    if data[str(self.options.currentText())].seconds not in to_plot:
+                        test.setBackground(QColor(252, 154, 149))
+                elif data[str(self.options.currentText())] not in to_plot:
                     test.setBackground(QColor(252, 154, 149))
 
 

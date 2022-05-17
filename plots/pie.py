@@ -8,6 +8,7 @@ from PyQt5.QtGui import QFont, QColor
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import matplotlib
 import matplotlib.pyplot as plt
+from code_SRC.composantes import Time
 from copy import copy
 
 
@@ -58,10 +59,10 @@ class Pie_app(QWidget):
 
             def filters():
                 clés = []
-                for x, value in self.data[0].items():
+                for x in self.data[0].keys():
                     if x in ["category", "subcat", "leaderboard"]:
                         continue
-                    elif not isinstance(value, (int, float)):
+                    elif not isinstance(self.data[0][x], (int, float)):
                         clés.append(x)
                 return clés
 
@@ -73,12 +74,8 @@ class Pie_app(QWidget):
         def pie_sommation():
             def filters():
                 clés = []
-                for x, value in self.data[0].items():
-                    if "%" in x:
-                        continue
-                    elif x in ["leaderboard", "place"]:
-                        continue
-                    elif isinstance(value, (int, float)):
+                for x in self.data[0].keys():
+                    if isinstance(self.data[0][x], (int, float, Time)):
                         clés.append(x)
                 return clés
 
@@ -105,11 +102,11 @@ class Pie_app(QWidget):
             def initial_count():
                 count = {}
                 for x in self.data:
-                    count[x[filter]] = count.get(x[filter], 0) + (
-                        1
-                        if str(self.options.currentText()) == "count"
-                        else x[str(self.options.currentText())]
-                    )
+                    if str(self.options.currentText()) == "count":
+                        value = 1
+                    elif str(self.options.currentText()) in ["time", "delta"]:
+                        value = x[str(self.options.currentText())].seconds
+                    count[x[filter]] = count.get(x[filter], 0) + value
                 return count
 
             def remove_small(count):

@@ -56,11 +56,6 @@ class api:
             req = requester(f'{api.URL}users/{username}')
             return req["data"]["id"]
 
-    def user_runs(user_id:str) -> list:
-        req = requester(f'{api.URL}runs?user={user_id}&max=200')
-        return req["data"]
-
-
     @staticmethod
     def game(id):  #TODO : Embed thing with series so we avoid to duplicate requests
         def serie(links):
@@ -72,3 +67,21 @@ class api:
             return toreturn
         req = requester(api.URL + f'games/{id}')
         return req["data"]["names"]["international"], req["data"]["released"], serie(req["data"]["links"])
+
+    def user_runs(user_id:str) -> list:
+        def recursive_request(link):
+            print(link)
+            req = requester(link)
+            runs = req["data"]
+            if not req["pagination"]["links"]:
+                return runs
+            elif req["pagination"]["links"][-1]["rel"] != "next":
+                return runs
+            return runs + recursive_request(req["pagination"]["links"][-1]["uri"])
+        link = f'{api.URL}runs?user={user_id}&max=200'
+        return recursive_request(link)
+
+if __name__ == "__main__":
+    user_id = api.user_id("nordanix")
+    test = api.user_runs(user_id)
+    print(len(test))

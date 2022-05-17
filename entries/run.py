@@ -16,6 +16,7 @@ class Run:
     def keys(self):
         return list(self.gamecat.keys()) + list(self.system.keys()) + ["time"]
 
+
     def __str__(self):
         return f'{self.system}   {self.gamecat}   {self.time}'
 
@@ -26,9 +27,15 @@ class PB(Run):
         self.delta = self.time - self.leaderboard["WR"]  #FIXME : self["WR"] instead
         self.perc = self.time / self.leaderboard["WR"]
 
+    def keys(self):
+        return super().keys() + ["delta", "perc", "perc_lb"]
+
+
     def __getitem__(self, clé):
         if clé == "WR":
             return self.leaderboard[0]
+        elif clé == "perc_lb":
+            return (len(self.leaderboard) - self.leaderboard.place)/len(self.leaderboard)
         return super().__getitem__(clé)
     def __str__(self):
         return f'{super().__str__()} +{str(self.delta).lstrip()} ({self.perc:.2%})  {str(self.leaderboard)}'

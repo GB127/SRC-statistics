@@ -1,6 +1,9 @@
 from entries.run import PB, Run
 from code_SRC.composantes import Time
 from statistics import mean, geometric_mean as geomean
+from plots.handler import window_handler
+from plots.histo import Histo_app
+from plots.pie import Pie_app
 
 
 class Table_run:
@@ -117,6 +120,13 @@ class Table_run:
         string += f"   {times}"
 
         return string
+
+
+    def pie(self):
+            window_handler(self.data, Pie_app)
+
+    def histo(self):
+            window_handler(self.data, Histo_app)
 
 
 class Table_pb(Table_run):
