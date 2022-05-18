@@ -22,6 +22,10 @@ class Table_run(Base_table):
                 self.data.append(Run(data))
             print(f"{no}/{len(list_runs)} runs processed!")
     
+    def methods(self):
+        return  self.pie, self.histo
+
+
     def pie(self):
             window_handler(self.data, Pie_app)
 

@@ -3,10 +3,26 @@ from statistics import fmean, geometric_mean as geomean
 from math import fsum
 from collections import Counter
 from itertools import chain
+from os import system as text_terminal
+
+clear = lambda: text_terminal('cls')
 
 class Base_table:
     def __init__(self):
         raise BaseException("This table can't be created : need to go by the childs")
+
+    def __call__(self):
+        while True:
+            clear()
+            print(self)
+            print("\n")
+
+            for index, fx in enumerate(self.methods()):
+                print(index, fx.__name__)
+            command = input(f"Select option: [0-{len(self.methods()) -1}] | Type end to exit\nInput : ")
+            if command == "end":
+                break
+            self.methods()[int(command)]()
 
 
     def group_attr(self)->dict:
