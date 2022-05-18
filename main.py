@@ -7,6 +7,6 @@ from PySide6.QtWidgets
 Et c'est quasi clef en main
 """
 
-test = User(input("Which user?"))
-# test = User("niamek")
-print(test.pbs)
+# test = User(input("Which user?"))
+test = User("libre")
+print(test.pbs.pie())

@@ -62,7 +62,7 @@ class Pie_app(QWidget):
                 for x in self.data[0].keys():
                     if x in ["category", "subcat", "leaderboard"]:
                         continue
-                    elif not isinstance(self.data[0][x], (int, float)):
+                    elif not isinstance(self.data[0][x], (int, float, Time)):
                         clés.append(x)
                 return clés
 

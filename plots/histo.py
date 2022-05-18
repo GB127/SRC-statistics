@@ -104,7 +104,7 @@ class Histo_app(QWidget):
     def update_plot(self):
         def trim_data(to_trim):
             if isinstance(to_trim[0], Time):
-                to_trim = [x.seconds for x in to_trim]
+                to_trim = [float(x) for x in to_trim]
             if len(set(to_trim)) == 1:
                 return to_trim
             IQ1, IQ2, IQ3 = quantiles(to_trim)
@@ -170,7 +170,7 @@ class Histo_app(QWidget):
                 test = self.listwidget.item(index)
                 test.setBackground(QColor(142, 250, 171))
                 if str(self.options.currentText()) in ["time", "delta"]:
-                    if data[str(self.options.currentText())].seconds not in to_plot:
+                    if float(data[str(self.options.currentText())]) not in to_plot:
                         test.setBackground(QColor(252, 154, 149))
                 elif data[str(self.options.currentText())] not in to_plot:
                     test.setBackground(QColor(252, 154, 149))
