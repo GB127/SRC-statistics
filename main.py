@@ -8,5 +8,5 @@ Et c'est quasi clef en main
 """
 
 # test = User(input("Which user?"))
-test = User("libre")
-print(test.pbs.pie())
+test = User("niamek")
+test()
