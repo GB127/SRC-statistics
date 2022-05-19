@@ -1,9 +1,11 @@
 from code_SRC.composantes import Time
-from statistics import fmean, geometric_mean as geomean
+from statistics import fmean, geometric_mean as geomean, mean
 from math import fsum
 from collections import Counter
 from itertools import chain
 from os import system as text_terminal
+
+from tables.leaderboard import LB
 
 clear = lambda: text_terminal('cls')
 
@@ -30,7 +32,7 @@ class Base_table:
         for clé in self.keys():
             if isinstance(self[0][clé], set):
                 dicto_sets[clé] = Counter(chain(*[x[clé] for x in self.data]))
-            elif isinstance(self[0][clé], (Time, int, float)):
+            elif isinstance(self[0][clé], (Time, int, float, LB)):
                 dicto_sets[clé] = list(x[clé] for x in self.data)
             else:
                 dicto_sets[clé] = Counter(x[clé] for x in self.data)
@@ -43,6 +45,8 @@ class Base_table:
         for clé in self.keys():
             if isinstance(self[0][clé], (int, float, Time)):
                 dicto_sum[clé] = fsum(dicto_groups[clé])
+            elif isinstance(self[0][clé], LB):
+                continue
             else:
                 dicto_sum[clé] = len(dicto_groups[clé])
         return dicto_sum
@@ -53,6 +57,8 @@ class Base_table:
         for clé in self.keys():
             if isinstance(self[0][clé], (int, float, Time)):
                 dicto_mean[clé] = fmean(dicto_groups[clé])
+            elif isinstance(self[0][clé], LB):
+                continue
             else:
                 dicto_mean[clé] = len(dicto_groups[clé]) / len(self)
         return dicto_mean
@@ -63,6 +69,8 @@ class Base_table:
         for clé in self.keys():
             if isinstance(self[0][clé], (int, float, Time)):
                 dicto_mean[clé] = geomean([float(x) for x in dicto_groups[clé] if float(x) > 0])
+            elif isinstance(self[0][clé], LB):
+                continue
             else:
                 dicto_mean[clé] = len(self) / len(dicto_groups[clé])
         return dicto_mean

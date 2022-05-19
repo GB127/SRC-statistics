@@ -1,8 +1,12 @@
 from requests import get
 
 def requester(link):
-    data = get(link).json()
-    return data
+    try:
+        data = get(link).json()
+        data["data"]
+        return data
+    except:
+        raise BaseException(data)
 
 class api:
     """api class to manage all requests. Stores data in a database.
@@ -16,8 +20,10 @@ class api:
 
 
     def system(id):
-        req = requester(api.URL + f'platforms/{id}')
-        return req["data"]["name"]
+        if id:
+            req = requester(api.URL + f'platforms/{id}')
+            return req["data"]["name"]
+        return ""
 
     def level(id):
         req = requester(api.URL + f'levels/{id}')

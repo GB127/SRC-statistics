@@ -4,8 +4,10 @@ from plots.handler import window_handler
 from plots.histo import Histo_app
 from plots.pie import Pie_app
 from copy import deepcopy
+from statistics import mean, geometric_mean as geomean
 from tables.base import Base_table
-
+import itertools
+import warnings
 
 class Table_run(Base_table):
     def __init__(self, list_runs: list, include_lvl: bool):
@@ -37,7 +39,7 @@ class Table_run(Base_table):
         sum_class.gamecat.game.game = f''
         sum_class.gamecat.category = f''
         sum_class.gamecat.subcategory = ""
-        sum_class.time = f'{Time(infos["time"])}'
+        sum_class.time = Time(infos["time"])
         sum_class.system.system = f''
         return sum_class
 
@@ -51,9 +53,60 @@ class Table_pb(Table_run):
             print(f"{no}/{len(list_runs)} PBs processed!")
 
 
+    def sum(self):
+        def new_ranking():
+            return list(itertools.chain(*[x.leaderboard.ranking for x in self.data]))
+        def new_place():
+            return sum([x.leaderboard.place for x in self.data])
+        def new_WR():
+            return sum([x.leaderboard.WR for x in self.data])
+        LB_copy = deepcopy(self.data[0].leaderboard)
+        dicto = super().sum()
+        LB_copy.ranking = new_ranking()
+        LB_copy.place = new_place()
+        LB_copy.WR = new_WR()
+        dicto["leaderboard"] = LB_copy
+        return dicto
+
+    def mean(self):
+        def new_ranking():
+            new_len = int(mean([len(x.leaderboard) for x in self.data]))
+            return list(itertools.chain(*[x.leaderboard.ranking for x in self.data]))[:new_len]
+
+        def new_place():
+            return int(mean([x.leaderboard.place for x in self.data]))
+        def new_WR():
+            return mean([x.leaderboard.WR for x in self.data])
+        LB_copy = deepcopy(self.data[0].leaderboard)
+        dicto = super().mean()
+        LB_copy.ranking = new_ranking()
+        LB_copy.place = new_place()
+        LB_copy.WR = new_WR()
+        dicto["leaderboard"] = LB_copy
+        return dicto
+
+    def geomean(self):
+        def new_ranking():
+            new_len = int(geomean([len(x.leaderboard) for x in self.data]))
+            return list(itertools.chain(*[x.leaderboard.ranking for x in self.data]))[:new_len]
+        def new_place():
+            return int(geomean([x.leaderboard.place for x in self.data]))
+        def new_WR():
+            return geomean([x.leaderboard.WR for x in self.data])
+        LB_copy = deepcopy(self.data[0].leaderboard)
+        dicto = super().geomean()
+        LB_copy.ranking = new_ranking()
+        LB_copy.place = new_place()
+        LB_copy.WR = new_WR()
+        dicto["leaderboard"] = LB_copy
+        return dicto
+
+
+
+
     def create_grouped(self, infos):
         sum_class = super().create_grouped(infos)
         sum_class.delta = Time(infos["delta"])
-        sum_class.perc = 9
-
+        sum_class.leaderboard = infos["leaderboard"]
+        sum_class.perc = sum_class.time / sum_class.leaderboard["WR"]
         return sum_class

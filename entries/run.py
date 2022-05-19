@@ -28,12 +28,14 @@ class PB(Run):
         self.perc = self.time / self.leaderboard["WR"]
 
     def keys(self):
-        return super().keys() + ["delta", "perc", "perc_lb"]
+        return super().keys() + ["delta", "perc", "perc_lb", "leaderboard"]
 
 
     def __getitem__(self, clé):
         if clé == "WR":
             return self.leaderboard[0]
+        elif clé == "leaderboard":
+            return self.leaderboard
         elif clé == "perc_lb":
             return (len(self.leaderboard) - self.leaderboard.place)/len(self.leaderboard)
         return super().__getitem__(clé)

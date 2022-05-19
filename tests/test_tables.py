@@ -2,7 +2,7 @@ from requests_mock import Mocker
 from entries.run import Run
 from code_SRC.composantes import Time
 from tests.class_builder import build_lb_l, build_lb, build_run, build_table_pb, build_table_run
-
+import warnings
 class Test_table_base:
     # Uses Table_run as a base.
     def test_str(self, requests_mock:Mocker):
@@ -47,10 +47,10 @@ class Test_table_base:
 class Test_LB:
     def test_init(self, requests_mock:Mocker):
         test = build_lb_l(requests_mock)
-        assert test.__dict__ == {"ranking":tuple(5421 + x for x in range(1, 11)), "place":1}
+        assert test.__dict__ == {"WR" : 5422, "ranking":tuple(5421 + x for x in range(1, 11)), "place":1}
 
         test = build_lb(requests_mock)
-        assert test.__dict__ == {"ranking":tuple(5421 + x for x in range(1, 11)), "place":1}
+        assert test.__dict__ == {"WR" : 5422, "ranking":tuple(5421 + x for x in range(1, 11)), "place":1}
     def test_len(self,  requests_mock:Mocker):
         test = build_lb(requests_mock)
         assert len(test) == 10
@@ -63,15 +63,30 @@ class Test_LB:
         test = build_lb(requests_mock)
         assert test["WR"] == Time(5422), f'Time({test["WR"].seconds})'
 
-
 class Test_table_runs:
     def test_init(self, requests_mock:Mocker):
         test = build_table_run(requests_mock)
         assert "data" in test.__dict__.keys() and isinstance(test.__dict__["data"], list)
         assert isinstance(test.__dict__["data"][0], Run)
 
-    def test_init(self, requests_mock:Mocker):
+    def test_str(self, requests_mock:Mocker):
         test = build_table_run(requests_mock)
         assert str(test.create_grouped(test.sum())) in str(test)
         assert str(test.create_grouped(test.geomean())) in str(test)
         assert str(test.create_grouped(test.mean())) in str(test)
+
+
+class Test_table_pbs:
+    def test_groupeds_no_errors(self, requests_mock:Mocker):
+        test = build_table_pb(requests_mock)
+        test.sum()
+        test.geomean()
+        test.mean()
+
+    def test_groupeds_check(self, requests_mock:Mocker):
+        test = build_table_pb(requests_mock)
+        test_initial = test[0]
+        for no, calculated in enumerate(map(test.create_grouped, [test.sum(),test.mean(), test.geomean()])):
+            for attribute_to_change in ["game", "system", "category","leaderboard"]:
+                assert test_initial[attribute_to_change] != calculated[attribute_to_change], f'{attribute_to_change} is wrong on {["sum", "mean", "geomean"][no]} {calculated[attribute_to_change]} == {test_initial[attribute_to_change]}'
+        assert test.create_grouped(test.sum()).time != test_initial.time
