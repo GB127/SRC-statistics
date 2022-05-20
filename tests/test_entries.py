@@ -44,18 +44,6 @@ class Test_PB:
         assert test["WR"] == Time(5422), f'{test["WR"]} == {Time(5422)}'
 
 
-    def test_str_lb(self, requests_mock:Mocker):
-        test = build_pb_l(requests_mock)
-        for time_sec in range(5422, 5432):
-            assert str(Time(time_sec)) in test.str_lb(), f'{Time(time_sec)} in...\n{test.str_lb()}'
-        assert "<---Runner" in test.str_lb()
-        assert "<---G" in test.str_lb()
-        assert "<---M" in test.str_lb()
-
-
-        assert str(Time(sum(range(5422, 5432)))) in test.str_lb(), f'sum in...\n{test.str_lb()}'
-        assert str(Time(mean(range(5422, 5432)))) in test.str_lb(), f'mean in...\n{test.str_lb()}'
-        assert str(Time(geomean(range(5422, 5432)))) in test.str_lb(), f'geomean in...\n{test.str_lb()}'
 
     def test_str(self, requests_mock:Mocker):
         test = build_pb_l(requests_mock)

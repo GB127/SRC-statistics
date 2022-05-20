@@ -125,7 +125,7 @@ class Histo_app(QWidget):
                 return
 
             self.ax.set_xticks(
-                arange(min(to_plot), max(to_plot), (max(to_plot) - min(to_plot)) / 5))
+                arange(min(to_plot), max(to_plot), (max(to_plot) - min(to_plot)) / 5)[1:])
 
             if str(self.options.currentText()) in ["time", "delta"]:
                 time_str = (lambda x: f"{int(x//3600):>3}:{int(x) % 3600 // 60:02}:{int(x) % 3600 % 60 % 60:02}")

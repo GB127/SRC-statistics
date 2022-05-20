@@ -43,8 +43,8 @@ class Test_hist:
     def test_x_axes_time(self, qtbot):
         widget = Histo_app(Test_hist.data)
         qtbot.addWidget(widget)
+        widget.canvas.figure.savefig("tests/plots/histo_time")
         assert list(widget.canvas.figure.gca().get_xticks()) == [x for x in arange(60,60 * 3, 120 / 5)][1:]
-        widget.canvas.figure.savefig("tests/histo_time")
 
     def test_with_outsiders_data(self, qtbot):
         Test_hist.data.append({"time":600000, "str":str(2), "place":44444444, "str2": str(2), "WR %":333333})

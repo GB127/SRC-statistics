@@ -114,4 +114,4 @@ class Table_pb(Table_run):
 
     def open_leaderboard(self):
         command = input(f"Which leaderboard? [0-{len(self) -1}] ")
-        self[int(command) -1]()
+        self[int(command) -1].leaderboard()

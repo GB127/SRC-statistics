@@ -75,7 +75,9 @@ class Pie_app(QWidget):
             def filters():
                 clés = []
                 for x in self.data[0].keys():
-                    if isinstance(self.data[0][x], (int, float, Time)):
+                    if x in ["perc", "perc_LB"]:
+                        continue
+                    elif isinstance(self.data[0][x], (int, float, Time)):
                         clés.append(x)
                 return clés
 
@@ -97,7 +99,7 @@ class Pie_app(QWidget):
 
     def update_plot(self):
         filter = str(self.filter.currentText())
-
+        # raise BaseException(plt.rcParams['axes.prop_cycle'].by_key()['color'])
         def count_data():
             def initial_count():
                 count = {}
@@ -143,12 +145,28 @@ class Pie_app(QWidget):
         self.canvas.figure.clf()
         self.ax = self.canvas.figure.subplots()
         graphique_data = self.ax.pie(
-            count_data().values(),
-            labels=count_data().keys(),
-            startangle=90,
-            autopct="%1.1f%%",
-        )
+                                        count_data().values(),
+                                        labels=count_data().keys(),
+                                        startangle=90,
+                                        autopct="%1.1f%%",
+                                    )
+        update_listwidget()
+
+        #raise BaseException(dir(graphique_data[1][0]))
+        if any([len(x.get_text())>=10 for x in graphique_data[1]]):
+            print([len(x.get_text())>=10 for x in graphique_data[1]])
+            self.canvas.figure.clf()
+            self.ax = self.canvas.figure.subplots()
+
+            self.ax.pie(
+                                        count_data().values(),
+                                        startangle=90,
+                                        autopct="%1.1f%%",
+                                    )
+            self.canvas.draw()
+            #raise BaseException("OOoh")
+        # for x in graphique_data[1]])
+
 
         self.ax.set_title(f"{self.data[0].__class__.__name__}s - {filter}")
         self.canvas.draw()
-        update_listwidget()

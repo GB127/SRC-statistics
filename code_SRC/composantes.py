@@ -114,7 +114,7 @@ class Time:
     def __init__(self, total_seconds: int):
         """Class created mainly to handle the stringing of the times. 
             Stores the total seconds internally as int."""
-        self.seconds:[int,float] = total_seconds
+        self.seconds:float = total_seconds
 
     def __float__(self):
         return float(self.seconds)
