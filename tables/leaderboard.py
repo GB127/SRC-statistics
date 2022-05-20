@@ -10,6 +10,7 @@ class LB:
             self.ranking = tuple(api.leaderboard(game_id, category_id, subcat_ids))
         self.place = place
         self.WR = self.ranking[0]
+
     def __str__(self):
         return f'{self.place:>4}/{len(self):<4} ({(len(self) - self.place)/len(self):6.2%})'
     def __len__(self):

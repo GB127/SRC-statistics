@@ -7,7 +7,6 @@ from copy import deepcopy
 from statistics import mean, geometric_mean as geomean
 from tables.base import Base_table
 import itertools
-import warnings
 
 class Table_run(Base_table):
     def __init__(self, list_runs: list, include_lvl: bool):
@@ -51,6 +50,9 @@ class Table_pb(Table_run):
             if include_lvl == bool(data["run"]["level"]):
                 self.data.append(PB(data))
             print(f"{no}/{len(list_runs)} PBs processed!")
+
+    def methods(self):
+        return  self.pie, self.histo, self.open_leaderboard
 
 
     def sum(self):
@@ -102,11 +104,14 @@ class Table_pb(Table_run):
         return dicto
 
 
-
-
     def create_grouped(self, infos):
         sum_class = super().create_grouped(infos)
         sum_class.delta = Time(infos["delta"])
         sum_class.leaderboard = infos["leaderboard"]
         sum_class.perc = sum_class.time / sum_class.leaderboard["WR"]
         return sum_class
+
+
+    def open_leaderboard(self):
+        command = input(f"Which leaderboard? [0-{len(self) -1}] ")
+        self[int(command) -1]()
