@@ -1,7 +1,7 @@
 from copy import deepcopy
 from code_SRC.api import api
 from code_SRC.composantes import Time
-from statistics import mean, geometric_mean as geomean
+from statistics import mean, geometric_mean as geomean, median
 
 class LB:
     def __init__(self,place, game_id, level_id, category_id, subcat_ids):
@@ -32,6 +32,11 @@ class LB:
     
     
     def str_lb(self):
+        def median_index():
+            differences = [abs(x - median(self.ranking)) for x in self.ranking]
+            median_ind = differences.index(min(differences))
+            return median_ind
+
         def mean_index():
             differences = [abs(x - mean(self.ranking)) for x in self.ranking]
             mean_ind = differences.index(min(differences))
@@ -50,10 +55,15 @@ class LB:
                 string += "<---Mean"
             if rank - 1  == geomean_index():
                 string += "<---Geomean"
+            if rank - 1  == median_index():
+                string += "<---Median"
+
             string += "\n"
         string += f'Sum    {Time(sum(self.ranking))}\n'
         string += f'Mean   {Time(mean(self.ranking))}\n'
-        string += f'Geomean{Time(geomean(self.ranking))}'
+        string += f'Geomean{Time(geomean(self.ranking))}\n'
+        string += f'Median{Time(median(self.ranking))}'
+
         return string
 
 

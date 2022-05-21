@@ -2,7 +2,7 @@ from requests_mock import Mocker
 from entries.run import Run
 from code_SRC.composantes import Time
 from tests.class_builder import build_lb_l, build_lb, build_run, build_table_pb, build_table_run
-from statistics import mean, geometric_mean as geomean
+from statistics import mean, geometric_mean as geomean, median
 
 
 class Test_table_base:
@@ -63,11 +63,17 @@ class Test_LB:
         for time_sec in range(5422, 5432):
             assert str(Time(time_sec)) in test.str_lb(), f'{Time(time_sec)} in...\n{test.str_lb()}'
         assert "<---Runner" in test.str_lb()
-        assert "<---G" in test.str_lb()
-        assert "<---M" in test.str_lb()
+        assert "<---Geomean" in test.str_lb()
+        assert "<---Median" in test.str_lb()
+        assert "<---Mean" in test.str_lb()
+
         assert str(Time(sum(range(5422, 5432)))) in test.str_lb(), f'sum in...\n{test.str_lb()}'
         assert str(Time(mean(range(5422, 5432)))) in test.str_lb(), f'mean in...\n{test.str_lb()}'
         assert str(Time(geomean(range(5422, 5432)))) in test.str_lb(), f'geomean in...\n{test.str_lb()}'
+        assert str(Time(median(range(5422, 5432)))) in test.str_lb(), f'Median in...\n{test.str_lb()}'
+
+
+
 
     def test_str(self,  requests_mock:Mocker):
         test = build_lb(requests_mock)
