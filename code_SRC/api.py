@@ -53,14 +53,14 @@ class api:
         return [x["run"]["times"]["primary_t"] for x in req["data"]["runs"]]
 
     def user_id(username:str) -> str:
-            """Makes a request to the SRC API to retrieve the ID of the given username.
-            Args:
-                username (str): Username
-            Returns:
-                str: ID of the username
-            """
-            req = requester(f'{api.URL}users/{username}')
-            return req["data"]["id"]
+        """Makes a request to the SRC API to retrieve the ID of the given username.
+        Args:
+            username (str): Username
+        Returns:
+            str: ID of the username
+        """
+        req = requester(f'{api.URL}users/{username}')
+        return req["data"]["id"]
 
     @staticmethod
     def game(id):  #TODO : Embed thing with series so we avoid to duplicate requests
