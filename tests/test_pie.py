@@ -1,10 +1,7 @@
-from PyQt5 import QtCore
-from plots.histo import Histo_app
 from plots.pie import Pie_app
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
-from PyQt5.QtWidgets import (   QListWidgetItem,    QGridLayout, QComboBox,
-                                QWidget,            QListWidget, QPushButton)
-from numpy import arange
+from PyQt5.QtWidgets import (QComboBox,
+                                            QListWidget)
 
 class Test_pie:
     data = [{"time":x*60, "str":str(x), "place":x*2, "game": "a" * (x+1), "series":{"allo" + str(x)}} for x in range(3)]
@@ -24,7 +21,7 @@ class Test_pie:
     def test_filter_options(self, qtbot):
         widget = Pie_app(Test_pie.data)
         qtbot.addWidget(widget)
-        assert widget.layout.itemAt(2).widget().count() == 4
+        assert widget.layout.itemAt(2).widget().count() == 3
 
     def test_long_game_names(self, qtbot):
         for x in range(3):

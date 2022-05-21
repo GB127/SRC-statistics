@@ -10,6 +10,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 from code_SRC.composantes import Time
 from copy import copy
+from collections import Counter
 
 
 class Pie_app(QWidget):
@@ -60,7 +61,7 @@ class Pie_app(QWidget):
             def filters():
                 clés = []
                 for x in self.data[0].keys():
-                    if x in ["category", "subcat", "leaderboard"]:
+                    if x in ["subcat", "leaderboard"]:
                         continue
                     elif not isinstance(self.data[0][x], (int, float, Time)):
                         clés.append(x)
@@ -75,7 +76,7 @@ class Pie_app(QWidget):
             def filters():
                 clés = []
                 for x in self.data[0].keys():
-                    if x in ["perc", "perc_LB"]:
+                    if x in ["perc", "perc_lb"]:
                         continue
                     elif isinstance(self.data[0][x], (int, float, Time)):
                         clés.append(x)
@@ -108,8 +109,14 @@ class Pie_app(QWidget):
                         value = 1
                     elif str(self.options.currentText()) in ["time", "delta"]:
                         value = x[str(self.options.currentText())].seconds
-                    count[x[filter]] = count.get(x[filter], 0) + value
+                    if isinstance(x[filter], set):
+                        for serie in x[filter]:
+                            count[serie] = count.get(serie, 0) + value
+                    else:
+                        count[x[filter]] = count.get(x[filter], 0) + value
                 return count
+                
+
 
             def remove_small(count):
                 for x in copy(count):
@@ -123,6 +130,7 @@ class Pie_app(QWidget):
             return remove_small(initial_count())
 
         def update_listwidget():
+            if filter in ["series"]: return  #FIXME
             def color_legend():
                 légende_couleurs = {}
                 for texte, couleur in zip(graphique_data[1], graphique_data[0]):
@@ -153,8 +161,7 @@ class Pie_app(QWidget):
         update_listwidget()
 
         #raise BaseException(dir(graphique_data[1][0]))
-        if any([len(x.get_text())>=10 for x in graphique_data[1]]):
-            print([len(x.get_text())>=10 for x in graphique_data[1]])
+        if any([len(x.get_text())>=15 for x in graphique_data[1]]):
             self.canvas.figure.clf()
             self.ax = self.canvas.figure.subplots()
 
@@ -162,6 +169,7 @@ class Pie_app(QWidget):
                                         count_data().values(),
                                         startangle=90,
                                         autopct="%1.1f%%",
+                                        labels = [x[:15] for x in count_data().keys()]
                                     )
             self.canvas.draw()
             #raise BaseException("OOoh")

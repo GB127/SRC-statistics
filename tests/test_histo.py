@@ -1,8 +1,7 @@
-from PyQt5 import QtCore
 from plots.histo import Histo_app
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
-from PyQt5.QtWidgets import (   QListWidgetItem,    QGridLayout, QComboBox,
-                                QWidget, QSpinBox,           QListWidget, QPushButton, QDoubleSpinBox)
+from PyQt5.QtWidgets import (      QComboBox,
+                                 QSpinBox,           QListWidget,  QDoubleSpinBox)
 from numpy import arange
 from code_SRC.composantes import Time
 
