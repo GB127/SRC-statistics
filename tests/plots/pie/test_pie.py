@@ -16,7 +16,7 @@ class Test_pie:
         assert [isinstance(widget.layout.itemAt(x).widget(), QComboBox) for x in range(widget.layout.count())].count(True) == 2
         assert widget.layout.count() == 4
             # Plot, List, Filter, Counting
-        widget.canvas.figure.savefig("tests/plots/pie")
+        widget.canvas.figure.savefig("tests/plots/pie/pie_reg")
 
     def test_filter_options(self, qtbot):
         widget = Pie_app(Test_pie.data)
@@ -28,4 +28,4 @@ class Test_pie:
             Test_pie.data[x]["str"] = "a" * (30 + x)
         widget = Pie_app(Test_pie.data)
         qtbot.addWidget(widget)
-        widget.canvas.figure.savefig("tests/plots/pie_long")
+        widget.canvas.figure.savefig("tests/plots/pie/pie_long")

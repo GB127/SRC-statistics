@@ -1,3 +1,4 @@
+import warnings
 from requests_mock import Mocker
 from entries.run import Run
 from code_SRC.composantes import Time
@@ -49,10 +50,17 @@ class Test_table_base:
 class Test_LB:
     def test_init(self, requests_mock:Mocker):
         test = build_lb_l(requests_mock)
-        assert test.__dict__ == {"WR" : 5422, "ranking":tuple(5421 + x for x in range(1, 11)), "place":1}
+        assert test.__dict__ == {"release": 2002, 'ids': ('game_id',
+                  'level_id',
+                  'category_id',
+                  [('subcat_id_t', 'selected_subcat')]), "WR" : 5422, "ranking":tuple(5421 + x for x in range(1, 11)), "place":1}
 
         test = build_lb(requests_mock)
-        assert test.__dict__ == {"WR" : 5422, "ranking":tuple(5421 + x for x in range(1, 11)), "place":1}
+        assert test.__dict__ == {"release": 2002, 
+                'ids': ('game_id',
+                  None,
+                  'category_id',
+                  [('subcat_id_t', 'selected_subcat')]), "WR" : 5422, "ranking":tuple(5421 + x for x in range(1, 11)), "place":1}
     def test_len(self,  requests_mock:Mocker):
         test = build_lb(requests_mock)
         assert len(test) == 10
@@ -70,9 +78,6 @@ class Test_LB:
         assert str(Time(sum(range(5422, 5432)))) in test.str_lb(), f'sum in...\n{test.str_lb()}'
         assert str(Time(mean(range(5422, 5432)))) in test.str_lb(), f'mean in...\n{test.str_lb()}'
         assert str(Time(geomean(range(5422, 5432)))) in test.str_lb(), f'geomean in...\n{test.str_lb()}'
-        assert str(Time(median(range(5422, 5432)))) in test.str_lb(), f'Median in...\n{test.str_lb()}'
-
-
 
 
     def test_str(self,  requests_mock:Mocker):

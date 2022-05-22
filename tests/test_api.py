@@ -1,10 +1,9 @@
 from code_SRC.api import api
-from entries.run import PB, Run
 from requests_mock.mocker import Mocker
 from tests.class_builder import req_mocker
 
 
-def off_test_nordanix():
+def test_nordanix():
     nordanix_id = api.user_id("nordanix")
     nordanix = api.user_runs(nordanix_id)
     assert len(nordanix) == 3765
@@ -21,6 +20,7 @@ class Test_api:
     def test_system(self, requests_mock:Mocker):
         req_mocker(requests_mock)
         assert api.system("system_id") == "Nintendo Entertainment System"
+        assert not api.system(None)
 
     def test_level(self, requests_mock:Mocker):
         req_mocker(requests_mock)
@@ -37,11 +37,8 @@ class Test_api:
 
     def test_leaderboard(self, requests_mock:Mocker):
         req_mocker(requests_mock)
-        assert api.leaderboard("game_id", "category_id", [("subcat_id_t", "selected_subcat")]) == list(range(5422,5432))
-
-    def test_leaderboard_l(self, requests_mock:Mocker):
-        req_mocker(requests_mock)
-        assert api.leaderboard_l("game_id","level_id", "category_id", [("subcat_id_t", "selected_subcat")]) == list(range(5422,5432))
+        assert api.leaderboard("game_id",None, "category_id", [("subcat_id_t", "selected_subcat")]) == list(range(5422,5432))
+        assert api.leaderboard("game_id","level_id", "category_id", [("subcat_id_t", "selected_subcat")]) == list(range(5422,5432))
 
     def test_user_id(self, requests_mock:Mocker):
         req_mocker(requests_mock)
@@ -56,3 +53,10 @@ class Test_api:
         for run in api.user_runs("user_id"):
             for clé in ["game", "category", "times", "system", "values", "level", "date", "status"]:
                     assert clé in run
+
+    def test_past_lb(self, requests_mock:Mocker):
+        # NOTE : I don't know why my requests still works even if I did not defined a link. Only the data type are validated.
+        req_mocker(requests_mock)
+        for year, ranking in api.past_lb(2002, "game_id", "level_id", "category_id", [("subcat_id_t", "selected_subcat")]).items():
+            assert isinstance(year, int) and isinstance(ranking, list)
+            assert all([isinstance(x, int) for x in ranking])

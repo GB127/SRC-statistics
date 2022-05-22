@@ -42,7 +42,7 @@ class Test_hist:
     def test_x_axes_time(self, qtbot):
         widget = Histo_app(Test_hist.data)
         qtbot.addWidget(widget)
-        widget.canvas.figure.savefig("tests/plots/histo_time")
+        widget.canvas.figure.savefig("tests/plots/histo/histo_time")
         assert list(widget.canvas.figure.gca().get_xticks()) == [x for x in arange(60,60 * 3, 120 / 5)][1:]
 
     def test_with_outsiders_data(self, qtbot):

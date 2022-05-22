@@ -171,12 +171,12 @@ def build_gamecat(requests_mock: Mocker):
 
 def build_lb_l(requests_mock: Mocker):
     req_mocker(requests_mock)
-    return LB(1, 
+    return LB(2002, 1, 
         *("game_id", "level_id", "category_id", [("subcat_id_t", "selected_subcat")])
     )
 
 def build_lb(requests_mock: Mocker):
     req_mocker(requests_mock)
-    return LB(1,
+    return LB(2002, 1,
         *("game_id", None, "category_id", [("subcat_id_t", "selected_subcat")])
     )
