@@ -1,4 +1,6 @@
+import warnings
 from requests import get
+import datetime
 
 def requester(link):
     try:
@@ -38,19 +40,17 @@ class api:
         if req["data"]["is-subcategory"]:
             return req["data"]["values"]["values"][id[1]]["label"]
 
-    def leaderboard(game_id, category_id, subcat_ids):
+    def leaderboard(game_id, level_id, category_id, subcat_ids):
         variables= ""
         if subcat_ids:
             variables = "&var-".join([f"{x}={y}" for x,y in subcat_ids])
+
+        if level_id:
+            req = requester(api.URL + f'leaderboards/{game_id}/level/{level_id}/{category_id}?var-{variables}')
+            return [x["run"]["times"]["primary_t"] for x in req["data"]["runs"]]
         req = requester(api.URL + f'leaderboards/{game_id}/category/{category_id}?var-{variables}')
         return [x["run"]["times"]["primary_t"] for x in req["data"]["runs"]]
 
-    def leaderboard_l(game_id, level_id, category_id, subcat_ids):
-        variables= ""
-        if subcat_ids:
-            variables = "&var-".join([f"{x}={y}" for x,y in subcat_ids])
-        req = requester(api.URL + f'leaderboards/{game_id}/level/{level_id}/{category_id}?var-{variables}')
-        return [x["run"]["times"]["primary_t"] for x in req["data"]["runs"]]
 
     def user_id(username:str) -> str:
         """Makes a request to the SRC API to retrieve the ID of the given username.
@@ -74,9 +74,33 @@ class api:
         req = requester(api.URL + f'games/{id}')
         return req["data"]["names"]["international"], req["data"]["released"], serie(req["data"]["links"])
 
+    @staticmethod
+    def past_lb(released, game_id, level_id, category_id, subcat_ids):
+        def request_lb(year):
+            if level_id:
+                req = requester(api.URL + f'leaderboards/{game_id}/level/{level_id}/{category_id}?var-{variables}&date={year}')
+                return [x["run"]["times"]["primary_t"] for x in req["data"]["runs"]]
+            req = requester(api.URL + f'leaderboards/{game_id}/category/{category_id}?var-{variables}&date={year}')
+            return [x["run"]["times"]["primary_t"] for x in req["data"]["runs"]]
+
+        variables= ""
+        if subcat_ids:
+            variables = "&var-".join([f"{x}={y}" for x,y in subcat_ids])
+        date_filter = datetime.date.today()
+        
+        rankings = {}
+        for new_year in range(date_filter.year, released, -1):
+            rankings[date_filter.year] = request_lb(date_filter.isoformat())
+            if rankings[date_filter.year]:
+                date_filter = date_filter.replace(year=new_year -1)
+            else:
+                del rankings[date_filter.year]
+                break
+        warnings.warn("need to remove duplicate years")
+        return rankings
+
     def user_runs(user_id:str) -> list:
         def recursive_request(link):
-            print(link)
             req = requester(link)
             runs = req["data"]
             if not req["pagination"]["links"]:
@@ -86,8 +110,3 @@ class api:
             return runs + recursive_request(req["pagination"]["links"][-1]["uri"])
         link = f'{api.URL}runs?user={user_id}&max=200'
         return recursive_request(link)
-
-if __name__ == "__main__":
-    user_id = api.user_id("nordanix")
-    test = api.user_runs(user_id)
-    print(len(test))

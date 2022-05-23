@@ -23,7 +23,7 @@ class Run:
 class PB(Run):
     def __init__(self, dicto:dict):
         super().__init__(dicto["run"])
-        self.leaderboard = LB(dicto["place"], *self.gamecat.ids())
+        self.leaderboard = LB(self.gamecat.game.release, dicto["place"], *self.gamecat.ids())
         self.delta = self.time - self.leaderboard["WR"]  #FIXME : self["WR"] instead
         self.perc = self.time / self.leaderboard["WR"]
 

@@ -125,12 +125,8 @@ class Time:
     def __eq__(self, other):
         return self.seconds == other.seconds
 
-    def __radd__(self, other):
-        return self.__add__(other)
 
     def __add__(self, other):
-        if isinstance(other, int):
-            return Time(self.seconds + other)
         return Time(self.seconds + other.seconds)
 
     def __sub__(self, other):
