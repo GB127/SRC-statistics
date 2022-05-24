@@ -1,8 +1,8 @@
 import warnings
 from statistics import mean, median, geometric_mean as geomean
 from PyQt5.QtGui import QFont 
-from PyQt5.QtWidgets import (
-    QListWidgetItem,
+from PyQt5.QtWidgets import (QHBoxLayout,
+    QListWidgetItem, QCheckBox,
     QGridLayout,
     QWidget, QComboBox,
     QListWidget)
@@ -28,7 +28,7 @@ class LB_plot_app(QWidget):
     #           #                                       #
     #           #                                       #
     #####################################################
-    #             # Plot selection # Metrics to display # 
+    # S  G  W M # # Plot selection # Metrics to display # 
     #####################################################
     """
 
@@ -40,9 +40,12 @@ class LB_plot_app(QWidget):
         def list_widget() -> QListWidget:
             self.listwidget = QListWidget()
             self.listwidget.setFixedWidth(450)
-            for entry in self.data[2022]:
+            for rank, entry in enumerate(self.data[2022], start=1):
+                delta = Time(entry - self.data[2022][0])
+                string = f'{rank:4} {Time(entry)} + {delta} ({entry / self.data[2022][0]:.2%})'
+
                 warnings.warn("Need to change this so it's always the current year. But it will work until 31st December.")
-                one_line = QListWidgetItem(str(entry))
+                one_line = QListWidgetItem(string)
                 one_line.setFont(QFont("Lucida Sans Typewriter", 10))
                 self.listwidget.addItem(one_line)
             # self.listwidget.clicked.connect(self.list_clicked)
@@ -64,15 +67,35 @@ class LB_plot_app(QWidget):
             self.filter.currentTextChanged.connect(self.update_plot)
             return self.filter
 
+        def metrics_selection():
+            mini_layout = QHBoxLayout()
+            self.WR = QCheckBox("WR")
+            self.WR.setChecked(True)
+            self.WR.stateChanged.connect(self.update_plot)
+            mini_layout.addWidget(self.WR)
+            self.moy = QCheckBox("Moy")
+            self.moy.setChecked(True)
+            self.moy.stateChanged.connect(self.update_plot)
+            mini_layout.addWidget(self.moy)
+            self.geo = QCheckBox("Geo")
+            self.geo.setChecked(True)
+            self.geo.stateChanged.connect(self.update_plot)
+            mini_layout.addWidget(self.geo)
+            self.med = QCheckBox("Med")
+            self.med.setChecked(True)
+            self.med.stateChanged.connect(self.update_plot)
+            mini_layout.addWidget(self.med)
 
+            return mini_layout
 
 
         super().__init__()
         self.data = data_dict
-        self.setMinimumSize(1400, 800)
+        self.setMinimumSize(1400, 600)
         self.layout = QGridLayout()
         self.setLayout(self.layout)
-        self.layout.addWidget(list_widget(), 0, 0, 0, 1)
+        self.layout.addWidget(list_widget(), 0, 0)
+        self.layout.addLayout(metrics_selection(), 1,0)
         self.layout.addWidget(plot_selection(),1,1)
         self.layout.addWidget(plot_widget(), 0, 1, 1, 3)
 
@@ -95,6 +118,11 @@ class LB_plot_app(QWidget):
         self.ax.set_xlim(right=1)
         self.canvas.draw()
 
+
+
+    def metrics_bools(self):
+        return (self.WR.isChecked(), self.moy.isChecked(), self.geo.isChecked(), self.med.isChecked())
+
     def plot_metrics_evolution(self):
         self.canvas.figure.clf()
         self.ax = self.canvas.figure.subplots()
@@ -103,17 +131,21 @@ class LB_plot_app(QWidget):
         mean_evo = [mean(x) for x in self.data.values()]
         geomean_evo = [geomean(x) for x in self.data.values()]
         median_evo = [median(x) for x in self.data.values()]
+        plotted = []
 
-        for name, toplot in zip(["WR","Mean", "GeoMean", "Median"], [WR_evo, mean_evo, geomean_evo, median_evo]):
-            self.ax.plot(self.data.keys(),toplot, label=name)
+        for name, toplot, booly in zip(["WR","Mean", "GeoMean", "Median"], [WR_evo, mean_evo, geomean_evo, median_evo], self.metrics_bools()):
+            if booly:
+                self.ax.plot(self.data.keys(),toplot, label=name)
+                plotted.append(toplot)
 
-        self.ax.legend()
+        self.ax.legend()#loc='upper center', bbox_to_anchor=(0.5, -0.05), ncol=4)
         self.ax.set_yticks(self.ax.get_yticks())
         self.ax.set_yticklabels([str(Time(x)) for x in self.ax.get_yticks()])
         # FIXME : Use map
-        self.ax.set_ylim(top=1.01 * max([max(x) for x in  [WR_evo, mean_evo, geomean_evo, median_evo]]),
-                                bottom=0.99 * min([min(x) for x in  [WR_evo, mean_evo, geomean_evo, median_evo]])
-        )
+        if len(plotted) > 1:
+            self.ax.set_ylim(top=1.005 * max([max(x) for x in  plotted]),
+                                    bottom=0.995 * min([min(x) for x in plotted])
+            )
         self.canvas.draw()
 
     def plot_current(self):

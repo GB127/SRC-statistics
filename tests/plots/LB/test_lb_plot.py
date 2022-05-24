@@ -1,4 +1,3 @@
-import pytest
 from plots.lb_plot import LB_plot_app
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
 from PyQt5.QtWidgets import (      QComboBox,
@@ -15,8 +14,12 @@ class Test_lb_plot:
     def test_widgets(self, qtbot):
         widget = LB_plot_app(Test_lb_plot.data)
         qtbot.addWidget(widget)
-        warnings.warn("Need to check identity of widgets")
-
+        if not any([isinstance(widget.layout.itemAt(x).widget(), FigureCanvasQTAgg) for x in range(widget.layout.count())]):
+            raise AssertionError("A plot is not created.")
+        if not any([isinstance(widget.layout.itemAt(x).widget(), QListWidget) for x in range(widget.layout.count())]):
+            raise AssertionError("A list of entry is not created.")
+        assert [isinstance(widget.layout.itemAt(x).widget(), QComboBox) for x in range(widget.layout.count())].count(True) == 1
+        warnings.warn("Some aren't checked")
         assert widget.layout.count() == 6
 
     def test_lb_evo_plot(self, qtbot):
