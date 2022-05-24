@@ -90,13 +90,14 @@ class api:
         
         rankings = {}
         for new_year in range(date_filter.year, released, -1):
-            rankings[date_filter.year] = request_lb(date_filter.isoformat())
-            if rankings[date_filter.year]:
+            this_year_ranking = request_lb(date_filter.isoformat())
+            if this_year_ranking in rankings.values():
+                continue
+            elif this_year_ranking:
+                rankings[new_year] = this_year_ranking
                 date_filter = date_filter.replace(year=new_year -1)
-            else:
-                del rankings[date_filter.year]
+            else: # No more leaderboard : lb is empty
                 break
-        warnings.warn("need to remove duplicate years")
         return rankings
 
     def user_runs(user_id:str) -> list:

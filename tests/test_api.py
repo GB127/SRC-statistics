@@ -3,7 +3,7 @@ from requests_mock.mocker import Mocker
 from tests.class_builder import req_mocker
 
 
-def test_nordanix():
+def off_test_nordanix():
     nordanix_id = api.user_id("nordanix")
     nordanix = api.user_runs(nordanix_id)
     assert len(nordanix) == 3765

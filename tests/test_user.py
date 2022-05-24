@@ -4,6 +4,7 @@ from tests.class_builder import build_user
 
 class Test_user:
     def test_init(self, requests_mock:Mocker):
+
         test = build_user(requests_mock)
         for clé, identity in [("pbs", Table_pb),
                                 ("pbs_l", Table_pb),

@@ -10,9 +10,6 @@ from tables.leaderboard import LB
 clear = lambda: text_terminal('cls')
 
 class Base_table:
-    def __init__(self):
-        raise BaseException("This table can't be created : need to go by the childs")
-
     def __call__(self):
         while True:
             clear()

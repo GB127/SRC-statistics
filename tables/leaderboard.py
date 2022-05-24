@@ -67,10 +67,10 @@ class LB:
         string += f'GeoM   {Time(geomoyenne)} + {Time(geomoyenne) - Time(self.ranking[0])} ({Time(geomoyenne) / Time(WR):.2%})\n'
         return string
 
-    def methods(self):
+    def methods(self):# pragma: no cover
         return [self.plot]
 
-    def plot(self):
+    def plot(self):# pragma: no cover
         print("Prepping informations...")
         yearly_ranking = api.past_lb(self.release, *self.ids)
         window_handler(yearly_ranking, LB_plot_app)

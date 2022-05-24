@@ -23,14 +23,14 @@ class Table_run(Base_table):
                 self.data.append(Run(data))
             print(f"{no}/{len(list_runs)} runs processed!")
     
-    def methods(self):
+    def methods(self):# pragma: no cover
         return  self.pie, self.histo
 
 
-    def pie(self):
+    def pie(self):# pragma: no cover
             window_handler(self.data, Pie_app)
 
-    def histo(self):
+    def histo(self):# pragma: no cover
         window_handler(self.data, Histo_app)
 
     def create_grouped(self, infos):
@@ -51,7 +51,7 @@ class Table_pb(Table_run):
                 self.data.append(PB(data))
             print(f"{no}/{len(list_runs)} PBs processed!")
 
-    def methods(self):
+    def methods(self):# pragma: no cover
         return  self.pie, self.histo, self.open_leaderboard
 
 
@@ -112,6 +112,6 @@ class Table_pb(Table_run):
         return sum_class
 
 
-    def open_leaderboard(self):
+    def open_leaderboard(self): # pragma: no cover
         command = input(f"Which leaderboard? [0-{len(self) -1}] ")
         self[int(command) -1].leaderboard()

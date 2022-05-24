@@ -10,6 +10,7 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import matplotlib
 import matplotlib.pyplot as plt
 from code_SRC.composantes import Time
+from datetime import date
 
 
 class LB_plot_app(QWidget):
@@ -40,11 +41,11 @@ class LB_plot_app(QWidget):
         def list_widget() -> QListWidget:
             self.listwidget = QListWidget()
             self.listwidget.setFixedWidth(450)
-            for rank, entry in enumerate(self.data[2022], start=1):
-                delta = Time(entry - self.data[2022][0])
-                string = f'{rank:4} {Time(entry)} + {delta} ({entry / self.data[2022][0]:.2%})'
+            current_ranking = self.data[date.today().year]
+            for rank, entry in enumerate(current_ranking, start=1):
+                delta = Time(entry - current_ranking[0])
+                string = f'{rank:4} {Time(entry)} + {delta} ({entry / current_ranking[0]:.2%})'
 
-                warnings.warn("Need to change this so it's always the current year. But it will work until 31st December.")
                 one_line = QListWidgetItem(string)
                 one_line.setFont(QFont("Lucida Sans Typewriter", 10))
                 self.listwidget.addItem(one_line)
@@ -151,14 +152,16 @@ class LB_plot_app(QWidget):
     def plot_current(self):
         self.canvas.figure.clf()
         self.ax = self.canvas.figure.subplots()
-        x_label = [x for x in range(1, len(self.data[2022]) +1)]
+        current_ranking = self.data[date.today().year]
 
-        self.ax.plot(x_label,self.data[2022])
+        x_label = [x for x in range(1, len(current_ranking) +1)]
+
+        self.ax.plot(x_label,current_ranking)
         self.ax.invert_xaxis()
         self.ax.set_yticks(self.ax.get_yticks())
         self.ax.set_yticklabels([str(Time(x)) for x in self.ax.get_yticks()])
-        self.ax.set_ylim(top=self.data[2022][-1],
-                            bottom=self.data[2022][0])
+        self.ax.set_ylim(top=current_ranking[-1],
+                            bottom=current_ranking[0])
         self.ax.set_xlim(left=len(x_label), right=1)
 
 
