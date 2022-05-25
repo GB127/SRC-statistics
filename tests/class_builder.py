@@ -10,7 +10,7 @@ from tables.solo_runs import Table_pb, Table_run
 def req_mocker(requests_mock: Mocker):
     """Function that will handle all mocks of the get"""
     system_data = {"data": {"id": "system_id","name": "Nintendo Entertainment System","released": 1983}}
-    game_data = {"data": {"id": "game_id","names": {"international": "Super Mario Sunshine"},"abbreviation": "sms","released": 2002,"release-date": "2002-07-19","gametypes": [],"platforms": ["4p9z06rn", "v06dk3e4", "7m6ylw9p"],"regions": ["pr184lqn", "e6lxy1dz", "o316x197", "p2g50lnk"],"genres": ["qdnqkn8k", "jp23ox26"],"developers": ["xv6dvx62"],"publishers": ["m0rvylrx"],"links": [{"rel": "series","uri": "https://www.speedrun.com/api/v1/series/serie_id"}]}}
+    game_data = {"data": {"id": "game_id","names": {"international": "The Legend of Zelda: Super Mario Sunshine Category Extensions"},"abbreviation": "sms","released": 2002,"release-date": "2002-07-19","gametypes": [],"platforms": ["4p9z06rn", "v06dk3e4", "7m6ylw9p"],"regions": ["pr184lqn", "e6lxy1dz", "o316x197", "p2g50lnk"],"genres": ["qdnqkn8k", "jp23ox26"],"developers": ["xv6dvx62"],"publishers": ["m0rvylrx"],"links": [{"rel": "series","uri": "https://www.speedrun.com/api/v1/series/serie_id"}]}}
     series_data = {"data": {"id": "serie_id","names": {"international": "Super Mario"},"abbreviation": "mario"}}
     level_data = {"data": {"id": "level_id", "name": "Shrub Forest"}}
     category_data = {"data": {"id": "category_id", "name": "Any% (No SSU)"}}

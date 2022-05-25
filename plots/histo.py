@@ -31,9 +31,9 @@ class Histo_app(QWidget):
     #           #                                       #
     #           #                                       #
     #           #                                       #
-    #####################################################
-    #  +     +  #               FILTERS                 #
-    #  -     -  #               BUTTONS                 #
+    #           #########################################
+    #           #  Filter  #   Granularity # Outliners  #
+    #           #  Box     #      number   #  factors   #
     #####################################################
     """
 
@@ -64,7 +64,6 @@ class Histo_app(QWidget):
                 for x in self.data[0].keys():
                     if isinstance(self.data[0][x], (int, float, Time)):
                         clés.append(x)
-
                 return clés
 
             self.options = QComboBox()
@@ -105,7 +104,7 @@ class Histo_app(QWidget):
         def trim_data(to_trim):
             if isinstance(to_trim[0], Time):
                 to_trim = [float(x) for x in to_trim]
-            if len(set(to_trim)) == 1:
+            if len(set(to_trim)) == 1:  # pragma: no cover
                 return to_trim
             IQ1, IQ2, IQ3 = quantiles(to_trim)
             IQR = (IQ3 - IQ1) * self.trim_power.value()
@@ -121,7 +120,7 @@ class Histo_app(QWidget):
             self.ax.set_ylabel("Frequency")
 
         def set_xticks():
-            if len(set(to_plot)) == 1:
+            if len(set(to_plot)) == 1:  # pragma: no cover
                 return
 
             self.ax.set_xticks(

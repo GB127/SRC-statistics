@@ -1,3 +1,5 @@
+from lib2to3.pytree import Base
+import warnings
 from code_SRC.api import api
 
 
@@ -9,8 +11,6 @@ class Game:
                 """
             for unwanted in [" Category Extensions", "The Legend of Zelda: "]:
                 self.game = self.game.replace(unwanted, "")
-
-
         self.ids = (game_id, level_id)
         self.game, self.release, self.series = api.game(game_id)
         self.level = api.level(level_id) if level_id else ""
@@ -37,7 +37,7 @@ class Game:
             Uses dict.keys() to eases adding functionnalities. 
             Docstring needs to be updated manually.
         
-            Returns: ["game", "release", "level"]
+            Returns: ["game", "series", "release", "level"]
             """
         tempo = list(self.__dict__.keys())
         tempo.remove("ids")
@@ -96,7 +96,7 @@ class GameCate:
         """Return all the keys that can be used to retrieve game 
             or/and category infos. Uses dict.keys() to eases 
             adding functionnalities.             
-            Returns: ["game", "release", "level", "category]
+            Returns: ["game", "release", "level", "category", "series"]
 
             Docstring needs to be updated manually.
             """

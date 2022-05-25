@@ -46,7 +46,7 @@ class Test_api:
 
     def test_game(self, requests_mock:Mocker):
         req_mocker(requests_mock)
-        assert api.game("game_id") == ("Super Mario Sunshine", 2002, {"Super Mario"})
+        assert api.game("game_id") == ("The Legend of Zelda: Super Mario Sunshine Category Extensions", 2002, {"Super Mario"})
 
     def test_user_runs(self, requests_mock:Mocker):
         req_mocker(requests_mock)

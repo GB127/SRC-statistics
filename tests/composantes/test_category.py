@@ -14,3 +14,5 @@ class Test_category:
         category = build_category(requests_mock)
         assert str(category) == "Any% (No SSU) (150cc)"
 
+    def test_eq(self, requests_mock:Mocker):
+        assert build_category(requests_mock) == build_category(requests_mock)
