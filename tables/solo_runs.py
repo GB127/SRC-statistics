@@ -24,7 +24,7 @@ class Table_run(Base_table):
             print(f"{no}/{len(list_runs)} runs processed!")
     
     def methods(self):# pragma: no cover
-        return  self.pie, self.histo
+        return  self.sort + self.pie, self.histo
 
 
     def pie(self):# pragma: no cover
@@ -52,7 +52,7 @@ class Table_pb(Table_run):
             print(f"{no}/{len(list_runs)} PBs processed!")
 
     def methods(self):# pragma: no cover
-        return  self.pie, self.histo, self.open_leaderboard
+        return  self.sort, self.pie, self.histo, self.open_leaderboard
 
 
     def sum(self):

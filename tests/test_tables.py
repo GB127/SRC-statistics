@@ -32,6 +32,14 @@ class Test_table_base:
         assert str1 == str(test[0])
         
 
+    def test_sorting(self, requests_mock:Mocker):
+        test = build_table_run(requests_mock)
+        test[0].gamecat.game.game = "Tuper Mario Sunshine"
+        test[2].gamecat.game.game = "Muper Mario Sunshine"
+        test.sort("game")
+        assert [x.gamecat.game.game for x in test] == ['Muper Mario Sunshine','Super Mario Sunshine', 'Tuper Mario Sunshine']
+
+
     def test_ineq_sumean(self, requests_mock:Mocker):
         test = build_table_run(requests_mock)
         assert test.create_grouped(test.sum()) != test.create_grouped(test.mean())

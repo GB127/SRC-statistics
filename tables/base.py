@@ -23,6 +23,12 @@ class Base_table:
                 break
             self.methods()[int(command)]()
 
+    def sort(self, key=None):
+        if not key:
+            for no, option in enumerate(self.keys()):
+                print(no, option)
+            key = self.keys()[int(input("Which sorting method? "))]
+        self.data.sort(key= lambda x : x[key])
 
     def group_attr(self)->dict:
         dicto_sets = {}

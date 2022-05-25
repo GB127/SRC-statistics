@@ -19,7 +19,6 @@ class Test_lb_plot:
         if not any([isinstance(widget.layout.itemAt(x).widget(), QListWidget) for x in range(widget.layout.count())]):
             raise AssertionError("A list of entry is not created.")
         assert [isinstance(widget.layout.itemAt(x).widget(), QComboBox) for x in range(widget.layout.count())].count(True) == 1
-        warnings.warn("Some aren't checked")
         #assert widget.layout.count() == 6
 
     def test_lb_evo_plot(self, qtbot):

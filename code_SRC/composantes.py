@@ -1,5 +1,3 @@
-from lib2to3.pytree import Base
-import warnings
 from code_SRC.api import api
 
 
@@ -134,6 +132,9 @@ class Time:
 
     def __le__(self, other):
         return self.seconds <= other.seconds
+
+    def __lt__(self, other):
+        return self.seconds < other.seconds
 
     def __truediv__(self, other):
         if isinstance(other, (int, float)):
