@@ -99,4 +99,3 @@ class Base_table:
     def keys(self):
         """Retrieves keys that can be used for sorting."""
         return self[0].keys()
-

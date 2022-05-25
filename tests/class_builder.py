@@ -4,6 +4,7 @@ from entries.run import Run, PB
 from tables.leaderboard import LB
 from code_SRC.user import User
 from tables.solo_runs import Table_pb, Table_run
+from entries.grouped import Grouped
 
 
 
@@ -180,3 +181,15 @@ def build_lb(requests_mock: Mocker):
     return LB(2002, 1,
         *("game_id", None, "category_id", [("subcat_id_t", "selected_subcat")])
     )
+
+
+
+def build_game_group(requests_mock: Mocker):
+    req_mocker(requests_mock)
+    run = build_run(requests_mock)
+    run2 = build_run(requests_mock)
+    run3 = build_run(requests_mock)
+    pb = build_pb(requests_mock)
+
+    return Grouped("Super Mario Sunshine", [run, run2, run3], [pb])
+
