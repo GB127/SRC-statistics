@@ -8,6 +8,9 @@ from statistics import mean, geometric_mean as geomean
 from tables.base import Base_table
 import itertools
 
+
+['patate', 'allo', 'allo', 'manam']
+
 class Table_run(Base_table):
     def __init__(self, list_runs: list, include_lvl: bool):
         """Class listing full OR level runs.
@@ -23,8 +26,22 @@ class Table_run(Base_table):
                 self.data.append(Run(data))
             print(f"{no}/{len(list_runs)} runs processed!")
     
+
+    def all_value_key(self, key):
+        assert key in self.keys()
+        if key  in ["level", "category", "time", "delta", "perc", "perc_lb", "leaderboard"]:
+            return
+        elif key == "series":
+            return set(itertools.chain(*[x[key] for x in self.data]))
+        return {x[key] for x in self.data}
+
+    def match_key_value(self, key, wanted_value):
+        if key == "series":
+            return [x for x in self.data if any([one_serie == wanted_value for one_serie in x[key]])]
+        return [x for x in self.data if x[key] == wanted_value]
+
     def methods(self):# pragma: no cover
-        return  self.sort + self.pie, self.histo
+        return  self.sort, self.pie, self.histo
 
 
     def pie(self):# pragma: no cover

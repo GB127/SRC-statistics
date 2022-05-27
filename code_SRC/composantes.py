@@ -11,12 +11,11 @@ class Game:
         self.ids = (game_id, level_id)
         self.game = api.db("game",game_id)
         self.release = str(api.db("release", game_id))
-
+        self.series = api.db("series", game_id)
         self.level = ""
         if level_id:
             self.level = api.db("level", level_id)
         game_name_cleanup()
-
     def __str__(self):
         string = self.game
         if self.level:

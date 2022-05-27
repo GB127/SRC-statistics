@@ -1,4 +1,3 @@
-from lib2to3.pytree import Base
 from requests import get
 
 def requester(link):
@@ -50,6 +49,7 @@ class api:
     @staticmethod
     def user_runs(user_id:str) -> list:
         def recursive_request(link):
+            print(f"Requesting datas: {link}...")
             req = requester(link)
             runs = req["data"]
             if not req["pagination"]["links"]:
@@ -65,18 +65,35 @@ class api:
                     api.subcategory_db[id] = req["data"]["values"]["values"][id[1]]["label"]
                 else:
                     api.subcategory_db[id] = ""
+            def get_series(links):
+                all_series = []
+                for link in links:
+                    if link["rel"] != "series":
+                        continue
+                    serie_data = requester(link["uri"])
+                    all_series.append(serie_data["data"]["names"]["international"])
+                return set(all_series)
+
+
 
             for run in data:
                 api.game_db[run["game"]["data"]["id"]] = run["game"]["data"]["names"]["international"]
+                api.series_db[run["game"]["data"]["id"]] = get_series(run["game"]["data"]["links"])
                 api.category_db[run["category"]["data"]["id"]] = run["category"]["data"]["name"]
                 if run["region"]["data"]:
                     api.region_db[run["region"]["data"]["id"]] = run["region"]["data"]["name"]
-                api.system_db[run["platform"]["data"]["id"]] = run["platform"]["data"]["name"]
+
+                if run["platform"]["data"]:
+                    api.system_db[run["platform"]["data"]["id"]] = run["platform"]["data"]["name"]
                 if run["level"]["data"]:
                     api.level_db[run["level"]["data"]["id"]] = run["level"]["data"]["name"]
                 api.release_db[run["game"]["data"]["id"]] = run["game"]["data"]["released"]
+
+
                 for variable in run["values"].items():
-                    update_subcategory(variable)
+                    update_subcategory(variable)        
+        
+        
         def change_to_id(data):
             for run in data:
                 run["game"] = run["game"]["data"]["id"]
@@ -87,8 +104,12 @@ class api:
                     run["level"] = run["level"]["data"]["id"]
                 else:
                     run["level"] = None
+
+
         link = f'{api.URL}runs?user={user_id}&max=200&embed=game,category,level,region,platform'
         data = recursive_request(link)
         update_databases(data)
         change_to_id(data)
+                    
+
         return data

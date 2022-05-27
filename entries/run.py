@@ -17,6 +17,7 @@ class Run:
         return list(self.gamecat.keys()) + list(self.system.keys()) + ["time"]
 
 
+
     def __str__(self):
         return f'{self.system}   {self.gamecat}   {self.time}'
 

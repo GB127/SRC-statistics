@@ -1,4 +1,3 @@
-import warnings
 from requests import get
 import datetime
 
@@ -14,32 +13,6 @@ class api:
     """api class to manage all requests. Stores data in a database.
         """
     URL = "https://www.speedrun.com/api/v1/"
-
-
-    def user_pbs(user_id):
-        req = requester(api.URL + f'users/{user_id}/personal-bests')
-        return req["data"]
-
-
-    def system(id):
-        if id:
-            req = requester(api.URL + f'platforms/{id}')
-            return req["data"]["name"]
-        return ""
-
-    def level(id):
-        req = requester(api.URL + f'levels/{id}')
-        return req["data"]["name"]
-
-    def category(id):
-        req = requester(api.URL + f'categories/{id}')
-        return req["data"]["name"]
-
-    def subcategory(id:dict):
-        req = requester(api.URL + f'variables/{id[0]}')
-        if req["data"]["is-subcategory"]:
-            return req["data"]["values"]["values"][id[1]]["label"]
-
     def leaderboard(game_id, level_id, category_id, subcat_ids):
         variables= ""
         if subcat_ids:
@@ -50,18 +23,6 @@ class api:
             return [x["run"]["times"]["primary_t"] for x in req["data"]["runs"]]
         req = requester(api.URL + f'leaderboards/{game_id}/category/{category_id}?var-{variables}')
         return [x["run"]["times"]["primary_t"] for x in req["data"]["runs"]]
-
-    @staticmethod
-    def game(id):  #TODO : Embed thing with series so we avoid to duplicate requests
-        def serie(links):
-            toreturn = set()
-            for link in links:
-                if link["rel"] == "series":
-                    req_serie = requester(link["uri"])
-                    toreturn.add(req_serie["data"]["names"]["international"])
-            return toreturn
-        req = requester(api.URL + f'games/{id}')
-        return req["data"]["names"]["international"], req["data"]["released"], serie(req["data"]["links"])
 
     @staticmethod
     def past_lb(released, game_id, level_id, category_id, subcat_ids):
@@ -88,15 +49,3 @@ class api:
             else: # No more leaderboard : lb is empty
                 break
         return rankings
-
-    def user_runs(user_id:str) -> list:
-        def recursive_request(link):
-            req = requester(link)
-            runs = req["data"]
-            if not req["pagination"]["links"]:
-                return runs
-            elif req["pagination"]["links"][-1]["rel"] != "next":
-                return runs
-            return runs + recursive_request(req["pagination"]["links"][-1]["uri"])
-        link = f'{api.URL}runs?user={user_id}&max=200'
-        return recursive_request(link)
