@@ -1,4 +1,4 @@
-from code_SRC.api2 import api
+from code_SRC.api import api
 
 class Game:
     def __init__(self, game_id: str, level_id: str):

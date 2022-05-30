@@ -1,4 +1,4 @@
-from code_SRC.api2 import api
+from code_SRC.api import api
 from tables.solo_runs import Table_pb, Table_run
 from os import system as text_terminal
 from tables.grouped import Table_grouped, Table_saved
