@@ -1,6 +1,6 @@
 from statistics import quantiles
 from numpy import arange
-from PyQt5.QtGui import QColor ,QFont 
+from PyQt5.QtGui import QColor, QFont
 from PyQt5.QtWidgets import (
     QListWidgetItem,
     QComboBox,
@@ -8,7 +8,8 @@ from PyQt5.QtWidgets import (
     QGridLayout,
     QWidget,
     QSpinBox,
-    QListWidget)
+    QListWidget,
+)
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import matplotlib
 import matplotlib.pyplot as plt
@@ -59,6 +60,7 @@ class Histo_app(QWidget):
             Returns:
                 List: QtPushButtons
             """
+
             def filters():
                 clés = []
                 for x in self.data[0].keys():
@@ -87,7 +89,6 @@ class Histo_app(QWidget):
             self.granularity.valueChanged.connect(self.update_plot)
             return self.granularity
 
-
         super().__init__()
         self.data = data_list
         self.setMinimumSize(1400, 800)
@@ -115,7 +116,9 @@ class Histo_app(QWidget):
             return trimmed
 
         def labels():
-            self.ax.set_title(f'{self.data[0].__class__.__name__} - {str(self.options.currentText())}')
+            self.ax.set_title(
+                f"{self.data[0].__class__.__name__} - {str(self.options.currentText())}"
+            )
             self.ax.set_xlabel(str(self.options.currentText()))
             self.ax.set_ylabel("Frequency")
 
@@ -124,12 +127,17 @@ class Histo_app(QWidget):
                 return
 
             self.ax.set_xticks(
-                arange(min(to_plot), max(to_plot), (max(to_plot) - min(to_plot)) / 5)[1:])
+                arange(min(to_plot), max(to_plot), (max(to_plot) - min(to_plot)) / 5)[
+                    1:
+                ]
+            )
 
             if str(self.options.currentText()) in ["time", "delta"]:
-                time_str = (lambda x: f"{int(x//3600):>3}:{int(x) % 3600 // 60:02}:{int(x) % 3600 % 60 % 60:02}")
+                time_str = (
+                    lambda x: f"{int(x//3600):>3}:{int(x) % 3600 // 60:02}:{int(x) % 3600 % 60 % 60:02}"
+                )
                 self.ax.set_xticklabels(
-                                        [time_str(float(x)) for x in self.ax.get_xticks()],
+                    [time_str(float(x)) for x in self.ax.get_xticks()],
                     horizontalalignment="center",
                 )
 
@@ -145,7 +153,7 @@ class Histo_app(QWidget):
                 )
             else:
                 raise KeyError(
-                    f'{str(self.options.currentText())} is not assigned to an approach in histogram.'
+                    f"{str(self.options.currentText())} is not assigned to an approach in histogram."
                 )  # pragma: no cover
             self.ax.set_xlim([min(to_plot), max(to_plot)])
 
@@ -174,15 +182,15 @@ class Histo_app(QWidget):
                 elif data[str(self.options.currentText())] not in to_plot:
                     test.setBackground(QColor(252, 154, 149))
 
-
-
         self.canvas.figure.clf()
         self.ax = self.canvas.figure.subplots()
 
         to_plot = trim_data([x[str(self.options.currentText())] for x in self.data])
         update_data_list_color()
 
-        self.ax.hist(to_plot, range=(min(to_plot), max(to_plot)), bins=self.granularity.value())
+        self.ax.hist(
+            to_plot, range=(min(to_plot), max(to_plot)), bins=self.granularity.value()
+        )
         self.ax.grid(visible=True, axis="x")
         labels()
         set_xticks()

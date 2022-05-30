@@ -1,21 +1,24 @@
 from code_SRC.api import api
 
+
 class Game:
     def __init__(self, game_id: str, level_id: str):
         """Class that handle the game, level and the release year of a game."""
+
         def game_name_cleanup():
-            """Removes unwanted elements from the names.
-                """
+            """Removes unwanted elements from the names."""
             for unwanted in [" Category Extensions", "The Legend of Zelda: "]:
                 self.game = self.game.replace(unwanted, "")
+
         self.ids = (game_id, level_id)
-        self.game = api.db("game",game_id)
+        self.game = api.db("game", game_id)
         self.release = str(api.db("release", game_id))
         self.series = api.db("series", game_id)
         self.level = ""
         if level_id:
             self.level = api.db("level", level_id)
         game_name_cleanup()
+
     def __str__(self):
         string = self.game
         if self.level:
@@ -33,11 +36,11 @@ class Game:
 
     def keys(self) -> list:
         """Return all the keys that can be used to retrieve game infos.
-            Uses dict.keys() to eases adding functionnalities. 
-            Docstring needs to be updated manually.
-        
-            Returns: ["game", "series", "release", "level"]
-            """
+        Uses dict.keys() to eases adding functionnalities.
+        Docstring needs to be updated manually.
+
+        Returns: ["game", "series", "release", "level"]
+        """
         tempo = list(self.__dict__.keys())
         tempo.remove("ids")
         return tempo
@@ -75,9 +78,9 @@ class Category:
 
 class GameCate:
     def __init__(self, game: Game, category: Category):
-        """Handles the Game and the Category. 
-            Because of the fact that a category can share the same name 
-            across different games, this classes handles this part."""
+        """Handles the Game and the Category.
+        Because of the fact that a category can share the same name
+        across different games, this classes handles this part."""
         self.game = game
         self.category = category
 
@@ -86,19 +89,19 @@ class GameCate:
 
     def ids(self) -> list:
         """Returns all the ids necessary for leaderboard requests.
-            Returns: ["game_id", "level_id", "category_id", "subcategory_ids"]
-                NOTE: "subcategory_id is a dictionnary {"field":"subcategory selected"}
-            """
+        Returns: ["game_id", "level_id", "category_id", "subcategory_ids"]
+            NOTE: "subcategory_id is a dictionnary {"field":"subcategory selected"}
+        """
         return self.game.ids + self.category.ids
 
     def keys(self):
-        """Return all the keys that can be used to retrieve game 
-            or/and category infos. Uses dict.keys() to eases 
-            adding functionnalities.             
-            Returns: ["game", "release", "level", "category", "series"]
+        """Return all the keys that can be used to retrieve game
+        or/and category infos. Uses dict.keys() to eases
+        adding functionnalities.
+        Returns: ["game", "release", "level", "category", "series"]
 
-            Docstring needs to be updated manually.
-            """
+        Docstring needs to be updated manually.
+        """
         return list(self.game.keys()) + ["category"]
 
     def __getitem__(self, clé):
@@ -111,20 +114,19 @@ class GameCate:
 
 class Time:
     def __init__(self, total_seconds: int):
-        """Class created mainly to handle the stringing of the times. 
-            Stores the total seconds internally as int."""
-        self.seconds:float = total_seconds
+        """Class created mainly to handle the stringing of the times.
+        Stores the total seconds internally as int."""
+        self.seconds: float = total_seconds
 
     def __float__(self):
         return float(self.seconds)
 
     def __str__(self):
-        
+
         return f"{'' if self.seconds>0 else '-'}{int(abs(self.seconds))//3600:>3}:{int(abs(self.seconds)) % 3600 // 60:02}:{int(abs(self.seconds)) % 3600 % 60 % 60:02}"
 
     def __eq__(self, other):
         return self.seconds == other.seconds
-
 
     def __add__(self, other):
         return Time(self.seconds + other.seconds)
@@ -147,21 +149,19 @@ class Time:
 
 class System:
     def __init__(self, system_id):
-        self.system: str = api.db("system",system_id)
+        self.system: str = api.db("system", system_id)
 
     def __str__(self):
         if any([x.isupper() for x in self.system]):
             return f'{"".join([x for x in self.system if x.isupper()])[:3]:^3}'
-        return f'{self.system[:3]:^3}'
+        return f"{self.system[:3]:^3}"
 
     def keys(self) -> list[str]:
         """Returns retrievable informations about system.
-            
-            Returns: ["system"]
-            """
+
+        Returns: ["system"]
+        """
         return self.__dict__.keys()
 
     def __getitem__(self, key):
         return self.__dict__[key]
-
-
