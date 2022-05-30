@@ -18,14 +18,28 @@ class User:
         self.pbs = Table_pb(all_pbs, False)
         self.pbs_l = Table_pb(all_pbs, True)
 
-        for clé in self.runs.keys():
-            if clé == "category":
-                self.__dict__["saves"] = Table_saved(clé, self.runs, self.pbs)
-            else:
-                try:
-                    self.__dict__[clé] = Table_grouped(clé, self.runs, self.pbs)
-                except TypeError:
-                    pass
+        if self.runs:
+            for clé in self.runs.keys():
+                if clé == "category":
+                    self.__dict__["saves"] = Table_saved(clé, self.runs, self.pbs)
+                else:
+                    try:
+                        self.__dict__[clé] = Table_grouped(clé, self.runs, self.pbs)
+                    except TypeError:
+                        pass
+
+        if self.runs_l:
+            for clé in self.runs_l.keys():
+                if clé == "category":
+                    self.__dict__["saves_l"] = Table_saved(clé, self.runs_l, self.pbs_l)
+                else:
+                    try:
+                        self.__dict__[clé + "_l"] = Table_grouped(clé, self.runs_l, self.pbs_l)
+                    except TypeError:
+                        pass
+
+
+
 
     def keys(self):
         string_nol = []
