@@ -62,9 +62,8 @@ class Saved:
         return self.__dict__[clé]
 
     def keys(self):
-        return "first", "pb", "save", 
-        , "perc_potential", "save_potential", "attempts"
-        return "attempts", "first", "pb", "save", "perc_save", "max_save", "max_perc"
+        return "attempts", "first", "pb", "save", "perc_save", "max_save", "max_perc",  "save_potential", "perc_potential"
+
     def __str__(self):
         string_first = f'{len(self.runs):3}  {self.first}'
         string_pb = f'{self.pb} {self["save"]} {self["perc_save"]:>7.2%}'
