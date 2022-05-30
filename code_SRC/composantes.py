@@ -123,7 +123,7 @@ class Time:
 
     def __str__(self):
 
-        return f"{'' if self.seconds>0 else '-'}{int(abs(self.seconds))//3600:>3}:{int(abs(self.seconds)) % 3600 // 60:02}:{int(abs(self.seconds)) % 3600 % 60 % 60:02}"
+        return f"{'' if self.seconds>=0 else '-'}{int(abs(self.seconds))//3600:>3}:{int(abs(self.seconds)) % 3600 // 60:02}:{int(abs(self.seconds)) % 3600 % 60 % 60:02}"
 
     def __eq__(self, other):
         return self.seconds == other.seconds
