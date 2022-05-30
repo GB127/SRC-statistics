@@ -20,15 +20,28 @@ class User:
         for clé in self.runs.keys():
             if clé == "category":
                 self.__dict__["saves"] = Table_saved(clé,self.runs, self.pbs)
+                self.__dict__["saves_l"] = Table_saved(clé,self.runs_l, self.pbs_l)
             try:
                 self.__dict__[clé] = Table_grouped(clé,self.runs, self.pbs)
             except TypeError:
-                continue
+                pass
+            try:
+                self.__dict__[clé + "_l"] = Table_grouped(clé,self.runs_l, self.pbs_l)
+            except TypeError:
+                pass
 
 
 
     def keys(self):
-        return [x for x in self.__dict__.keys() if (callable(self.__dict__[x]) and bool(self.__dict__[x]))]
+        string_nol = []
+        string_l = []
+        for x in self.__dict__.keys():
+            if (callable(self.__dict__[x]) and bool(self.__dict__[x])):
+                if x[-2:] == "_l":
+                    string_l.append(x)
+                else:
+                    string_nol.append(x)
+        return string_nol + string_l
 
     def __call__(self):
         while True:
