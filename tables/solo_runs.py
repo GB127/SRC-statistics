@@ -8,9 +8,6 @@ from statistics import mean, geometric_mean as geomean
 from tables.base import Base_table
 import itertools
 
-
-['patate', 'allo', 'allo', 'manam']
-
 class Table_run(Base_table):
     def __init__(self, list_runs: list, include_lvl: bool):
         """Class listing full OR level runs.
@@ -29,7 +26,7 @@ class Table_run(Base_table):
 
     def all_value_key(self, key):
         assert key in self.keys()
-        if key  in ["level", "category", "time", "delta", "perc", "perc_lb", "leaderboard"]:
+        if key  in ["level", "time", "delta", "perc", "perc_lb", "leaderboard"]:
             return
         elif key == "series":
             return set(itertools.chain(*[x[key] for x in self.data]))

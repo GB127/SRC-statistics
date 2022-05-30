@@ -92,6 +92,9 @@ class Base_table:
     def __len__(self):
         return len(self.data)
 
+    def __bool__(self):
+        return bool(self.data)
+
 
     def __getitem__(self, index: int):
         return self.data[index]
