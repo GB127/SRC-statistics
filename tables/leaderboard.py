@@ -1,4 +1,3 @@
-from copy import deepcopy
 from plots.handler import window_handler
 from code_SRC.api import api
 from code_SRC.composantes import Time

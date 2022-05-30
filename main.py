@@ -1,4 +1,6 @@
 from code_SRC.user import User
 
-test = User(input("Which user? "))
-test()
+
+if __name__ == "__main__":
+    user = User(input("Which user? "))
+    user()

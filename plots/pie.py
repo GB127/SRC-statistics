@@ -3,14 +3,14 @@ from PyQt5.QtWidgets import (
     QGridLayout,
     QWidget,
     QComboBox,
-    QListWidget)
+    QListWidget,
+)
 from PyQt5.QtGui import QFont, QColor
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import matplotlib
 import matplotlib.pyplot as plt
 from code_SRC.composantes import Time
 from copy import copy
-from collections import Counter
 
 
 class Pie_app(QWidget):
@@ -52,7 +52,7 @@ class Pie_app(QWidget):
             self.update_plot()
             return self.canvas
 
-        def plot_filters()->list:
+        def plot_filters() -> list:
             """Fetches the buttons that will change the filters of the pie charts
             Returns:
                 List: QtPushButtons
@@ -93,10 +93,10 @@ class Pie_app(QWidget):
         self.current_filter = "game"  # FIXME : This is a temporary fix
         self.layout = QGridLayout()
         self.setLayout(self.layout)
-        self.layout.addWidget(list_widget(), 0, 0,0,1)
+        self.layout.addWidget(list_widget(), 0, 0, 0, 1)
         self.layout.addWidget(pie_sommation(), 1, 1)
-        self.layout.addWidget(plot_filters(), 1,2)
-        self.layout.addWidget(plot_widget(), 0, 1, 1,2)  # TODO
+        self.layout.addWidget(plot_filters(), 1, 2)
+        self.layout.addWidget(plot_widget(), 0, 1, 1, 2)  # TODO
 
     def update_plot(self):
         filter = str(self.filter.currentText())
@@ -115,8 +115,6 @@ class Pie_app(QWidget):
                     else:
                         count[x[filter]] = count.get(x[filter], 0) + value
                 return count
-                
-
 
             def remove_small(count):
                 for x in copy(count):
@@ -130,7 +128,9 @@ class Pie_app(QWidget):
             return remove_small(initial_count())
 
         def update_listwidget():
-            if filter in ["series"]: return  #FIXME
+            if filter in ["series"]:
+                return  # FIXME
+
             def color_legend():
                 légende_couleurs = {}
                 for texte, couleur in zip(graphique_data[1], graphique_data[0]):
@@ -153,28 +153,27 @@ class Pie_app(QWidget):
         self.canvas.figure.clf()
         self.ax = self.canvas.figure.subplots()
         graphique_data = self.ax.pie(
-                                        count_data().values(),
-                                        labels=count_data().keys(),
-                                        startangle=90,
-                                        autopct="%1.1f%%",
-                                    )
+            count_data().values(),
+            labels=count_data().keys(),
+            startangle=90,
+            autopct="%1.1f%%",
+        )
         update_listwidget()
 
-        #raise BaseException(dir(graphique_data[1][0]))
-        if any([len(x.get_text())>=15 for x in graphique_data[1]]):
+        # raise BaseException(dir(graphique_data[1][0]))
+        if any([len(x.get_text()) >= 15 for x in graphique_data[1]]):
             self.canvas.figure.clf()
             self.ax = self.canvas.figure.subplots()
 
             self.ax.pie(
-                                        count_data().values(),
-                                        startangle=90,
-                                        autopct="%1.1f%%",
-                                        labels = [x[:15] for x in count_data().keys()]
-                                    )
+                count_data().values(),
+                startangle=90,
+                autopct="%1.1f%%",
+                labels=[x[:15] for x in count_data().keys()],
+            )
             self.canvas.draw()
-            #raise BaseException("OOoh")
+            # raise BaseException("OOoh")
         # for x in graphique_data[1]])
-
 
         self.ax.set_title(f"{self.data[0].__class__.__name__}s - {filter}")
         self.canvas.draw()
