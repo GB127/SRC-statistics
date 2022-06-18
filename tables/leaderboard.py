@@ -55,7 +55,7 @@ class LB:
             mean_ind = differences.index(min(differences))
             return mean_ind
 
-        string = ""
+        string = f"{'Rank':^4}     {'Time':^7} {'ΔWR':^12}{'%WR':^9}\n"
         for rank, run_time in enumerate(self.ranking, start=1):
             delta = Time(run_time) - self["WR"]
             string += f'{rank:4}   {Time(run_time)} + {delta} ({Time(run_time) / self["WR"]:.2%})'

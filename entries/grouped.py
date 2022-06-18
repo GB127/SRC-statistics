@@ -23,7 +23,7 @@ class Grouped:
             return f"{self.group_name[:30]:30}   {len(self.runs):3}   {Time(Grouped.mode(self.runs))}   {len(self.pbs):2}   ---------"
 
     def keys(self):
-        return "len_runs", "len_pbs", "runs_times", "pbs_times", "group_name"
+        return "group_name", "len_runs","runs_times", "len_pbs", "pbs_times"
 
     def __getitem__(self, clé):
         if clé == "len_runs":

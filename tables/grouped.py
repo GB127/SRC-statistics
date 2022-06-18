@@ -10,6 +10,7 @@ from plots.save_plot import Save_plot_app
 class Table_grouped(Base_table):
     def __init__(self, clé, runs: Table_run, pbs: Table_pb):
         self.data = []
+        self.groupe = clé
         for x in runs.all_value_key(clé):
             self.data.append(
                 Grouped(x, runs.match_key_value(clé, x), pbs.match_key_value(clé, x))
@@ -30,6 +31,8 @@ class Table_grouped(Base_table):
         return self.sort, self.change_mode
 
     def __str__(self):
+        heading = f"{'#':>4}   {self.groupe.capitalize():^32}   {'#'}   {'Runs':^9}   {' #'}   {'PBs':^9}\n"
+        
         line = "-------" + "-" * len(str(self.data[0])) + "\n"
         string = line
         for index, object in enumerate(self.data, start=1):
@@ -53,7 +56,9 @@ class Table_grouped(Base_table):
                 lens_pbs = [x for x in lens_pbs if x != 0]
             string += f'{["Sum", "Mean", "Geomean"][ind]:>38}  {round(stat(lens_runs)):3}   {Time(stat(group_runs))}  {round(stat(lens_pbs)):3}   {Time(stat(group_pbs))}\n'
 
-        return string
+        string += f'Current mode : {Grouped.mode.__name__.capitalize()}'
+
+        return heading + string
 
 
 class Table_saved(Base_table):
@@ -73,12 +78,13 @@ class Table_saved(Base_table):
                     continue
 
     def __str__(self):
+        heading = f"{'#':>4}   {'Game (Category)':^40}   {'#':2}   {'1st':^7} | {'PB':^9} {'PB Δ%':^18} | {'max Δ%':^18} | {'potential Δ%':^18}\n"
         line = "-------" + "-" * len(str(self.data[0])) + "\n"
         string = line
         for index, object in enumerate(self.data, start=1):
             string += f"{index:>4}   {str(object)}\n"
         string += line
-        return string
+        return heading + string
 
     def methods(self):
         return self.sort, self.plot

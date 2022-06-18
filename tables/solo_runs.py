@@ -24,6 +24,11 @@ class Table_run(Base_table):
                 self.data.append(Run(data))
             print(f"{no}/{len(list_runs)} runs processed!")
 
+    def __str__(self):
+        heading = f"{'#':>4}   {'sys':^3}   {'Game':^30}   {'Category':^22}   {'time':^7}\n"
+        return heading + super().__str__()
+
+
     def all_value_key(self, key):
         assert key in self.keys()
         if key in ["level", "time", "delta", "perc", "perc_lb", "leaderboard"]:
@@ -70,6 +75,15 @@ class Table_pb(Table_run):
 
     def methods(self):  # pragma: no cover
         return self.sort, self.pie, self.histo, self.open_leaderboard
+
+    def __str__(self):
+        tempo = super().__str__()
+        heading = super().__str__()[:tempo.index("\n")]
+        heading += f" {'+ΔWR':^7}  {'%WR':^9}{'LB':^12}{'%LB':^8}"
+        body = super().__str__()[tempo.index("\n"):]
+        return heading + body
+
+
 
     def sum(self):
         def new_ranking():
