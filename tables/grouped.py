@@ -3,6 +3,8 @@ from entries.grouped import Grouped, Saved
 from tables.base import Base_table
 from code_SRC.composantes import Time
 from statistics import StatisticsError, fmean, geometric_mean as geomean
+from plots.handler import window_handler
+from plots.save_plot import Save_plot_app
 
 
 class Table_grouped(Base_table):
@@ -19,6 +21,8 @@ class Table_grouped(Base_table):
         command = input(
             f"Select option: [0-{len(self.methods()) -1}] | Type end to exit\nInput : "
         )
+        if command.isnumeric:
+            Grouped.mode = [sum, fmean, geomean ][int(command)]
         
 
 
@@ -77,4 +81,14 @@ class Table_saved(Base_table):
         return string
 
     def methods(self):
-        return [self.sort]
+        return self.sort, self.plot
+
+
+    def plot(self):
+        #command = input(f"Which one? [0-{len(self.data)}] ")
+        command = "1"
+        if command.isnumeric():
+            testing_runs = self[int(command)].runs
+            testing_pb = self[int(command)].pb
+            testing_WR = self[int(command)].WR.seconds
+            window_handler((testing_runs, testing_pb, testing_WR), Save_plot_app)

@@ -64,7 +64,7 @@ class Saved:
         return self.__dict__[clé]
 
     def keys(self):
-        return (
+        return ("category",
             "attempts",
             "first",
             "pb",
