@@ -110,9 +110,6 @@ class Histo_app(QWidget):
             IQ1, IQ2, IQ3 = quantiles(to_trim)
             IQR = (IQ3 - IQ1) * self.trim_power.value()
             trimmed = [x for x in to_trim if (IQ1 - IQR) < x < (IQ3 + IQR)]
-
-            if len(trimmed) != len(to_trim):
-                trimmed = trim_data(trimmed)
             return trimmed
 
         def labels():
