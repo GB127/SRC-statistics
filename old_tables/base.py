@@ -85,26 +85,3 @@ class Base_table:
                 dicto_mean[clé] = len(self) / len(dicto_groups[clé])
         return dicto_mean
 
-    def __str__(self):
-        line = "-------" + "-" * len(str(self.data[0])) + "\n"
-        string = line
-        for index, object in enumerate(self.data, start=1):
-            string += f"{index:>4}   {str(object)}\n"
-        string += line
-        string += f"       {self.create_grouped(self.sum())}\n"
-        string += f"       {self.create_grouped(self.mean())}\n"
-        string += f"       {self.create_grouped(self.geomean())}"
-        return string
-
-    def __len__(self):
-        return len(self.data)
-
-    def __bool__(self):
-        return bool(self.data)
-
-    def __getitem__(self, index: int):
-        return self.data[index]
-
-    def keys(self):
-        """Retrieves keys that can be used for sorting."""
-        return self[0].keys()
