@@ -12,11 +12,11 @@ def requester(link):
         if "data" in data.keys():
             return data
         elif data["status"] == 404:
-             raise InvalidURL(link)
-        print("Got the maximum of requests per minute, waiting...")
-        print("By the way, you need to change something here.")
+            raise InvalidURL(link)
+        elif data["status"] == 420:
+            print("Got the maximum of requests per minute, waiting...")
+            sleep(20)
         raise BaseException(f'Please do something here\n{data}')
-        sleep(120)
 
 
 def get_user_id(username: str) -> str:
