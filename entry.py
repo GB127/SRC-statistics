@@ -2,10 +2,11 @@ from parameters import max_str_game
 from utils import time_str
 
 class Entry(dict):
-    id_to_game = {}
+    games = {}
+    systems = {}
 
     def __init__(self, data):
-        assert self.id_to_game, "Game db must be updated first."
+        assert self.games, "Game db must be updated first."
 
         # FIXME : Don't do it if absent.
         unwanted = ["comment", "submittedById", "reason", "dateSubmitted",
@@ -17,21 +18,28 @@ class Entry(dict):
         super().__init__(data)
 
     def __str__(self):
-        game_str_size = max([len(x) for x in self.id_to_game.values()])
+        game_str_size = max([len(x) for x in self.games.values()])
         final_game_str = min(max_str_game, game_str_size)
-        return f'{self.id_to_game[self["gameId"]][:final_game_str]:{final_game_str}}|'
+
+        game =  f'{self.games[self["gameId"]][:final_game_str]:{final_game_str}}|'
+
+        system_str_size = max([len(x) for x in self.systems.values()])
+        system =  f'{self.systems[self["platformId"]]:^{system_str_size}}|'
+
+
+        return game + system
 
     def __gt__(self, other):
-        self_game = self.id_to_game[self["gameId"]]
-        other_game = other.id_to_game[other["gameId"]]
+        self_game = self.games[self["gameId"]]
+        other_game = other.games[other["gameId"]]
 
         if self_game == other_game:
             return self["time"] > other["time"]
         return self_game > other_game
 
     def __eq__(self, other):
-        self_game = self.id_to_game[self["gameId"]]
-        other_game = other.id_to_game[other["gameId"]]
+        self_game = self.games[self["gameId"]]
+        other_game = other.games[other["gameId"]]
         return (self_game == other_game) and (self["time"] == other["time"])
 
     @staticmethod
@@ -40,8 +48,15 @@ class Entry(dict):
         for one_game in test:
             id = one_game["id"]
             name = one_game["name"]
-            Run.id_to_game[id] = name
+            Entry.games[id] = name
 
+    @staticmethod
+    def update_system_db(data):
+        test = data["platforms"]
+        for one in test:
+            id = one["id"]
+            system = one["url"]  # url is the acronym from what I see.
+            Entry.systems[id] = system
 
 class Run(Entry):
     def __str__(self):
@@ -54,6 +69,6 @@ class PB(Entry):
 
 if __name__ == "__main__":
     from Speedrunner import Speedrunner
-    test = Speedrunner().runs
+    test = Speedrunner()
 
-    print(test)
+    print(test.runs)
