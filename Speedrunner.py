@@ -7,9 +7,9 @@ from entry import Run, PB, Entry
 class Speedrunner:
     def __init__(self, user="Niamek"):
         data = get_user_infos()
-        print(data.keys())
         Entry.update_game_db(data)  # Update game db.
         Entry.update_system_db(data)  # Update systems
+        Entry.update_cat_db(data)
 
         self.runs = Runs(data["runs"])
         self.runs.sort()

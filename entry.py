@@ -4,6 +4,8 @@ from utils import time_str
 class Entry(dict):
     games = {}
     systems = {}
+    categories = {}
+
 
     def __init__(self, data):
         assert self.games, "Game db must be updated first."
@@ -21,15 +23,18 @@ class Entry(dict):
         game_str_size = max([len(x) for x in self.games.values()])
         final_game_str = min(max_str_game, game_str_size)
 
-        game =  f'{self.games[self["gameId"]][:final_game_str]:{final_game_str}}|'
+        game =  f'{self.games[self["gameId"]][:final_game_str]:{final_game_str}}'
 
-        system_str_size = max([len(x) for x in self.systems.values()])
-        system =  f'{self.systems[self["platformId"]]:^{system_str_size}}|'
+        system_str_size = max([len(x) for x in self.systems.values()]) +1
+        system =  f'{self.systems[self["platformId"]]:^{system_str_size}}'
 
+        cat_str_size = max([len(x) for x in self.categories.values()])
+        category =  f'{self.categories[self["categoryId"]]:^{cat_str_size}}'
 
-        return game + system
+        return "|" + "|".join([system, game,  category]) + "|"
 
     def __gt__(self, other):
+        # FIXME : add category
         self_game = self.games[self["gameId"]]
         other_game = other.games[other["gameId"]]
 
@@ -38,6 +43,7 @@ class Entry(dict):
         return self_game > other_game
 
     def __eq__(self, other):
+        # FIXME : add category
         self_game = self.games[self["gameId"]]
         other_game = other.games[other["gameId"]]
         return (self_game == other_game) and (self["time"] == other["time"])
@@ -57,6 +63,15 @@ class Entry(dict):
             id = one["id"]
             system = one["url"]  # url is the acronym from what I see.
             Entry.systems[id] = system
+
+    @staticmethod
+    def update_cat_db(data):
+        test = data["categories"]
+        for one in test:
+            id = one["id"]
+            category = one["name"]
+            Entry.categories[id] = category
+
 
 class Run(Entry):
     def __str__(self):
