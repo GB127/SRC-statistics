@@ -9,14 +9,12 @@ class Entry(dict):
 
     def __init__(self, data):
         assert self.games, "Game db must be updated first."
-
-        # FIXME : Don't do it if absent.
         unwanted = ["comment", "submittedById", "reason", "dateSubmitted",
                     "hasSplits", "dateVerified", "verifiedById",
                     "enforceMs", "timeWithLoads", "video", "verified", "date",
                     "playerIds", "estimated", "issues", "videoState", "id", "igt", "emulator", "regionId", "orphaned"]
         for one in unwanted:
-            del data[one]
+            data.pop(one, None)
         super().__init__(data)
 
     def __str__(self):
