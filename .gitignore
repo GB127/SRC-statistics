@@ -1,10 +1,2 @@
-.vscode/settings.json
-__pycache__/
-setup.cfg
-.coverage
-.gitignore
-classes.dot
-packages.dot
-api_cache.txt
-times.py
-debug.py
+*.idea
+env/*
