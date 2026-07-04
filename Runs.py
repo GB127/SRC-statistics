@@ -1,4 +1,4 @@
-from run import Run
+from entry import Run
 from parameters import max_str_game
 from utils import time_str
 from statistics import mean, median

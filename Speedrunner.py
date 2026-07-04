@@ -1,8 +1,7 @@
 from Runs import Runs
 from PBs import PBs
 from main import get_user_infos
-from run import Run
-from PBs import PB
+from entry import Run, PB
 
 
 class Speedrunner:
@@ -14,7 +13,7 @@ class Speedrunner:
         self.runs = Runs(data["runs"])
         self.runs.sort()
 
-        self.PBs = PBs(data["runs"])
+        # self.PBs = PBs(data["runs"])
 
 
     def __str__(self):
