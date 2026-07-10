@@ -49,11 +49,19 @@ class Entry(dict):
 
     @staticmethod
     def update_game_db(data):
+        def filter_name(name:str):
+            legend = "The Legend of Zelda"
+            if legend == name[:len(legend)]:
+                name = name[len(legend) - 5:]
+            extension = " Category Extensions"
+            if extension == name[-len(extension):]:
+                name = name[:-len(extension)]
+            return name
         test = data["games"]
         for one_game in test:
             id = one_game["id"]
             name = one_game["name"]
-            Entry.games[id] = name
+            Entry.games[id] = filter_name(name)
 
     @staticmethod
     def update_system_db(data):
