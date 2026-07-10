@@ -30,6 +30,6 @@ class Runs(list):
 
 if __name__ == "__main__":
     from Speedrunner import Speedrunner
-    test = Speedrunner().runs
+    test = Speedrunner().PBs
 
     print(test)

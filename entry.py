@@ -1,5 +1,6 @@
 from parameters import max_str_game
 from utils import time_str
+from main import get_lb
 
 class Entry(dict):
     games = {}
@@ -77,11 +78,18 @@ class Run(Entry):
 
 
 class PB(Entry):
-    pass
+    def __init__(self, data):
+        super().__init__(data)
+        self["lb"] = get_lb(self["gameId"], self["categoryId"] )
+
+    def __str__(self):
+        string = super().__str__()
+        string += f'{time_str(self["lb"][0]):>9}|'
+        string += f'{time_str(self["time"]):>9} ({self["time"]/self["lb"][0]:.2%})'
+        return string
 
 
 if __name__ == "__main__":
     from Speedrunner import Speedrunner
     test = Speedrunner()
-
-    print(test.runs)
+    print(test.PBs)

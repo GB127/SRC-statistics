@@ -1,11 +1,15 @@
 from entry import PB
 from parameters import max_str_game
-
+from tqdm import tqdm
 
 class PBs(list):
     def __init__(self, data):
-        print(data[0].keys())
-        super().__init__([PB(x) for x in data if (x["time"] and not x["obsolete"])])
+        tempo  = []
+        for run in tqdm(data, desc="Preparing PB data"):
+            if (run["time"] and not run["obsolete"]):
+                tempo.append(PB(run))
+        super().__init__(tempo)
+        self.sort()
 
     def __str__(self):
         entete = f'{"Game":{max_str_game}}|{"Time":^9}|'

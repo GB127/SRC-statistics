@@ -12,9 +12,10 @@ class Speedrunner:
         Entry.update_cat_db(data)
 
         self.runs = Runs(data["runs"])
-        self.runs.sort()
+        self.PBs = PBs(data["runs"])
 
-        # self.PBs = PBs(data["runs"])
+    def __str__(self):
+        return str(self.PBs)
 
 
 if __name__ == "__main__":
