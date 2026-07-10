@@ -81,11 +81,18 @@ class PB(Entry):
     def __init__(self, data):
         super().__init__(data)
         self["lb"] = get_lb(self["gameId"], self["categoryId"] )
+        self["WR %"] = self["time"]/self["lb"][0]
+        self["LB %"] = (len(self["lb"]) - self["place"] + 1)/len(self["lb"])
+
+        # tempo fix until I fix something in api.
+        if self["LB %"] < 0:
+            self["LB %"] = 0
 
     def __str__(self):
         string = super().__str__()
         string += f'{time_str(self["lb"][0]):>9}|'
-        string += f'{time_str(self["time"]):>9} ({self["time"]/self["lb"][0]:.2%})'
+        string += f'{time_str(self["time"]):>9} ({self["WR %"]:.2%})|'
+        string += f'{self["place"]:>4}/{len(self["lb"]):<4} ({self["LB %"]:.2%})'
         return string
 
 
