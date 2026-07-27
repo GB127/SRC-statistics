@@ -1,23 +1,8 @@
 from Runs import Runs
-from PBs import PBs
-from main import get_user_infos
-from entry import Run, PB, Entry
+from Runs import PBs
 
 
 class Speedrunner:
-    def __init__(self, user="Niamek"):
-        data = get_user_infos()
-        Entry.update_game_db(data)  # Update game db.
-        Entry.update_system_db(data)  # Update systems
-        Entry.update_cat_db(data)
-
-        self.runs = Runs(data["runs"])
-        self.PBs = PBs(data["runs"])
-
-    def __str__(self):
-        return str(self.PBs)
-
-
-if __name__ == "__main__":
-    test = Speedrunner()
-    print(test)
+    def __init__(self, runs, pbs):
+        self.runs = Runs(runs)
+        self.pbs = PBs(pbs)

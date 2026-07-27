@@ -1,35 +1,32 @@
-from entry import Run
-from parameters import max_str_game
+from entry import Run, PB
 from utils import time_str
-from statistics import mean, median
+from statistics import mean
 
 class Runs(list):
     def __init__(self, data):
-        super().__init__([Run(x) for x in data if x["time"]])
+        super().__init__([Run(**x) for x in data])
+        self.sort(key=lambda x: x["game"])
+
 
     def __str__(self):
-        entete = f'{"Game":{max_str_game}}|{"Time":^9}|'
-        line = "-" * len(entete)
-        body = "\n".join(str(x) for x in self)
+        body = "\n".join([str(x) for x in self])
+        total_time = sum(x.time for x in self)
+        str_total = f'{"Total":30}|{time_str(total_time):>10}|'
+        mean_time = mean(x.time for x in self)
+        str_mean = f'{"Mean":30}|{time_str(mean_time):>10}|'
+        line = "-" * len(str_total)
+        return f'{line}\n{body}\n{line}\n{str_total}\n{line}\n{str_mean}'
 
-        foot = f'{f"Total: {len(self)} runs":{max_str_game}}|{time_str(self.sum()):>9}|'
-        foot += f'\n{"Mean:":{max_str_game}}|{time_str(self.mean()):>9}|'
-        foot += f'\n{"Median:":{max_str_game}}|{time_str(self.median()):>9}|'
+class PBs(list):
+    def __init__(self, data):
+        super().__init__([PB(**x) for x in data])
+        self.sort(key=lambda x: x["game"])
 
-        return f"\n{line}\n".join([entete, body, foot])
-
-    def sum(self):
-        return sum([x["time"] for x in self])
-
-    def mean(self):
-        return mean([x["time"] for x in self])
-
-    def median(self):
-        return median([x["time"] for x in self])
-
-
-if __name__ == "__main__":
-    from Speedrunner import Speedrunner
-    test = Speedrunner().PBs
-
-    print(test)
+    def __str__(self):
+        body = "\n".join([str(x) for x in self])
+        total_time = sum(x.time for x in self)
+        str_total = f'{"Total :":>51}|{time_str(total_time):>10}|'
+        mean_time = mean(x.time for x in self)
+        str_mean = f'{"Mean :":>51}|{time_str(mean_time):>10}|'
+        line = "-" * len(str_total)
+        return f'{line}\n{body}\n{line}\n{str_total}\n{line}\n{str_mean}'

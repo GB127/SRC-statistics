@@ -1,110 +1,41 @@
-from parameters import max_str_game
 from utils import time_str
-from main import get_lb
 
-class Entry(dict):
+class Entry:
     games = {}
     systems = {}
     categories = {}
 
+    def __init__(self, game, time, category):
+        self.game = game
+        self.category = category
+        self.time = time
 
-    def __init__(self, data):
-        assert self.games, "Game db must be updated first."
-        unwanted = ["comment", "submittedById", "reason", "dateSubmitted",
-                    "hasSplits", "dateVerified", "verifiedById",
-                    "enforceMs", "timeWithLoads", "video", "verified", "date",
-                    "playerIds", "estimated", "issues", "videoState", "id", "igt", "emulator", "regionId", "orphaned"]
-        for one in unwanted:
-            data.pop(one, None)
-        super().__init__(data)
 
     def __str__(self):
-        game_str_size = max([len(x) for x in self.games.values()])
-        final_game_str = min(max_str_game, game_str_size)
+        game_str = 30
+        cat_str = 20
+        return (f'{self["game"][:game_str]:{game_str}}|{self["category"][:cat_str]:{cat_str}}|{self["time"]:>10}|')
 
-        game =  f'{self.games[self["gameId"]][:final_game_str]:{final_game_str}}'
-
-        system_str_size = max([len(x) for x in self.systems.values()]) +1
-        system =  f'{self.systems[self["platformId"]]:^{system_str_size}}'
-
-        cat_str_size = max([len(x) for x in self.categories.values()])
-        category =  f'{self.categories[self["categoryId"]]:^{cat_str_size}}'
-
-        return "|" + "|".join([system, game,  category]) + "|"
-
-    def __gt__(self, other):
-        # FIXME : add category
-        self_game = self.games[self["gameId"]]
-        other_game = other.games[other["gameId"]]
-
-        if self_game == other_game:
-            return self["time"] > other["time"]
-        return self_game > other_game
-
-    def __eq__(self, other):
-        # FIXME : add category
-        self_game = self.games[self["gameId"]]
-        other_game = other.games[other["gameId"]]
-        return (self_game == other_game) and (self["time"] == other["time"])
+    def __getitem__(self, key):
+        if key == "game":
+            return self.games[self.game]
+        elif key == "time":
+            return time_str(self.time)
+        elif key == "category":
+            return self.categories[self.category]
+        raise NotImplementedError("FIXME LATER")
 
     @staticmethod
-    def update_game_db(data):
-        def filter_name(name:str):
-            legend = "The Legend of Zelda"
-            if legend == name[:len(legend)]:
-                name = name[len(legend) - 5:]
-            extension = " Category Extensions"
-            if extension == name[-len(extension):]:
-                name = name[:-len(extension)]
-            return name
-        test = data["games"]
-        for one_game in test:
-            id = one_game["id"]
-            name = one_game["name"]
-            Entry.games[id] = filter_name(name)
+    def update_games(infos):
+        Entry.games = infos
 
     @staticmethod
-    def update_system_db(data):
-        test = data["platforms"]
-        for one in test:
-            id = one["id"]
-            system = one["url"]  # url is the acronym from what I see.
-            Entry.systems[id] = system
-
-    @staticmethod
-    def update_cat_db(data):
-        test = data["categories"]
-        for one in test:
-            id = one["id"]
-            category = one["name"]
-            Entry.categories[id] = category
+    def update_categories(infos):
+        Entry.categories = infos
 
 
 class Run(Entry):
-    def __str__(self):
-        return super().__str__() + f'{time_str(self["time"]):>9}|'
-
+    pass
 
 class PB(Entry):
-    def __init__(self, data):
-        super().__init__(data)
-        self["lb"] = get_lb(self["gameId"], self["categoryId"] )
-        self["WR %"] = self["time"]/self["lb"][0]
-        self["LB %"] = (len(self["lb"]) - self["place"] + 1)/len(self["lb"])
-
-        # tempo fix until I fix something in api.
-        if self["LB %"] < 0:
-            self["LB %"] = 0
-
-    def __str__(self):
-        string = super().__str__()
-        string += f'{time_str(self["lb"][0]):>9}|'
-        string += f'{time_str(self["time"]):>9} ({self["WR %"]:.2%})|'
-        string += f'{self["place"]:>4}/{len(self["lb"]):<4} ({self["LB %"]:.2%})'
-        return string
-
-
-if __name__ == "__main__":
-    from Speedrunner import Speedrunner
-    test = Speedrunner()
-    print(test.PBs)
+    pass
